@@ -34,7 +34,8 @@
 // # General
 .app-container {
     display: grid;
-    grid-template-columns: fit-content($side-nav-w) auto;
+    // grid-template-columns: fit-content($side-nav-w) auto;
+    grid-template-columns: 15vw 85vw;
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
