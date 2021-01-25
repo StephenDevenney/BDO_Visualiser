@@ -1,0 +1,105 @@
+<page>
+    <page-header></page-header>
+    <div class="split-page">
+        <div *ngIf="isLoaded" class="half-page">
+            <div *ngIf="grindingRes.length > 0">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <!-- <h2 class="mb-0">Grinding</h2> -->
+                    <div class="d-flex">
+                        <!-- [selectionLimit]="5" (Removes select all option)-->
+                        <div class="search-bar p-d-flex mr-2">
+                            <span class="p-input-icon-right">      
+                                <input pInputText type="text" (input)="table.filterGlobal($event.target.value, 'contains')" placeholder="Search"/>
+                                <i class="pi pi-search mr-2"></i>
+                            </span>
+                        </div>
+
+                        <p-multiSelect 
+                            class="mr-2" 
+                            [options]="columnsHeaders" 
+                            [(ngModel)]="filteredColumns" 
+                            optionLabel="header"
+                            placeholder="Select Columns"
+                            maxSelectedLabels="0"
+                            selectedItemsLabel="Select Columns">
+                        </p-multiSelect>
+
+                        <button class="btn btn-primary mr-2">Edit</button>
+                        <button class="btn btn-primary mr-2">Add</button>
+                        <button class="btn btn-primary mr-2">Remove</button>
+                        <button class="btn btn-primary mr-2">Save</button>
+                    </div>
+                </div>
+                
+                <!-- Table -->
+                <div class="table-container">
+                    <p-table 
+                        #table
+                        [value]="grindingRes"
+                        rowGroupMode="subheader"
+                        selectionMode="single"
+                        (onRowSelect)="onRowSelect($event)"
+                        [(selection)]="selectedRow"
+                        [reorderableColumns]="true"
+                        [columns]="filteredColumns"
+                        (onFilter)="onFilter($event)"
+                        [scrollable]="true"
+                        scrollHeight="flex"
+                        styleClass="h-100">
+
+                        <!-- Header -->
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pReorderableColumn *ngFor="let col of filteredColumns;">
+                                    {{ col.header }}
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+                            <!-- Subheader Group -->
+                            <tr class="table-group-subheading" *ngIf="rowGroupMetadata[item.date].index === rowIndex">
+                                <td [colSpan]="filteredColumns.length"><h3 class="mb-0">{{ item[columnsHeaders[0].field] | dateLong }}</h3></td>
+                            </tr>
+                            
+                            <!-- Main Data -->
+                            <tr [pSelectableRow]="item">
+                                <td *ngFor="let col of filteredColumns;">{{ item[col.field] }}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                
+            </div> 
+            <!-- Empty Datasource -->
+            <div *ngIf="grindingRes.length == 0">
+                <div>
+                    <h2>Grinding</h2>
+                    <div>
+                        <label>Add data</label>
+                        <button class="btn btn-primary mr-2">Add</button>
+                    </div>
+                </div>
+            </div>        
+        </div>
+        <div class="half-page p-0">
+            <p-tabView>
+                <p-tabPanel header="Graphs">
+                    <div class="tab-container">
+                        <h2>Graphs</h2>
+                    </div> 
+                </p-tabPanel>
+                <p-tabPanel header="Loot">
+                    <div class="tab-container">
+                        <h2>Loot</h2>
+                    </div>
+                </p-tabPanel>
+                <p-tabPanel header="Buffs">
+                    <div class="tab-container">
+                        <h2>Buffs</h2>
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
+        </div>      
+    </div>
+</page>
+

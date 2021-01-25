@@ -1,0 +1,69 @@
+<div appClickOutside (clickOutside)="closeDropdown()" class="page-header" [ngClass]="headerType">
+    <div class="page-header-container">
+        <div class="page-header-main">
+
+        </div>
+        <div class="page-sub-header">
+            <p class="page-header-subtitle" *ngIf="subTitle1 != ''" [title]="subTitle1">{{ subTitle1 }}</p>
+            <p class="page-header-subtitle" *ngIf="subTitle2 != ''" [title]="subTitle2">{{ subTitle2 }}</p>
+        </div>
+    </div>
+    <div class="page-header-content">
+        <ng-content #headerContent></ng-content>
+    </div>
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-primary mr-2" title="Notifications">
+            Notification
+        </button>
+        <button class="btn btn-primary" title="Profile&SupportDropdown" (click)="toggleOptionsMenu();">
+            Options
+        </button>
+
+        <!-- Dropdown Options -->
+        <dropdown-header *ngIf="showOptions" (sideTabToOpen)="getSideTabId($event)"></dropdown-header>
+
+        <!-- Options Sidebar -->
+        <p-sidebar 
+            [(visible)]="showSideOptions" 
+            position="right" 
+            [style]="{width:'15vw'}"
+            (onHide)="sideBarClosed()">
+
+            <!-- Profile -->
+            <div *ngIf="sideOptionsId == 1" class="p-2 sidebar-options">
+                <div>
+                    <h2>Profile</h2>
+                    <p-dropdown [options]="themes" [(ngModel)]="globals.config.theme" optionLabel="themeName" styleClass="p-dropdown-icon-custom">
+                        <ng-template pTemplate="selectedItem">
+                            <div *ngIf="globals.config.theme.themeId">
+                                <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" /> -->
+                                <div>{{globals.config.theme.themeName}}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-item pTemplate="item">
+                            <div>
+                                <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" /> -->
+                                <div>{{item.themeName}}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+                <div>
+                    <button class="btn btn-secondary" (click)="saveSettings()">Save</button>
+                </div>
+            </div>
+
+             <!-- Preferences -->
+             <div *ngIf="sideOptionsId == 2" class="p-2 sidebar-options">
+                <div>
+                    <h2>Preferences</h2>
+                </div>
+                <div>
+                    
+                </div>
+            </div>
+        </p-sidebar>
+    </div>
+</div>
+<p-toast position="top-center"></p-toast>
+

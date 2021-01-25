@@ -1,0 +1,30 @@
+<div class="side-nav-container" [ngClass]="{'collapsed' : navToggle}">
+    <div class="side-nav" *ngIf="navLoaded">
+        <div class="d-flex top-section align-items-center justify-content-between">
+            <div class="logo-container">
+                <!--IMG - Logo -->
+                <div class="logo-sm"></div>
+            </div>
+            <button class="btn btn-dark btn-no-bg">
+                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="icon-50 icon-stroke">
+                    <path d="M 2.3994356,2.5383162 H 13.504714"/>
+                    <path d="M 2.4673806,7.5195313 H 13.572658"/>
+                    <path d="M 2.5040022,12.561035 H 13.609279"/>
+                </svg>
+                <div></div>
+            </button>
+        </div>
+        <nav class="nav flex-column nav-pills pt-2">
+            <div *ngFor="let navMenu of navigationMenu.menu; let i = index">
+                <button class="btn btn-nav-link text-left d-flex align-items-center" (click)="navToPage(navMenu.navRoute);" title="{{ navMenu.navTitle }}">
+                    <!-- SVG - Icon -->
+                    <div></div>
+                    <div class="pl-2">
+                        <span class="btn-text float-left">{{ navMenu.navName }}</span>
+                        <!-- SVG - Chevron-Right -->
+                    </div>
+                </button>
+            </div>
+        </nav>    
+    </div>
+</div>
