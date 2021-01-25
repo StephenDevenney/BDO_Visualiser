@@ -15,7 +15,8 @@
 */
 
 // # Sizes
-$side-nav-w: 15.2rem;
+// $side-nav-w: 15.2rem;
+$side-nav-w: calc(10vw + 1rem);
 $header-h: 6.5rem;
 $heading-h: 3.4rem;
 $body-h: calc(100% - 3.4rem);
