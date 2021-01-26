@@ -61,7 +61,6 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   } 
 
   onFilter(event) {
-    console.log("filtered");
     this.updateRowGroupMetaData(event.filteredValue);
  }
 

@@ -25,7 +25,6 @@ export class SidenavComponent extends BaseComponent implements OnInit {
   }
 
   public navToPage(navRoute: string) {
-    console.log(navRoute);
     if(navRoute != "" || navRoute != undefined)
       this.router.navigate([navRoute]);
   }
