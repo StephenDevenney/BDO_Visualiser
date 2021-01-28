@@ -11,9 +11,11 @@
 /*
     # General
         ## Page
+        ## PageTab
         ## Containers
     # Fonts
         ## Headers
+        ## labels
     # Inputs
         ## Input
         ## Buttons
@@ -218,6 +220,17 @@
     }
 }
 
+// ## PageTab
+
+.page-tab {
+    width: 100%;
+    height: 100%;
+
+    .page-tab-content {
+
+    }
+}
+
 // ## Containers 
 .table-container {
     height: calc(90vh - 6rem);
@@ -246,6 +259,16 @@ h3 {
     font-size: 1.2rem;
     font-weight: 600;
     line-height: 1.5;
+}
+
+label {
+    font-size: 1rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    font-weight: 400;
+    text-align: left;
+    vertical-align: middle;
 }
 
 // # Inputs

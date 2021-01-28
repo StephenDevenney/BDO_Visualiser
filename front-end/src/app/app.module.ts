@@ -16,11 +16,13 @@ import { LifeModule } from './modules/life/life.module';
 import { MapModule } from './modules/map/map.module';
 import { FailStacksModule } from './modules/fail-stacks/fail-stacks.module';
 import { MessageService } from 'primeng/api';
+import { TableInsertComponent } from './shared/components/table-insert/table-insert.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    RedirectToComponent
+    RedirectToComponent,
+    TableInsertComponent
   ],
   imports: [
     BrowserModule,

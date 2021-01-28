@@ -3,6 +3,9 @@
         # General
             ## Body
             ## Page
+        # Font
+            ## Headers
+            ## Label
         # Input
             ## Buttons
             ## Dropdown
@@ -59,6 +62,11 @@
     }
 
     h3 {
+        color: $dark-primary-text;
+    }
+
+    // ## Label
+    label {
         color: $dark-primary-text;
     }
 
