@@ -23,9 +23,11 @@
         ## Navigation
     # Components
         ## Table
+        ## Sidebar
         ## Dropdown
         ## MultiSelect
         ## Tabpanel
+            ### FixedTiles
     # Specifics
         ## Dropdown-Options
     # Logo
@@ -498,6 +500,33 @@ input {
     .p-tabview-panels {
         height: calc(100vh - 4.5rem);
         background: transparent;
+    }
+}
+
+// ### FixedTiles
+.fixed-tile {
+    margin: 0.5rem;
+    width: 100%;
+
+    .fixed-tile-header {
+        h3 {
+            margin: 0;
+        }
+        padding-top: 0.25rem;
+        padding-bottom: 0.25rem;
+        text-align: center;
+    }
+    .fixed-tile-content {
+        padding: 0.5rem 0.5rem 0 0.5rem;
+
+        label {
+            margin-bottom: 1rem;
+        }
+
+        // > div {
+        //     // max-width: 9rem;
+        //     background-color: red;
+        // }
     }
 }
 

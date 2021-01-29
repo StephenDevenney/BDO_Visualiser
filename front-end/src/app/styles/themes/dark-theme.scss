@@ -27,6 +27,7 @@
             ## Sidebar
             ## Tabpanel
                 ### Header  
+                ### FixedTiles
         # Overrides
             ## Input Text
             ## Checkboxes  
@@ -337,6 +338,23 @@
                 color: $dark-primary-text !important;
             }
         }   
+    }
+
+    // ### FixedTiles
+    .fixed-tile {
+        background-color: $dark-primary;
+            
+        label {
+            color: $dark-primary-text;
+        }
+
+        .fixed-tile-header {
+            background-color: $dark-secondary;
+
+            h3 {
+                color: $dark-secondary-text;
+            }
+        }
     }
 
     // # Overrides

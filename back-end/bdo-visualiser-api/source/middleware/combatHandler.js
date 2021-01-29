@@ -13,3 +13,17 @@ exports.getColumnDefaults = function(res) {
     var settings = sqlContext.getCombatSettingsId(globalUserId);
     return res.json(sqlContext.getColumnDefaults(settings.combatSettingsId));
 }
+
+exports.getTotals = function(res) {
+    // Day
+
+    // Week
+
+    // Month
+
+    // Year
+
+    // Total
+
+    return res.json(sqlContext.getTotals(globalUserId));
+}

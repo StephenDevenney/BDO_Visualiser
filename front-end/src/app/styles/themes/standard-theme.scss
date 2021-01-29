@@ -25,7 +25,8 @@
                 ### Table - Selected
             ## Sidebar
             ## Tabpanel
-                ### Header    
+                ### Header 
+                ### FixedTiles   
         # Overrides
             ## Input Text
             ## Checkboxes
@@ -335,6 +336,25 @@
             }
         }   
     }
+
+    // ### FixedTiles
+    .fixed-tile {
+        background-color: $standard-primary;
+            
+        label {
+            color: $standard-primary-text;
+        }
+
+        .fixed-tile-header {
+            background-color: $standard-secondary;
+
+            h3 {
+                color: $standard-secondary-text;
+            }
+        }
+    }
+
+
 
     // # Overrides
 

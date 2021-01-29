@@ -19,6 +19,10 @@ exports.getColumnDefaults = function(combatSettingsId) {
     return db.prepare("SELECT enum_combatTableHeadings.headingId, enum_combatTableHeadings.field, enum_combatTableHeadings.header FROM enum_combatTableHeadings INNER JOIN combat_columnDefaults ON combat_columnDefaults.FK_headingId = enum_combatTableHeadings.headingId WHERE combat_columnDefaults.isActive = 1 AND combat_columnDefaults.FK_combatSettingsId = ?").all(combatSettingsId);
 }
 
+exports.getTotals = function() {
+    // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
+}
+
 // Post 
 exports.createCombatSettings = function(userId) {
 
