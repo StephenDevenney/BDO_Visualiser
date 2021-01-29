@@ -1,0 +1,5 @@
+.env
+bdo-visualiser.sqlite
+bdo-visualiser.sqlite-shm
+bdo-visualiser.sqlite-wal
+bdo-visualiser.sqlite-journal
