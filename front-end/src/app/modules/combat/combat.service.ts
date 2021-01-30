@@ -17,4 +17,12 @@ export class CombatService {
     public getDefaultColumns() {
         return this.http.get(this.globals.config.appApiUrl + "combat/column-defaults");
     }
+
+    public getTotals() {
+        return this.http.get(this.globals.config.appApiUrl + "combat/totals");
+    }
+
+    public getLocations() {
+        return this.http.get(this.globals.config.appApiUrl + "shared/locations");
+    }
 }

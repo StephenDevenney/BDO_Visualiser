@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var Security = require('./source/routes/securityController');
 var Combat = require('./source/routes/combatController');
+var Shared = require('./source/routes/sharedController');
 var app = express();
 const cors = require('cors');
 
@@ -26,6 +27,7 @@ app.get('/', function(req, res) {
 // Routes
 app.use('/visualiser/security/', Security);
 app.use('/visualiser/combat/', Combat);
+app.use('/visualiser/shared/', Shared);
 
 module.exports = app;
 

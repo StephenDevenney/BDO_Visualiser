@@ -20,7 +20,7 @@ exports.getColumnDefaults = function(combatSettingsId) {
 }
 
 exports.getTotals = function(userId) {
-    return db.prepare("SELECT SUM(trashLootAmount) as trashLootAmount, SUM(enum_time.timeAmount) as timeAmount, SUM(afuaruSpawns) as afuaruSpawns FROM combat_grinding INNER JOIN enum_time ON combat_grinding.FK_timeId = enum_time.timeId INNER JOIN security_settings ON combat_grinding.FK_combatSettingsId = security_settings.FK_combatSettingsId WHERE security_settings.FK_userId = ?").all(userId);
+    return db.prepare("SELECT SUM(trashLootAmount) as trashLootAmount, SUM(enum_time.timeAmount) as timeAmount, SUM(afuaruSpawns) as afuaruSpawns FROM combat_grinding INNER JOIN enum_time ON combat_grinding.FK_timeId = enum_time.timeId INNER JOIN security_settings ON combat_grinding.FK_combatSettingsId = security_settings.FK_combatSettingsId WHERE security_settings.FK_userId = ?").get(userId);
 }
 
 exports.getTotalsDay = function() {
