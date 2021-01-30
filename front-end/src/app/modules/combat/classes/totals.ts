@@ -6,7 +6,6 @@ export class CombatTotals {
     // public tableData: Array<GrindingData> = new Array<GrindingData>();
 }
 
-
 @Injectable()
 export class Total {
     public trashLootAmount: number = 0;
@@ -40,4 +39,14 @@ export class TotalYear {
     public headingId: number = 0;
     public field: string = "";
     public header: string = "";
+}
+
+@Injectable()
+export class TrashLootTotals {
+    public trashLootTotal: TrashTotal = new TrashTotal;
+}
+
+@Injectable()
+export class TrashTotal {
+    public trashLootAmount: number = 0;
 }

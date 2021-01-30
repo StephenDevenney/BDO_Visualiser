@@ -39,6 +39,26 @@ exports.getTotalsYear = function() {
     // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
 }
 
+exports.getTrashLootTotal = function(locationId, userId) {
+    return db.prepare("SELECT SUM(trashLootAmount) AS trashLootAmount FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = combat_grinding.FK_locationId INNER JOIN security_settings ON security_settings.FK_combatSettingsId = combat_grinding.FK_combatSettingsId WHERE FK_locationId = ? AND security_settings.FK_userId = ?").get(locationId, userId);
+}
+
+exports.getTrashLootDay = function() {
+    // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
+}
+
+exports.getTrashLootWeek = function() {
+    // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
+}
+
+exports.getTrashLootMonth = function() {
+    // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
+}
+
+exports.getTrashLootYear = function() {
+    // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
+}
+
 // Post 
 exports.createCombatSettings = function(userId) {
 

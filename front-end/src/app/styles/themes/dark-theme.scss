@@ -1,5 +1,9 @@
 .dark-theme {
     /*
+        # Component Setup
+            ## Background
+            ## Main
+            ## Hover
         # General
             ## Body
             ## Page
@@ -31,6 +35,16 @@
         # Overrides
             ## Input Text
             ## Checkboxes  
+            ## FloatLabel
+    */
+
+    /*  # Component Setup
+        ## Background
+        background-color: lighten($dark-primary, 10%);
+        ## Main Border
+        border-color: darken($dark-tertiary, 15%);
+        ## Hover Border
+        border-color: lighten($dark-tertiary, 10%);
     */
 
     // # General
@@ -143,7 +157,7 @@
     // ## Dropdowns
     .p-dropdown {
         background: $dark-primary;
-        border-color: $dark-primary;
+        border-color: darken($dark-tertiary, 15%);
 
         // ### Text
         &.p-inputtext {
@@ -182,14 +196,22 @@
             background: $dark-primary;
             color: $dark-primary-text;
         }
+
+        .p-dropdown-clear-icon {
+            color: $dark-primary-text;
+        }
+
+        .p-dropdown-clear-icon:hover {
+            color: lighten($dark-primary-text, 10%);
+        }
     }
 
     .p-dropdown:not(.p-disabled):hover {
-        border-color: $dark-primary;
+        border-color: lighten($dark-tertiary, 10%);
     }
 
     .p-dropdown:not(.p-disabled).p-focus {
-        border-color: $dark-primary;
+        border-color: darken($dark-tertiary, 15%);
     }
 
     .p-inputtext {
@@ -385,5 +407,12 @@
     .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
         background-color: lighten($dark-secondary, 10%);
         border-color: lighten($dark-secondary, 10%);
+    }
+
+    // ## FloatLabel
+    .p-float-label {
+        .p-dropdown {
+            background-color: lighten($dark-primary, 10%);
+        }     
     }
 }

@@ -1,5 +1,9 @@
 .standard-theme {
     /*
+        # Component Setup
+            ## Background
+            ## Main
+            ## Hover
         # General
             ## Body
             ## Page
@@ -30,6 +34,16 @@
         # Overrides
             ## Input Text
             ## Checkboxes
+            ## FloatLabel
+    */
+
+    /*  # Component Setup
+        ## Background
+        background-color: lighten($standard-primary, 10%);
+        ## Main
+        border-color: $standard-tertiary;
+        ## Hover
+        border-color: lighten($standard-tertiary, 20%);
     */
 
     // # General
@@ -73,16 +87,6 @@
 
     // # Inputs
 
-    // ## Input
-    // input {
-    //     background-color: lighten($standard-primary, 10%);
-    //     color: $standard-primary-text;
-
-    //     &:hover {
-    //         border-color: lighten($standard-tertiary, 20%);
-    //     }
-    // }
-
     // ## Search-Bar
     .search-bar {
         input {
@@ -95,7 +99,7 @@
             }
 
             &:hover {
-                border-color: lighten($standard-tertiary, 10%);
+                border-color: lighten($standard-tertiary, 20%);
             }
         }
 
@@ -154,7 +158,7 @@
     // ## Dropdowns
     .p-dropdown {
         background: $standard-primary;
-        border-color: $standard-primary;
+        border-color: $standard-tertiary;
 
         // ### Text
         &.p-inputtext {
@@ -193,6 +197,22 @@
             background: $standard-primary;
             color: $standard-primary-text;
         }
+
+        .p-dropdown-clear-icon {
+            color: $standard-primary-text;
+        }
+
+        .p-dropdown-clear-icon:hover {
+            color: lighten($standard-primary-text, 40%);
+        }
+    }
+
+    .p-dropdown:not(.p-disabled):hover {
+        border-color: lighten($standard-tertiary, 20%);
+    }
+
+    .p-dropdown:not(.p-disabled).p-focus {
+        border-color: $standard-tertiary;
     }
 
     // ## MultiSelect
@@ -389,16 +409,10 @@
         border-color: lighten($standard-secondary, 10%);
     }
 
+    // ## FloatLabel
     .p-float-label {
         .p-dropdown {
             background-color: lighten($standard-primary, 10%);
-            border-color: $standard-tertiary;
-            width: calc(10em + 1rem + 2px);
-        }
-
-        label {
-            font-size: 1rem;
-            font-weight: 700;
         }
     }
 }

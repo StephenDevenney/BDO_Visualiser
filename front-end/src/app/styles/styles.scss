@@ -567,3 +567,15 @@ body {
         box-shadow: none;
     }
 }
+
+// # Overrides
+.p-float-label {
+    .p-dropdown {
+        width: calc(10em + 1rem + 2px);
+    }
+
+    label {
+        font-size: 1rem;
+        font-weight: 700;
+    }
+}

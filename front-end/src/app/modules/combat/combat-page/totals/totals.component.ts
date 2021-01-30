@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseComponent } from '../../../../shared/components/base.component';
-import { CombatTotals } from '../../classes/totals';
+import { CombatTotals, TrashLootTotals } from '../../classes/totals';
 import { CombatService } from '../../combat.service';
 
 @Component({
@@ -10,7 +10,9 @@ import { CombatService } from '../../combat.service';
 export class TotalsComponent extends BaseComponent implements OnInit {
   public isLoaded: boolean = false;
   public totals: CombatTotals = new CombatTotals;
+  public trashTotals: TrashLootTotals = new TrashLootTotals;
   public locations: Array<Location> = new Array<Location>();
+  public selectedLocation: number;
 
   constructor(private injector: Injector,
               private combatService: CombatService) {
@@ -24,10 +26,26 @@ export class TotalsComponent extends BaseComponent implements OnInit {
     });
 
     this.combatService.getLocations().subscribe( res => {
-      console.log(res);
-      // this.totals = res as CombatTotals;
+      this.locations = res as Array<Location>;
+      console.log(this.locations);
       this.isLoaded = true;
     });
+  }
+
+  public loadTrashLoot(e: any) {
+    // console.log(e);
+    let locationToLoad = e.value;
+    if(locationToLoad === null)
+      console.log("cleared");
+    else {
+      this.combatService.getTrashLootTotals(locationToLoad.locationId).subscribe( res => {
+        this.trashTotals = res as TrashLootTotals;
+        // console.log(this.trashTotals);
+        // console.log(this.trashTotals.trashLootTotal);
+        // console.log(this.trashTotals.trashLootTotal.trashLootAmount);
+      });
+    }
+
   }
 
 }

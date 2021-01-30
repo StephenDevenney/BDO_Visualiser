@@ -263,6 +263,7 @@ INSERT INTO combat_grinding (FK_combatSettingsId, trashLootAmount, date, FK_time
 INSERT INTO combat_grinding (FK_combatSettingsId, trashLootAmount, date, FK_timeId, FK_classId, FK_locationId, FK_serverId, FK_combatTypeId, FK_gearScoreId, afuaruSpawns) VALUES(1, 4345, '12-17-2020', 4, 1, 5, 30, 2, 1, 1);
 INSERT INTO combat_grinding (FK_combatSettingsId, trashLootAmount, date, FK_timeId, FK_classId, FK_locationId, FK_serverId, FK_combatTypeId, FK_gearScoreId, afuaruSpawns) VALUES(1, 5654, '12-17-2020', 4, 1, 5, 25, 2, 1, 0);
 INSERT INTO combat_grinding (FK_combatSettingsId, trashLootAmount, date, FK_timeId, FK_classId, FK_locationId, FK_serverId, FK_combatTypeId, FK_gearScoreId, afuaruSpawns) VALUES(1, 3546, '10-15-2019', 4, 1, 3, 19, 2, 1, 0);
+INSERT INTO combat_grinding (FK_combatSettingsId, trashLootAmount, date, FK_timeId, FK_classId, FK_locationId, FK_serverId, FK_combatTypeId, FK_gearScoreId, afuaruSpawns) VALUES(1, 3867, '10-15-2019', 4, 1, 1, 19, 2, 1, 0);
 
 -- security_navMenu
 INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Home', 'Overview', 'home');

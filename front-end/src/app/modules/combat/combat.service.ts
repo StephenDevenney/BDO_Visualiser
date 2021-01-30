@@ -25,4 +25,8 @@ export class CombatService {
     public getLocations() {
         return this.http.get(this.globals.config.appApiUrl + "shared/locations");
     }
+
+    public getTrashLootTotals(locationId: number) {
+        return this.http.get(this.globals.config.appApiUrl + "combat/trashloot-totals/" + locationId);
+    }
 }

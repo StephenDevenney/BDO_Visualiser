@@ -28,3 +28,18 @@ exports.getTotals = function(res) {
 
     return res.json({totalsDay, totalsWeek, totalsMonth, totalsYear, total});
 }
+
+exports.getTrashLootTotals = function(locationId, res) {
+    // Day
+    var trashLootDay = sqlContext.getTrashLootDay(locationId, globalUserId);
+    // Week
+    var trashLootWeek = sqlContext.getTrashLootWeek(locationId, globalUserId);
+    // Month
+    var trashLootMonth = sqlContext.getTrashLootMonth(locationId, globalUserId);
+    // Year
+    var trashLootYear = sqlContext.getTrashLootYear(locationId, globalUserId);
+    // Total
+    var trashLootTotal = sqlContext.getTrashLootTotal(locationId, globalUserId);
+
+    return res.json({trashLootDay, trashLootWeek, trashLootMonth, trashLootYear, trashLootTotal});
+}
