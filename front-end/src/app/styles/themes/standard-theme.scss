@@ -352,9 +352,12 @@
                 color: $standard-secondary-text;
             }
         }
+
+        .p-dropdown {
+            background-color: lighten($standard-primary, 10%);
+            border-color: $standard-tertiary;
+        }
     }
-
-
 
     // # Overrides
 
@@ -384,5 +387,18 @@
     .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
         background-color: lighten($standard-secondary, 10%);
         border-color: lighten($standard-secondary, 10%);
+    }
+
+    .p-float-label {
+        .p-dropdown {
+            background-color: lighten($standard-primary, 10%);
+            border-color: $standard-tertiary;
+            width: calc(10em + 1rem + 2px);
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: 700;
+        }
     }
 }

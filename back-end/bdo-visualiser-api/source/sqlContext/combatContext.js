@@ -19,7 +19,23 @@ exports.getColumnDefaults = function(combatSettingsId) {
     return db.prepare("SELECT enum_combatTableHeadings.headingId, enum_combatTableHeadings.field, enum_combatTableHeadings.header FROM enum_combatTableHeadings INNER JOIN combat_columnDefaults ON combat_columnDefaults.FK_headingId = enum_combatTableHeadings.headingId WHERE combat_columnDefaults.isActive = 1 AND combat_columnDefaults.FK_combatSettingsId = ?").all(combatSettingsId);
 }
 
-exports.getTotals = function() {
+exports.getTotals = function(userId) {
+    return db.prepare("SELECT SUM(trashLootAmount) as trashLootAmount, SUM(enum_time.timeAmount) as timeAmount, SUM(afuaruSpawns) as afuaruSpawns FROM combat_grinding INNER JOIN enum_time ON combat_grinding.FK_timeId = enum_time.timeId INNER JOIN security_settings ON combat_grinding.FK_combatSettingsId = security_settings.FK_combatSettingsId WHERE security_settings.FK_userId = ?").all(userId);
+}
+
+exports.getTotalsDay = function() {
+    // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
+}
+
+exports.getTotalsWeek = function() {
+    // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
+}
+
+exports.getTotalsMonth = function() {
+    // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
+}
+
+exports.getTotalsYear = function() {
     // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
 }
 

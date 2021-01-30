@@ -16,14 +16,15 @@ exports.getColumnDefaults = function(res) {
 
 exports.getTotals = function(res) {
     // Day
-
+    var totalsDay = sqlContext.getTotalsDay(globalUserId);
     // Week
-
+    var totalsWeek = sqlContext.getTotalsWeek(globalUserId);
     // Month
-
+    var totalsMonth = sqlContext.getTotalsMonth(globalUserId);
     // Year
-
+    var totalsYear = sqlContext.getTotalsYear(globalUserId);
     // Total
+    var total = sqlContext.getTotals(globalUserId);
 
-    return res.json(sqlContext.getTotals(globalUserId));
+    return res.json({totalsDay, totalsWeek, totalsMonth, totalsYear, total});
 }
