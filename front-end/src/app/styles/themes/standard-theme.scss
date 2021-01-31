@@ -157,7 +157,7 @@
 
     // ## Dropdowns
     .p-dropdown {
-        background: $standard-primary;
+        background-color: lighten($standard-primary, 10%);
         border-color: $standard-tertiary;
 
         // ### Text
@@ -170,10 +170,33 @@
             color: $standard-primary-text;
         }
 
+        .p-dropdown-label.p-placeholder {
+            color: $standard-primary-text;
+        }
+
         // ### Panel Body
         .p-dropdown-panel {
             background: lighten($standard-primary, 5%);
             color: $standard-primary-text;
+
+            // ### Filter
+            .p-dropdown-header {
+                background: lighten($standard-primary, 5%);
+                .p-inputtext {
+                    background: lighten($standard-primary, 5%);
+                    border-color: $standard-secondary;
+                }
+                .p-inputtext:enabled:hover {
+                    border-color: lighten($standard-secondary, 10%);
+                }
+                .p-dropdown-filter-icon {
+                    color: $standard-primary-text;
+                }
+            }
+
+            .p-dropdown-items .p-dropdown-empty-message {
+                color: $standard-primary-text;
+            }
         }
 
         // ### Panel Items
@@ -410,9 +433,9 @@
     }
 
     // ## FloatLabel
-    .p-float-label {
-        .p-dropdown {
-            background-color: lighten($standard-primary, 10%);
-        }
-    }
+    // .p-float-label {
+    //     .p-dropdown {
+    //         background-color: lighten($standard-primary, 10%);
+    //     }
+    // }
 }

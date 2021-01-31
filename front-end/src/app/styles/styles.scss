@@ -458,7 +458,7 @@ input {
 // ## Dropdowns
 .p-dropdown {
     border-radius: 0.25rem;
-    width: 100%;
+    width: calc(10em + 1rem + 2px);
 }
 
 .p-dropdown:not(.p-disabled).p-focus {

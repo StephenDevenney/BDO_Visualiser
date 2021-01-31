@@ -13,13 +13,18 @@ export class TotalsComponent extends BaseComponent implements OnInit {
   public trashTotals: TrashLootTotals = new TrashLootTotals;
   public locations: Array<Location> = new Array<Location>();
   public selectedLocation: number;
+  public locationSelected: boolean = false;
 
   constructor(private injector: Injector,
               private combatService: CombatService) {
     super(injector);
   }
-
+  
   ngOnInit(): void {
+
+  }
+
+  ngAfterViewInit(): void {
     this.combatService.getTotals().subscribe( res => {
       this.totals = res as CombatTotals;
       // this.isLoaded = true;
@@ -33,14 +38,14 @@ export class TotalsComponent extends BaseComponent implements OnInit {
   }
 
   public loadTrashLoot(e: any) {
-    // console.log(e);
     let locationToLoad = e.value;
     if(locationToLoad === null)
-      console.log("cleared");
+      this.locationSelected = false;
     else {
       this.combatService.getTrashLootTotals(locationToLoad.locationId).subscribe( res => {
         this.trashTotals = res as TrashLootTotals;
-        // console.log(this.trashTotals);
+        console.log(this.trashTotals);
+        this.locationSelected = true;
         // console.log(this.trashTotals.trashLootTotal);
         // console.log(this.trashTotals.trashLootTotal.trashLootAmount);
       });

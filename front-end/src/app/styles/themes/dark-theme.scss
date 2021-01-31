@@ -156,7 +156,7 @@
 
     // ## Dropdowns
     .p-dropdown {
-        background: $dark-primary;
+        background-color: lighten($dark-primary, 10%);
         border-color: darken($dark-tertiary, 15%);
 
         // ### Text
@@ -169,10 +169,33 @@
             color: $dark-primary-text;
         }
 
+        .p-dropdown-label.p-placeholder {
+            color: $dark-primary-text;
+        }
+
         // ### Panel Body
         .p-dropdown-panel {
             background: lighten($dark-primary, 5%);
             color: $dark-primary-text;
+
+            // ### Filter
+            .p-dropdown-header {
+                background: lighten($dark-primary, 5%);
+                .p-inputtext {
+                    background: lighten($dark-primary, 5%);
+                    border-color: darken($dark-tertiary, 15%);
+                }
+                .p-inputtext:enabled:hover {
+                    border-color: lighten($dark-tertiary, 10%);
+                }
+                .p-dropdown-filter-icon {
+                    color: $dark-primary-text;
+                }
+            }
+
+            .p-dropdown-items .p-dropdown-empty-message {
+                color: $dark-primary-text;
+            }
         }
 
         // ### Panel Items

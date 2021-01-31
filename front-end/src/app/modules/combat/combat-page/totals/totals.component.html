@@ -1,23 +1,16 @@
 <div class="page-tab">
     <div class="page-tab-content mt-2">
         <div class="d-flex justify-content-end mb-2">
-            <div class="p-float-label">
-                <p-dropdown [options]="locations" [(ngModel)]="selectedLocation" [showClear]="true" optionLabel="locationName" [autoDisplayFirst]="false" inputId="dropdown" styleClass="p-dropdown-icon-custom" (onChange)="loadTrashLoot($event)"> 
-                    <!-- <ng-template pTemplate="selectedItem">
-                        <div>
-                            <div>location name</div>
-                            <div>{{globals.config.theme.themeName}}</div>
-                        </div>
-                    </ng-template> -->
+            <!-- <div class="p-float-label"> -->
+                <p-dropdown [filter]="true" [options]="locations" [(ngModel)]="selectedLocation" [showClear]="true" optionLabel="locationName" [autoDisplayFirst]="false" inputId="dropdown" styleClass="p-dropdown-icon-custom" (onChange)="loadTrashLoot($event)" placeholder="Trash Loot"> 
                     <ng-template let-item pTemplate="item">
                         <div>
                             <div>{{item.locationName}}</div>
-                            <!-- <div>location</div> -->
                         </div>
                     </ng-template>
                 </p-dropdown>
-                <label for="dropdown">Trash Loot</label>
-            </div>
+                <!-- <label for="dropdown">Trash Loot</label> -->
+            <!-- </div> -->
         </div>
         <div class="d-flex align-items-center">
             <div class="fixed-tile">
@@ -112,8 +105,8 @@
                     <div class="mt-3">
                         <label>Trash Loot:</label>
                         <div>
-                            <!-- <label>{{totals.total.trashLootAmount}}</label> -->
-                            <label *ngIf="selectedLocation > 0"></label>
+                            <label *ngIf="!locationSelected">0</label>
+                            <label *ngIf="locationSelected">{{trashTotals.trashLootTotal.trashLootAmount}}</label>
                         </div>  
                     </div>
                     <div class="mt-3">
