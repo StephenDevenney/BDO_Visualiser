@@ -74,9 +74,19 @@
             <div *ngIf="grindingRes.length == 0">
                 <div>
                     <h2>Grinding</h2>
-                    <div>
-                        <label>Add data</label>
-                        <button class="btn btn-primary mr-2">Add</button>
+                    <!-- <div class="mt-4">
+                        <label class="mt-2 mr-5">No data available.</label>
+                        <button class="btn btn-primary mr-2">Begin</button>
+                    </div> -->
+                    <div class="d-flex align-items-center justify-content-center" style="height: 60vh;">
+                        <div class="d-flex flex-column">
+                            <label class="d-flex align-items-center justify-content-center">No data available.</label>
+                            <label class="d-flex align-items-center justify-content-center mt-2">Start by selecting what data you wish to track</label>
+                            <label class="d-flex align-items-center justify-content-center">followed by a new entry.</label>
+                            <div class="d-flex align-items-center justify-content-center mt-4">
+                                <button class="btn btn-primary mr-2">Begin</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>        
