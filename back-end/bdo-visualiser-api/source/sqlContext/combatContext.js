@@ -20,7 +20,7 @@ exports.getColumnDefaults = function(combatSettingsId) {
 }
 
 exports.getTotals = function(userId) {
-    return db.prepare("SELECT SUM(trashLootAmount) as trashLootAmount, SUM(enum_time.timeAmount) as timeAmount, SUM(afuaruSpawns) as afuaruSpawns FROM combat_grinding INNER JOIN enum_time ON combat_grinding.FK_timeId = enum_time.timeId INNER JOIN security_settings ON combat_grinding.FK_combatSettingsId = security_settings.FK_combatSettingsId WHERE security_settings.FK_userId = ?").get(userId);
+    return db.prepare("SELECT IFNULL(SUM(trashLootAmount), 0) as trashLootAmount, IFNULL(SUM(enum_time.timeAmount), 0) as timeAmount, IFNULL(SUM(afuaruSpawns), 0)  as afuaruSpawns FROM combat_grinding INNER JOIN enum_time ON combat_grinding.FK_timeId = enum_time.timeId INNER JOIN security_settings ON combat_grinding.FK_combatSettingsId = security_settings.FK_combatSettingsId WHERE security_settings.FK_userId = ?").get(userId);
 }
 
 exports.getTotalsDay = function() {
@@ -35,8 +35,8 @@ exports.getTotalsMonth = function() {
     // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
 }
 
-exports.getTotalsYear = function() {
-    // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
+exports.getTotalsYear = function(userId) {
+    // return db.prepare("SELECT SUM(trashLootAmount) as trashLootAmount, SUM(enum_time.timeAmount) as timeAmount, SUM(afuaruSpawns) as afuaruSpawns FROM combat_grinding INNER JOIN enum_time ON combat_grinding.FK_timeId = enum_time.timeId INNER JOIN security_settings ON combat_grinding.FK_combatSettingsId = security_settings.FK_combatSettingsId WHERE security_settings.FK_userId = ? AND combat_grinding.date BETWEEN '01-01-2021' AND '03-20-2021'").get(userId);
 }
 
 exports.getTrashLootTotal = function(locationId, userId) {

@@ -400,6 +400,15 @@
             background-color: lighten($standard-primary, 10%);
             border-color: $standard-tertiary;
         }
+
+        .fixed-tile-item {
+            padding: 0.5rem;
+            width: 100%;
+            background: lighten($standard-primary, 10%);
+            color: $standard-primary-text;
+            border-radius: 3px;
+            border: 1px solid $standard-secondary;
+        }
     }
 
     // # Overrides

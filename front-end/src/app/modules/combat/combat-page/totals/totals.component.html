@@ -1,34 +1,204 @@
 <div class="page-tab">
-    <div class="page-tab-content mt-2">
-        <div class="d-flex justify-content-end mb-2">
-            <!-- <div class="p-float-label"> -->
-                <p-dropdown [filter]="true" [options]="locations" [(ngModel)]="selectedLocation" [showClear]="true" optionLabel="locationName" [autoDisplayFirst]="false" inputId="dropdown" styleClass="p-dropdown-icon-custom" (onChange)="loadTrashLoot($event)" placeholder="Trash Loot"> 
-                    <ng-template let-item pTemplate="item">
-                        <div>
-                            <div>{{item.locationName}}</div>
-                        </div>
-                    </ng-template>
-                </p-dropdown>
-                <!-- <label for="dropdown">Trash Loot</label> -->
-            <!-- </div> -->
+    <div class="page-tab-content">
+        <div class="totals-header">
+            <!-- Hours -->
+            <div class="totals-hours">
+                <div class="d-flex align-content-center justify-content-center">
+                    <Label class="mb-0">Time</Label>
+                </div>
+                <div>
+                    <Label>Total</Label>
+                    <div>
+                        <Label>{{totals.total.timeAmount}}</Label>
+                    </div>
+                </div>
+                <div>
+                    <Label>Day</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1">
+                    <Label>Week</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1">
+                    <Label>Month</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1"> 
+                    <Label>Year</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="totals-other ml-2">
+                <div class="d-flex align-content-center justify-content-center">
+                    <Label class="mb-0">Top Servers</Label>
+                </div>
+                <div>
+                    <Label>Server 1</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div>
+                    <Label>Server 2</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1">
+                    <Label>Server 3</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1">
+                    <Label>Server 4</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1"> 
+                    <Label>Server 5</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+            </div>   
         </div>
+        <div class="totals-header mt-2">
+            <!-- Hours -->
+            <div class="totals-hours">
+                <div class="d-flex align-content-center justify-content-center">
+                    <Label class="mb-0">Trashloot</Label>
+                </div>
+                <div>
+                    <Label>Total</Label>
+                    <div>
+                        <Label>{{totals.total.trashLootAmount}}</Label>
+                    </div>
+                </div>
+                <div>
+                    <Label>Day</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1">
+                    <Label>Week</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1">
+                    <Label>Month</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1"> 
+                    <Label>Year</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="totals-other ml-2">
+                <div class="d-flex align-content-center justify-content-center">
+                    <Label class="mb-0">Afuaru</Label>
+                </div>
+                <div>
+                    <Label>Total</Label>
+                    <div>
+                        <Label>{{totals.total.afuaruSpawns}}</Label>
+                    </div>
+                </div>
+                <div>
+                    <Label>Day</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1">
+                    <Label>Week</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1">
+                    <Label>Month</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+                <div class="pb-1"> 
+                    <Label>Year</Label>
+                    <div>
+                        <Label>0</Label>
+                    </div>
+                </div>
+            </div>   
+        </div>
+        
+        <!-- Specific Location -->
         <div class="d-flex align-items-center">
+            <div class="fixed-tile">
+                <div class="fixed-tile-header">
+                    <h3>Total</h3>
+                </div>
+                <div class="fixed-tile-content">
+                    <div>
+                        <label>Hours:</label>
+                        <div>
+                            <label class="fixed-tile-item">{{totals.total.timeAmount}}</label>
+                        </div>  
+                    </div>
+                    <div>
+                        <label>Trash Loot:</label>
+                        <div>
+                            <label class="fixed-tile-item" *ngIf="!locationSelected">-</label>
+                            <label class="fixed-tile-item" *ngIf="locationSelected">{{trashTotals.trashLootTotal.trashLootAmount}}</label>
+                        </div>  
+                    </div>
+                    <div>
+                        <label>Afuaru Spawns:</label>
+                        <div>
+                            <label class="fixed-tile-item">{{totals.total.afuaruSpawns}}</label>
+                        </div>  
+                    </div>
+                </div>
+            </div> 
             <div class="fixed-tile">
                 <div class="fixed-tile-header">
                     <h3>Day</h3>
                 </div>
                 <div class="fixed-tile-content">
-                    <div class="mt-3">
+                    <div>
                         <label>Hours:</label>
-                        <label>2</label>
+                        <div>
+                            <label class="fixed-tile-item">0</label>
+                        </div>  
                     </div>
-                    <div class="mt-3">
-
+                    <div>
+                        <label>Trash Loot:</label>
+                        <div>
+                            <label class="fixed-tile-item" *ngIf="!locationSelected">-</label>
+                            <label class="fixed-tile-item" *ngIf="locationSelected">0</label>
+                        </div>  
                     </div>
-                    <div class="mt-3">
+                    <div>
                         <label>Afuaru Spawns:</label>
                         <div>
-                            <label>2</label>
+                            <label class="fixed-tile-item">0</label>
                         </div>  
                     </div>
                 </div>
@@ -38,17 +208,23 @@
                     <h3>Week</h3>
                 </div>
                 <div class="fixed-tile-content">
-                    <div class="mt-3">
+                    <div>
                         <label>Hours:</label>
-                        <label>2</label>
+                        <div>
+                            <label class="fixed-tile-item">0</label>
+                        </div>  
                     </div>
-                    <div class="mt-3">
-
+                    <div>
+                        <label>Trash Loot:</label>
+                        <div>
+                            <label class="fixed-tile-item" *ngIf="!locationSelected">-</label>
+                            <label class="fixed-tile-item" *ngIf="locationSelected">0</label>
+                        </div>  
                     </div>
-                    <div class="mt-3">
+                    <div>
                         <label>Afuaru Spawns:</label>
                         <div>
-                            <label>2</label>
+                            <label class="fixed-tile-item">0</label>
                         </div>  
                     </div>
                 </div>
@@ -58,77 +234,68 @@
                     <h3>Month</h3>
                 </div>
                 <div class="fixed-tile-content">
-                    <div class="mt-3">
+                    <div>
                         <label>Hours:</label>
-                        <label>2</label>
+                        <div>
+                            <label class="fixed-tile-item">0</label>
+                        </div>  
                     </div>
-                    <div class="mt-3">
-
+                    <div>
+                        <label>Trash Loot:</label>
+                        <div>
+                            <label class="fixed-tile-item" *ngIf="!locationSelected">-</label>
+                            <label class="fixed-tile-item" *ngIf="locationSelected">0</label>
+                        </div>  
                     </div>
-                    <div class="mt-3">
+                    <div>
                         <label>Afuaru Spawns:</label>
                         <div>
-                            <label>2</label>
+                            <label class="fixed-tile-item">0</label>
                         </div>  
                     </div>
                 </div>
-            </div>  
+            </div> 
             <div class="fixed-tile">
                 <div class="fixed-tile-header">
                     <h3>Year</h3>
                 </div>
                 <div class="fixed-tile-content">
-                    <div class="mt-3">
+                    <div>
                         <label>Hours:</label>
-                        <label>2</label>
-                    </div>
-                    <div class="mt-3">
-
-                    </div>
-                    <div class="mt-3">
-                        <label>Afuaru Spawns:</label>
                         <div>
-                            <label>2</label>
+                            <label class="fixed-tile-item">0</label>
                         </div>  
                     </div>
-                </div>
-            </div>
-            <div class="fixed-tile">
-                <div class="fixed-tile-header">
-                    <h3>Total</h3>
-                </div>
-                <div class="fixed-tile-content">
-                    <div class="mt-3">
-                        <label>Hours:</label>
-                        <label>{{totals.total.timeAmount}}</label>
-                    </div>
-                    <div class="mt-3">
+                    <div>
                         <label>Trash Loot:</label>
                         <div>
-                            <label *ngIf="!locationSelected">0</label>
-                            <label *ngIf="locationSelected">{{trashTotals.trashLootTotal.trashLootAmount}}</label>
+                            <label class="fixed-tile-item" *ngIf="!locationSelected">-</label>
+                            <label class="fixed-tile-item" *ngIf="locationSelected">0</label>
                         </div>  
                     </div>
-                    <div class="mt-3">
+                    <div>
                         <label>Afuaru Spawns:</label>
                         <div>
-                            <label>{{totals.total.afuaruSpawns}}</label>
+                            <label class="fixed-tile-item">0</label>
                         </div>  
                     </div>
                 </div>
-            </div>       
+            </div>    
         </div>
-        <div>
-            <h3>Location Name</h3>
-            <div>
-                <label>Hours: 0</label>
-            </div>
-            <div>
-                <label>Trash loot: 0</label>
-            </div>
-            <div>
-                <label>Afuaru Spawns: 0</label>
-            </div>
-        </div> 
+
     </div>
 </div>
+
+<!-- 
+
+-->
+<!-- Dropdown & Search -->
+<!-- <div class="d-flex mb-2">
+    <p-dropdown [filter]="true" [options]="locations" [(ngModel)]="selectedLocation" [showClear]="true" optionLabel="locationName" [autoDisplayFirst]="false" inputId="dropdown" styleClass="p-dropdown-icon-custom" (onChange)="loadTrashLoot($event)" placeholder="Trash Loot"> 
+        <ng-template let-item pTemplate="item">
+            <div>
+                <div>{{item.locationName}}</div>
+            </div>
+        </ng-template>
+    </p-dropdown>
+</div> -->
