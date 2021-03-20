@@ -9,8 +9,9 @@ export class DateLongPipe implements PipeTransform {
         if(dateString == "" || dateString == undefined) 
             return "";
 
-        var date = new Date(dateString);
-        var tempDate = moment(date).format('dddd, Do MMMM YYYY');
-        return tempDate;
+        var momentObj = moment(dateString, 'MM-DD-YYYY');
+        var momentString = momentObj.format('dddd, Do MMMM YYYY');
+
+        return momentString;
     }
 }
