@@ -5,6 +5,12 @@ var globalUserId = "1";
 exports.getGrindingData = function(res) {
     var settings = sqlContext.getCombatSettingsId(globalUserId);
     var tableHeaders = sqlContext.getCombatTableHeaders(settings.combatSettingsId);
+    tableHeaders.forEach(col => {
+        if(col.isActive == 1)
+            col.isActive = true;
+        else if(col.isActive == 0)
+            col.isActive = false;
+    });
     var tableData = sqlContext.getGrindingData(globalUserId);
 
     return res.json({tableHeaders, tableData});
@@ -43,4 +49,18 @@ exports.getTrashLootTotals = function(locationId, res) {
     var trashLootTotal = sqlContext.getTrashLootTotal(locationId, globalUserId);
 
     return res.json({trashLootDay, trashLootWeek, trashLootMonth, trashLootYear, trashLootTotal});
+}
+
+// // PUT
+exports.updateActiveColumns = function(columnHeaders, res) {
+    var settings = sqlContext.getCombatSettingsId(globalUserId);
+    columnHeaders.forEach(col => {
+        if(col.isActive == true)
+            col.isActive = 1;
+        else if(col.isActive == false)
+            col.isActive = 0;
+        sqlContext.updateActiveColumns(settings.combatSettingsId, col.headingId, col.isActive);
+    });
+
+    // return res.json(sqlContext.getCombatTableHeaders(settings.combatSettingsId));
 }

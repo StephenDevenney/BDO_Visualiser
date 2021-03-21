@@ -29,7 +29,8 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
     this.combatService.getGrindingData().subscribe( res => {
       this.grindingTable = res as GrindingTable;
-      this.columnHeaders = this.grindingTable.tableHeaders;
+      this.columnHeaders = this.grindingTable.tableHeaders as Array<GrindingTableHeaders>;
+      console.log(this.columnHeaders);
       this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
       console.log(this.columnHeaders);
       this.grindingRes = this.grindingTable.tableData;
@@ -81,6 +82,13 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   }
 
   public saveDefaultColumns() {
-    this.messageService.add({severity:'success', summary:'Combat Headers Updated', detail:'You can change your combat headers later.', life: 2600 });
+    this.combatService.saveCombatHeaders(this.columnHeaders).subscribe( res => {
+      this.showAddEntry = true; 
+      this.entryPopupTitle = "Add Entry";
+      this.messageService.add({severity:'success', summary:'Combat Headers Updated', detail:'You can change your combat headers later.', life: 2600 });
+    },
+    err => {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Combat headers failed to update.', life: 2600 });
+    });
   }
 }

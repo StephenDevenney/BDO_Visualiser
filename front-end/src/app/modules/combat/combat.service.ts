@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Globals } from '../../shared/classes/globals';
 import { APIService } from '../../shared/services/api.service';
+import { GrindingTableHeaders } from './classes/grindingTable';
 
 @Injectable()
 export class CombatService {
@@ -28,5 +29,9 @@ export class CombatService {
 
     public getTrashLootTotals(locationId: number) {
         return this.http.get(this.globals.config.appApiUrl + "combat/trashloot-totals/" + locationId);
+    }
+
+    public saveCombatHeaders(combatHeaders: Array<GrindingTableHeaders>) {
+        return this.http.put(this.globals.config.appApiUrl + "combat/active-columns", JSON.stringify(combatHeaders));
     }
 }

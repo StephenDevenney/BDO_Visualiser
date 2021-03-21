@@ -12,4 +12,7 @@ router.get('/totals', (req, res) => { return combatPath.getTotals(res) });
 
 router.get('/trashLoot-totals/:locationId', (req, res) => { return combatPath.getTrashLootTotals(req.params.locationId, res) });
 
+// // PUT
+router.put('/active-columns', (req, res) => { return res.json(combatPath.updateActiveColumns(req.body, res)) });
+
 module.exports = router;

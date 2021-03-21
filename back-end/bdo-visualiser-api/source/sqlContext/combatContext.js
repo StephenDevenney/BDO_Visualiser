@@ -61,7 +61,12 @@ exports.getTrashLootYear = function() {
     // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
 }
 
-// Post 
+// POST 
 exports.createCombatSettings = function(userId) {
 
+}
+
+// // PUT
+exports.updateActiveColumns = function(combatSettingsId, columnHeadingId, isActive) {
+    db.prepare("UPDATE combat_columnDefaults SET isActive = ? WHERE FK_combatSettingsId = ? AND FK_headingId = ?").run(isActive, combatSettingsId, columnHeadingId);  
 }
