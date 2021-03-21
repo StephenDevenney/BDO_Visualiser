@@ -12,6 +12,7 @@ export class GrindingTableHeaders {
     public headingId: number = 0;
     public field: string = "";
     public header: string = "";
+    public isActive: boolean = false;
 }
 
 @Injectable()

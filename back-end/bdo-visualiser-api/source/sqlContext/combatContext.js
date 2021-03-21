@@ -11,12 +11,14 @@ exports.getCombatSettingsId = function(userId) {
     return db.prepare("SELECT combat_settings.combatSettingsId FROM combat_settings INNER JOIN security_settings ON combat_settings.combatSettingsId = security_settings.FK_combatSettingsId WHERE security_settings.FK_userId = ?").get(userId);
 }
 
-exports.getCombatTableHeaders = function() {
-    return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
+exports.getCombatTableHeaders = function(combatSettingsId) {
+    // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
+    return db.prepare("SELECT enum_combatTableHeadings.headingId, enum_combatTableHeadings.field, enum_combatTableHeadings.header, combat_columnDefaults.isActive FROM enum_combatTableHeadings INNER JOIN combat_columnDefaults ON combat_columnDefaults.FK_headingId = enum_combatTableHeadings.headingId WHERE combat_columnDefaults.FK_combatSettingsId = ?").all(combatSettingsId);
 }
 
 exports.getColumnDefaults = function(combatSettingsId) {
-    return db.prepare("SELECT enum_combatTableHeadings.headingId, enum_combatTableHeadings.field, enum_combatTableHeadings.header FROM enum_combatTableHeadings INNER JOIN combat_columnDefaults ON combat_columnDefaults.FK_headingId = enum_combatTableHeadings.headingId WHERE combat_columnDefaults.isActive = 1 AND combat_columnDefaults.FK_combatSettingsId = ?").all(combatSettingsId);
+    // return db.prepare("SELECT enum_combatTableHeadings.headingId, enum_combatTableHeadings.field, enum_combatTableHeadings.header FROM enum_combatTableHeadings INNER JOIN combat_columnDefaults ON combat_columnDefaults.FK_headingId = enum_combatTableHeadings.headingId WHERE combat_columnDefaults.isActive = 1 AND combat_columnDefaults.FK_combatSettingsId = ?").all(combatSettingsId);
+    return db.prepare("SELECT enum_combatTableHeadings.headingId, enum_combatTableHeadings.field, enum_combatTableHeadings.header, combat_columnDefaults.isActive FROM enum_combatTableHeadings INNER JOIN combat_columnDefaults ON combat_columnDefaults.FK_headingId = enum_combatTableHeadings.headingId WHERE combat_columnDefaults.FK_combatSettingsId = ?").all(combatSettingsId);
 }
 
 exports.getTotals = function(userId) {

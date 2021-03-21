@@ -27,12 +27,10 @@ export class TotalsComponent extends BaseComponent implements OnInit {
   ngAfterViewInit(): void {
     this.combatService.getTotals().subscribe( res => {
       this.totals = res as CombatTotals;
-      // this.isLoaded = true;
     });
 
     this.combatService.getLocations().subscribe( res => {
       this.locations = res as Array<Location>;
-      console.log(this.locations);
       this.isLoaded = true;
     });
   }
@@ -46,8 +44,6 @@ export class TotalsComponent extends BaseComponent implements OnInit {
         this.trashTotals = res as TrashLootTotals;
         console.log(this.trashTotals);
         this.locationSelected = true;
-        // console.log(this.trashTotals.trashLootTotal);
-        // console.log(this.trashTotals.trashLootTotal.trashLootAmount);
       });
     }
 

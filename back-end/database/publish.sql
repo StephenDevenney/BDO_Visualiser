@@ -226,7 +226,7 @@ INSERT INTO combat_classes (classId, FK_combatSettingsId, FK_classNameId, FK_cla
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 1, 2, 1);
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (2, 1, 3, 1);
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (3, 1, 4, 1);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (4, 1, 5, 1);
+INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (4, 1, 5, 0);
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (5, 1, 6, 0);
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (6, 1, 7, 1);
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (7, 1, 8, 0);

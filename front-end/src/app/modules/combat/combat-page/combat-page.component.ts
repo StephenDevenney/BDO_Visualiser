@@ -18,23 +18,35 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public grindingRes: Array<GrindingData> = new Array<GrindingData>();
   public rowGroupMetadata: any;
   public filteredColumns: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
-  public columnsHeaders: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
+  public columnHeaders: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
+  public stateOptions = [{label: 'Off', value: 0}, {label: 'On', value: 1}];
   public isLoaded: boolean = false;
+  public showAddEntryPopup: boolean = false;
+  public entryPopupTitle: string = "New Entry";
+  public showAddEntry: boolean = true;
 
   ngOnInit(): void {
 
     this.combatService.getGrindingData().subscribe( res => {
       this.grindingTable = res as GrindingTable;
-      this.columnsHeaders = this.grindingTable.tableHeaders;
+      this.columnHeaders = this.grindingTable.tableHeaders;
+      this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
+      console.log(this.columnHeaders);
       this.grindingRes = this.grindingTable.tableData;
       this.updateRowGroupMetaData(this.grindingRes);
-    });
-
-    this.combatService.getDefaultColumns().subscribe( res => {
-      this.filteredColumns = res as Array<GrindingTableHeaders>;  
-      this.updateRowGroupMetaData(this.grindingRes);
+      if(this.grindingRes.length == 0){
+        this.entryPopupTitle = "Select Combat Headers";
+        this.showAddEntry = false;
+      }  
       this.isLoaded = true;
     });
+
+    // this.combatService.getDefaultColumns().subscribe( res => {
+    //   this.filteredColumns = res as Array<GrindingTableHeaders>;
+    //   console.log(this.filteredColumns);
+    //   this.updateRowGroupMetaData(this.grindingRes);
+    //   this.isLoaded = true;
+    // });
 
   }
 
@@ -66,5 +78,9 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   public onRowSelect(e) {
 
+  }
+
+  public saveDefaultColumns() {
+    this.messageService.add({severity:'success', summary:'Combat Headers Updated', detail:'You can change your combat headers later.', life: 2600 });
   }
 }

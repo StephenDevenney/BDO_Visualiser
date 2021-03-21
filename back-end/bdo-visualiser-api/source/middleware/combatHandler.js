@@ -3,7 +3,8 @@ var globalUserId = "1";
 
 // // GET
 exports.getGrindingData = function(res) {
-    var tableHeaders = sqlContext.getCombatTableHeaders();
+    var settings = sqlContext.getCombatSettingsId(globalUserId);
+    var tableHeaders = sqlContext.getCombatTableHeaders(settings.combatSettingsId);
     var tableData = sqlContext.getGrindingData(globalUserId);
 
     return res.json({tableHeaders, tableData});

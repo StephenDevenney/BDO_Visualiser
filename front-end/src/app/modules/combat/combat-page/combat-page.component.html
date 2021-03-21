@@ -16,7 +16,7 @@
 
                         <p-multiSelect 
                             class="mr-2" 
-                            [options]="columnsHeaders" 
+                            [options]="columnHeaders" 
                             [(ngModel)]="filteredColumns" 
                             optionLabel="header"
                             placeholder="Select Columns"
@@ -58,7 +58,7 @@
                         <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
                             <!-- Subheader Group -->
                             <tr class="table-group-subheading" *ngIf="rowGroupMetadata[item.date].index === rowIndex">
-                                <td [colSpan]="filteredColumns.length"><h3 class="mb-0">{{ item[columnsHeaders[0].field] | dateLong }}</h3></td>
+                                <td [colSpan]="filteredColumns.length"><h3 class="mb-0">{{ item[columnHeaders[0].field] | dateLong }}</h3></td>
                             </tr>
                             
                             <!-- Main Data -->
@@ -84,7 +84,7 @@
                             <label class="d-flex align-items-center justify-content-center mt-2">Start by selecting what data you wish to track</label>
                             <label class="d-flex align-items-center justify-content-center">followed by a new entry.</label>
                             <div class="d-flex align-items-center justify-content-center mt-4">
-                                <button class="btn btn-primary mr-2">Begin</button>
+                                <button class="btn btn-primary mr-2" (click)="showAddEntryPopup = true;">Begin</button>
                             </div>
                         </div>
                     </div>
@@ -118,3 +118,39 @@
     </div>
 </page>
 
+
+<p-dialog 
+    header="{{entryPopupTitle}}" 
+    [(visible)]="showAddEntryPopup"
+    [style]="{width: '50vw'}"
+    styleClass="popupDialog"
+    [closable]="false"
+    modal="true">
+
+    <div>
+        <!-- Choose Columns -->
+        <div class="row" *ngIf="grindingRes.length == 0 && showAddEntry == false;">
+            <div class="col-md-4 col-sm-6 col" *ngFor="let col of columnHeaders; let i = index">
+                <div class="mb-2">
+                    <div class="d-flex align-items-center">
+                        <label>{{col.header}}</label>
+                        <label class="ml-2" *ngIf="col.headingId == 3">(Hours, Minutes...)</label>
+                    </div>
+                    <div>
+                        <!-- <p-selectButton [options]="stateOptions" [(ngModel)]="col.isActive" optionLabel="label" optionValue="value"></p-selectButton> -->
+                        <p-inputSwitch [(ngModel)]="col.isActive"></p-inputSwitch>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add Entry -->
+        <div *ngIf="showAddEntry">
+            
+        </div>
+        <div class="d-flex align-items-center justify-content-end">
+            <button *ngIf="grindingRes.length == 0 && showAddEntry == false;" class="btn btn-primary" (click)="showAddEntry = true; entryPopupTitle = 'Add Entry'; saveDefaultColumns();">Continue</button>
+            <button *ngIf="showAddEntry" class="btn btn-primary">Add</button>
+            <button class="btn btn-primary ml-2" (click)="showAddEntryPopup = false;">Close</button>
+        </div>
+    </div>
+</p-dialog>
