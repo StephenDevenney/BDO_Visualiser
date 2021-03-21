@@ -34,7 +34,8 @@
         # Overrides
             ## Input Text
             ## Checkboxes
-            ## FloatLabel
+            ## Switch
+            ## Popup Dialog
     */
 
     /*  # Component Setup
@@ -62,6 +63,11 @@
 
     .split-page .half-page:nth-child(2n) {
         border-left: 0.1rem solid darken($standard-primary, 20%);
+    }
+
+    // ## Popup Dialog
+    .popupDialog {
+        background-color: red;
     }
 
     //# Fonts
@@ -441,10 +447,33 @@
         border-color: lighten($standard-secondary, 10%);
     }
 
-    // ## FloatLabel
-    // .p-float-label {
-    //     .p-dropdown {
-    //         background-color: lighten($standard-primary, 10%);
-    //     }
-    // }
+    // ## Switch
+    .p-inputswitch .p-inputswitch-slider {
+        background: $standard-tertiary;
+    }
+
+    .p-inputswitch:not(.p-disabled):hover .p-inputswitch-slider {
+        background: lighten($standard-tertiary, 10%);
+    }
+
+    .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+        background: $standard-secondary;
+    }
+
+    .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
+        background: lighten($standard-secondary, 10%);
+    }
+
+    .p-inputswitch.p-focus .p-inputswitch-slider {
+        box-shadow: 0 0 0 0.1rem lighten($standard-secondary, 10%);
+    }
+
+    // ## Popup Dialog
+    .p-dialog .p-dialog-header, .p-dialog-content {
+        background: $standard-primary;  
+    }
+
+    .p-dialog .p-dialog-header {
+        color: $standard-primary-text;  
+    }
 }

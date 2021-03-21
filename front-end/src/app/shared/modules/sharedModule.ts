@@ -12,13 +12,13 @@ import { ToastModule } from 'primeng/toast'
 import { MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
+import { DialogModule } from 'primeng/dialog';
 import { DateLongPipe } from '../pipes/date-long.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
-    PageModule,
-    ToastModule
+    PageModule
   ],
   declarations: [
     DateLongPipe
@@ -32,6 +32,8 @@ import { DateLongPipe } from '../pipes/date-long.pipe';
     TableModule,
     MultiSelectModule,
     DropdownModule,
+    DialogModule,
+    ToastModule,
     DateLongPipe
   ],
   providers: [

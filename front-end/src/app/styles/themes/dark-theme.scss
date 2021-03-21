@@ -35,7 +35,9 @@
         # Overrides
             ## Input Text
             ## Checkboxes  
+            ## Switch
             ## FloatLabel
+            ## Popup Dialog
     */
 
     /*  # Component Setup
@@ -432,10 +434,40 @@
         border-color: lighten($dark-secondary, 10%);
     }
 
+    // ## Switch
+    .p-inputswitch .p-inputswitch-slider {
+        background: darken($dark-tertiary, 20%);
+    }
+
+    .p-inputswitch:not(.p-disabled):hover .p-inputswitch-slider {
+        background: darken($dark-tertiary, 10%);
+    }
+
+    .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+        background: $dark-secondary;
+    }
+
+    .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
+        background: lighten($dark-secondary, 10%);
+    }
+
+    .p-inputswitch.p-focus .p-inputswitch-slider {
+        box-shadow: 0 0 0 0.1rem lighten($dark-secondary, 10%);
+    }
+
     // ## FloatLabel
     .p-float-label {
         .p-dropdown {
             background-color: lighten($dark-primary, 10%);
         }     
+    }
+
+    // ## Popup Dialog
+    .p-dialog .p-dialog-header, .p-dialog-content {
+        background: $dark-primary;  
+    }
+
+    .p-dialog .p-dialog-header {
+        color: $dark-primary-text;  
     }
 }
