@@ -49,7 +49,7 @@ export class PageHeaderComponent extends BaseComponent implements OnInit {
 
   public saveSettings() {
     this.pageService.saveProfile().subscribe( res => {
-      this.messageService.add({severity:'success', summary:'Profile Updated', detail:'Your profile settings have been saved.', life: 1800 });
+      this.messageService.add({severity:'success', summary:'Profile Updated', detail:'Your profile settings have been saved.', life: 1900 });
     });
   }
 
