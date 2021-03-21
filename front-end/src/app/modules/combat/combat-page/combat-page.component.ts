@@ -24,13 +24,13 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public showAddEntryPopup: boolean = false;
   public entryPopupTitle: string = "New Entry";
   public showAddEntry: boolean = true;
+  public showMainClassEntry: boolean = false;
 
   ngOnInit(): void {
 
     this.combatService.getGrindingData().subscribe( res => {
       this.grindingTable = res as GrindingTable;
       this.columnHeaders = this.grindingTable.tableHeaders as Array<GrindingTableHeaders>;
-      console.log(this.columnHeaders);
       this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
       console.log(this.columnHeaders);
       this.grindingRes = this.grindingTable.tableData;

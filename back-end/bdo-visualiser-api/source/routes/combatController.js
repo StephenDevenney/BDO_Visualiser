@@ -10,6 +10,8 @@ router.get('/column-defaults', (req, res) => { return combatPath.getColumnDefaul
 
 router.get('/totals', (req, res) => { return combatPath.getTotals(res) });
 
+router.get('/main-class', (req, res) => { return combatPath.getMainClass(res) });
+
 router.get('/trashLoot-totals/:locationId', (req, res) => { return combatPath.getTrashLootTotals(req.params.locationId, res) });
 
 // // PUT

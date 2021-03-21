@@ -51,6 +51,22 @@ exports.getTrashLootTotals = function(locationId, res) {
     return res.json({trashLootDay, trashLootWeek, trashLootMonth, trashLootYear, trashLootTotal});
 }
 
+exports.getMainClass = function(locationId, res) {
+    var settings = sqlContext.getCombatSettingsId(globalUserId);
+
+    var classDetails = sqlContext.getMainClass(settings.combatSettingsId);
+    if(classDetails.classId > 0) {
+        var classId = classDetails.classId;
+        var className = classDetails.className;
+        var classRole = classDetails.classRole;
+        var gear = sqlContext.getClassGear(classDetails.gearScoreId);
+
+        return res.json({classId, className, classRole, gear});
+    } 
+    else
+        return;
+}
+
 // // PUT
 exports.updateActiveColumns = function(columnHeaders, res) {
     var settings = sqlContext.getCombatSettingsId(globalUserId);
