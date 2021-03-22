@@ -411,6 +411,10 @@
         color: $dark-primary-text;
     }
 
+    .p-inputtext {
+        background-color: $dark-primary;
+    }
+
     .p-inputtext:enabled:focus {
         box-shadow: 0 0 0 0.03rem $dark-secondary;
     }
@@ -463,11 +467,44 @@
     }
 
     // ## Popup Dialog
-    .p-dialog .p-dialog-header, .p-dialog-content {
-        background: $dark-primary;  
+    .p-dialog .p-dialog-header {
+        background: $dark-secondary;  
     }
 
     .p-dialog .p-dialog-header {
+        color: $dark-secondary-text;  
+    }
+
+    .p-dialog .p-dialog-content {
+        background: $dark-primary;  
+    }
+
+    .p-dialog .p-dialog-content {
         color: $dark-primary-text;  
     }
+
+    // ### Panel Body
+    // .p-dropdown-panel {
+    //     background: lighten($dark-primary, 5%);
+    //     color: $dark-primary-text;
+
+    //     // ### Filter
+    //     .p-dropdown-header {
+    //         background: lighten($dark-primary, 5%);
+    //         .p-inputtext {
+    //             background: lighten($dark-primary, 5%);
+    //             border-color: darken($dark-tertiary, 15%);
+    //         }
+    //         .p-inputtext:enabled:hover {
+    //             border-color: lighten($dark-tertiary, 10%);
+    //         }
+    //         .p-dropdown-filter-icon {
+    //             color: $dark-primary-text;
+    //         }
+    //     }
+
+    //     .p-dropdown-items .p-dropdown-empty-message {
+    //         color: $dark-primary-text;
+    //     }
+    // }
 }

@@ -128,9 +128,9 @@
     closeOnEscape="true"
     dismissableMask="true">
 
-    <div>
+    <div class="mt-4">
         <!-- Choose Columns -->
-        <div class="row" *ngIf="grindingRes.length == 0 && showAddEntry == false;">
+        <div class="row" *ngIf="grindingRes.length == 0 && showCombatHeaderDefaults && !showAddEntry">
             <div class="col-md-4 col-sm-6 col" *ngFor="let col of columnHeaders; let i = index">
                 <div class="mb-2">
                     <div class="d-flex align-items-center">
@@ -145,11 +145,43 @@
             </div>
         </div>
         <!-- Select Main Class -->
-        <div *ngIf="showMainClassEntry">
-            
+        <div *ngIf="showMainClassEntry && !showCombatHeaderDefaults">
+            <div class="row">
+                <div class="col mb-4">
+                    <div>
+                        <label>Mainhand AP</label>
+                    </div>
+                    <!-- <label>0</label> -->
+                    <p-inputNumber [(ngModel)]="mainClass.gear.ap" [min]="0"></p-inputNumber>
+                </div>
+                <div class="col mb-4">
+                    <div>
+                        <label>Awakening AP</label>
+                    </div>
+                    <p-inputNumber [(ngModel)]="mainClass.gear.aap" [min]="0">{{mainClass.aap}}</p-inputNumber>
+                </div>
+                <div class="col mb-4">
+                    <div>
+                        <label>DP</label>
+                    </div>
+                    <p-inputNumber [(ngModel)]="mainClass.gear.dp" [min]="0"></p-inputNumber>
+                </div>
+                <div class="col mb-4">
+                    <div>
+                        <label>Class</label>
+                    </div>
+                    <p-dropdown appendTo="body" [options]="classNames" placeholder="Select Class" [(ngModel)]="mainClass.className" optionLabel="className" optionValue="className" styleClass="p-dropdown-icon-custom p-dropdown-panel-custom">
+                        <ng-template let-item pTemplate="item">
+                            <div>
+                                <div>{{item.className}}</div>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
         </div>
         <!-- Add Entry -->
-        <div *ngIf="showAddEntry">
+        <div *ngIf="showAddEntry && !showCombatHeaderDefaults && !showMainClassEntry">
             <p>
                 Sample Text
             </p>
@@ -158,7 +190,8 @@
             </p>
         </div>
         <div class="d-flex align-items-center justify-content-end">
-            <button *ngIf="grindingRes.length == 0 && showAddEntry == false;" class="btn btn-primary" (click)="saveDefaultColumns();">Continue</button>
+            <button *ngIf="grindingRes.length == 0 && !showAddEntry && showCombatHeaderDefaults" class="btn btn-primary" (click)="saveDefaultColumns();">Continue</button>
+            <button *ngIf="showMainClassEntry && !showCombatHeaderDefaults" class="btn btn-primary" (click)="saveMainClass()">Add Class</button>
             <button *ngIf="showAddEntry" class="btn btn-primary">Add</button>
             <button class="btn btn-primary ml-2" (click)="showAddEntryPopup = false;">Close</button>
         </div>

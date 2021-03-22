@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Globals } from '../../shared/classes/globals';
 import { APIService } from '../../shared/services/api.service';
-import { Classes } from './classes/classes';
+import { UserClass } from './classes/userClass';
 import { GrindingTableHeaders } from './classes/grindingTable';
 
 @Injectable()
@@ -32,15 +32,19 @@ export class CombatService {
         return this.http.get(this.globals.config.appApiUrl + "combat/trashloot-totals/" + locationId);
     }
 
-    public saveCombatHeaders(combatHeaders: Array<GrindingTableHeaders>) {
-        return this.http.put(this.globals.config.appApiUrl + "combat/active-columns", JSON.stringify(combatHeaders));
+    public saveCombatHeaders(combatHeaders: Array<GrindingTableHeaders>): Promise<any> {
+        return this.http.put(this.globals.config.appApiUrl + "combat/active-columns", JSON.stringify(combatHeaders)).toPromise();
     }
 
-    public getMainClass() {
-        return this.http.get(this.globals.config.appApiUrl + "combat/main-class");
+    public getAllClassNames() {
+        return this.http.get(this.globals.config.appApiUrl + "combat/class-names");
     }
 
-    public addMainClass(classToSave: Classes) {
-        return this.http.post(this.globals.config.appApiUrl + "combat/add-main-class", JSON.stringify(classToSave));
+    public getMainClass(): Promise<any> {
+        return this.http.get(this.globals.config.appApiUrl + "combat/main-class").toPromise();
+    }
+
+    public addMainClass(classToSave: UserClass) {
+        return this.http.post(this.globals.config.appApiUrl + "combat/create-main-class", JSON.stringify(classToSave));
     }
 }

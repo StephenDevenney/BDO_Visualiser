@@ -14,6 +14,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
 import { DateLongPipe } from '../pipes/date-long.pipe';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { DateLongPipe } from '../pipes/date-long.pipe';
     MultiSelectModule,
     DropdownModule,
     DialogModule,
+    InputNumberModule,
     ToastModule,
     DateLongPipe
   ],

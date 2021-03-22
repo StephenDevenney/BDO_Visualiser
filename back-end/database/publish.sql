@@ -59,11 +59,12 @@ CREATE TABLE combat_settings (
 CREATE TABLE combat_gearScore (
 	gearScoreId	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	FK_combatSettingsId	INTEGER DEFAULT 0,
+	FK_classId INTEGER DEFAULT 0,
 	ap INTEGER DEFAULT 0,
 	aap INTEGER DEFAULT 0,
 	dp INTEGER DEFAULT 0,
 	gearScore INTEGER DEFAULT 0,
-	date TEXT NOT NULL
+	dateCreated TEXT NOT NULL
 );
 
 CREATE TABLE combat_grinding (
@@ -107,7 +108,9 @@ CREATE TABLE combat_classes (
 	classId	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	FK_combatSettingsId	INTEGER DEFAULT 0,
 	FK_classNameId INTEGER DEFAULT 0,
-	FK_classRoleId INTEGER DEFAULT 0
+	FK_classRoleId INTEGER DEFAULT 0,
+	FK_gearScoreId INTEGER DEFAULT 0,
+	dateCreated TEXT NOT NULL
 );
 
 CREATE TABLE combat_activeBuffs (
@@ -218,9 +221,9 @@ CREATE TABLE enum_combatTableHeadings (
 INSERT INTO security_user (userName, FK_roleId) VALUES ('Commander386', 2);
 INSERT INTO security_settings (FK_appIdleSecsId, FK_themeId, FK_userId, FK_combatSettingsId, navMinimised) VALUES (2, 1, 1, 1, 0);
 INSERT INTO combat_settings (combatSettingsId, FK_currentGearScoreId, FK_redBattleFieldId) VALUES (1, 1, 1);
-INSERT INTO combat_gearScore (gearScoreId, FK_combatSettingsId, date) VALUES(1, 1, '18-01-2021');
-INSERT INTO combat_classes (classId, FK_combatSettingsId, FK_classNameId, FK_classRoleId) VALUES(1, 1, 17, 1);
-INSERT INTO combat_classes (classId, FK_combatSettingsId, FK_classNameId, FK_classRoleId) VALUES(2, 1, 12, 3);
+-- INSERT INTO combat_gearScore (gearScoreId, FK_combatSettingsId, date) VALUES(1, 1, '18-01-2021');
+-- INSERT INTO combat_classes (classId, FK_combatSettingsId, FK_classNameId, FK_classRoleId, FK_gearScoreId) VALUES(1, 1, 17, 1, 1);
+-- INSERT INTO combat_classes (classId, FK_combatSettingsId, FK_classNameId, FK_classRoleId, FK_gearScoreId) VALUES(2, 1, 12, 3, 1);
 
 -- INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 1, 1, 0);
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 1, 2, 1);

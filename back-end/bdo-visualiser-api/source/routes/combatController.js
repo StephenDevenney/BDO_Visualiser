@@ -3,7 +3,6 @@ var router = express.Router();
 var combatPath = require('../middleware/combatHandler');
 
 // // GET
-
 router.get('/grinding-data', (req, res) => { return combatPath.getGrindingData(res) });
 
 router.get('/column-defaults', (req, res) => { return combatPath.getColumnDefaults(res) });
@@ -12,9 +11,18 @@ router.get('/totals', (req, res) => { return combatPath.getTotals(res) });
 
 router.get('/main-class', (req, res) => { return combatPath.getMainClass(res) });
 
+router.get('/class-names', (req, res) => { return combatPath.getAllClassNames(res) });
+
 router.get('/trashLoot-totals/:locationId', (req, res) => { return combatPath.getTrashLootTotals(req.params.locationId, res) });
 
 // // PUT
 router.put('/active-columns', (req, res) => { return res.json(combatPath.updateActiveColumns(req.body, res)) });
+
+router.put('/update-class', (req, res) => { return res.json(combatPath.updateClass(req.body, res)) })
+
+// // POST
+router.post('/create-main-class', (req, res) => { return res.json(combatPath.createMainClass(req.body, res)) });
+
+router.post('/create-class', (req, res) => { return res.json(combatPath.createClass(req.body, res)) });
 
 module.exports = router;

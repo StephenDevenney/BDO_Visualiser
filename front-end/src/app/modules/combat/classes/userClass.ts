@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class Classes {
-    public classId: number = 0;
+export class UserClass {
     public className: string = "";
     public classRole: string = "";
-    public gear: Array<Gear> = new Array<Gear>();
+    public gear: Gear = new Gear();
 }
 
 export class Gear {

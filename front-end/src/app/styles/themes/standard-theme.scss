@@ -469,11 +469,19 @@
     }
 
     // ## Popup Dialog
-    .p-dialog .p-dialog-header, .p-dialog-content {
-        background: $standard-primary;  
+    .p-dialog .p-dialog-header {
+        background: $standard-secondary;  
     }
 
     .p-dialog .p-dialog-header {
+        color: $standard-secondary-text;  
+    }
+
+    .p-dialog .p-dialog-content {
+        background: $standard-primary;  
+    }
+
+    .p-dialog .p-dialog-content {
         color: $standard-primary-text;  
     }
 }

@@ -36,13 +36,11 @@
                     <p-dropdown [options]="themes" [(ngModel)]="globals.config.theme" optionLabel="themeName" styleClass="p-dropdown-icon-custom">
                         <ng-template pTemplate="selectedItem">
                             <div *ngIf="globals.config.theme.themeId">
-                                <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" /> -->
                                 <div>{{globals.config.theme.themeName}}</div>
                             </div>
                         </ng-template>
                         <ng-template let-item pTemplate="item">
                             <div>
-                                <!-- <img src="assets/showcase/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" /> -->
                                 <div>{{item.themeName}}</div>
                             </div>
                         </ng-template>

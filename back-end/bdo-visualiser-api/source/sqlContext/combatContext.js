@@ -61,12 +61,42 @@ exports.getTrashLootYear = function() {
     // return db.prepare("SELECT * FROM enum_combatTableHeadings").all();
 }
 
+exports.getMainClass = function(combatSettingsId) {
+    return db.prepare("SELECT combat_classes.classId, enum_class.className as className, enum_classRole.roleDescription as classRole, combat_classes.FK_gearScoreId as gearScoreId FROM combat_classes INNER JOIN enum_class ON enum_class.classId = combat_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = combat_classes.FK_classRoleId WHERE FK_combatSettingsId = ? AND FK_classRoleId = 1").get(combatSettingsId);
+}
+
+exports.getClassGear = function(gearScoreId) {
+    return db.prepare("SELECT ap, aap, dp, gearScore FROM combat_gearScore WHERE combat_gearScore.gearScoreId = ?").get(gearScoreId);
+}
+
+exports.getAllClassNames = function() {
+    return db.prepare("SELECT * FROM enum_class").all();
+}
+
+exports.getAllClassRoles = function() {
+    return db.prepare("SELECT * FROM enum_classRole").all();
+}
+
 // POST 
 exports.createCombatSettings = function(userId) {
 
 }
 
+exports.createClass = function(newClass) {
+    db.prepare("INSERT OR REPLACE INTO combat_classes (FK_combatSettingsId, FK_classNameId, FK_classRoleId, dateCreated) VALUES (@FK_combatSettingsId, @FK_classNameId, @FK_classRoleId, @dateCreated);").run(newClass);
+    return db.prepare("SELECT classId as classId FROM combat_classes ORDER BY classId DESC LIMIT 1").get();  
+}
+
+exports.createGearScore = function(gearEntity) {
+    db.prepare("INSERT OR REPLACE INTO combat_gearScore (FK_combatSettingsId, FK_classId, ap, aap, dp, gearScore, dateCreated) VALUES (@FK_combatSettingsId, @FK_classId, @ap, @aap, @dp, @gearScore, @dateCreated);").run(gearEntity);
+    return db.prepare("SELECT gearScoreId as gearScoreId FROM combat_gearScore ORDER BY gearScoreId DESC LIMIT 1").get();
+}
+
 // // PUT
 exports.updateActiveColumns = function(combatSettingsId, columnHeadingId, isActive) {
     db.prepare("UPDATE combat_columnDefaults SET isActive = ? WHERE FK_combatSettingsId = ? AND FK_headingId = ?").run(isActive, combatSettingsId, columnHeadingId);  
+}
+
+exports.updateClassWithGearScoreId = function(gearScoreId, combatSettingsId) {
+    db.prepare("UPDATE combat_classes SET FK_gearScoreId = ? WHERE FK_combatSettingsId = ?").run(gearScoreId, combatSettingsId);
 }
