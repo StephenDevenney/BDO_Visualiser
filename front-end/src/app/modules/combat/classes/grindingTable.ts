@@ -1,9 +1,13 @@
 import { Injectable } from '@angular/core';
+import { UserClass } from './userClass';
 
 @Injectable()
-export class GrindingTable {
+export class CombatPageData {
     public tableHeaders: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
     public tableData: Array<GrindingData> = new Array<GrindingData>();
+    public hasDefaultCombatHeaders: boolean = false;
+    public activeClasses: Array<UserClass> = new Array<UserClass>();
+    public hasMainClass: boolean = false;
 }
 
 
@@ -18,13 +22,12 @@ export class GrindingTableHeaders {
 @Injectable()
 export class GrindingData {
     public grindingId: number = 0;
-    public trashLoot: string = "";
     public date: string = "";
-    public time: string = "";
-    public class: string = "";
-    public location: string = "";
-    public server: string = "";
-    public combatType: string = "";
-    public gearScore: number = 0;
+    public locationName: string = "";
+    public timeAmount: number = 0;
+    public trashLootAmount: number = 0;
+    public className: string = "";
+    public serverName: string = "";
+    public combatTypeName: string = "";
     public afuaruSpawns: number = 0;
 }

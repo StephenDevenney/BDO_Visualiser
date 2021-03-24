@@ -17,6 +17,28 @@ import { MapModule } from './modules/map/map.module';
 import { FailStacksModule } from './modules/fail-stacks/fail-stacks.module';
 import { MessageService } from 'primeng/api';
 import { TableInsertComponent } from './shared/components/table-insert/table-insert.component';
+import { LoadingService } from './shared/services/loading.service';
+import { NgxUiLoaderModule, NgxUiLoaderConfig, POSITION, SPINNER, PB_DIRECTION } from 'ngx-ui-loader';
+
+/*
+  bgs = bottomRight Small loader
+  fgs = main center loader
+  pb = top bar loader
+*/
+const ngxUiLoaderConfig: NgxUiLoaderConfig = {
+  bgsColor: '#66b3ff',
+  bgsPosition: POSITION.bottomRight,
+  bgsSize: 100,
+  bgsType: SPINNER.wanderingCubes,
+  bgsOpacity: 0.8,
+  fgsColor: '#66b3ff',
+  fgsPosition: POSITION.centerCenter,
+  fgsType: SPINNER.cubeGrid,
+  fgsSize: 150,
+  pbColor: '#66b3ff',
+  pbDirection: PB_DIRECTION.leftToRight,
+  pbThickness: 20
+};
 
 @NgModule({
   declarations: [
@@ -34,7 +56,8 @@ import { TableInsertComponent } from './shared/components/table-insert/table-ins
     MapModule,
     FailStacksModule,
     SharedModule,
-    HttpClientModule
+    HttpClientModule,
+    NgxUiLoaderModule.forRoot(ngxUiLoaderConfig)
   ],
   providers: [
     AuthService,
@@ -44,7 +67,8 @@ import { TableInsertComponent } from './shared/components/table-insert/table-ins
       multi: true,
     },
     APIService ,
-    MessageService
+    MessageService,
+    LoadingService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

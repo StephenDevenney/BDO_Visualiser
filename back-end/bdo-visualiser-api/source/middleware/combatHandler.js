@@ -6,21 +6,41 @@ const Calc = require("../../shared/calc/gearScore");
 var globalUserId = "1";
 
 // // GET
-exports.getGrindingData = function(res) {
-    var settings = sqlContext.getCombatSettingsId(globalUserId);
-    var tableHeaders = sqlContext.getCombatTableHeaders(settings.combatSettingsId);
+exports.getGrindingData = async function(res) {
+    var combatSettings = sqlContext.getCombatSettings(globalUserId);
+    var hasDefaultCombatHeaders = true;
+    if(combatSettings.hasDefaultCombatHeaders == 0)
+        hasDefaultCombatHeaders = false;
+    // Get Table Headers
+    var tableHeaders = sqlContext.getCombatTableHeaders(combatSettings.combatSettingsId);
     var i = 0;
     tableHeaders.forEach(col => {
         tableHeaders[i] = new CombatHeaders.convertToVM(col.headingId, col.field, col.header, col.isActive);
         i++;
     });
+    // Get Grinding Data
     var tableData = sqlContext.getGrindingData(globalUserId);
-    return res.json({tableHeaders, tableData});
+
+    // Get Active Classes
+    var activeClassesEntities = sqlContext.getActiveClasses(combatSettings.combatSettingsId);
+    var activeClasses = [];
+    var i = 0;
+    await activeClassesEntities.forEach(async userClassEntity => {
+        var gearEntity = await sqlContext.getClassGear(userClassEntity.FK_gearScoreId);
+        var activeClassVM = UserClass.convertEntitiesToViewModel(userClassEntity, gearEntity);
+        activeClasses.push(activeClassVM);
+    });
+
+    var hasMainClass = false;
+    if(activeClasses.length > 0)
+        hasMainClass = true;
+
+    return res.json({tableHeaders, tableData, hasDefaultCombatHeaders, activeClasses, hasMainClass});
 }
 
 exports.getColumnDefaults = function(res) {
-    var settings = sqlContext.getCombatSettingsId(globalUserId);
-    return res.json(sqlContext.getColumnDefaults(settings.combatSettingsId));
+    var combatSettings = sqlContext.getCombatSettings(globalUserId);
+    return res.json(sqlContext.getColumnDefaults(combatSettings.combatSettingsId));
 }
 
 exports.getTotals = function(res) {
@@ -54,8 +74,8 @@ exports.getTrashLootTotals = function(locationId, res) {
 }
 
 exports.getMainClass = function(res) {
-    var settings = sqlContext.getCombatSettingsId(globalUserId);
-    var classEntity = sqlContext.getMainClass(settings.combatSettingsId);
+    var combatSettings = sqlContext.getCombatSettings(globalUserId);
+    var classEntity = sqlContext.getMainClass(combatSettings.combatSettingsId);
     if(classEntity) {
         var className = classEntity.className;
         var classRole = classEntity.classRole;
@@ -72,11 +92,16 @@ exports.getAllClassNames = function(res) {
 
 // // PUT
 exports.updateActiveColumns = function(columnHeaders, res) {
-    var settings = sqlContext.getCombatSettingsId(globalUserId);
+    var combatSettings = sqlContext.getCombatSettings(globalUserId);
     columnHeaders.forEach(col => {
         var dbCol = new CombatHeaders.convertToEntity(col.headingId, col.field, col.header, col.isActive);
-        sqlContext.updateActiveColumns(settings.combatSettingsId, dbCol.headingId, dbCol.isActive);
+        sqlContext.updateActiveColumns(combatSettings.combatSettingsId, dbCol.headingId, dbCol.isActive);
     });
+    var settingsCombatHeadersSet = sqlContext.updateHasDefaultCombatHeadersSet(combatSettings.combatSettingsId, 1);
+    if(settingsCombatHeadersSet.hasDefaultCombatHeaders == 1)
+        return true;
+    else 
+        return false;
 }
 
 exports.updateClass = function(classToUpdate, res) {
@@ -91,21 +116,19 @@ exports.createMainClass = function(newClass, res) {
 }
 
 exports.createClass = function(newClass, res) {
-    var settings = sqlContext.getCombatSettingsId(globalUserId);
+    var combatSettings = sqlContext.getCombatSettings(globalUserId);
 
     if(!newClass.className)
         return res.status(400).json({ msg: `Class Name Required.` });
     else if(!newClass.classRole)
         return res.status(400).json({ msg: `Class Role Required.` });
 
-    var classNames = sqlContext.getAllClassNames();
-    var classRoles = sqlContext.getAllClassRoles();
-    var classEntity = UserClass.convertToEntity(newClass, classRoles, classNames, settings.combatSettingsId);
+    var classEntity = UserClass.convertToEntity(newClass, combatSettings.combatSettingsId);
     var classIdObj = sqlContext.createClass(classEntity);
     var gearEntity = Gear.convertToEntity(newClass, classEntity, classIdObj);
     gearEntity = Calc.calcGearScore(gearEntity);
     var gearScoreIdObj = sqlContext.createGearScore(gearEntity);
-    sqlContext.updateClassWithGearScoreId(gearScoreIdObj.gearScoreId, classEntity.FK_combatSettingsId);
-    var classVM = UserClass.convertToViewModel(classEntity, gearEntity, classRoles, classNames);
+    sqlContext.updateClassWithGearScoreId(gearScoreIdObj.gearScoreId, classEntity.FK_combatSettingsId, classIdObj);
+    var classVM = UserClass.convertToViewModel(classEntity, gearEntity);
     return res.json(classVM);
 }

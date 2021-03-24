@@ -1,3 +1,14 @@
+const SQLite = require("better-sqlite3");
+const db = new SQLite('../Database/' + process.env.DATABASE_NAME);
+const sqlContext = require("../../source/sqlContext/combatContext");
+const table = db.prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'security_user';").get();
+var classNamesEnum;
+var classRolesEnum;
+if (table['count(*)']) {
+    classNamesEnum = sqlContext.getAllClassNames();
+    classRolesEnum = sqlContext.getAllClassRoles();
+}
+
 /*
     ## Class Entity
         FK_combatSettingsId
@@ -5,10 +16,15 @@
         FK_classRoleId
         dateCreated
 */
-exports.convertToEntity = function(newClass, classRoles, classNameList, combatSettingsIdObj) {
-    var cn = classNameList.filter(classObj => classObj.className == newClass.className);
+exports.convertToEntity = function(newClass, combatSettingsIdObj) {
+    if(typeof(classNamesEnum) == "undefined"){
+        classNamesEnum = sqlContext.getAllClassNames();
+        classRolesEnum = sqlContext.getAllClassRoles();
+    }
+
+    var cn = classNamesEnum.filter(classObj => classObj.className == newClass.className);
     var classIdConverted = cn[0].classId;
-    var cr = classRoles.filter(roleObj => roleObj.roleDescription == newClass.classRole);
+    var cr = classRolesEnum.filter(roleObj => roleObj.roleDescription == newClass.classRole);
     var classRoleConverted = cr[0].roleId;
 
     var classEntity = {
@@ -32,10 +48,15 @@ exports.convertToEntity = function(newClass, classRoles, classNameList, combatSe
             gearScore
         
 */
-exports.convertToViewModel = function(classEntity, gearEntity, classRoles, classNameList) {
-    var cn = classNameList.filter(classObj => classObj.classId == classEntity.FK_classNameId);
+exports.convertToViewModel = function(classEntity, gearEntity) {
+    if(typeof(classNamesEnum) == "undefined"){
+        classNamesEnum = sqlContext.getAllClassNames();
+        classRolesEnum = sqlContext.getAllClassRoles();
+    }
+    
+    var cn = classNamesEnum.filter(classObj => classObj.classId == classEntity.FK_classNameId);
     var classNameConverted = cn[0].className;
-    var cr = classRoles.filter(roleObj => roleObj.roleId == classEntity.FK_classRoleId);
+    var cr = classRolesEnum.filter(roleObj => roleObj.roleId == classEntity.FK_classRoleId);
     var classRoleConverted = cr[0].roleDescription;
 
     var userClass = { 
@@ -48,5 +69,21 @@ exports.convertToViewModel = function(classEntity, gearEntity, classRoles, class
             gearScore: gearEntity.gearScore 
         } 
     };
+    return userClass;
+}
+
+exports.convertEntitiesToViewModel = function(classEntity, gearEntity) {
+
+    var userClass = { 
+        className: classEntity.className, 
+        classRole: classEntity.classRole,
+        gear: { 
+            ap: gearEntity.ap, 
+            aap: gearEntity.aap, 
+            dp: gearEntity.dp, 
+            gearScore: gearEntity.gearScore 
+        } 
+    };
+
     return userClass;
 }

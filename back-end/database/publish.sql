@@ -53,7 +53,8 @@ CREATE TABLE security_navSubRole (
 CREATE TABLE combat_settings (
 	combatSettingsId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	FK_currentGearScoreId INTEGER DEFAULT 0,
-	FK_redBattleFieldId	INTEGER DEFAULT 0
+	FK_redBattleFieldId	INTEGER DEFAULT 0,
+	hasDefaultCombatHeaders INTEGER DEFAULT 0
 );
 
 CREATE TABLE combat_gearScore (

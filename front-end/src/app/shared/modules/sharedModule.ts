@@ -15,11 +15,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
 import { DateLongPipe } from '../pipes/date-long.pipe';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 @NgModule({
   imports: [
     CommonModule,
-    PageModule
+    PageModule,
+    NgxUiLoaderModule
   ],
   declarations: [
     DateLongPipe

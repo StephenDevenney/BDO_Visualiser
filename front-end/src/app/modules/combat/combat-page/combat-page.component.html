@@ -84,7 +84,7 @@
                             <label class="d-flex align-items-center justify-content-center mt-2">Start by selecting what data you wish to track</label>
                             <label class="d-flex align-items-center justify-content-center">followed by a new entry.</label>
                             <div class="d-flex align-items-center justify-content-center mt-4">
-                                <button class="btn btn-primary mr-2" (click)="showAddEntryPopup = true;">Begin</button>
+                                <button class="btn btn-primary mr-2" (click)="addEntryPopupChecks()">Begin</button>
                             </div>
                         </div>
                     </div>
@@ -130,7 +130,7 @@
 
     <div class="mt-4">
         <!-- Choose Columns -->
-        <div class="row" *ngIf="grindingRes.length == 0 && showCombatHeaderDefaults && !showAddEntry">
+        <div class="row" *ngIf="showCombatDefaultColumns">
             <div class="col-md-4 col-sm-6 col" *ngFor="let col of columnHeaders; let i = index">
                 <div class="mb-2">
                     <div class="d-flex align-items-center">
@@ -145,7 +145,7 @@
             </div>
         </div>
         <!-- Select Main Class -->
-        <div *ngIf="showMainClassEntry && !showCombatHeaderDefaults">
+        <div *ngIf="showAddMainClass">
             <div class="row">
                 <div class="col mb-4">
                     <div>
@@ -170,7 +170,7 @@
                     <div>
                         <label>Class</label>
                     </div>
-                    <p-dropdown appendTo="body" [options]="classNames" placeholder="Select Class" [(ngModel)]="mainClass.className" optionLabel="className" optionValue="className" styleClass="p-dropdown-icon-custom p-dropdown-panel-custom">
+                    <p-dropdown appendTo="body" [options]="classNames" placeholder="Select Class" [(ngModel)]="mainClass.className" optionLabel="className" optionValue="className">
                         <ng-template let-item pTemplate="item">
                             <div>
                                 <div>{{item.className}}</div>
@@ -181,18 +181,53 @@
             </div>
         </div>
         <!-- Add Entry -->
-        <div *ngIf="showAddEntry && !showCombatHeaderDefaults && !showMainClassEntry">
-            <p>
-                Sample Text
-            </p>
-            <p>
-                More Sample Text
-            </p>
+        <div *ngIf="showGrindingTableEntry">
+            <div class="mb-2">
+                Remove This.
+                <!-- <div *ngFor="let col of filteredColumns;">
+                    <div *ngIf="col.isActive">
+                        <p-dropdown *ngIf="col.headingId == 2" [options]="classNames" [(ngModel)]="item.locationName"></p-dropdown>
+                        <p-inputNumber *ngIf="col.headingId == 3 || col.headingId == 4 || col.headingId == 8" [(ngModel)]="newEntry" [min]="0"></p-inputNumber>
+                    </div>
+                </div> -->
+
+                <!-- <p-table 
+                    #tableNewEntry
+                    [value]="newGrindingResEntry"
+                    [reorderableColumns]="true"
+                    [columns]="filteredColumns"
+                    editMode="row"
+                    dataKey="id">
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pReorderableColumn *ngFor="let col of filteredColumns;">
+                                {{ col.header }}
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex" let-editing="editing">                    
+                        <tr [pEditableRow]="item">
+                            <td *ngFor="let col of filteredColumns;">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <p-dropdown *ngIf="col.headingId == 2" [options]="classNames" [(ngModel)]="item.locationName" [style]="{'width':'100%'}"></p-dropdown>
+                                        <p-inputNumber *ngIf="col.headingId == 3 || col.headingId == 4 || col.headingId == 8" [(ngModel)]="item[col.field]" [min]="0"></p-inputNumber>
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{item[col.field]}}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table> -->
+            </div>
         </div>
         <div class="d-flex align-items-center justify-content-end">
-            <button *ngIf="grindingRes.length == 0 && !showAddEntry && showCombatHeaderDefaults" class="btn btn-primary" (click)="saveDefaultColumns();">Continue</button>
-            <button *ngIf="showMainClassEntry && !showCombatHeaderDefaults" class="btn btn-primary" (click)="saveMainClass()">Add Class</button>
-            <button *ngIf="showAddEntry" class="btn btn-primary">Add</button>
+            <button *ngIf="showCombatDefaultColumns" class="btn btn-primary" (click)="saveDefaultColumns();">Continue</button>
+            <button *ngIf="showAddMainClass" class="btn btn-primary" (click)="saveMainClass()">Add Class</button>
+            <button *ngIf="showGrindingTableEntry" class="btn btn-primary">Add</button>
             <button class="btn btn-primary ml-2" (click)="showAddEntryPopup = false;">Close</button>
         </div>
     </div>

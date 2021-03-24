@@ -47,8 +47,15 @@ export class PageHeaderComponent extends BaseComponent implements OnInit {
     this.showOptions = false;
   }
 
-  public saveSettings() {
-    this.pageService.saveProfile().subscribe( res => {
+  public async saveSettings(): Promise<any> {
+    this.loader.startBackground();
+    await this.pageService.saveProfile().then( res => {
+      this.loader.stopBackground();
+    },
+    err => {
+      this.loader.stopBackground();
+      this.messageService.add({severity:'error', summary:'Error Saving', detail:'Server issue, cannot save settings at this time.', life: 2600 });
+    }).finally(() => {
       this.messageService.add({severity:'success', summary:'Profile Updated', detail:'Your profile settings have been saved.', life: 1900 });
     });
   }

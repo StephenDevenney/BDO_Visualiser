@@ -12,7 +12,7 @@ export class CombatService {
 
     }
 
-    public getGrindingData() {
+    public getCombatPageData() {
         return this.http.get(this.globals.config.appApiUrl + "combat/grinding-data");
     }
 

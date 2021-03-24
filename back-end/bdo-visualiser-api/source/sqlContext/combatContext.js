@@ -7,8 +7,8 @@ exports.getGrindingData = function(userId) {
     return db.prepare("SELECT combat_grinding.grindingId, combat_grinding.trashLootAmount, combat_grinding.date, enum_time.timeAmount, enum_class.className, enum_locations.locationName, (enum_server.serverName || ' ' || enum_server.serverNumber) AS serverName, enum_combatType.combatTypeName, combat_gearScore.gearScore, combat_grinding.afuaruSpawns FROM combat_grinding INNER JOIN enum_time ON combat_grinding.FK_timeId = enum_time.timeId INNER JOIN combat_classes ON combat_classes.FK_combatSettingsId = combat_grinding.FK_combatSettingsId AND combat_classes.classId = combat_grinding.FK_classId INNER JOIN enum_class ON combat_classes.FK_classNameId = enum_class.classId INNER JOIN enum_locations ON combat_grinding.FK_locationId = enum_locations.locationId INNER JOIN enum_server ON combat_grinding.FK_serverId = enum_server.serverId INNER JOIN enum_combatType ON combat_grinding.FK_combatTypeId = enum_combatType.combatTypeId INNER JOIN combat_gearScore ON combat_grinding.FK_gearScoreId = combat_gearScore.gearScoreId INNER JOIN security_settings ON combat_grinding.FK_combatSettingsId = security_settings.FK_combatSettingsId WHERE security_settings.FK_userId = ?").all(userId);
 }
 
-exports.getCombatSettingsId = function(userId) {
-    return db.prepare("SELECT combat_settings.combatSettingsId FROM combat_settings INNER JOIN security_settings ON combat_settings.combatSettingsId = security_settings.FK_combatSettingsId WHERE security_settings.FK_userId = ?").get(userId);
+exports.getCombatSettings = function(userId) {
+    return db.prepare("SELECT * FROM combat_settings INNER JOIN security_settings ON combat_settings.combatSettingsId = security_settings.FK_combatSettingsId WHERE security_settings.FK_userId = ?").get(userId);
 }
 
 exports.getCombatTableHeaders = function(combatSettingsId) {
@@ -77,6 +77,10 @@ exports.getAllClassRoles = function() {
     return db.prepare("SELECT * FROM enum_classRole").all();
 }
 
+exports.getActiveClasses = function(combatSettingsId) {
+    return db.prepare("SELECT combat_classes.classId as FK_classId, enum_class.className as className, enum_classRole.roleDescription as classRole, combat_classes.FK_gearScoreId as FK_gearScoreId FROM combat_classes INNER JOIN enum_class ON enum_class.classId = combat_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = combat_classes.FK_classRoleId WHERE FK_combatSettingsId = ?").all(combatSettingsId);
+}
+
 // POST 
 exports.createCombatSettings = function(userId) {
 
@@ -92,11 +96,17 @@ exports.createGearScore = function(gearEntity) {
     return db.prepare("SELECT gearScoreId as gearScoreId FROM combat_gearScore ORDER BY gearScoreId DESC LIMIT 1").get();
 }
 
+exports.updateHasDefaultCombatHeadersSet = function(combatSettingsId, hasDefaultCombatHeaders) {
+    db.prepare("UPDATE combat_settings SET hasDefaultCombatHeaders = ? WHERE combatSettingsId = ?").run(hasDefaultCombatHeaders, combatSettingsId);
+    return db.prepare("SELECT combat_settings.hasDefaultCombatHeaders FROM combat_settings WHERE combat_settings.combatSettingsId = ?").get(combatSettingsId);
+}
+
 // // PUT
 exports.updateActiveColumns = function(combatSettingsId, columnHeadingId, isActive) {
     db.prepare("UPDATE combat_columnDefaults SET isActive = ? WHERE FK_combatSettingsId = ? AND FK_headingId = ?").run(isActive, combatSettingsId, columnHeadingId);  
 }
 
-exports.updateClassWithGearScoreId = function(gearScoreId, combatSettingsId) {
-    db.prepare("UPDATE combat_classes SET FK_gearScoreId = ? WHERE FK_combatSettingsId = ?").run(gearScoreId, combatSettingsId);
+exports.updateClassWithGearScoreId = function(gearScoreId, combatSettingsId, classIdObj) {
+    var classID = classIdObj.classId;
+    db.prepare("UPDATE combat_classes SET FK_gearScoreId = ? WHERE FK_combatSettingsId = ? AND classId = ?").run(gearScoreId, combatSettingsId, classID);
 }

@@ -45,6 +45,8 @@
         border-color: $standard-tertiary;
         ## Hover
         border-color: lighten($standard-tertiary, 20%);
+        ## Placeholder
+        color: lighten($standard-tertiary, 10%);
     */
 
     // # General
@@ -177,7 +179,7 @@
         }
 
         .p-dropdown-label.p-placeholder {
-            color: $standard-primary-text;
+            color: lighten($standard-tertiary, 10%);
         }
 
         // ### Panel Body
@@ -241,7 +243,7 @@
     }
 
     .p-dropdown:not(.p-disabled).p-focus {
-        border-color: $standard-tertiary;
+        border-color: lighten($standard-tertiary, 30%);
     }
 
     // ## MultiSelect
@@ -483,5 +485,19 @@
 
     .p-dialog .p-dialog-content {
         color: $standard-primary-text;  
+    }
+
+    // ## Input Number
+    .p-inputnumber .p-component {
+        border-color: $standard-tertiary; 
+    }
+
+    .p-inputtext:enabled:hover {
+        border-color: lighten($standard-tertiary, 30%);
+    }
+
+    .p-inputtext:enabled:focus {
+        border-color: lighten($standard-tertiary, 30%);;
+        box-shadow: none;
     }
 }

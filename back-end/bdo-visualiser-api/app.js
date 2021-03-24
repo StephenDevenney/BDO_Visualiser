@@ -8,8 +8,8 @@ var Shared = require('./source/routes/sharedController');
 var app = express();
 const cors = require('cors');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 var corsOptions = {

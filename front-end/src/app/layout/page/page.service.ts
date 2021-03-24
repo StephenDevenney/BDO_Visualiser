@@ -14,8 +14,8 @@ export class PageService {
         return this.http.get(this.globals.config.appApiUrl + "security/themes")
     }
 
-    public saveProfile() {
-        return this.http.put(this.globals.config.appApiUrl + "security/config-settings", JSON.stringify(this.globals.config));
+    public saveProfile(): Promise<any> {
+        return this.http.put(this.globals.config.appApiUrl + "security/config-settings", JSON.stringify(this.globals.config)).toPromise();
     }
 
     // public saveSettings() {

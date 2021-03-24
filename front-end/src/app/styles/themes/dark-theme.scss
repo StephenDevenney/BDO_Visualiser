@@ -47,6 +47,8 @@
         border-color: darken($dark-tertiary, 15%);
         ## Hover Border
         border-color: lighten($dark-tertiary, 10%);
+        ## Placeholder
+        color: $dark-tertiary;
     */
 
     // # General
@@ -172,7 +174,7 @@
         }
 
         .p-dropdown-label.p-placeholder {
-            color: $dark-primary-text;
+            color: $dark-tertiary;
         }
 
         // ### Panel Body
@@ -229,6 +231,10 @@
         .p-dropdown-clear-icon:hover {
             color: lighten($dark-primary-text, 10%);
         }
+
+        .p-dropdown:not(.p-disabled).p-focus {
+            border-color: lighten($dark-primary-text, 10%);
+        }
     }
 
     .p-dropdown:not(.p-disabled):hover {
@@ -236,7 +242,7 @@
     }
 
     .p-dropdown:not(.p-disabled).p-focus {
-        border-color: darken($dark-tertiary, 15%);
+        border-color: lighten($dark-tertiary, 10%);
     }
 
     .p-inputtext {
@@ -483,28 +489,21 @@
         color: $dark-primary-text;  
     }
 
-    // ### Panel Body
-    // .p-dropdown-panel {
-    //     background: lighten($dark-primary, 5%);
-    //     color: $dark-primary-text;
+    // ## Input Number
+    .p-inputnumber .p-component {
+        border-color: $dark-tertiary;
+    }
 
-    //     // ### Filter
-    //     .p-dropdown-header {
-    //         background: lighten($dark-primary, 5%);
-    //         .p-inputtext {
-    //             background: lighten($dark-primary, 5%);
-    //             border-color: darken($dark-tertiary, 15%);
-    //         }
-    //         .p-inputtext:enabled:hover {
-    //             border-color: lighten($dark-tertiary, 10%);
-    //         }
-    //         .p-dropdown-filter-icon {
-    //             color: $dark-primary-text;
-    //         }
-    //     }
+    .p-inputtext:enabled:hover {
+        border-color: lighten($dark-tertiary, 10%);
+    }
 
-    //     .p-dropdown-items .p-dropdown-empty-message {
-    //         color: $dark-primary-text;
-    //     }
-    // }
+    .p-inputtext:enabled:focus {
+        border-color: lighten($dark-tertiary, 10%);
+        box-shadow: none;
+    }
+
+    .p-placeholder {
+        color: lighten($dark-primary-text, 10%);
+    }
 }

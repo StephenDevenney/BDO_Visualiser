@@ -1,17 +1,11 @@
 /*
 # Sizes
 # Colours
-# Nav Themes
+# Colour Themes
     ## Standard
-        ### Body & Nav
-        ### Border
-        ### Btn Primary
-        ### Table
     ## Dark
-        ### Body & Nav
-        ### Border
-        ### Btn Primary
-        ### Table
+# Icons
+# Loader Colour
 */
 
 // # Sizes
@@ -59,28 +53,31 @@ $bdo-orange-4: #ffb366;
 $bdo-orange-5: #ffcc99;
 $bdo-orange-6: #ffe6cc;
 
-// # Colour Schemes
-// ## Standard
-$standard-primary: $bdo-grey-6;
-$standard-secondary: $bdo-blue-1;
-$standard-tertiary: $bdo-grey-3;
-$standard-primary-text: $bdo-grey-1;
-$standard-secondary-text: $bdo-grey-7;
-$standard-tertiary-text: $bdo-grey-7;
+// # Colour Themes
+    // ## Standard
+    $standard-primary: $bdo-grey-6;
+    $standard-secondary: $bdo-blue-1;
+    $standard-tertiary: $bdo-grey-3;
+    $standard-primary-text: $bdo-grey-1;
+    $standard-secondary-text: $bdo-grey-7;
+    $standard-tertiary-text: $bdo-grey-7;
 
-// ## Dark
-$dark-primary: $bdo-grey-2;
-$dark-secondary: $bdo-grey-1;
-$dark-tertiary: $bdo-grey-5;
-$dark-primary-text: $bdo-grey-6;
-$dark-secondary-text: $bdo-grey-6;
-$dark-tertiary-text: $bdo-grey-3;
+    // ## Dark
+    $dark-primary: $bdo-grey-2;
+    $dark-secondary: $bdo-grey-1;
+    $dark-tertiary: $bdo-grey-5;
+    $dark-primary-text: $bdo-grey-6;
+    $dark-secondary-text: $bdo-grey-6;
+    $dark-tertiary-text: $bdo-grey-3;
 
-// // Icons (Temp)
+// # Icons
 $icon: $bdo-grey-1;
 $icon-grey: $bdo-grey-3;
 $icon-white: $bdo-grey-7;
 $icon-green: $bdo-green-1;
+
+// # Loader
+$loader-color: $bdo-blue-4;
 
 .text-white {
     color: $bdo-grey-7 !important;
