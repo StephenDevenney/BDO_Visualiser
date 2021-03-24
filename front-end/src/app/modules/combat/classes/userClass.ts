@@ -2,9 +2,12 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class UserClass {
+    public classId: number = 0;
     public className: string = "";
     public classRole: string = "";
+    public primaryCombatTypeDescription: string = "";
     public gear: Gear = new Gear();
+    public description: string = "";
 }
 
 export class Gear {

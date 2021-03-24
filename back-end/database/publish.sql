@@ -71,14 +71,14 @@ CREATE TABLE combat_gearScore (
 CREATE TABLE combat_grinding (
 	grindingId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	FK_combatSettingsId	INTEGER DEFAULT 0,
-	trashLootAmount INTEGER DEFAULT 0,
-	date TEXT NOT NULL,
 	FK_timeId INTEGER DEFAULT 4,
 	FK_classId INTEGER DEFAULT 0,
 	FK_locationId INTEGER DEFAULT 0,
 	FK_serverId	INTEGER DEFAULT 0,
 	FK_combatTypeId INTEGER DEFAULT 0,
 	FK_gearScoreId INTEGER DEFAULT 0,
+	date TEXT NOT NULL,
+	trashLootAmount INTEGER DEFAULT 0,
 	afuaruSpawns INTEGER DEFAULT 0
 );
 
@@ -161,7 +161,8 @@ CREATE TABLE enum_appIdleSecs (
 CREATE TABLE enum_server (
 	serverId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	serverName TEXT,
-	serverNumber INTEGER
+	serverNumber INTEGER,
+	isElviaRealm INTEGER DEFAULT 0
 );
 
 CREATE TABLE enum_serverRegion (
@@ -230,9 +231,9 @@ INSERT INTO combat_settings (combatSettingsId, FK_currentGearScoreId, FK_redBatt
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 1, 2, 1);
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (2, 1, 3, 1);
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (3, 1, 4, 1);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (4, 1, 5, 0);
+INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (4, 1, 5, 1);
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (5, 1, 6, 0);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (6, 1, 7, 1);
+INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (6, 1, 7, 0);
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (7, 1, 8, 0);
 
 -- Sample Combat Data - User 1 - Date Format: month-day-year
@@ -296,10 +297,10 @@ INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (5, 2); -- FailSta
 -- security_navSubRole
 
 -- enum_time
-INSERT INTO enum_time (timeAmount) VALUES (15);
-INSERT INTO enum_time (timeAmount) VALUES (30);
-INSERT INTO enum_time (timeAmount) VALUES (45);
 INSERT INTO enum_time (timeAmount) VALUES (60);
+INSERT INTO enum_time (timeAmount) VALUES (45);
+INSERT INTO enum_time (timeAmount) VALUES (30);
+INSERT INTO enum_time (timeAmount) VALUES (15);
 
 -- enum_roles
 INSERT INTO enum_roles (roleName) VALUES ('user');
@@ -310,6 +311,7 @@ INSERT INTO enum_classRole (roleDescription) VALUES ('Main');
 INSERT INTO enum_classRole (roleDescription) VALUES ('Tagged');
 INSERT INTO enum_classRole (roleDescription) VALUES ('Secondary');
 INSERT INTO enum_classRole (roleDescription) VALUES ('Life Skiller');
+INSERT INTO enum_classRole (roleDescription) VALUES ('Alt');
 
 -- enum_class
 INSERT INTO enum_class (className) VALUES ('Archer');
@@ -337,7 +339,7 @@ INSERT INTO enum_theme (themeName, className) VALUES ('Default', 'standard-theme
 INSERT INTO enum_theme (themeName, className) VALUES ('Dark', 'dark-theme');
 
 -- enum_server
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Arsha(PvP)', 0);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Arsha(PvP)', 0, 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 2);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 3);
@@ -346,10 +348,10 @@ INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 5);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 6);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Calpheon', 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Calpheon', 2);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Calpheon', 3);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Calpheon', 4);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Calpheon', 5);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Calpheon', 6);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Calpheon', 3, 1);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Calpheon', 4, 1);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Calpheon', 5, 1);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Calpheon', 6, 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Kamasylvia', 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Kamasylvia', 2);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Kamasylvia', 3);
@@ -357,38 +359,38 @@ INSERT INTO enum_server (serverName, serverNumber) VALUES ('Kamasylvia', 4);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Kamasylvia', 5);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Mediah', 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Mediah', 2);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Mediah', 3);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Mediah', 4);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Mediah', 5);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Mediah', 6);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Olvia', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Olvia', 2);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Olvia', 3);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Olvia', 4);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Olvia', 5);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Mediah', 3, 1);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Mediah', 4, 1);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Mediah', 5, 1);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Mediah', 6, 1);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('New Olvia', 1);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('New Olvia', 2);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('New Olvia', 3);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('New Olvia', 4);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('New Olvia', 5);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 1);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 2);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 3);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 4);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season(PvP)', 0);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('Serendia', 1);
+INSERT INTO enum_server (serverName, serverNumber) VALUES ('Serendia', 2);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Serendia', 3, 1);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Serendia', 4, 1);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Serendia', 5, 1);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Serendia', 6, 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Valencia', 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Valencia', 2);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Valencia', 3);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Valencia', 4);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Valencia', 5);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Valencia', 6);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Serendia', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Serendia', 2);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Serendia', 3);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Serendia', 4);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Serendia', 5);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Serendia', 6);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Valencia', 4, 1);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Valencia', 5, 1);
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Valencia', 6, 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 2);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 3);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 4);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 5);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 6);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 2);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 3);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 4);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season(PvP)', 0);
 
 -- enum_serverRegion, may change after merge
 INSERT INTO enum_serverRegion (regionName) VALUES ('EU');
@@ -406,11 +408,11 @@ INSERT INTO enum_territory (territoryName) VALUES ('Serendia');
 INSERT INTO enum_territory (territoryName) VALUES ('Valenica');
 
 -- enum_appIdleSecs
-INSERT INTO enum_appIdleSecs (idleTime, description) VALUES (0, 'Off');
-INSERT INTO enum_appIdleSecs (idleTime, description) VALUES (1800, '30 Minutes');
-INSERT INTO enum_appIdleSecs (idleTime, description) VALUES (3600, '1 Hour');
-INSERT INTO enum_appIdleSecs (idleTime, description) VALUES (10800, '3 Hours');
 INSERT INTO enum_appIdleSecs (idleTime, description) VALUES (21600, '6 Hours');
+INSERT INTO enum_appIdleSecs (idleTime, description) VALUES (10800, '3 Hours');
+INSERT INTO enum_appIdleSecs (idleTime, description) VALUES (3600, '1 Hour');
+INSERT INTO enum_appIdleSecs (idleTime, description) VALUES (1800, '30 Minutes');
+INSERT INTO enum_appIdleSecs (idleTime, description) VALUES (0, 'Off');
 
 -- enum_locations
 INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Turos', 6);

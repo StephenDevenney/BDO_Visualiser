@@ -33,6 +33,7 @@
     # Logo
     # Bootstrap Override
     # PrimeNG Override
+        ## Popup Overrides
 */
 
 // # General
@@ -622,4 +623,16 @@ body {
         font-size: 1rem;
         font-weight: 700;
     }
+}
+
+// ## Popup Overrides
+.addEntryPopup {
+    .p-dialog-content{
+        height: 20rem;
+    }
+}
+.btn-group-addEntryPopup {
+    height: 6rem;
+    display: flex;
+    justify-content: end;
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Globals } from '../../shared/classes/globals';
 import { APIService } from '../../shared/services/api.service';
 import { UserClass } from './classes/userClass';
-import { GrindingTableHeaders } from './classes/grindingTable';
+import { GrindingData, GrindingTableHeaders } from './classes/grindingTable';
 
 @Injectable()
 export class CombatService {
@@ -46,5 +46,13 @@ export class CombatService {
 
     public addMainClass(classToSave: UserClass) {
         return this.http.post(this.globals.config.appApiUrl + "combat/create-main-class", JSON.stringify(classToSave));
+    }
+
+    public getCombatEnums() {
+        return this.http.get(this.globals.config.appApiUrl + "combat/enums");
+    }
+
+    public saveGrindingEntry(newEntry: GrindingData): Promise<any> {
+        return this.http.post(this.globals.config.appApiUrl + "combat/new-entry", JSON.stringify(newEntry)).toPromise();
     }
 }

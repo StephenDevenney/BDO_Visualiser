@@ -15,6 +15,8 @@ router.get('/class-names', (req, res) => { return combatPath.getAllClassNames(re
 
 router.get('/trashLoot-totals/:locationId', (req, res) => { return combatPath.getTrashLootTotals(req.params.locationId, res) });
 
+router.get('/enums', (req, res) => { return combatPath.getCombatEnums(res) });
+
 // // PUT
 router.put('/active-columns', (req, res) => { return res.json(combatPath.updateActiveColumns(req.body, res)) });
 
@@ -24,5 +26,7 @@ router.put('/update-class', (req, res) => { return res.json(combatPath.updateCla
 router.post('/create-main-class', (req, res) => { return res.json(combatPath.createMainClass(req.body, res)) });
 
 router.post('/create-class', (req, res) => { return res.json(combatPath.createClass(req.body, res)) });
+
+router.post('/new-entry', (req, res) => { return res.json(combatPath.createEntry(req.body, res)) });
 
 module.exports = router;

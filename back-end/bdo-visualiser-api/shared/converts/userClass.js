@@ -5,8 +5,8 @@ const table = db.prepare("SELECT count(*) FROM sqlite_master WHERE type='table' 
 var classNamesEnum;
 var classRolesEnum;
 if (table['count(*)']) {
-    classNamesEnum = sqlContext.getAllClassNames();
-    classRolesEnum = sqlContext.getAllClassRoles();
+    classNamesEnum = sqlContext.getClassNameEnums();
+    classRolesEnum = sqlContext.getClassRoleEnums();
 }
 
 /*
@@ -18,8 +18,8 @@ if (table['count(*)']) {
 */
 exports.convertToEntity = function(newClass, combatSettingsIdObj) {
     if(typeof(classNamesEnum) == "undefined"){
-        classNamesEnum = sqlContext.getAllClassNames();
-        classRolesEnum = sqlContext.getAllClassRoles();
+        classNamesEnum = sqlContext.getClassNameEnums();
+        classRolesEnum = sqlContext.getClassRoleEnums();
     }
 
     var cn = classNamesEnum.filter(classObj => classObj.className == newClass.className);
@@ -39,6 +39,7 @@ exports.convertToEntity = function(newClass, combatSettingsIdObj) {
 
 /*
     ## Class View Model
+        classId
         className
         classRole
         gear: 
@@ -48,18 +49,19 @@ exports.convertToEntity = function(newClass, combatSettingsIdObj) {
             gearScore
         
 */
-exports.convertToViewModel = function(classEntity, gearEntity) {
+exports.convertToViewModel = function(classEntity, gearEntity, classIdObj) {
     if(typeof(classNamesEnum) == "undefined"){
         classNamesEnum = sqlContext.getAllClassNames();
         classRolesEnum = sqlContext.getAllClassRoles();
     }
-    
+
     var cn = classNamesEnum.filter(classObj => classObj.classId == classEntity.FK_classNameId);
     var classNameConverted = cn[0].className;
     var cr = classRolesEnum.filter(roleObj => roleObj.roleId == classEntity.FK_classRoleId);
     var classRoleConverted = cr[0].roleDescription;
 
     var userClass = { 
+        classId: classIdObj,
         className: classNameConverted, 
         classRole: classRoleConverted,
         gear: { 
@@ -67,14 +69,15 @@ exports.convertToViewModel = function(classEntity, gearEntity) {
             aap: gearEntity.aap, 
             dp: gearEntity.dp, 
             gearScore: gearEntity.gearScore 
-        } 
+        },
+        description: classNameConverted + " - " + gearEntity.gearScore + " GS"
     };
     return userClass;
 }
 
 exports.convertEntitiesToViewModel = function(classEntity, gearEntity) {
-
     var userClass = { 
+        classId: classEntity.FK_classId,
         className: classEntity.className, 
         classRole: classEntity.classRole,
         gear: { 
@@ -82,7 +85,8 @@ exports.convertEntitiesToViewModel = function(classEntity, gearEntity) {
             aap: gearEntity.aap, 
             dp: gearEntity.dp, 
             gearScore: gearEntity.gearScore 
-        } 
+        },
+        description: classEntity.className + " - " + gearEntity.gearScore + " GS"
     };
 
     return userClass;

@@ -69,12 +69,32 @@ exports.getClassGear = function(gearScoreId) {
     return db.prepare("SELECT ap, aap, dp, gearScore FROM combat_gearScore WHERE combat_gearScore.gearScoreId = ?").get(gearScoreId);
 }
 
-exports.getAllClassNames = function() {
+exports.getClassNameEnums = function() {
     return db.prepare("SELECT * FROM enum_class").all();
 }
 
-exports.getAllClassRoles = function() {
+exports.getLocationEnums = function() {
+    return db.prepare("SELECT enum_locations.locationId, enum_territory.territoryId, enum_locations.locationName, enum_territory.territoryName FROM enum_locations INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId").all();
+}
+
+exports.getClassRoleEnums = function() {
     return db.prepare("SELECT * FROM enum_classRole").all();
+}
+
+exports.getServerEnums = function() {
+    return db.prepare("SELECT * FROM enum_server").all();
+}
+
+exports.getTimeEnums = function() {
+    return db.prepare("SELECT * FROM enum_time").all();
+}
+
+exports.getCombatTypeEnums = function() {
+    return db.prepare("SELECT * FROM enum_combatType").all();
+}
+
+exports.getTimeAmountEnums = function() {
+    return db.prepare("SELECT * FROM enum_time").all();
 }
 
 exports.getActiveClasses = function(combatSettingsId) {

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LocationNamesEnum, ServerNamesEnum, CombatTypesEnum, TimeAmountEnum } from './combatEnums';
 import { UserClass } from './userClass';
 
 @Injectable()
@@ -23,11 +24,11 @@ export class GrindingTableHeaders {
 export class GrindingData {
     public grindingId: number = 0;
     public date: string = "";
-    public locationName: string = "";
-    public timeAmount: number = 0;
+    public grindLocation: LocationNamesEnum = new LocationNamesEnum();
+    public timeAmount: TimeAmountEnum = new TimeAmountEnum();
     public trashLootAmount: number = 0;
-    public className: string = "";
-    public serverName: string = "";
-    public combatTypeName: string = "";
+    public userClass: UserClass = new UserClass();
+    public server: ServerNamesEnum = new ServerNamesEnum();
+    public combatType: CombatTypesEnum = new CombatTypesEnum();
     public afuaruSpawns: number = 0;
 }

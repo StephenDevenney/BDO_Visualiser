@@ -3,7 +3,7 @@ import { BaseComponent } from '../../../shared/components/base.component';
 import { CombatService } from '../combat.service';
 import { GrindingData, GrindingTableHeaders, CombatPageData } from "../classes/grindingTable";
 import { UserClass } from '../classes/userClass';
-import { ClassNames } from '../classes/classNames';
+import { ClassNamesEnum, CombatPageEnums } from '../classes/combatEnums';
 
 @Component({
   selector: 'combat-page',
@@ -20,11 +20,14 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public rowGroupMetadata: any;
   public stateOptions = [{label: 'Off', value: 0}, {label: 'On', value: 1}];
   public isLoaded: boolean = false;
-  public classNames: Array<ClassNames> = new Array<ClassNames>();
+  public classNames: Array<ClassNamesEnum> = new Array<ClassNamesEnum>();
+  public combatEnums: CombatPageEnums = new CombatPageEnums();
 
   // Grinding Data
   public combatPageData: CombatPageData;
   public grindingRes: Array<GrindingData> = new Array<GrindingData>();
+
+  // New Entry
   public newGrindingResEntry: Array<GrindingData> = new Array<GrindingData>();
   public newEntry: GrindingData = new GrindingData();
 
@@ -59,13 +62,15 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.updateRowGroupMetaData(this.grindingRes);
       this.isLoaded = true;
       this.loader.stop();
+      console.log(this.newEntry);
     },
     err => {
       this.loader.stop();
     });
 
-    this.combatService.getAllClassNames().subscribe(res => {
-      this.classNames = res as Array<ClassNames>;
+    this.combatService.getCombatEnums().subscribe(res => {
+      this.combatEnums = res as CombatPageEnums;
+      console.log(this.combatEnums);
     });
   }
 
@@ -136,7 +141,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     }
   }
 
-  public addEntryPopupChecks() {
+  public async addEntryPopupChecks() {
     if(this.grindingRes.length == 0 && !this.combatPageData.hasDefaultCombatHeaders) {
       this.entryPopupTitle = "Select Combat Headers";
       this.showCombatDefaultColumns = true;
@@ -149,8 +154,35 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.showCombatDefaultColumns = false;
     }
     else {
-      if(this.newGrindingResEntry.length == 0)
+      if(this.newGrindingResEntry.length == 0){
+        if(this.mainClass)
+          this.newEntry.userClass = this.mainClass;
+          await Promise.all(this.filteredColumns.map(async (col) => {
+            if(col.isActive){
+              switch(col.headingId){
+                case 2: // Location
+                  this.newEntry.grindLocation = this.combatEnums.locationNamesEnum[0];
+                  break;
+                case 3: // Time
+                  this.newEntry.timeAmount = this.combatEnums.timeAmountEnum[0];
+                  break;
+                case 5: // Class
+                  this.newEntry.userClass = this.mainClass;
+                  break;
+                case 6: // Server
+                  this.newEntry.server = this.combatEnums.serverNamesEnum[0];
+                  break;
+                case 7: // Combat Types
+                  this.newEntry.combatType = this.combatEnums.combatTypesEnum[0];
+                  break;
+                default:
+                  break;
+              }
+            }
+          }));
         this.newGrindingResEntry.push(this.newEntry); this.newEntry.grindingId = 1;
+      }
+        
       this.entryPopupTitle = "Add New Entry";
       this.showGrindingTableEntry = true;
       this.showAddMainClass = false;
@@ -163,7 +195,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     this.newGrindingResEntry[entry.grindingId] = {...entry};
   }
 
-  // public add(table){
-  //   this.onRowEditInit(this.cars2[this.cars2.length - 1]);
-  // }
+  public addEntry() {
+    console.log(this.newEntry);
+  }
 }

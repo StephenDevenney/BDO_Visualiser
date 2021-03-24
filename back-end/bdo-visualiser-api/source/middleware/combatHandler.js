@@ -3,6 +3,8 @@ const CombatHeaders = require("../../shared/converts/combatHeaders");
 const UserClass = require("../../shared/converts/userClass");
 const Gear = require("../../shared/converts/gear");
 const Calc = require("../../shared/calc/gearScore");
+const NewEntry = require("../../shared/converts/combatTableEntry");
+const Server = require("../../shared/converts/server");
 var globalUserId = "1";
 
 // // GET
@@ -31,9 +33,9 @@ exports.getGrindingData = async function(res) {
         activeClasses.push(activeClassVM);
     });
 
-    var hasMainClass = false;
-    if(activeClasses.length > 0)
-        hasMainClass = true;
+    var hasMainClass = true;
+    if(activeClasses.length == 0 || !activeClasses)
+        hasMainClass = false;
 
     return res.json({tableHeaders, tableData, hasDefaultCombatHeaders, activeClasses, hasMainClass});
 }
@@ -87,7 +89,22 @@ exports.getMainClass = function(res) {
 }
 
 exports.getAllClassNames = function(res) {
-    return res.json(sqlContext.getAllClassNames());
+    return res.json(sqlContext.getClassNameEnums());
+}
+
+exports.getCombatEnums = async function(res){
+    var classNamesEnum = sqlContext.getClassNameEnums();
+    var locationNamesEnum = sqlContext.getLocationEnums();
+    var serversEnum = sqlContext.getServerEnums();
+    var combatTypesEnum = sqlContext.getCombatTypeEnums();
+    var timeAmountEnum = sqlContext.getTimeAmountEnums();
+    var serverNamesEnum = [];
+    await serversEnum.forEach(serverEntity => {
+        serverVM = Server.convertToViewModel(serverEntity); 
+        serverNamesEnum.push(serverVM);
+    });
+
+    return res.json({classNamesEnum, locationNamesEnum, serverNamesEnum, combatTypesEnum, timeAmountEnum});
 }
 
 // // PUT
@@ -125,10 +142,19 @@ exports.createClass = function(newClass, res) {
 
     var classEntity = UserClass.convertToEntity(newClass, combatSettings.combatSettingsId);
     var classIdObj = sqlContext.createClass(classEntity);
-    var gearEntity = Gear.convertToEntity(newClass, classEntity, classIdObj);
+    var gearEntity = Gear.convertToEntity(newClass, classEntity, classIdObj.classId);
     gearEntity = Calc.calcGearScore(gearEntity);
     var gearScoreIdObj = sqlContext.createGearScore(gearEntity);
     sqlContext.updateClassWithGearScoreId(gearScoreIdObj.gearScoreId, classEntity.FK_combatSettingsId, classIdObj);
-    var classVM = UserClass.convertToViewModel(classEntity, gearEntity);
+    var classVM = UserClass.convertToViewModel(classEntity, gearEntity, classIdObj.classId);
     return res.json(classVM);
+}
+
+exports.createEntry = function(newEntry, res) {
+    var combatSettings = sqlContext.getCombatSettings(globalUserId);
+    console.log(newEntry);
+    var classEntity = UserClass.convertToEntity(newEntry.userClass, combatSettings.combatSettingsId);
+    console.log(classEntity);
+    // var gearEntity = Gear.convertToEntity(newEntry.gear, classEntity, classIdObj.classId);
+    // var newEntryEntity = NewEntry.convertToEntity(newEntry, gearEntity, combatSettings.combatSettingsId);
 }

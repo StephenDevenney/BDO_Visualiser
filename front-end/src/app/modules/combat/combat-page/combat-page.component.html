@@ -122,8 +122,8 @@
 <p-dialog 
     header="{{entryPopupTitle}}" 
     [(visible)]="showAddEntryPopup"
-    [style]="{width: '50vw'}"
-    styleClass="popupDialog"
+    [style]="{width: '50vw', height: 'auto'}"
+    styleClass="popupDialog addEntryPopup"
     modal="true"
     closeOnEscape="true"
     dismissableMask="true">
@@ -138,7 +138,6 @@
                         <label class="ml-2" *ngIf="col.headingId == 3">(Hours, Minutes...)</label>
                     </div>
                     <div>
-                        <!-- <p-selectButton [options]="stateOptions" [(ngModel)]="col.isActive" optionLabel="label" optionValue="value"></p-selectButton> -->
                         <p-inputSwitch [(ngModel)]="col.isActive"></p-inputSwitch>
                     </div>
                 </div>
@@ -151,7 +150,6 @@
                     <div>
                         <label>Mainhand AP</label>
                     </div>
-                    <!-- <label>0</label> -->
                     <p-inputNumber [(ngModel)]="mainClass.gear.ap" [min]="0"></p-inputNumber>
                 </div>
                 <div class="col mb-4">
@@ -170,7 +168,7 @@
                     <div>
                         <label>Class</label>
                     </div>
-                    <p-dropdown appendTo="body" [options]="classNames" placeholder="Select Class" [(ngModel)]="mainClass.className" optionLabel="className" optionValue="className">
+                    <p-dropdown appendTo="body" [options]="combatEnums.classNamesEnum" placeholder="Select Class" [(ngModel)]="mainClass.className" optionLabel="className" optionValue="className">
                         <ng-template let-item pTemplate="item">
                             <div>
                                 <div>{{item.className}}</div>
@@ -182,53 +180,73 @@
         </div>
         <!-- Add Entry -->
         <div *ngIf="showGrindingTableEntry">
-            <div class="mb-2">
-                Remove This.
-                <!-- <div *ngFor="let col of filteredColumns;">
-                    <div *ngIf="col.isActive">
-                        <p-dropdown *ngIf="col.headingId == 2" [options]="classNames" [(ngModel)]="item.locationName"></p-dropdown>
-                        <p-inputNumber *ngIf="col.headingId == 3 || col.headingId == 4 || col.headingId == 8" [(ngModel)]="newEntry" [min]="0"></p-inputNumber>
+            <div class="row mb-2">
+                <div class="col-md-4 col-sm-6 col" *ngFor="let col of filteredColumns;">
+                    <div *ngIf="col.isActive" class="mb-4">
+                        <div *ngIf="col.headingId == 2">
+                            <div>
+                                <label>Location</label>
+                            </div>
+                            <p-dropdown [options]="combatEnums.locationNamesEnum" [(ngModel)]="newEntry.grindLocation" optionLabel="locationName"></p-dropdown>
+                        </div>
+                        <div *ngIf="col.headingId == 3">
+                            <div>
+                                <label>Time Grinded</label>
+                            </div>
+                            <p-dropdown [options]="combatEnums.timeAmountEnum" [(ngModel)]="newEntry.timeAmount">
+                                <ng-template let-item pTemplate="selectedItem">
+                                    <div>
+                                        <div>{{item.timeAmount}} Minutes</div>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-item pTemplate="item">
+                                    <div>
+                                        <div>{{item.timeAmount}} Minutes</div>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+                        </div>
+                        <div *ngIf="col.headingId == 4">
+                            <div>
+                                <label>Primary Trash Loot Dropped</label>
+                            </div>
+                            <p-inputNumber [(ngModel)]="newEntry.trashLootAmount" [min]="0"></p-inputNumber>
+                        </div>
+                        <div *ngIf="col.headingId == 5">
+                            <div>
+                                <label>Character</label>
+                            </div>
+                            <p-dropdown [options]="activeClasses" [(ngModel)]="newEntry.userClass" optionLabel="description"></p-dropdown>
+                        </div>
+                        <div *ngIf="col.headingId == 6">
+                            <div>
+                                <label>Server</label>
+                            </div>
+                            <p-dropdown [options]="combatEnums.serverNamesEnum" [(ngModel)]="newEntry.server" optionLabel="serverDescription"></p-dropdown>
+                        </div>
+                        <div *ngIf="col.headingId == 7">
+                            <div>
+                                <label>Combat Type</label>
+                            </div>
+                            <p-dropdown [options]="combatEnums.combatTypesEnum" [(ngModel)]="newEntry.combatType" optionLabel="combatTypeName"></p-dropdown>
+                        </div>
+                        <div *ngIf="col.headingId == 8">
+                            <div>
+                                <label>Afuaru Spawns</label>
+                            </div>
+                            <p-inputNumber [(ngModel)]="newEntry.afuaruSpawns" [min]="0"></p-inputNumber>
+                        </div>
                     </div>
-                </div> -->
-
-                <!-- <p-table 
-                    #tableNewEntry
-                    [value]="newGrindingResEntry"
-                    [reorderableColumns]="true"
-                    [columns]="filteredColumns"
-                    editMode="row"
-                    dataKey="id">
-
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th pReorderableColumn *ngFor="let col of filteredColumns;">
-                                {{ col.header }}
-                            </th>
-                        </tr>
-                    </ng-template>
-                    <ng-template pTemplate="body" let-item let-rowIndex="rowIndex" let-editing="editing">                    
-                        <tr [pEditableRow]="item">
-                            <td *ngFor="let col of filteredColumns;">
-                                <p-cellEditor>
-                                    <ng-template pTemplate="input">
-                                        <p-dropdown *ngIf="col.headingId == 2" [options]="classNames" [(ngModel)]="item.locationName" [style]="{'width':'100%'}"></p-dropdown>
-                                        <p-inputNumber *ngIf="col.headingId == 3 || col.headingId == 4 || col.headingId == 8" [(ngModel)]="item[col.field]" [min]="0"></p-inputNumber>
-                                    </ng-template>
-                                    <ng-template pTemplate="output">
-                                        {{item[col.field]}}
-                                    </ng-template>
-                                </p-cellEditor>
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table> -->
+                </div>
             </div>
         </div>
-        <div class="d-flex align-items-center justify-content-end">
-            <button *ngIf="showCombatDefaultColumns" class="btn btn-primary" (click)="saveDefaultColumns();">Continue</button>
-            <button *ngIf="showAddMainClass" class="btn btn-primary" (click)="saveMainClass()">Add Class</button>
-            <button *ngIf="showGrindingTableEntry" class="btn btn-primary">Add</button>
-            <button class="btn btn-primary ml-2" (click)="showAddEntryPopup = false;">Close</button>
+        <div class="btn-group-addEntryPopup">
+            <div class="d-flex align-items-center justify-content-end">
+                <button *ngIf="showCombatDefaultColumns" class="btn btn-primary" (click)="saveDefaultColumns();">Continue</button>
+                <button *ngIf="showAddMainClass" class="btn btn-primary" (click)="saveMainClass()">Add Class</button>
+                <button *ngIf="showGrindingTableEntry" class="btn btn-primary" (click)="addEntry()">Add</button>
+                <button class="btn btn-primary ml-2" (click)="showAddEntryPopup = false;">Close</button>
+            </div>
         </div>
     </div>
 </p-dialog>
