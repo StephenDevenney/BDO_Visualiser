@@ -6,10 +6,11 @@ import * as moment from "moment";
 @Pipe({name: 'dateLong'})
 export class DateLongPipe implements PipeTransform {
     transform(dateString: any): any {
-        if(dateString == "" || dateString == undefined) 
+        if(dateString == "" || typeof(dateString) == "undefined") 
             return "";
 
         var momentObj = moment.unix(dateString);
+        console.log(momentObj);
         var momentString = momentObj.format('dddd, Do MMMM YYYY');
 
         return momentString;
