@@ -57,7 +57,7 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
                             <!-- Subheader Group -->
-                            <tr class="table-group-subheading" *ngIf="rowGroupMetadata[item.date].index === rowIndex">
+                            <tr class="table-group-subheading" *ngIf="rowGroupMetadata[item.dateCreated].index === rowIndex">
                                 <td [colSpan]="filteredColumns.length"><h3 class="mb-0">{{ item[columnHeaders[0].field] | dateLong }}</h3></td>
                             </tr>
                             
@@ -131,8 +131,8 @@
     <div class="mt-4">
         <!-- Choose Columns -->
         <div class="row" *ngIf="showCombatDefaultColumns">
-            <div class="col-md-4 col-sm-6 col" *ngFor="let col of columnHeaders; let i = index">
-                <div class="mb-2">
+            <div class="col-md-4 col-sm-6 col" *ngFor="let col of newColumnHeadersFiltered; let i = index">
+                <div *ngIf="col.headingId != 1" class="mb-2">
                     <div class="d-flex align-items-center">
                         <label>{{col.header}}</label>
                         <label class="ml-2" *ngIf="col.headingId == 3">(Hours, Minutes...)</label>
@@ -181,7 +181,7 @@
         <!-- Add Entry -->
         <div *ngIf="showGrindingTableEntry">
             <div class="row mb-2">
-                <div class="col-md-4 col-sm-6 col" *ngFor="let col of filteredColumns;">
+                <div class="col-md-4 col-sm-6 col" *ngFor="let col of newColumnHeadersFiltered;">
                     <div *ngIf="col.isActive" class="mb-4">
                         <div *ngIf="col.headingId == 2">
                             <div>

@@ -1,7 +1,7 @@
 /*
     ## Calculate Gear Score
         gear score is only calculated on creation, as there will be snapshots of gear scores,
-        no gear score table entry will be updated.
+        no gear score table entry will be updated after.
 */
 exports.calcGearScore = function(gearObj) {
     var gearScoreUpdated = Math.floor((gearObj.ap + gearObj.aap) / 2) + gearObj.dp;

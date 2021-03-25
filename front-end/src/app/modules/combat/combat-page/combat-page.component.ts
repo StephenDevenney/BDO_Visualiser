@@ -29,6 +29,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   // New Entry
   public newGrindingResEntry: Array<GrindingData> = new Array<GrindingData>();
+  public newColumnHeadersFiltered: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
   public newEntry: GrindingData = new GrindingData();
 
   // Combat Headers
@@ -54,6 +55,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       console.log(this.combatPageData);
       this.columnHeaders = this.combatPageData.tableHeaders as Array<GrindingTableHeaders>;
       this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
+      this.newColumnHeadersFiltered = this.columnHeaders.filter(header => header.headingId != 1);
       this.activeClasses = this.combatPageData.activeClasses as Array<UserClass>;
       if(this.combatPageData.hasMainClass)
         this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
@@ -80,7 +82,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     if (data) {
         for (let i = 0; i < data.length; i++) {
             let rowData = data[i];
-            let date = rowData.date;
+            let date = rowData.dateCreated;
             
             if (i == 0) {
                 this.rowGroupMetadata[date] = { index: 0, size: 1 };
@@ -125,6 +127,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.loader.startBackground();
       this.combatService.addMainClass(this.mainClass).subscribe(res => {
         this.mainClass = res as UserClass;
+        console.log(this.mainClass);
         this.combatPageData.hasMainClass = true;
         this.combatPageData.activeClasses.push(this.mainClass);
         this.addEntryPopupChecks();

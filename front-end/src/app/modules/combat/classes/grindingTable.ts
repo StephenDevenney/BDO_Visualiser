@@ -23,7 +23,7 @@ export class GrindingTableHeaders {
 @Injectable()
 export class GrindingData {
     public grindingId: number = 0;
-    public date: string = "";
+    public dateCreated: string = "";
     public grindLocation: LocationNamesEnum = new LocationNamesEnum();
     public timeAmount: TimeAmountEnum = new TimeAmountEnum();
     public trashLootAmount: number = 0;

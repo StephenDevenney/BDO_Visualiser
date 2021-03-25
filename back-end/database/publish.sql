@@ -111,6 +111,7 @@ CREATE TABLE combat_classes (
 	FK_classNameId INTEGER DEFAULT 0,
 	FK_classRoleId INTEGER DEFAULT 0,
 	FK_gearScoreId INTEGER DEFAULT 0,
+	FK_primaryCombatTypeId INTEGER DEFAULT 2,
 	dateCreated TEXT NOT NULL
 );
 
@@ -138,7 +139,7 @@ CREATE TABLE enum_locations (
 
 CREATE TABLE enum_time (
 	timeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	timeAmount INTEGER
+	timeAmount INTEGER DEFAULT 1
 );
 
 CREATE TABLE enum_roles (
@@ -228,13 +229,14 @@ INSERT INTO combat_settings (combatSettingsId, FK_currentGearScoreId, FK_redBatt
 -- INSERT INTO combat_classes (classId, FK_combatSettingsId, FK_classNameId, FK_classRoleId, FK_gearScoreId) VALUES(2, 1, 12, 3, 1);
 
 -- INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 1, 1, 0);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 1, 2, 1);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (2, 1, 3, 1);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (3, 1, 4, 1);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (4, 1, 5, 1);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (5, 1, 6, 0);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (6, 1, 7, 0);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (7, 1, 8, 0);
+INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 1, 1, 0);
+INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (2, 1, 2, 1);
+INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (3, 1, 3, 1);
+INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (4, 1, 4, 1);
+INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (5, 1, 5, 1);
+INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (6, 1, 6, 0);
+INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (7, 1, 7, 0);
+INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (8, 1, 8, 0);
 
 -- Sample Combat Data - User 1 - Date Format: month-day-year
 -- INSERT INTO combat_grinding (FK_combatSettingsId, trashLootAmount, date, FK_timeId, FK_classId, FK_locationId, FK_serverId, FK_combatTypeId, FK_gearScoreId, afuaruSpawns) VALUES(1, 5000, '01-12-2021', 4, 1, 13, 10, 1, 1, 2);
@@ -314,6 +316,7 @@ INSERT INTO enum_classRole (roleDescription) VALUES ('Life Skiller');
 INSERT INTO enum_classRole (roleDescription) VALUES ('Alt');
 
 -- enum_class
+INSERT INTO enum_class (className) VALUES ('-');
 INSERT INTO enum_class (className) VALUES ('Archer');
 INSERT INTO enum_class (className) VALUES ('Beserker');
 INSERT INTO enum_class (className) VALUES ('Dark Knight');
@@ -339,6 +342,7 @@ INSERT INTO enum_theme (themeName, className) VALUES ('Default', 'standard-theme
 INSERT INTO enum_theme (themeName, className) VALUES ('Dark', 'dark-theme');
 
 -- enum_server
+INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('-', 0, 0);
 INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Arsha(PvP)', 0, 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 1);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 2);
@@ -392,12 +396,14 @@ INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 4);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 5);
 INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 6);
 
--- enum_serverRegion, may change after merge
+-- enum_serverRegion
+INSERT INTO enum_serverRegion (regionName) VALUES ('-');
 INSERT INTO enum_serverRegion (regionName) VALUES ('EU');
 INSERT INTO enum_serverRegion (regionName) VALUES ('NA');
 INSERT INTO enum_serverRegion (regionName) VALUES ('SEA');
 
 -- enum_territory
+INSERT INTO enum_territory (territoryName) VALUES ('-');
 INSERT INTO enum_territory (territoryName) VALUES ('Balenos');
 INSERT INTO enum_territory (territoryName) VALUES ('Calpheon');
 INSERT INTO enum_territory (territoryName) VALUES ('Dreighan');
@@ -415,29 +421,31 @@ INSERT INTO enum_appIdleSecs (idleTime, description) VALUES (1800, '30 Minutes')
 INSERT INTO enum_appIdleSecs (idleTime, description) VALUES (0, 'Off');
 
 -- enum_locations
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Turos', 6);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Sycria', 1);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Hystria', 8);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Stars End', 2);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Forest Ronaros Area (Ronaros)', 4);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Manshaum Forest', 4);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Ash Forest', 4);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Abandoned Monastery', 2);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Aakman', 8);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Titium Valley (Fogans)', 8);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Desert Naga Temple (Nagas)', 8);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Roud Sulpher Mine', 8);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Pila Ku Jail', 8);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Sherekhan Necropolis', 3);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Blood Wolf Settlement', 3);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Navarn Steppe', 4);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Tshira Ruins', 3);
-INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Manshaum Forest', 4);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('-', 1);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Turos', 7);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Sycria', 2);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Hystria', 9);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Stars End', 3);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Forest Ronaros Area (Ronaros)', 5);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Manshaum Forest', 5);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Ash Forest', 5);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Abandoned Monastery', 3);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Aakman', 9);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Titium Valley (Fogans)', 9);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Desert Naga Temple (Nagas)', 9);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Roud Sulpher Mine', 9);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Pila Ku Jail', 9);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Sherekhan Necropolis', 4);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Blood Wolf Settlement', 4);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Navarn Steppe', 5);
+INSERT INTO enum_locations (locationName, FK_territoryId) VALUES ('Tshira Ruins', 4);
 
 -- enum_combatType
+INSERT INTO enum_combatType (combatTypeName) VALUES ('-');
 INSERT INTO enum_combatType (combatTypeName) VALUES ('Awakening');
 INSERT INTO enum_combatType (combatTypeName) VALUES ('Succession');
 INSERT INTO enum_combatType (combatTypeName) VALUES ('Mainhand');
+INSERT INTO enum_combatType (combatTypeName) VALUES ('Mixed');
 
 -- enum_combatBrackets
 INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('100 - 139', 5, '203 - 210', 1);
@@ -493,7 +501,7 @@ INSERT INTO enum_treasureItemCompleted (itemName) VALUES ('Ornette’s Spirit Es
 INSERT INTO enum_treasureItemCompleted (itemName) VALUES ('Odore’s Spirit Essence (Infinite MP/WP/EP/SP potion)');
 
 -- enum_combatTableHeadings
-INSERT INTO enum_combatTableHeadings (field, header) VALUES ('date', 'Date');
+INSERT INTO enum_combatTableHeadings (field, header) VALUES ('dateCreated', 'Date');
 INSERT INTO enum_combatTableHeadings (field, header) VALUES ('locationName', 'Location');
 INSERT INTO enum_combatTableHeadings (field, header) VALUES ('timeAmount', 'Time');
 INSERT INTO enum_combatTableHeadings (field, header) VALUES ('trashLootAmount', 'Trash Loot');

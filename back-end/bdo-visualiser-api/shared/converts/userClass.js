@@ -1,37 +1,34 @@
-const SQLite = require("better-sqlite3");
-const db = new SQLite('../Database/' + process.env.DATABASE_NAME);
 const sqlContext = require("../../source/sqlContext/combatContext");
-const table = db.prepare("SELECT count(*) FROM sqlite_master WHERE type='table' AND name = 'security_user';").get();
-var classNamesEnum;
-var classRolesEnum;
-if (table['count(*)']) {
-    classNamesEnum = sqlContext.getClassNameEnums();
-    classRolesEnum = sqlContext.getClassRoleEnums();
-}
+const CalcDate = require("../calc/unixDate");
 
 /*
     ## Class Entity
         FK_combatSettingsId
         FK_classNameId
         FK_classRoleId
+        FK_primaryCombatTypeId
         dateCreated
 */
 exports.convertToEntity = function(newClass, combatSettingsIdObj) {
-    if(typeof(classNamesEnum) == "undefined"){
-        classNamesEnum = sqlContext.getClassNameEnums();
-        classRolesEnum = sqlContext.getClassRoleEnums();
-    }
+    var classNamesEnum = sqlContext.getClassNameEnums();
+    var classRolesEnum = sqlContext.getClassRoleEnums();
+    var combatTypesEnum = sqlContext.getCombatTypeEnums();
 
     var cn = classNamesEnum.filter(classObj => classObj.className == newClass.className);
     var classIdConverted = cn[0].classId;
     var cr = classRolesEnum.filter(roleObj => roleObj.roleDescription == newClass.classRole);
     var classRoleConverted = cr[0].roleId;
+    var ct = combatTypesEnum.filter(combatTypeObj => combatTypeObj.combatTypeName == newClass.primaryCombatTypeDescription);
+    var combatTypeConverted = 2;
+    if(typeof(ct) != "undefined" && ct.length > 0)
+        combatTypeConverted = ct[0].combatTypeId;
 
     var classEntity = {
         FK_combatSettingsId: combatSettingsIdObj,
         FK_classNameId: classIdConverted,
         FK_classRoleId: classRoleConverted,
-        dateCreated: Date.now().toString()
+        FK_primaryCombatTypeId: combatTypeConverted,
+        dateCreated: CalcDate.calcUnixDate(),
     }
 
     return classEntity;
@@ -50,10 +47,8 @@ exports.convertToEntity = function(newClass, combatSettingsIdObj) {
         
 */
 exports.convertToViewModel = function(classEntity, gearEntity, classIdObj) {
-    if(typeof(classNamesEnum) == "undefined"){
-        classNamesEnum = sqlContext.getAllClassNames();
-        classRolesEnum = sqlContext.getAllClassRoles();
-    }
+    var classNamesEnum = sqlContext.getClassNameEnums();
+    var classRolesEnum = sqlContext.getClassRoleEnums();
 
     var cn = classNamesEnum.filter(classObj => classObj.classId == classEntity.FK_classNameId);
     var classNameConverted = cn[0].className;
@@ -64,7 +59,8 @@ exports.convertToViewModel = function(classEntity, gearEntity, classIdObj) {
         classId: classIdObj,
         className: classNameConverted, 
         classRole: classRoleConverted,
-        gear: { 
+        gear: {
+            gearScoreId: gearEntity.gearScoreId,
             ap: gearEntity.ap, 
             aap: gearEntity.aap, 
             dp: gearEntity.dp, 

@@ -20,9 +20,6 @@ exports.getGrindingData = async function(res) {
         var headerVM = CombatHeaders.convertToVM(col);
         tableHeaders.push(headerVM);
     }));
-    // Get Grinding Data
-    var tableData = sqlContext.getGrindingData(globalUserId);
-
     // Get Active Classes
     var activeClassesEntities = sqlContext.getActiveClasses(combatSettings.combatSettingsId);
     var activeClasses = [];
@@ -31,6 +28,15 @@ exports.getGrindingData = async function(res) {
         var activeClassVM = UserClass.convertEntitiesToViewModel(userClassEntity, gearEntity);
         activeClasses.push(activeClassVM);
     }));
+    // Get Grinding Data
+    var tableDataEntity = sqlContext.getGrindingData(globalUserId);
+    tableData = [];
+    await Promise.all(tableDataEntity.map(async (entry) => {
+        // console.log(entry);
+        var returnEntry = NewEntry.convertToViewModel(entry);
+        tableData.push(returnEntry);
+    }));
+    // console.log(tableData);
 
     var hasMainClass = true;
     if(activeClasses.length == 0 || !activeClasses)
@@ -96,12 +102,12 @@ exports.getCombatEnums = async function(res){
     var locationNamesEnum = sqlContext.getLocationEnums();
     var serversEnum = sqlContext.getServerEnums();
     var combatTypesEnum = sqlContext.getCombatTypeEnums();
-    var timeAmountEnum = sqlContext.getTimeAmountEnums();
+    var timeAmountEnum = sqlContext.getTimeEnums();
     var serverNamesEnum = [];
-    await serversEnum.forEach(serverEntity => {
+    await Promise.all(serversEnum.map(async (serverEntity) => {
         serverVM = Server.convertToViewModel(serverEntity); 
         serverNamesEnum.push(serverVM);
-    });
+    }));
 
     return res.json({classNamesEnum, locationNamesEnum, serverNamesEnum, combatTypesEnum, timeAmountEnum});
 }
@@ -143,12 +149,14 @@ exports.createClass = function(newClass, res) {
     else if(!newClass.classRole)
         return res.status(400).json({ msg: `Class Role Required.` });
 
+
     var classEntity = UserClass.convertToEntity(newClass, combatSettings.combatSettingsId);
     var classIdObj = sqlContext.createClass(classEntity);
-    var gearEntity = Gear.convertToEntity(newClass, classEntity, classIdObj.classId);
+    var gearEntity = Gear.convertToEntity(newClass.gear, classEntity, classIdObj.classId);
     gearEntity = Calc.calcGearScore(gearEntity);
     var gearScoreIdObj = sqlContext.createGearScore(gearEntity);
     sqlContext.updateClassWithGearScoreId(gearScoreIdObj.gearScoreId, classEntity.FK_combatSettingsId, classIdObj);
+    gearEntity = Gear.reConvertToEntity(gearEntity, gearScoreIdObj.gearScoreId);
     var classVM = UserClass.convertToViewModel(classEntity, gearEntity, classIdObj.classId);
     return res.json(classVM);
 }
@@ -157,6 +165,6 @@ exports.createEntry = async function(newEntry, res) {
     var combatSettings = sqlContext.getCombatSettings(globalUserId);
     var newEntryEntity = NewEntry.convertToEntity(newEntry, combatSettings.combatSettingsId);
     var returnEntity = sqlContext.createGrindingEntry(newEntryEntity);
-    var grindingTableEntry = NewEntry.convertToViewModel(returnEntity, newEntry);
+    var grindingTableEntry = NewEntry.reConvertToViewModel(returnEntity, newEntry);
     return res.json(grindingTableEntry); 
 }
