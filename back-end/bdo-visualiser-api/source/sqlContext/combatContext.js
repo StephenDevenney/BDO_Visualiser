@@ -118,7 +118,12 @@ exports.createGearScore = function(gearEntity) {
 
 exports.updateHasDefaultCombatHeadersSet = function(combatSettingsId, hasDefaultCombatHeaders) {
     db.prepare("UPDATE combat_settings SET hasDefaultCombatHeaders = ? WHERE combatSettingsId = ?").run(hasDefaultCombatHeaders, combatSettingsId);
-    return db.prepare("SELECT combat_settings.hasDefaultCombatHeaders FROM combat_settings WHERE combat_settings.combatSettingsId = ?").get(combatSettingsId);
+    // return db.prepare("SELECT combat_settings.hasDefaultCombatHeaders FROM combat_settings WHERE combat_settings.combatSettingsId = ?").get(combatSettingsId);
+}
+
+exports.createGrindingEntry = function(newEntry) {
+    db.prepare("INSERT OR REPLACE INTO combat_grinding (FK_combatSettingsId, FK_timeId, FK_classId, FK_locationId, FK_serverId, FK_combatTypeId, FK_gearScoreId, date, trashLootAmount, afuaruSpawns) VALUES (@FK_combatSettingsId, @FK_timeId, @FK_classId, @FK_locationId, @FK_serverId, @FK_combatTypeId, @FK_gearScoreId, @dateCreated, @trashLootAmount, @afuaruSpawns);").run(newEntry);
+    return db.prepare("SELECT * FROM combat_grinding ORDER BY grindingId DESC LIMIT 1").get();
 }
 
 // // PUT

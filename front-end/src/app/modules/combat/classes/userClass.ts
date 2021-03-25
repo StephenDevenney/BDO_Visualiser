@@ -11,6 +11,7 @@ export class UserClass {
 }
 
 export class Gear {
+    public gearScoreId: number = 0;
     public ap: number = 0;
     public aap: number = 0;
     public dp: number = 0

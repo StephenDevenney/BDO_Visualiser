@@ -9,13 +9,11 @@ export class CombatPageEnums {
     public timeAmountEnum: Array<TimeAmountEnum> = new Array<TimeAmountEnum>();
 }
 
-
 @Injectable()
 export class ClassNamesEnum {
     public classId: number = 0;
     public className: string = "";
 }
-
 
 @Injectable()
 export class LocationNamesEnum {

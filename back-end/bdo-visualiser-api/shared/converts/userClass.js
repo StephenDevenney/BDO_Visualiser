@@ -81,6 +81,7 @@ exports.convertEntitiesToViewModel = function(classEntity, gearEntity) {
         className: classEntity.className, 
         classRole: classEntity.classRole,
         gear: { 
+            gearScoreId: classEntity.FK_gearScoreId,
             ap: gearEntity.ap, 
             aap: gearEntity.aap, 
             dp: gearEntity.dp, 

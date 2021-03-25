@@ -14,24 +14,23 @@ exports.getGrindingData = async function(res) {
     if(combatSettings.hasDefaultCombatHeaders == 0)
         hasDefaultCombatHeaders = false;
     // Get Table Headers
-    var tableHeaders = sqlContext.getCombatTableHeaders(combatSettings.combatSettingsId);
-    var i = 0;
-    tableHeaders.forEach(col => {
-        tableHeaders[i] = new CombatHeaders.convertToVM(col.headingId, col.field, col.header, col.isActive);
-        i++;
-    });
+    var tableHeadersEntites = sqlContext.getCombatTableHeaders(combatSettings.combatSettingsId);
+    var tableHeaders = [];
+    await Promise.all(tableHeadersEntites.map(async (col) => {
+        var headerVM = CombatHeaders.convertToVM(col);
+        tableHeaders.push(headerVM);
+    }));
     // Get Grinding Data
     var tableData = sqlContext.getGrindingData(globalUserId);
 
     // Get Active Classes
     var activeClassesEntities = sqlContext.getActiveClasses(combatSettings.combatSettingsId);
     var activeClasses = [];
-    var i = 0;
-    await activeClassesEntities.forEach(async userClassEntity => {
+    await Promise.all(activeClassesEntities.map(async (userClassEntity) => {
         var gearEntity = await sqlContext.getClassGear(userClassEntity.FK_gearScoreId);
         var activeClassVM = UserClass.convertEntitiesToViewModel(userClassEntity, gearEntity);
         activeClasses.push(activeClassVM);
-    });
+    }));
 
     var hasMainClass = true;
     if(activeClasses.length == 0 || !activeClasses)
@@ -108,17 +107,21 @@ exports.getCombatEnums = async function(res){
 }
 
 // // PUT
-exports.updateActiveColumns = function(columnHeaders, res) {
+exports.updateActiveColumns = async function(columnHeaders, res) {
     var combatSettings = sqlContext.getCombatSettings(globalUserId);
-    columnHeaders.forEach(col => {
-        var dbCol = new CombatHeaders.convertToEntity(col.headingId, col.field, col.header, col.isActive);
-        sqlContext.updateActiveColumns(combatSettings.combatSettingsId, dbCol.headingId, dbCol.isActive);
-    });
-    var settingsCombatHeadersSet = sqlContext.updateHasDefaultCombatHeadersSet(combatSettings.combatSettingsId, 1);
-    if(settingsCombatHeadersSet.hasDefaultCombatHeaders == 1)
-        return true;
-    else 
-        return false;
+    await Promise.all(columnHeaders.map(async (col) => {
+        var headerEntity = CombatHeaders.convertToEntity(col);
+        sqlContext.updateActiveColumns(combatSettings.combatSettingsId, headerEntity.headingId, headerEntity.isActive);
+    }));
+    
+    sqlContext.updateHasDefaultCombatHeadersSet(combatSettings.combatSettingsId, 1);
+    var tableHeadersObj = sqlContext.getCombatTableHeaders(combatSettings.combatSettingsId);
+    var tableHeaderViewModels = [];
+    await Promise.all(tableHeadersObj.map(async (col) => {
+        headerVM = CombatHeaders.convertToVM(col);
+        tableHeaderViewModels.push(headerVM);
+    }));
+    return res.json(tableHeaderViewModels);
 }
 
 exports.updateClass = function(classToUpdate, res) {
@@ -150,11 +153,10 @@ exports.createClass = function(newClass, res) {
     return res.json(classVM);
 }
 
-exports.createEntry = function(newEntry, res) {
+exports.createEntry = async function(newEntry, res) {
     var combatSettings = sqlContext.getCombatSettings(globalUserId);
-    console.log(newEntry);
-    var classEntity = UserClass.convertToEntity(newEntry.userClass, combatSettings.combatSettingsId);
-    console.log(classEntity);
-    // var gearEntity = Gear.convertToEntity(newEntry.gear, classEntity, classIdObj.classId);
-    // var newEntryEntity = NewEntry.convertToEntity(newEntry, gearEntity, combatSettings.combatSettingsId);
+    var newEntryEntity = NewEntry.convertToEntity(newEntry, combatSettings.combatSettingsId);
+    var returnEntity = sqlContext.createGrindingEntry(newEntryEntity);
+    var grindingTableEntry = NewEntry.convertToViewModel(returnEntity, newEntry);
+    return res.json(grindingTableEntry); 
 }

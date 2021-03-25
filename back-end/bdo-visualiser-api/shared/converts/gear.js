@@ -8,14 +8,15 @@
         gearScore
         dateCreated
 */
-exports.convertToEntity = function(classVM, classEntity, classIdObj) {
+exports.convertToEntity = function(gearVM, classEntity, classIdObj) {
+    // console.log(gearVM);
     var gear = { 
         FK_combatSettingsId: classEntity.FK_combatSettingsId,
         FK_classId: classIdObj,
-        ap: classVM.gear.ap,
-        aap: classVM.gear.aap,
-        dp: classVM.gear.dp,
-        gearScore: classVM.gear.gearScore,
+        ap: gearVM.ap,
+        aap: gearVM.aap,
+        dp: gearVM.dp,
+        gearScore: gearVM.gearScore,
         dateCreated: Date.now().toString()
     }
 

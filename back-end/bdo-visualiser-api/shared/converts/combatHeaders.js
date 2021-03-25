@@ -1,21 +1,42 @@
-exports.convertToEntity = function CombatHeadersEntity(headingId, field, header, isActive) {
-    this.headingId = headingId;
-    this.field = field;
-    this.header = header;
+/*
+    ## Combat Header Entity
+        headingId - int
+        field - string
+        header - string
+        isActive - int
+*/
+exports.convertToEntity = function CombatHeadersEntity(combatHeaderViewModel) {
+    var isActiveCheck = 0;
+    if(combatHeaderViewModel.isActive == true)
+        isActiveCheck = 1;
 
-    if(isActive == false)
-        this.isActive = 0;
-    else
-        this.isActive = 1;
+    var headerEntity = {
+        headingId: combatHeaderViewModel.headingId,
+        field: combatHeaderViewModel.field,
+        header: combatHeaderViewModel.header,
+        isActive: isActiveCheck
+    }
+
+    return headerEntity;
 }
+/*
+    ## Combat Header View Model
+        headingId - number
+        field - string
+        header - string
+        isActive - boolean
+*/
+exports.convertToVM = function CombatHeadersVM(combatHeaderEntity) {
+    var isActiveCheck = false;
+    if(combatHeaderEntity.isActive == 1)
+        isActiveCheck = true;
 
-exports.convertToVM = function CombatHeadersVM(headingId, field, header, isActive) {
-    this.headingId = headingId;
-    this.field = field;
-    this.header = header;
+    var headerVM = {
+        headingId: combatHeaderEntity.headingId,
+        field: combatHeaderEntity.field,
+        header: combatHeaderEntity.header,
+        isActive: isActiveCheck
+    };
 
-    if(isActive == 0)
-        this.isActive = false;
-    else
-        this.isActive = true;
+    return headerVM;
 }

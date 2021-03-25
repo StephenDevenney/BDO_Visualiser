@@ -22,28 +22,16 @@ if (table['count(*)']) {
         trashLootAmount - int
         afuaruSpawns - int
 */
-exports.convertToEntity = function(newEntry, gearEntity, combatSettingsIdObj) {   
-    if(typeof(timeEnum) == "undefined"){
-        timeEnum = sqlContext.getTimeEnums();
-        combatTypesEnum = sqlContext.getCombatTypeEnums();
-    }
-
-    var timeId;
-    if(newEntry.serverName != "")
-        timeId = timeEnum.filter(_ => _.timeAmount == newEntry.timeAmount)[0].timeId;
-
-    var combatTypeId;
-    if(newEntry.serverName != "")
-        combatTypeId = combatTypesEnum.filter(_ => _.combatTypeName == newEntry.combatTypeDescription)[0].combatTypeId;
+exports.convertToEntity = function(newEntry, combatSettingsIdObj) {
 
     var newEntryEntity = {
         FK_combatSettingsId: combatSettingsIdObj,
         FK_classId: newEntry.userClass.classId,
         FK_locationId: newEntry.grindLocation.locationId,
-        FK_timeId: timeId,
+        FK_timeId: newEntry.timeAmount.timeId,
         FK_serverId: newEntry.server.serverId,
-        FK_combatTypeId: combatTypeId,
-        FK_gearScoreId: gearEntity.gearScoreId,
+        FK_combatTypeId: newEntry.combatType.combatTypeId,
+        FK_gearScoreId: newEntry.userClass.gear.gearScoreId,
         dateCreated: Date.now().toString(),
         trashLootAmount: newEntry.trashLootAmount,
         afuaruSpawns: newEntry.afuaruSpawns
@@ -80,6 +68,9 @@ exports.convertToEntity = function(newEntry, gearEntity, combatSettingsIdObj) {
         combatTypeDescription - string
         
 */
-exports.convertToViewModel = function(classEntity, gearEntity) {
-    
+exports.convertToViewModel = function(newEntity, newEntry) {
+    var returnVM = newEntry;
+    returnVM.grindingId = newEntity.grindingId;
+
+    return returnVM;
 }

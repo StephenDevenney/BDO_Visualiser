@@ -105,20 +105,19 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   }
 
-  public async saveDefaultColumns(): Promise<any> {
+  public async saveDefaultColumns() {
     this.loader.startBackground();
-    await this.combatService.saveCombatHeaders(this.columnHeaders).then(async res => {
-      if(res == true)
+    await this.combatService.saveCombatHeaders(this.columnHeaders).then(res => {
         this.combatPageData.hasDefaultCombatHeaders = true;
-      
-      this.loader.stopBackground();
+        this.filteredColumns = res as Array<GrindingTableHeaders>;
     },
     err => {
       this.loader.stopBackground();
       this.messageService.add({severity:'error', summary:'Error', detail:'Combat headers failed to update.', life: 2600 });
+    }).then(_ => {
+      this.addEntryPopupChecks();
+      this.loader.stopBackground();
     });
-
-    this.addEntryPopupChecks();
   }
 
   public saveMainClass() {
@@ -195,7 +194,17 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     this.newGrindingResEntry[entry.grindingId] = {...entry};
   }
 
-  public addEntry() {
-    console.log(this.newEntry);
+  public async addEntry() {
+    this.loader.startBackground();
+    await this.combatService.saveGrindingEntry(this.newEntry).then(res => {
+      console.log(res);
+      this.grindingRes.push(res as GrindingData);
+      this.showGrindingTableEntry = false;
+      this.showAddEntryPopup = false;
+      this.loader.stopBackground();
+    },err => {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Failed to add entry.', life: 2600 });
+      this.loader.stopBackground();
+    });
   }
 }
