@@ -17,7 +17,6 @@ const CalcDate = require("../calc/unixDate");
         afuaruSpawns - int
 */
 exports.convertToEntity = function(newEntry, combatSettingsIdObj) {
-
     var newEntryEntity = {
         FK_combatSettingsId: combatSettingsIdObj,
         FK_classId: newEntry.userClass.classId,
@@ -47,6 +46,7 @@ exports.convertToEntity = function(newEntry, combatSettingsIdObj) {
             timeId - number 
             timeAmount - number
         trashLootAmount - number
+        afuaruSpawns - number
         userClass:
             classId - number
             className - string
@@ -84,12 +84,13 @@ exports.convertToViewModel = function(tableEntity) {
                 "territoryId": tableEntryDetails.territoryId,
                 "territoryName": tableEntryDetails.territoryName
             },
-        "time":
+        "timeAmount":
             {
                 "timeId": tableEntity.FK_timeId,
                 "timeAmount": tableEntryDetails.timeAmount
             },
         "trashLootAmount": tableEntity.trashLootAmount,
+        "afuaruSpawns": tableEntity.afuaruSpawns,
         "userClass":
             {
                 "classId": tableEntity.FK_classId,
@@ -118,8 +119,6 @@ exports.convertToViewModel = function(tableEntity) {
                 "combatTypeName": tableEntryDetails.combatTypeName
             }
     }
-
-    console.log(returnVM);
 
     return returnVM;
 }

@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { CombatService } from '../combat.service';
-import { GrindingData, GrindingTableHeaders, CombatPageData } from "../classes/grindingTable";
+import { GrindingData, GrindingTableHeaders, CombatPageData, VisibleData } from "../classes/grindingTable";
 import { UserClass } from '../classes/userClass';
 import { ClassNamesEnum, CombatPageEnums } from '../classes/combatEnums';
 
@@ -25,7 +25,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   // Grinding Data
   public combatPageData: CombatPageData;
-  public grindingRes: Array<GrindingData> = new Array<GrindingData>();
+  public grindingRes: Array<VisibleData> = new Array<VisibleData>();
 
   // New Entry
   public newGrindingResEntry: Array<GrindingData> = new Array<GrindingData>();
@@ -60,7 +60,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       if(this.combatPageData.hasMainClass)
         this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
 
-      this.grindingRes = this.combatPageData.tableData;
+      this.grindingRes = this.combatPageData.visibleData;
       this.updateRowGroupMetaData(this.grindingRes);
       this.isLoaded = true;
       this.loader.stop();
@@ -100,6 +100,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   } 
 
   onFilter(event) {
+    console.log(event)
     this.updateRowGroupMetaData(event.filteredValue);
  }
 
@@ -200,8 +201,10 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public async addEntry() {
     this.loader.startBackground();
     await this.combatService.saveGrindingEntry(this.newEntry).then(res => {
-      console.log(res);
-      this.grindingRes.push(res as GrindingData);
+      this.grindingRes.push(res.visibleData as VisibleData);
+      this.combatPageData.tableData.push(res.grindingTableEntry as GrindingData);
+      this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
+      this.updateRowGroupMetaData(this.grindingRes);
       this.showGrindingTableEntry = false;
       this.showAddEntryPopup = false;
       this.loader.stopBackground();

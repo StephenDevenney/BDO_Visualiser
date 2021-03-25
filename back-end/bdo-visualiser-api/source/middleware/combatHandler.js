@@ -4,6 +4,7 @@ const UserClass = require("../../shared/converts/userClass");
 const Gear = require("../../shared/converts/gear");
 const Calc = require("../../shared/calc/gearScore");
 const NewEntry = require("../../shared/converts/combatTableEntry");
+const VisibleTableData = require("../../shared/converts/visibleCombatTableData");
 const Server = require("../../shared/converts/server");
 var globalUserId = "1";
 
@@ -30,19 +31,20 @@ exports.getGrindingData = async function(res) {
     }));
     // Get Grinding Data
     var tableDataEntity = sqlContext.getGrindingData(globalUserId);
-    tableData = [];
+    var tableData = [];
+    var visibleData = [];
     await Promise.all(tableDataEntity.map(async (entry) => {
-        // console.log(entry);
         var returnEntry = NewEntry.convertToViewModel(entry);
         tableData.push(returnEntry);
+        var visibleEntry = VisibleTableData.convertToViewModel(returnEntry);
+        visibleData.push(visibleEntry);
     }));
-    // console.log(tableData);
 
     var hasMainClass = true;
     if(activeClasses.length == 0 || !activeClasses)
         hasMainClass = false;
 
-    return res.json({tableHeaders, tableData, hasDefaultCombatHeaders, activeClasses, hasMainClass});
+    return res.json({tableHeaders, tableData, visibleData, hasDefaultCombatHeaders, activeClasses, hasMainClass});
 }
 
 exports.getColumnDefaults = function(res) {
@@ -166,5 +168,6 @@ exports.createEntry = async function(newEntry, res) {
     var newEntryEntity = NewEntry.convertToEntity(newEntry, combatSettings.combatSettingsId);
     var returnEntity = sqlContext.createGrindingEntry(newEntryEntity);
     var grindingTableEntry = NewEntry.reConvertToViewModel(returnEntity, newEntry);
-    return res.json(grindingTableEntry); 
+    var visibleData = VisibleTableData.convertToViewModel(grindingTableEntry);
+    return res.json({grindingTableEntry, visibleData}); 
 }

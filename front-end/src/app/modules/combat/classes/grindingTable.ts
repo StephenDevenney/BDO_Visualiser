@@ -6,6 +6,7 @@ import { UserClass } from './userClass';
 export class CombatPageData {
     public tableHeaders: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
     public tableData: Array<GrindingData> = new Array<GrindingData>();
+    public visibleData: Array<VisibleData> = new Array<VisibleData>();
     public hasDefaultCombatHeaders: boolean = false;
     public activeClasses: Array<UserClass> = new Array<UserClass>();
     public hasMainClass: boolean = false;
@@ -30,5 +31,18 @@ export class GrindingData {
     public userClass: UserClass = new UserClass();
     public server: ServerNamesEnum = new ServerNamesEnum();
     public combatType: CombatTypesEnum = new CombatTypesEnum();
+    public afuaruSpawns: number = 0;
+}
+
+@Injectable()
+export class VisibleData {
+    public grindingId: number = 0;
+    public dateCreated: string = "";
+    public locationName: string = "";
+    public timeAmount: string = "";
+    public trashLootAmount: number = 0;
+    public className: string = "";
+    public serverName: string = "";
+    public combatTypeName: string = "";
     public afuaruSpawns: number = 0;
 }
