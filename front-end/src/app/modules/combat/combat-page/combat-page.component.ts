@@ -1,9 +1,10 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, HostListener, Injector, OnInit } from '@angular/core';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { CombatService } from '../combat.service';
 import { GrindingData, GrindingTableHeaders, CombatPageData, VisibleData } from "../classes/grindingTable";
 import { UserClass } from '../classes/userClass';
 import { ClassNamesEnum, CombatPageEnums } from '../classes/combatEnums';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'combat-page',
@@ -47,7 +48,19 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public showAddMainClass: boolean = false;
   public showGrindingTableEntry: boolean = false;
 
+  // Lazy Loading
+  public first = 0;
+  public rows = 10;
+  public totalRecords = 100;
+  public innerWidth: number = 0;
+  public visibleRows: number = 0;
+
   ngOnInit(): void {
+    this.innerWidth = window.innerWidth;
+    if(this.innerWidth < 2000)
+      this.visibleRows = 10;
+    else 
+      this.visibleRows = 16;
     // Load grinding data and organise into row data.
     this.loader.start();
     this.combatService.getCombatPageData().subscribe( res => {
@@ -60,6 +73,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
         this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
 
       this.grindingRes = this.combatPageData.visibleData;
+      this.totalRecords = this.grindingRes.length;
       this.updateRowGroupMetaData(this.grindingRes);
       this.isLoaded = true;
       this.loader.stop();
@@ -225,4 +239,24 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
     });
   }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
+    if(this.innerWidth < 2000)
+      this.visibleRows = 10;
+    else 
+      this.visibleRows = 16;
+  }
+
+  // public lazyLoadData(event: LazyLoadEvent) {
+  //   console.log(event);
+  //   this.loading = true;
+  //   setTimeout(() => {
+  //     if (this.grindingRes) {
+  //       this.visibleDataLoaded = this.grindingRes.slice(event.first, (event.first + event.rows));
+  //       this.loading = false;
+  //     }
+  //   }, 1000);
+  // }
 }
