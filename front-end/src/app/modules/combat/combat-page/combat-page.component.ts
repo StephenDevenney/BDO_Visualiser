@@ -29,10 +29,10 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   // New Entry
   public newGrindingResEntry: Array<GrindingData> = new Array<GrindingData>();
-  public newColumnHeadersFiltered: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
   public newEntry: GrindingData = new GrindingData();
 
   // Combat Headers
+  public columnSelectOptions: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
   public filteredColumns: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
   public columnHeaders: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
   public showAddEntryPopup: boolean = false;
@@ -52,10 +52,9 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     this.loader.start();
     this.combatService.getCombatPageData().subscribe( res => {
       this.combatPageData = res as CombatPageData;
-      console.log(this.combatPageData);
       this.columnHeaders = this.combatPageData.tableHeaders as Array<GrindingTableHeaders>;
       this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
-      this.newColumnHeadersFiltered = this.columnHeaders.filter(header => header.headingId != 1);
+      this.columnSelectOptions = this.columnHeaders.filter(header => header.headingId != 1);
       this.activeClasses = this.combatPageData.activeClasses as Array<UserClass>;
       if(this.combatPageData.hasMainClass)
         this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
@@ -64,6 +63,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.updateRowGroupMetaData(this.grindingRes);
       this.isLoaded = true;
       this.loader.stop();
+      console.log(this.combatPageData);
     },
     err => {
       this.loader.stop();
@@ -192,7 +192,8 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
         }
       }));
 
-      this.newGrindingResEntry.push(this.newEntry); this.newEntry.grindingId = 1;
+      this.newGrindingResEntry.push(this.newEntry); 
+      this.newEntry.grindingId = 1;
       this.entryPopupTitle = "Add New Entry";
       this.showGrindingTableEntry = true;
       this.showAddMainClass = false;
@@ -203,7 +204,6 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   public async addEntry() {
     this.loader.startBackground();
-    console.log(this.newEntry);
     await this.combatService.saveGrindingEntry(this.newEntry).then(res => {
       this.grindingRes.push(res.visibleData as VisibleData);
       this.combatPageData.tableData.push(res.grindingTableEntry as GrindingData);
@@ -216,6 +216,13 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     },err => {
       this.messageService.add({severity:'error', summary:'Error', detail:'Failed to add entry.', life: 2600 });
       this.loader.stopBackground();
+    });
+  }
+
+  public onVisibleColumnChange(event) {
+    this.combatService.updateSingleVisibleColumn(event.itemValue as GrindingTableHeaders).subscribe(res => {},
+    err => {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
     });
   }
 }

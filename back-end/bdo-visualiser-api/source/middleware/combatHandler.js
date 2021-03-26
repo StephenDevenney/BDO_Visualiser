@@ -136,6 +136,19 @@ exports.updateClass = function(classToUpdate, res) {
 
 }
 
+exports.updateVisibleColumn = function(column, res) {
+    if(column.isActive)
+        column.isActive = false;
+    else if(!column.isActive)
+        column.isActive = true;
+
+    var combatSettings = sqlContext.getCombatSettings(globalUserId);
+    var headerEntity = CombatHeaders.convertToEntity(column);
+    sqlContext.updateActiveColumns(combatSettings.combatSettingsId, headerEntity.headingId, headerEntity.isActive);
+    var headerVM = CombatHeaders.convertToVM(headerEntity);
+    return res.json(headerVM);
+}
+
 // // POST
 exports.createMainClass = function(newClass, res) {
     // Set Role

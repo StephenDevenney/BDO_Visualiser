@@ -20,12 +20,14 @@ router.get('/enums', (req, res) => { return combatPath.getCombatEnums(res) });
 // // PUT
 router.put('/active-columns', (req, res) => { return combatPath.updateActiveColumns(req.body, res) });
 
-router.put('/update-class', (req, res) => { return res.json(combatPath.updateClass(req.body, res)) })
+router.put('/visible-column', (req, res) => { return combatPath.updateVisibleColumn(req.body, res) });
+
+router.put('/update-class', (req, res) => { return combatPath.updateClass(req.body, res) })
 
 // // POST
-router.post('/create-main-class', (req, res) => { return res.json(combatPath.createMainClass(req.body, res)) });
+router.post('/create-main-class', (req, res) => { return combatPath.createMainClass(req.body, res) });
 
-router.post('/create-class', (req, res) => { return res.json(combatPath.createClass(req.body, res)) });
+router.post('/create-class', (req, res) => { return combatPath.createClass(req.body, res) });
 
 router.post('/new-entry', (req, res) => { return combatPath.createEntry(req.body, res) });
 

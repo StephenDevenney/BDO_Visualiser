@@ -17,7 +17,6 @@ const CalcDate = require("../calc/unixDate");
         afuaruSpawns - int
 */
 exports.convertToEntity = function(newEntry, combatSettingsIdObj) {
-    console.log(newEntry);
     var newEntryEntity = {
         FK_combatSettingsId: combatSettingsIdObj,
         FK_classId: newEntry.userClass.classId,

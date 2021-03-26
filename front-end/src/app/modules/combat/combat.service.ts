@@ -55,4 +55,8 @@ export class CombatService {
     public saveGrindingEntry(newEntry: GrindingData): Promise<any> {
         return this.http.post(this.globals.config.appApiUrl + "combat/new-entry", JSON.stringify(newEntry)).toPromise();
     }
+
+    public updateSingleVisibleColumn(combatHeader: GrindingTableHeaders) {
+        return this.http.put(this.globals.config.appApiUrl + "combat/visible-column", JSON.stringify(combatHeader));
+    }
 }
