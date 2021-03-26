@@ -45,7 +45,11 @@
                         (onFilter)="onFilter($event)"
                         [scrollable]="true"
                         scrollHeight="flex"
-                        styleClass="h-100">
+                        styleClass="h-100"
+                        (sortFunction)="customSort($event)" 
+                        [customSort]="true"
+                        sortField="grindingId" 
+                        sortMode="single">
 
                         <!-- Header -->
                         <ng-template pTemplate="header">
