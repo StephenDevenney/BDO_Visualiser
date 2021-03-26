@@ -45,11 +45,7 @@
                         (sortFunction)="customSort($event)" 
                         [customSort]="true"
                         sortField="grindingId" 
-                        sortMode="single"
-                        [showCurrentPageReport]="true"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-                        [rows]="visibleRows"
-                        [paginator]="true">
+                        sortMode="single">
 
                         <!-- Header -->
                         <ng-template pTemplate="header">
@@ -69,12 +65,6 @@
                             <tr [pSelectableRow]="item">
                                 <td *ngFor="let col of filteredColumns;">{{ item[col.field] }}</td>
                             </tr>
-                        </ng-template>
-                        <ng-template pTemplate="paginatorleft">
-                            <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
-                        </ng-template>
-                        <ng-template pTemplate="paginatorright">
-                            <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
                         </ng-template>
                     </p-table>
                    

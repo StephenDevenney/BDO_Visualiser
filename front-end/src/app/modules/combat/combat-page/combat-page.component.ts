@@ -27,6 +27,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   // Grinding Data
   public combatPageData: CombatPageData;
   public grindingRes: Array<VisibleData> = new Array<VisibleData>();
+  // public virtualRes: Array<VisibleData> = new Array<VisibleData>();
 
   // New Entry
   public newGrindingResEntry: Array<GrindingData> = new Array<GrindingData>();
@@ -248,15 +249,4 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     else 
       this.visibleRows = 16;
   }
-
-  // public lazyLoadData(event: LazyLoadEvent) {
-  //   console.log(event);
-  //   this.loading = true;
-  //   setTimeout(() => {
-  //     if (this.grindingRes) {
-  //       this.visibleDataLoaded = this.grindingRes.slice(event.first, (event.first + event.rows));
-  //       this.loading = false;
-  //     }
-  //   }, 1000);
-  // }
 }
