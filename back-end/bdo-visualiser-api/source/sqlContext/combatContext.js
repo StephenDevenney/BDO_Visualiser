@@ -4,7 +4,7 @@ const db = new SQLite('../Database/' + process.env.DATABASE_NAME, { fileMustExis
 
 // Get
 exports.getGrindingData = function(userId) {
-    return db.prepare("SELECT * FROM combat_grinding INNER JOIN security_settings ON security_settings.FK_combatSettingsId = combat_grinding.FK_combatSettingsId WHERE security_settings.FK_userId = ?").all(userId);
+    return db.prepare("SELECT * FROM combat_grinding INNER JOIN security_settings ON security_settings.FK_combatSettingsId = combat_grinding.FK_combatSettingsId WHERE security_settings.FK_userId = ? ORDER BY grindingId DESC").all(userId);
 }
 
 exports.getTableEntryDetails = function(grindingId) {

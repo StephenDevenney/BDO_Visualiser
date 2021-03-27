@@ -74,8 +74,6 @@ exports.convertToViewModel = function(tableEntity) {
     if(tableEntity.isElviaRealm == 1)
         isElviaRealmCheck = true;
 
-    console.log(tableEntity);
-    console.log(tableEntryDetails);
     var returnVM;
 
     if(typeof(tableEntryDetails) != "undefined") {

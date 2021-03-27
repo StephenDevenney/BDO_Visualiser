@@ -27,7 +27,6 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   // Grinding Data
   public combatPageData: CombatPageData;
   public grindingRes: Array<VisibleData> = new Array<VisibleData>();
-  // public virtualRes: Array<VisibleData> = new Array<VisibleData>();
 
   // New Entry
   public newGrindingResEntry: Array<GrindingData> = new Array<GrindingData>();
@@ -49,19 +48,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public showAddMainClass: boolean = false;
   public showGrindingTableEntry: boolean = false;
 
-  // Lazy Loading
-  public first = 0;
-  public rows = 10;
-  public totalRecords = 100;
-  public innerWidth: number = 0;
-  public visibleRows: number = 0;
-
-  ngOnInit(): void {
-    this.innerWidth = window.innerWidth;
-    if(this.innerWidth < 2000)
-      this.visibleRows = 10;
-    else 
-      this.visibleRows = 16;
+  public ngOnInit(): void {
     // Load grinding data and organise into row data.
     this.loader.start();
     this.combatService.getCombatPageData().subscribe( res => {
@@ -74,7 +61,6 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
         this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
 
       this.grindingRes = this.combatPageData.visibleData;
-      this.totalRecords = this.grindingRes.length;
       this.updateRowGroupMetaData(this.grindingRes);
       this.isLoaded = true;
       this.loader.stop();
@@ -91,7 +77,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   }
 
   // Displayed data.
-  public updateRowGroupMetaData(data) {
+  public async updateRowGroupMetaData(data) {
     console.log(data);
     this.rowGroupMetadata = {};
     if (data) {
@@ -224,13 +210,15 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.grindingRes.push(res.visibleData as VisibleData);
       this.combatPageData.tableData.push(res.grindingTableEntry as GrindingData);
       this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
+    },err => {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Failed to add entry.', life: 2600 });
+      this.loader.stopBackground();
+    }).then(res => {
       this.customSort();
+      this.updateRowGroupMetaData(this.grindingRes);
       this.showGrindingTableEntry = false;
       this.showAddEntryPopup = false;
       this.newEntry = new GrindingData();
-      this.loader.stopBackground();
-    },err => {
-      this.messageService.add({severity:'error', summary:'Error', detail:'Failed to add entry.', life: 2600 });
       this.loader.stopBackground();
     });
   }
@@ -240,14 +228,5 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     err => {
       this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
     });
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.innerWidth = window.innerWidth;
-    if(this.innerWidth < 2000)
-      this.visibleRows = 10;
-    else 
-      this.visibleRows = 16;
   }
 }
