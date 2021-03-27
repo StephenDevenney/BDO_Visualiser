@@ -92,6 +92,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   // Displayed data.
   public updateRowGroupMetaData(data) {
+    console.log(data);
     this.rowGroupMetadata = {};
     if (data) {
         for (let i = 0; i < data.length; i++) {

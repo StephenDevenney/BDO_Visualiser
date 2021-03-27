@@ -74,50 +74,56 @@ exports.convertToViewModel = function(tableEntity) {
     if(tableEntity.isElviaRealm == 1)
         isElviaRealmCheck = true;
 
-    var returnVM = {
-        "grindingId": tableEntity.grindingId,
-        "dateCreated": tableEntity.dateCreated,
-        "grindLocation": 
-            {
-                "locationId": tableEntity.FK_locationId,
-                "locationName": tableEntryDetails.locationName,
-                "territoryId": tableEntryDetails.territoryId,
-                "territoryName": tableEntryDetails.territoryName
-            },
-        "timeAmount":
-            {
-                "timeId": tableEntity.FK_timeId,
-                "timeAmount": tableEntryDetails.timeAmount
-            },
-        "trashLootAmount": tableEntity.trashLootAmount,
-        "afuaruSpawns": tableEntity.afuaruSpawns,
-        "userClass":
-            {
-                "classId": tableEntity.FK_classId,
-                "className": tableEntryDetails.className,
-                "classRole": tableEntryDetails.classRole,
-                "description": tableEntryDetails.className + " - " + tableEntryDetails.gearScore + " GS",
-                "primaryCombatTypeDescription": tableEntryDetails.primaryCombatTypeName,
-                "gear":
-                    {
-                        "gearScoreId": tableEntity.FK_gearScoreId,
-                        "ap": tableEntryDetails.ap,
-                        "aap": tableEntryDetails.aap,
-                        "dp": tableEntryDetails.dp,
-                        "gearScore": tableEntryDetails.gearScore,
-                    }
-            },
-        "server": 
-            {
-                "serverId": tableEntity.FK_serverId,
-                "serverDescription": tableEntryDetails.serverDescription,
-                "isElviaRealm": isElviaRealmCheck,
-            },
-        "combatType":
-            {
-                "combatTypeId": tableEntity.FK_combatTypeId,
-                "combatTypeName": tableEntryDetails.combatTypeName
-            }
+    console.log(tableEntity);
+    console.log(tableEntryDetails);
+    var returnVM;
+
+    if(typeof(tableEntryDetails) != "undefined") {
+        returnVM = {
+            "grindingId": tableEntity.grindingId,
+            "dateCreated": tableEntity.dateCreated,
+            "grindLocation": 
+                {
+                    "locationId": tableEntity.FK_locationId,
+                    "locationName": tableEntryDetails.locationName,
+                    "territoryId": tableEntryDetails.territoryId,
+                    "territoryName": tableEntryDetails.territoryName
+                },
+            "timeAmount":
+                {
+                    "timeId": tableEntity.FK_timeId,
+                    "timeAmount": tableEntryDetails.timeAmount
+                },
+            "trashLootAmount": tableEntity.trashLootAmount,
+            "afuaruSpawns": tableEntity.afuaruSpawns,
+            "userClass":
+                {
+                    "classId": tableEntity.FK_classId,
+                    "className": tableEntryDetails.className,
+                    "classRole": tableEntryDetails.classRole,
+                    "description": tableEntryDetails.className + " - " + tableEntryDetails.gearScore + " GS",
+                    "primaryCombatTypeDescription": tableEntryDetails.primaryCombatTypeName,
+                    "gear":
+                        {
+                            "gearScoreId": tableEntity.FK_gearScoreId,
+                            "ap": tableEntryDetails.ap,
+                            "aap": tableEntryDetails.aap,
+                            "dp": tableEntryDetails.dp,
+                            "gearScore": tableEntryDetails.gearScore,
+                        }
+                },
+            "server": 
+                {
+                    "serverId": tableEntity.FK_serverId,
+                    "serverDescription": tableEntryDetails.serverDescription,
+                    "isElviaRealm": isElviaRealmCheck,
+                },
+            "combatType":
+                {
+                    "combatTypeId": tableEntity.FK_combatTypeId,
+                    "combatTypeName": tableEntryDetails.combatTypeName
+                }
+        }
     }
 
     return returnVM;
