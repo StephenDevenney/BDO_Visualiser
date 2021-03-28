@@ -20,15 +20,14 @@ export class SignInComponent extends BaseComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       if(typeof(params['code']) != "undefined")
         this.discordAuthToken = params['code'];
-      console.log(this.discordAuthToken.length);
       if(this.discordAuthToken.length > 0) {
         this.authService.setToken(this.discordAuthToken);
         this.globals.isSignedIn = true;
-        this.router.navigate(["home"]);
+        this.router.navigate(["home"]).then(res => { this.globals.currentUrl="home"; this.authService.setLastPage("home"); });
       }
       else {
         this.globals.isSignedIn = false;
-        this.router.navigate(["landing-page"]);
+        this.router.navigate(["landing-page"]).then(res => { this.authService.emptyLocalStorage(); });
       }
         
     });

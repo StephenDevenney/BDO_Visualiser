@@ -22,7 +22,6 @@ exports.convertToEntity = function(newEntry, combatSettingsIdObj) {
     var combatTypeId;
     if(typeof(newEntry.userClass.classId) == "undefined" || typeof(newEntry.userClass.gear.gearScoreId) == "undefined" || typeof(newEntry.combatType.combatTypeId) == "undefined" || newEntry.userClass.gear.gearScoreId == 0 || newEntry.userClass.classId == 0 || newEntry.combatType.combatTypeId){
         var classObj = sqlContext.getMainClassEntity(combatSettingsIdObj);
-        console.log(classObj);
         gearScoreId = classObj.FK_gearScoreId;
         classId = classObj.classId;
         combatTypeId = classObj.FK_primaryCombatTypeId;

@@ -19,4 +19,8 @@ export class LandingPageComponent extends BaseComponent implements OnInit {
 
   }
 
+  public discordRedirect() {
+    window.location.href = this.globals.config.discordRedirectUrl;
+  }
+
 }

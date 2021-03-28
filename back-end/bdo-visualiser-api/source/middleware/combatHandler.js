@@ -178,7 +178,6 @@ exports.createClass = function(newClass, res) {
 exports.createEntry = async function(newEntry, res) {
     var combatSettings = await sqlContext.getCombatSettings(globalUserId);
     var newEntryEntity = NewEntry.convertToEntity(newEntry, combatSettings.combatSettingsId);
-    console.log(newEntryEntity);
     var returnEntity = await sqlContext.createGrindingEntry(newEntryEntity);
     var grindingTableEntry = NewEntry.reConvertToViewModel(returnEntity, newEntry);
     var visibleData = VisibleTableData.convertToViewModel(grindingTableEntry);

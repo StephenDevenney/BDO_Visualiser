@@ -123,6 +123,7 @@ export class APIService {
                 this.globals.config.appApiUrl = tempRes.appApiUrl;
                 this.globals.config.hubName = tempRes.hubName;
                 this.globals.config.instrumentKey = tempRes.instrumentKey;
+                this.globals.config.discordRedirectUrl = tempRes.discordRedirectUrl;
 
                 return this.loadSecuritySettings();
 

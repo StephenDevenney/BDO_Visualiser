@@ -1,5 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { BaseComponent } from '../../shared/components/base.component';
+import { AuthService } from '../../shared/services/auth.service';
 import { SidenavService } from './sidenav.service';
 
 @Component({
@@ -12,7 +14,9 @@ export class SidenavComponent extends BaseComponent implements OnInit {
   public navLoaded: boolean = false;
   
   constructor(private injector: Injector, 
-              private sideNavService: SidenavService) { 
+              private sideNavService: SidenavService,
+              private authService: AuthService,
+              private titleService: Title) { 
                 
     super(injector);
   }
@@ -24,9 +28,13 @@ export class SidenavComponent extends BaseComponent implements OnInit {
     });
   }
 
-  public navToPage(navRoute: string) {
+  public async navToPage(navRoute: string) {
     if(navRoute != "" || navRoute != undefined)
-      this.router.navigate([navRoute]);
+      await this.router.navigate([navRoute]).then(res => {
+        this.titleService.setTitle(this.globals.config.hubName + " - " + navRoute);
+        this.globals.currentUrl=navRoute;
+        this.authService.setLastPage(navRoute);
+      });
   }
 
 }

@@ -29,9 +29,10 @@ export class AuthService implements CanActivate {
 
     public isauthenticated(): boolean {
         var id_token = this.getToken();
-        if(!id_token)
-            this.router.navigate(["landing-page"]);
-
+        if(!id_token || typeof(id_token) == "undefined"){
+            this.router.navigate(["landing-page"]); 
+            return false;
+        }
         return true
     }
 
@@ -45,5 +46,14 @@ export class AuthService implements CanActivate {
 
     public emptyLocalStorage() : void {
         localStorage.removeItem("auth_token");
+        localStorage.removeItem("last_page");
+    }
+
+    public getLastPage() : string {
+        return localStorage.getItem("last_page");
+    }
+
+    public setLastPage(lastPage: string) : void {
+        return localStorage.setItem("last_page", lastPage);
     }
 }

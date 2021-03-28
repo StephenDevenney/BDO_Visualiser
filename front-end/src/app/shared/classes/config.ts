@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class Config {
     public appApiUrl: string = "";
+    public discordRedirectUrl: string = "";
     public hubName: string = "";
     public instrumentKey: string = "";
     public theme: Theme = new Theme;

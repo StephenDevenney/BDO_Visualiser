@@ -69,4 +69,10 @@ export class PageHeaderComponent extends BaseComponent implements OnInit {
     if(this.showOptions)
       this.showOptions = false;
   }
+  
+  public deleteToken() {
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("last_page");
+    window.location.reload();
+  }
 }
