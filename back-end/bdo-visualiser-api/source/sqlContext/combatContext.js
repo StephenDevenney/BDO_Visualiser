@@ -69,6 +69,10 @@ exports.getMainClass = function(combatSettingsId) {
     return db.prepare("SELECT combat_classes.classId, enum_class.className as className, enum_classRole.roleDescription as classRole, combat_classes.FK_gearScoreId as gearScoreId FROM combat_classes INNER JOIN enum_class ON enum_class.classId = combat_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = combat_classes.FK_classRoleId WHERE FK_combatSettingsId = ? AND FK_classRoleId = 1").get(combatSettingsId);
 }
 
+exports.getMainClassEntity = function(combatSettingsId) {
+    return db.prepare("SELECT * FROM combat_classes WHERE FK_combatSettingsId = ? AND FK_classRoleId = 1").get(combatSettingsId);
+}
+
 exports.getClassGear = function(gearScoreId) {
     return db.prepare("SELECT ap, aap, dp, gearScore FROM combat_gearScore WHERE combat_gearScore.gearScoreId = ?").get(gearScoreId);
 }

@@ -3,7 +3,7 @@
         grindingId - number
         dateCreated - string 
         locationName - string
-        timeAmount - number
+        timeAmount - string
         trashLootAmount - number
         className - string
         serverName - string
@@ -17,7 +17,7 @@ exports.convertToViewModel = function(tableData) {
             grindingId: tableData.grindingId,
             dateCreated: tableData.dateCreated,
             locationName: tableData.grindLocation.locationName,
-            timeAmount: tableData.timeAmount.timeAmount,
+            timeAmount: tableData.timeAmount.timeAmount + " Minutes",
             trashLootAmount: tableData.trashLootAmount,
             className: tableData.userClass.className,
             serverName: tableData.server.serverDescription,

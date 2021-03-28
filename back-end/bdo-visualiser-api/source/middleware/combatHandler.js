@@ -158,13 +158,12 @@ exports.createMainClass = function(newClass, res) {
 
 exports.createClass = function(newClass, res) {
     var combatSettings = sqlContext.getCombatSettings(globalUserId);
-
     if(!newClass.className)
         return res.status(400).json({ msg: `Class Name Required.` });
     else if(!newClass.classRole)
         return res.status(400).json({ msg: `Class Role Required.` });
 
-
+    
     var classEntity = UserClass.convertToEntity(newClass, combatSettings.combatSettingsId);
     var classIdObj = sqlContext.createClass(classEntity);
     var gearEntity = Gear.convertToEntity(newClass.gear, classEntity, classIdObj.classId);
@@ -179,6 +178,7 @@ exports.createClass = function(newClass, res) {
 exports.createEntry = async function(newEntry, res) {
     var combatSettings = await sqlContext.getCombatSettings(globalUserId);
     var newEntryEntity = NewEntry.convertToEntity(newEntry, combatSettings.combatSettingsId);
+    console.log(newEntryEntity);
     var returnEntity = await sqlContext.createGrindingEntry(newEntryEntity);
     var grindingTableEntry = NewEntry.reConvertToViewModel(returnEntity, newEntry);
     var visibleData = VisibleTableData.convertToViewModel(grindingTableEntry);

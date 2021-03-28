@@ -1,10 +1,9 @@
-import { Component, HostListener, Injector, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, Injector, OnInit } from '@angular/core';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { CombatService } from '../combat.service';
 import { GrindingData, GrindingTableHeaders, CombatPageData, VisibleData } from "../classes/grindingTable";
 import { UserClass } from '../classes/userClass';
 import { ClassNamesEnum, CombatPageEnums } from '../classes/combatEnums';
-import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'combat-page',
@@ -13,7 +12,8 @@ import { LazyLoadEvent } from 'primeng/api';
 export class CombatPageComponent extends BaseComponent implements OnInit {
 
   constructor(private injector: Injector,
-              private combatService: CombatService) {
+              private combatService: CombatService,
+              private cdRef:ChangeDetectorRef) {
     super(injector);
   }
 
@@ -47,6 +47,9 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public showCombatDefaultColumns: boolean = false;
   public showAddMainClass: boolean = false;
   public showGrindingTableEntry: boolean = false;
+  public popupHeight: string = "21rem";
+  public columnChanged: boolean = false;
+  public disableChecks: boolean = false;
 
   public ngOnInit(): void {
     // Load grinding data and organise into row data.
@@ -59,6 +62,8 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.activeClasses = this.combatPageData.activeClasses as Array<UserClass>;
       if(this.combatPageData.hasMainClass)
         this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
+
+      console.log(this.mainClass);
 
       this.grindingRes = this.combatPageData.visibleData;
       this.updateRowGroupMetaData(this.grindingRes);
@@ -123,18 +128,21 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   }
 
   public async saveDefaultColumns() {
-    this.loader.startBackground();
-    await this.combatService.saveCombatHeaders(this.columnHeaders).then(res => {
-        this.combatPageData.hasDefaultCombatHeaders = true;
-        this.filteredColumns = res as Array<GrindingTableHeaders>;
-    },
-    err => {
-      this.loader.stopBackground();
-      this.messageService.add({severity:'error', summary:'Error', detail:'Combat headers failed to update.', life: 2600 });
-    }).then(_ => {
-      this.addEntryPopupChecks();
-      this.loader.stopBackground();
-    });
+    if(this.columnChanged) {
+      this.loader.startBackground();
+      await this.combatService.saveCombatHeaders(this.columnHeaders).then(res => {
+          this.combatPageData.hasDefaultCombatHeaders = true;
+          this.columnChanged = false;
+          this.columnHeaders = res as Array<GrindingTableHeaders>;
+      },
+      err => {
+        this.loader.stopBackground();
+        this.messageService.add({severity:'error', summary:'Error', detail:'Combat headers failed to update.', life: 2600 });
+      }).then(_ => {
+        this.addEntryPopupChecks();
+        this.loader.stopBackground();
+      });
+    }
   }
 
   public saveMainClass() {
@@ -149,7 +157,11 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       },
       err => {
         this.loader.stopBackground();
-        this.messageService.add({severity:'error', summary:'Error', detail:'Failed to save class', life: 2600 });
+        if(err.message.msg == "Class Role Required.")
+          this.messageService.add({severity:'info', summary:'Class Required', detail:'Class Required.', life: 2600 });
+        else
+          this.messageService.add({severity:'error', summary:'Error', detail:'Failed to save class', life: 2600 });
+          console.log(err);
       });
     }
     else {
@@ -158,8 +170,16 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   }
 
   public async addEntryPopupChecks() {
+    this.showCombatDefaultColumns = false;
+    this.showAddMainClass = false;
+    this.showGrindingTableEntry = false;
+
+    this.columnSelectOptions = this.columnHeaders.filter(header => header.headingId != 1);
+    console.log(this.columnSelectOptions);
     if(this.grindingRes.length == 0 && !this.combatPageData.hasDefaultCombatHeaders) {
-      this.entryPopupTitle = "Select Combat Headers";
+      this.columnChanged = true;
+      this.popupHeight = "32rem";
+      this.entryPopupTitle = "Select Default Combat Headers";
       this.showCombatDefaultColumns = true;
       this.showAddMainClass = false;
       this.showGrindingTableEntry = false;
@@ -170,6 +190,8 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.showCombatDefaultColumns = false;
     }
     else {
+      this.popupHeight = "21rem";
+      this.mainClass = this.activeClasses.filter(_ => _.classRole == "Main")[0];
       await Promise.all(this.filteredColumns.map(async (col) => {
         if(col.isActive){
           switch(col.headingId){
@@ -183,7 +205,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
               this.newEntry.userClass = this.mainClass;
               break;
             case 6: // Server
-              this.newEntry.server = this.combatEnums.serverNamesEnum[0];
+              this.newEntry.server = this.combatEnums.serverNamesEnum[0]; console.log(this.newEntry);
               break;
             case 7: // Combat Types
               this.newEntry.combatType = this.combatEnums.combatTypesEnum[0];
@@ -194,7 +216,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
         }
       }));
 
-      this.newGrindingResEntry.push(this.newEntry); 
+      this.newGrindingResEntry.push(this.newEntry);
       this.newEntry.grindingId = 1;
       this.entryPopupTitle = "Add New Entry";
       this.showGrindingTableEntry = true;
@@ -206,13 +228,10 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   public async addEntry() {
     this.loader.startBackground();
+    console.log(this.newEntry);
     await this.combatService.saveGrindingEntry(this.newEntry).then(res => {
       this.grindingRes.push(res.visibleData as VisibleData);
       this.combatPageData.tableData.push(res.grindingTableEntry as GrindingData);
-      this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
-    },err => {
-      this.messageService.add({severity:'error', summary:'Error', detail:'Failed to add entry.', life: 2600 });
-      this.loader.stopBackground();
     }).then(res => {
       this.customSort();
       this.updateRowGroupMetaData(this.grindingRes);
@@ -220,13 +239,41 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.showAddEntryPopup = false;
       this.newEntry = new GrindingData();
       this.loader.stopBackground();
+    },err => {
+      if(err.error.msg == "Class Required.")
+        this.messageService.add({severity:'info', summary:'Class Required', detail:'Class Required.', life: 2600 });
+      else
+        this.messageService.add({severity:'error', summary:'Error', detail:'Failed to add entry.', life: 2600 });
+      this.loader.stopBackground()
     });
   }
 
   public onVisibleColumnChange(event) {
-    this.combatService.updateSingleVisibleColumn(event.itemValue as GrindingTableHeaders).subscribe(res => {},
+    this.combatService.updateSingleVisibleColumn(event.itemValue as GrindingTableHeaders).subscribe(res => {
+      let updatedHeader = res as GrindingTableHeaders;
+      let foundIndex = this.columnHeaders.findIndex(_ => _.headingId == updatedHeader.headingId);
+      if(foundIndex >= 0)
+        this.columnSelectOptions[foundIndex].isActive = updatedHeader.isActive;
+
+      this.cdRef.detectChanges();
+    },
     err => {
       this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
     });
+  }
+
+  public toggleAddEntryColumns(target: string) {
+    if(target == "columnChooser") {
+      this.entryPopupTitle = "Select Combat Headers";
+      this.showCombatDefaultColumns = true;
+      this.showGrindingTableEntry = false;
+      this.popupHeight = "32rem";
+    }
+    else if(target == "addEntry") {
+      this.entryPopupTitle = "Add New Entry";
+      this.showCombatDefaultColumns = false;
+      this.showGrindingTableEntry = true;
+      this.popupHeight = "21rem";
+    }
   }
 }

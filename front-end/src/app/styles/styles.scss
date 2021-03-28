@@ -218,7 +218,7 @@
 
     .half-page {
         padding: 1.5rem;
-        min-width: calc(50vw - 10rem);
+        min-width: 50rem;
         overflow: hidden;
     }
 }
@@ -628,11 +628,16 @@ body {
 // ## Popup Overrides
 .addEntryPopup {
     .p-dialog-content{
-        height: 20rem;
+        // height: 20rem;
     }
 }
 .btn-group-addEntryPopup {
-    height: 6rem;
     display: flex;
     justify-content: end;
+}
+
+.item-widths {
+    .p-dropdown, .p-inputnumber .p-component {
+        width: 18rem;
+    }
 }

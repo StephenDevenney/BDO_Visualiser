@@ -17,14 +17,36 @@ const CalcDate = require("../calc/unixDate");
         afuaruSpawns - int
 */
 exports.convertToEntity = function(newEntry, combatSettingsIdObj) {
+    var gearScoreId;
+    var classId;
+    var combatTypeId;
+    if(typeof(newEntry.userClass.classId) == "undefined" || typeof(newEntry.userClass.gear.gearScoreId) == "undefined" || typeof(newEntry.combatType.combatTypeId) == "undefined" || newEntry.userClass.gear.gearScoreId == 0 || newEntry.userClass.classId == 0 || newEntry.combatType.combatTypeId){
+        var classObj = sqlContext.getMainClassEntity(combatSettingsIdObj);
+        console.log(classObj);
+        gearScoreId = classObj.FK_gearScoreId;
+        classId = classObj.classId;
+        combatTypeId = classObj.FK_primaryCombatTypeId;
+    }
+    else {
+        gearScoreId = newEntry.userClass.gear.gearScoreId;
+        classId = newEntry.userClass.classId;
+        combatTypeId = newEntry.combatType.combatTypeId;
+    }
+
+    var locationId;
+    if(typeof(newEntry.grindLocation.locationId) == "undefined")
+        locationId = 1;
+    else 
+        locationId = newEntry.grindLocation.locationId;
+
     var newEntryEntity = {
         FK_combatSettingsId: combatSettingsIdObj,
-        FK_classId: newEntry.userClass.classId,
-        FK_locationId: newEntry.grindLocation.locationId,
+        FK_classId: classId,
+        FK_locationId: locationId,
         FK_timeId: newEntry.timeAmount.timeId,
         FK_serverId: newEntry.server.serverId,
-        FK_combatTypeId: newEntry.combatType.combatTypeId,
-        FK_gearScoreId: newEntry.userClass.gear.gearScoreId,
+        FK_combatTypeId: combatTypeId,
+        FK_gearScoreId: gearScoreId,
         dateCreated: CalcDate.calcUnixDate(),
         trashLootAmount: newEntry.trashLootAmount,
         afuaruSpawns: newEntry.afuaruSpawns
