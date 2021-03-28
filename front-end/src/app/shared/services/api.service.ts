@@ -4,6 +4,7 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RoutesRecognized } from '@
 import { Observable, Observer } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { Globals } from '../classes/globals';
+import { AuthService } from './auth.service';
 // import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable()
@@ -100,7 +101,6 @@ export class APIService {
             this.globals.user.userId = tempRes.user.userId;
             this.globals.user.userName = tempRes.user.userName;
             this.globals.user.roleId = tempRes.user.FK_roleId;
-            this.globals.isSignedIn = true;
             this.globals.config.theme.themeId = tempRes.settings.themeId;
             this.globals.config.theme.themeName = tempRes.settings.themeName;
             this.globals.config.theme.className = tempRes.settings.className;

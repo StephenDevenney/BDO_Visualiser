@@ -2,3 +2,6 @@
 
 // Global Stats (home page)
 Class Usage
+
+// Other
+get applications.builds.read from discord 0auth2, it returns current played game, use this to user ingame when guild functions introduced.  

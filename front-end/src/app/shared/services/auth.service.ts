@@ -30,7 +30,7 @@ export class AuthService implements CanActivate {
     public isauthenticated(): boolean {
         var id_token = this.getToken();
         if(!id_token)
-            window.location.href = "/";
+            this.router.navigate(["landing-page"]);
 
         return true
     }

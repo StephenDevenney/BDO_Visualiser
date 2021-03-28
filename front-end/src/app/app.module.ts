@@ -13,6 +13,7 @@ import { APIService } from './shared/services/api.service';
 import { HomeModule} from './modules/home/home.module';
 import { CombatModule } from './modules/combat/combat.module';
 import { LifeModule } from './modules/life/life.module';
+import { SignInModule } from './modules/sign-in/signin.module';
 import { MapModule } from './modules/map/map.module';
 import { FailStacksModule } from './modules/fail-stacks/fail-stacks.module';
 import { MessageService } from 'primeng/api';
@@ -55,6 +56,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     LifeModule,
     MapModule,
     FailStacksModule,
+    SignInModule,
     SharedModule,
     HttpClientModule,
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig)

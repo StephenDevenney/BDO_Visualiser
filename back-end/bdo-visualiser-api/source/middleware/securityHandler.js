@@ -50,6 +50,11 @@ exports.getThemes = function(res) {
         return res.status(400).json({ msg: `Error retrieving themes.`});
 }
 
+// Discord Redirect
+exports.handleRedirect = function(req, res) {
+    console.log(req);
+}
+
 // // POST
 
 exports.createUser = function(user, res) {
