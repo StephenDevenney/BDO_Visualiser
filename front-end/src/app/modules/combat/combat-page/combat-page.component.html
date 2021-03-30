@@ -21,6 +21,11 @@
                             selectedItemsLabel="Select Columns"
                             (onChange)="onVisibleColumnChange($event)">
                         </p-multiSelect>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-end">
+                        <p-fileUpload class="mr-2" name="uploadedFiles[]" accept=".csv" maxFileSize="1000000" fileLimit="1" [auto]="true" customUpload="true" (uploadHandler)="onDataUpload($event)" mode="basic" [showUploadButton]="true" (onError)="catchError($event)"></p-fileUpload>
+                        <button class="btn btn-primary mr-2" (click)="exportCSV()">Export</button>
+                        <button class="btn btn-primary mr-2">Delete</button>
                         <button class="btn btn-primary mr-2" (click)="addEntryPopupChecks()">Add</button>
                     </div>
                 </div>
@@ -61,7 +66,11 @@
                                 <td *ngFor="let col of filteredColumns;">{{ item[col.field] }}</td>
                             </tr>
                         </ng-template>
-                    </p-table>                 
+                    </p-table>    
+                    <p-table *ngIf="false"
+                        #hiddenTable
+                        [value]="combatPageData.visibleData">  
+                    </p-table>               
                 </div>              
             </div> 
             <!-- Empty Datasource -->

@@ -4,6 +4,9 @@ import { CombatService } from '../combat.service';
 import { GrindingData, GrindingTableHeaders, CombatPageData, VisibleData } from "../classes/grindingTable";
 import { UserClass } from '../classes/userClass';
 import { ClassNamesEnum, CombatPageEnums } from '../classes/combatEnums';
+import { ExportToCsv } from 'export-to-csv';
+import { NgxCsvParser } from 'ngx-csv-parser';
+import { NgxCSVParserError } from 'ngx-csv-parser';
 
 @Component({
   selector: 'combat-page',
@@ -13,7 +16,8 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   constructor(private injector: Injector,
               private combatService: CombatService,
-              private cdRef:ChangeDetectorRef) {
+              private cdRef:ChangeDetectorRef,
+              private ngxCsvParser: NgxCsvParser) {
     super(injector);
   }
 
@@ -50,6 +54,10 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public popupHeight: string = "21rem";
   public columnChanged: boolean = false;
   public disableChecks: boolean = false;
+
+  // Upload
+  public uploadedFiles: Array<GrindingData> = new Array<GrindingData>();
+  public csvRecords: Array<GrindingData> = new Array<GrindingData>();
 
   public ngOnInit(): void {
     // Load grinding data and organise into row data.
@@ -228,7 +236,6 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   public async addEntry() {
     this.loader.startBackground();
-    console.log(this.newEntry);
     await this.combatService.saveGrindingEntry(this.newEntry).then(res => {
       this.grindingRes.push(res.visibleData as VisibleData);
       this.combatPageData.tableData.push(res.grindingTableEntry as GrindingData);
@@ -275,5 +282,52 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.showGrindingTableEntry = true;
       this.popupHeight = "21rem";
     }
+  }
+
+  public exportCSV() {
+    const options = { 
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalSeparator: '.',
+      showLabels: true, 
+      showTitle: false,
+      title: 'Title',
+      useTextFile: false,
+      useBom: true,
+      useKeysAsHeaders: true,
+      filename: 'grindingData'
+    };
+
+    const csvExporter = new ExportToCsv(options); 
+    csvExporter.generateCsv(this.grindingRes);
+  }
+
+  public async onDataUpload(event): Promise<any> {
+    await Promise.all(event.files.map(async (file) => {
+      await this.uploadedFiles.push(file);
+    }));
+
+    this.ngxCsvParser.parse(event.files[0], { header: true, delimiter: ',' })
+    .pipe().subscribe((res: Array<GrindingData>) => {
+      this.uploadedFiles = res;
+      console.log(this.uploadedFiles);
+      if(this.uploadedFiles.length == 0)
+        this.messageService.add({severity:'error', summary:'Error', detail:'Failed to upload data', life: 2600 });
+    }, (error: NgxCSVParserError) => {
+      console.log('Error', error);
+    });  
+
+    this.loader.startBackground();
+    if(this.uploadedFiles.length > 0)
+      await this.combatService.uploadGrindingData(this.uploadedFiles).then(res => {
+
+    },
+    err => {
+      this.loader.stopBackground();
+      this.messageService.add({severity:'error', summary:'Error', detail:'Failed to upload data', life: 2600 });
+    }).then(_ => {
+
+      this.loader.stopBackground();
+    });
   }
 }

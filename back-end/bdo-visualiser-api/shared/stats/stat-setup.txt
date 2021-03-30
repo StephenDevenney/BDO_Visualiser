@@ -1,4 +1,6 @@
 // Stats
+duel count
+get primarry trashloot value per location, generate value.
 
 // Global Stats (home page)
 Class Usage

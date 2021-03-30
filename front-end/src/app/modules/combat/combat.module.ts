@@ -10,6 +10,8 @@ import { BuffsComponent } from './combat-page/buffs/buffs.component';
 import { LootComponent } from './combat-page/loot/loot.component';
 import { GraphsComponent } from './combat-page/graphs/graphs.component';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { FileUploadModule } from 'primeng/fileupload';
+import { NgxCsvParserModule } from 'ngx-csv-parser';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     CommonModule,
     SharedModule,
     TabViewModule,
-    InputSwitchModule
+    InputSwitchModule,
+    FileUploadModule,
+    NgxCsvParserModule
   ],
   exports: [
     RouterModule

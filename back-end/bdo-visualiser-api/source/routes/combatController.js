@@ -31,4 +31,6 @@ router.post('/create-class', (req, res) => { return combatPath.createClass(req.b
 
 router.post('/new-entry', (req, res) => { return combatPath.createEntry(req.body, res) });
 
+router.post('/data-upload', (req, res) => { return combatPath.dataUpload(req.body, res) });
+
 module.exports = router;

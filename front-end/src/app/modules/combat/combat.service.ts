@@ -59,4 +59,10 @@ export class CombatService {
     public updateSingleVisibleColumn(combatHeader: GrindingTableHeaders) {
         return this.http.put(this.globals.config.appApiUrl + "combat/visible-column", JSON.stringify(combatHeader));
     }
+
+    public uploadGrindingData(files: Array<GrindingData>): Promise<any> {
+        let origin = "combat";
+        console.log(files);
+        return this.http.post(this.globals.config.appApiUrl + "combat/data-upload", JSON.stringify(files)).toPromise();
+    }
 }

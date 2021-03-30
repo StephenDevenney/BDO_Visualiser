@@ -81,6 +81,10 @@ exports.getActiveClasses = function(combatSettingsId) {
     return db.prepare("SELECT combat_classes.classId as FK_classId, enum_class.className as className, enum_classRole.roleDescription as classRole, combat_classes.FK_gearScoreId as FK_gearScoreId FROM combat_classes INNER JOIN enum_class ON enum_class.classId = combat_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = combat_classes.FK_classRoleId WHERE FK_combatSettingsId = ?").all(combatSettingsId);
 }
 
+exports.getGivenClass = function(combatSettingsId, classId) {
+    return db.prepare("SELECT * FROM combat_classes WHERE FK_combatSettingsId = ? AND classId = ?").all(combatSettingsId, classId);
+}
+
 // GET Enums
 
 exports.getClassNameEnums = function() {

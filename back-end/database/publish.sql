@@ -162,7 +162,6 @@ CREATE TABLE enum_appIdleSecs (
 CREATE TABLE enum_server (
 	serverId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	serverName TEXT,
-	serverNumber INTEGER,
 	isElviaRealm INTEGER DEFAULT 0
 );
 
@@ -342,59 +341,59 @@ INSERT INTO enum_theme (themeName, className) VALUES ('Default', 'standard-theme
 INSERT INTO enum_theme (themeName, className) VALUES ('Dark', 'dark-theme');
 
 -- enum_server
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('-', 0, 0);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Arsha(PvP)', 0, 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 2);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 3);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 4);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 5);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Balenos', 6);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Calpheon', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Calpheon', 2);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Calpheon', 3, 1);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Calpheon', 4, 1);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Calpheon', 5, 1);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Calpheon', 6, 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Kamasylvia', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Kamasylvia', 2);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Kamasylvia', 3);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Kamasylvia', 4);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Kamasylvia', 5);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Mediah', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Mediah', 2);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Mediah', 3, 1);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Mediah', 4, 1);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Mediah', 5, 1);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Mediah', 6, 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('New Olvia', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('New Olvia', 2);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('New Olvia', 3);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('New Olvia', 4);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('New Olvia', 5);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 2);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 3);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season', 4);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Season(PvP)', 0);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Serendia', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Serendia', 2);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Serendia', 3, 1);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Serendia', 4, 1);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Serendia', 5, 1);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Serendia', 6, 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Valencia', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Valencia', 2);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Valencia', 3);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Valencia', 4, 1);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Valencia', 5, 1);
-INSERT INTO enum_server (serverName, serverNumber, isElviaRealm) VALUES ('Valencia', 6, 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 1);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 2);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 3);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 4);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 5);
-INSERT INTO enum_server (serverName, serverNumber) VALUES ('Velia', 6);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('-', 0);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Arsha(PvP)', 1);
+INSERT INTO enum_server (serverName) VALUES ('Balenos 1');
+INSERT INTO enum_server (serverName) VALUES ('Balenos 2');
+INSERT INTO enum_server (serverName) VALUES ('Balenos 3');
+INSERT INTO enum_server (serverName) VALUES ('Balenos 4');
+INSERT INTO enum_server (serverName) VALUES ('Balenos 5');
+INSERT INTO enum_server (serverName) VALUES ('Balenos 6');
+INSERT INTO enum_server (serverName) VALUES ('Calpheon 1');
+INSERT INTO enum_server (serverName) VALUES ('Calpheon 2');
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Calpheon 3', 1);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Calpheon 4', 1);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Calpheon 5', 1);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Calpheon 6', 1);
+INSERT INTO enum_server (serverName) VALUES ('Kamasylvia 1');
+INSERT INTO enum_server (serverName) VALUES ('Kamasylvia 2');
+INSERT INTO enum_server (serverName) VALUES ('Kamasylvia 3');
+INSERT INTO enum_server (serverName) VALUES ('Kamasylvia 4');
+INSERT INTO enum_server (serverName) VALUES ('Kamasylvia 5');
+INSERT INTO enum_server (serverName) VALUES ('Mediah 1');
+INSERT INTO enum_server (serverName) VALUES ('Mediah 2');
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Mediah 3', 1);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Mediah 4', 1);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Mediah 5', 1);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Mediah 6', 1);
+INSERT INTO enum_server (serverName) VALUES ('New Olvia 1');
+INSERT INTO enum_server (serverName) VALUES ('New Olvia 2');
+INSERT INTO enum_server (serverName) VALUES ('New Olvia 3');
+INSERT INTO enum_server (serverName) VALUES ('New Olvia 4');
+INSERT INTO enum_server (serverName) VALUES ('New Olvia 5');
+INSERT INTO enum_server (serverName) VALUES ('Season 1');
+INSERT INTO enum_server (serverName) VALUES ('Season 2');
+INSERT INTO enum_server (serverName) VALUES ('Season 3');
+INSERT INTO enum_server (serverName) VALUES ('Season 4');
+INSERT INTO enum_server (serverName) VALUES ('Season(PvP)');
+INSERT INTO enum_server (serverName) VALUES ('Serendia 1');
+INSERT INTO enum_server (serverName) VALUES ('Serendia 2');
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Serendia 3', 1);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Serendia 4', 1);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Serendia 5', 1);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Serendia 6', 1);
+INSERT INTO enum_server (serverName) VALUES ('Valencia 1');
+INSERT INTO enum_server (serverName) VALUES ('Valencia 2');
+INSERT INTO enum_server (serverName) VALUES ('Valencia 3');
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Valencia 4', 1);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Valencia 5', 1);
+INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('Valencia 6', 1);
+INSERT INTO enum_server (serverName) VALUES ('Velia 1');
+INSERT INTO enum_server (serverName) VALUES ('Velia 2');
+INSERT INTO enum_server (serverName) VALUES ('Velia 3');
+INSERT INTO enum_server (serverName) VALUES ('Velia 4');
+INSERT INTO enum_server (serverName) VALUES ('Velia 5');
+INSERT INTO enum_server (serverName) VALUES ('Velia 6');
 
 -- enum_serverRegion
 INSERT INTO enum_serverRegion (regionName) VALUES ('-');

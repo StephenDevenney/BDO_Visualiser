@@ -12,7 +12,7 @@ const CalcDate = require("../calc/unixDate");
         FK_serverId - int
         FK_combatTypeId - int
         FK_gearScoreId - int
-        dateCreated - string (Unix epoch)
+        dateCreated - string
         trashLootAmount - int
         afuaruSpawns - int
 */

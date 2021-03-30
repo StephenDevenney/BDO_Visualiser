@@ -6,6 +6,7 @@ const Calc = require("../../shared/calc/gearScore");
 const NewEntry = require("../../shared/converts/combatTableEntry");
 const VisibleTableData = require("../../shared/converts/visibleCombatTableData");
 const Server = require("../../shared/converts/server");
+const csv = require('csv-parser');
 var globalUserId = "1";
 
 // // GET
@@ -182,4 +183,32 @@ exports.createEntry = async function(newEntry, res) {
     var grindingTableEntry = NewEntry.reConvertToViewModel(returnEntity, newEntry);
     var visibleData = VisibleTableData.convertToViewModel(grindingTableEntry);
     return res.json({grindingTableEntry, visibleData}); 
+}
+
+exports.dataUpload = async function(uploadedFiles, res) {
+    var combatSettings = sqlContext.getCombatSettings(globalUserId);
+    var newEntry = [];
+    await Promise.all(uploadedFiles.map(async (file) => {
+        if(file) {
+            if(parseInt(file.grindingId) > 0){
+                // console.log(file);
+                var insertEntry = await VisibleTableData.convertImportToEntity(file, combatSettings.combatSettingsId);
+                newEntry.push(insertEntry);
+                // console.log(insertEntry);
+            }
+        }
+    }));
+    // console.log(uploadedFiles);
+
+    // var tableDataEntity = await sqlContext.getGrindingData(globalUserId);
+    // var tableData = [];
+    // var visibleData = [];
+    // await Promise.all(tableDataEntity.map(async (entry) => {
+    //     var returnEntry = NewEntry.convertToViewModel(entry);
+    //     tableData.push(returnEntry);
+    //     var visibleEntry = VisibleTableData.convertToViewModel(returnEntry);
+    //     visibleData.push(visibleEntry);
+    // }));
+
+    return res.json(uploadedFiles);
 }

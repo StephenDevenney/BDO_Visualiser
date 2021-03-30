@@ -48,13 +48,9 @@ exports.convertToViewModel = function(serverEntity) {
     if(serverEntity.isElviaRealm == 1)
         isElviaRealmCheck = true;
 
-    var servDescription = serverEntity.serverName;
-    if(serverEntity.serverNumber > 0)
-        servDescription = serverEntity.serverName + " " + serverEntity.serverNumber;
-
     var serverViewModel = { 
         serverId: serverEntity.serverId,
-        serverDescription: servDescription,
+        serverDescription: serverEntity.serverName,
         isElviaRealm: isElviaRealmCheck
     }
 
