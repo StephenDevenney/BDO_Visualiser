@@ -23,6 +23,11 @@ export class LocationNamesEnum {
     public territoryName: string = "-";
 }
 
+export class LocationNamesGroupedEnum {
+    public label: string = "-";
+    public items: Array<LocationNamesEnum> = new Array<LocationNamesEnum>();
+}
+
 @Injectable()
 export class ServerNamesEnum {
     public serverId: number = 1;

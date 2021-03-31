@@ -29,3 +29,4 @@ DROP TABLE enum_treasureItems;
 DROP TABLE enum_treasureItemCompleted;
 DROP TABLE enum_combatTableHeadings;
 DROP TABLE combat_columnDefaults;
+DROP TABLE enum_trashLootValue;

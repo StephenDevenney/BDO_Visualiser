@@ -3,7 +3,7 @@ import { BaseComponent } from '../../../shared/components/base.component';
 import { CombatService } from '../combat.service';
 import { GrindingData, GrindingTableHeaders, CombatPageData, VisibleData } from "../classes/grindingTable";
 import { UserClass } from '../classes/userClass';
-import { ClassNamesEnum, CombatPageEnums } from '../classes/combatEnums';
+import { ClassNamesEnum, CombatPageEnums, LocationNamesEnum, LocationNamesGroupedEnum } from '../classes/combatEnums';
 import { ExportToCsv } from 'export-to-csv';
 import { NgxCsvParser } from 'ngx-csv-parser';
 import { NgxCSVParserError } from 'ngx-csv-parser';
@@ -27,6 +27,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public isLoaded: boolean = false;
   public classNames: Array<ClassNamesEnum> = new Array<ClassNamesEnum>();
   public combatEnums: CombatPageEnums = new CombatPageEnums();
+  public groupedLocationsEnums: Array<LocationNamesGroupedEnum> = new Array<LocationNamesGroupedEnum>();
 
   // Grinding Data
   public combatPageData: CombatPageData;
@@ -71,13 +72,13 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       if(this.combatPageData.hasMainClass)
         this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
 
-      console.log(this.mainClass);
+      // console.log(this.mainClass);
 
       this.grindingRes = this.combatPageData.visibleData;
       this.updateRowGroupMetaData(this.grindingRes);
       this.isLoaded = true;
       this.loader.stop();
-      console.log(this.combatPageData);
+      // console.log(this.combatPageData);
     },
     err => {
       this.loader.stop();
@@ -86,12 +87,46 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     this.combatService.getCombatEnums().subscribe(res => {
       this.combatEnums = res as CombatPageEnums;
       console.log(this.combatEnums);
+      let recentGroup = this.combatEnums.locationNamesEnum.filter(_ => _.locationName == "Pila Ku Jail" || _.locationName == "Sycraia Underwater Ruins" || _.locationName == "Swamp Naga" || _.locationName == "Blood Wolf Settlement");
+      let balenosGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Balenos");
+      let serendiaGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Serendia");
+      let mediahGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Mediah");
+      let valenciaGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Valencia");
+      let kamasylviaGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Kamasylvia");
+      let dreighanGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Dreighan");
+      let OdyllitaGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "O'dyllita");
+      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
+      this.groupedLocationsEnums[0].label = "Recent";
+      this.groupedLocationsEnums[0].items = recentGroup as Array<LocationNamesEnum>;
+      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
+      this.groupedLocationsEnums[1].label = "Balenos";
+      this.groupedLocationsEnums[1].items = balenosGroup as Array<LocationNamesEnum>;
+      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
+      this.groupedLocationsEnums[2].label = "Serendia";
+      this.groupedLocationsEnums[2].items = serendiaGroup as Array<LocationNamesEnum>;
+      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
+      this.groupedLocationsEnums[3].label = "Mediah";
+      this.groupedLocationsEnums[3].items = mediahGroup as Array<LocationNamesEnum>;
+      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
+      this.groupedLocationsEnums[4].label = "Valencia";
+      this.groupedLocationsEnums[4].items = valenciaGroup as Array<LocationNamesEnum>;
+      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
+      this.groupedLocationsEnums[5].label = "Kamasylvia";
+      this.groupedLocationsEnums[5].items = kamasylviaGroup as Array<LocationNamesEnum>;
+      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
+      this.groupedLocationsEnums[6].label = "Dreighan";
+      this.groupedLocationsEnums[6].items = dreighanGroup as Array<LocationNamesEnum>;
+      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
+      this.groupedLocationsEnums[7].label = "O'dyllita";
+      this.groupedLocationsEnums[7].items = OdyllitaGroup as Array<LocationNamesEnum>;
+
+      console.log(this.groupedLocationsEnums);
     });
   }
 
   // Displayed data.
   public async updateRowGroupMetaData(data) {
-    console.log(data);
+    // console.log(data);
     this.rowGroupMetadata = {};
     if (data) {
         for (let i = 0; i < data.length; i++) {
@@ -183,7 +218,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     this.showGrindingTableEntry = false;
 
     this.columnSelectOptions = this.columnHeaders.filter(header => header.headingId != 1);
-    console.log(this.columnSelectOptions);
+    // console.log(this.columnSelectOptions);
     if(this.grindingRes.length == 0 && !this.combatPageData.hasDefaultCombatHeaders) {
       this.columnChanged = true;
       this.popupHeight = "32rem";
@@ -213,7 +248,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
               this.newEntry.userClass = this.mainClass;
               break;
             case 6: // Server
-              this.newEntry.server = this.combatEnums.serverNamesEnum[0]; console.log(this.newEntry);
+              this.newEntry.server = this.combatEnums.serverNamesEnum[0];
               break;
             case 7: // Combat Types
               this.newEntry.combatType = this.combatEnums.combatTypesEnum[0];
@@ -308,7 +343,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     }));
 
     this.ngxCsvParser.parse(event.files[0], { header: true, delimiter: ',' })
-    .pipe().subscribe((res: Array<GrindingData>) => {
+    .pipe().subscribe((res: any) => {
       this.uploadedFiles = res;
       console.log(this.uploadedFiles);
       if(this.uploadedFiles.length == 0)
