@@ -4,6 +4,7 @@ get primarry trashloot value per location, generate value.
 for group spots, option to link to other peoples stats for that grinding entry.
 min-maxes, totals
 socket.io for signalling
+profile (stats visible to other people?)
 
 // Global Stats (home page)
 Class Usage

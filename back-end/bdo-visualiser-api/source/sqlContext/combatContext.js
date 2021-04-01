@@ -85,6 +85,14 @@ exports.getGivenClass = function(combatSettingsId, classId) {
     return db.prepare("SELECT * FROM combat_classes WHERE FK_combatSettingsId = ? AND classId = ?").all(combatSettingsId, classId);
 }
 
+exports.recentEntries = function(combatSettingsId) {
+    return db.prepare("SELECT * FROM combat_grinding WHERE FK_combatSettingsId = ? ORDER BY grindingId DESC LIMIT 3").all(combatSettingsId);
+}
+
+exports.getRecentLocations = function(combatSettingsId) {
+    return db.prepare("SELECT DISTINCT enum_locations.locationId, enum_territory.territoryId, enum_locations.locationName, enum_territory.territoryName, enum_locations.recommendedLevel, enum_locations.recommendedAP FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = combat_grinding.FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE FK_combatSettingsId = ? ORDER BY combat_grinding.grindingId DESC LIMIT 3").all(combatSettingsId);
+}
+
 // GET Enums
 
 exports.getClassNameEnums = function() {
@@ -110,6 +118,19 @@ exports.getTimeEnums = function() {
 exports.getCombatTypeEnums = function() {
     return db.prepare("SELECT * FROM enum_combatType WHERE enum_combatType.combatTypeId != 1").all();
 }
+
+exports.getTerritoryEnums = function() {
+    return db.prepare("SELECT * FROM enum_territory WHERE territoryId != 1").all();
+}
+
+exports.getTerritoryLocationsEnums = function(territoryId) {
+    return db.prepare("SELECT locationId, FK_territoryId as territoryId, locationName, recommendedLevel, recommendedAP FROM enum_locations WHERE FK_territoryId == ?").all(territoryId);
+}
+
+exports.getSingleTerritory = function(locationId) {
+    return db.prepare("SELECT enum_territory.territoryId, enum_territory.territoryName FROM enum_locations INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE enum_locations.locationId == ?").get(locationId);
+}
+
 
 // POST 
 exports.createCombatSettings = function(userId) {

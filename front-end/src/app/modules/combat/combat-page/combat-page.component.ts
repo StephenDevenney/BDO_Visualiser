@@ -71,14 +71,10 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.activeClasses = this.combatPageData.activeClasses as Array<UserClass>;
       if(this.combatPageData.hasMainClass)
         this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
-
-      // console.log(this.mainClass);
-
       this.grindingRes = this.combatPageData.visibleData;
       this.updateRowGroupMetaData(this.grindingRes);
       this.isLoaded = true;
       this.loader.stop();
-      // console.log(this.combatPageData);
     },
     err => {
       this.loader.stop();
@@ -86,47 +82,12 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
     this.combatService.getCombatEnums().subscribe(res => {
       this.combatEnums = res as CombatPageEnums;
-      console.log(this.combatEnums);
-      let recentGroup = this.combatEnums.locationNamesEnum.filter(_ => _.locationName == "Pila Ku Jail" || _.locationName == "Sycraia Underwater Ruins" || _.locationName == "Swamp Naga" || _.locationName == "Blood Wolf Settlement");
-      let balenosGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Balenos");
-      let serendiaGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Serendia");
-      let mediahGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Mediah");
-      let valenciaGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Valencia");
-      let kamasylviaGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Kamasylvia");
-      let dreighanGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "Dreighan");
-      let OdyllitaGroup = this.combatEnums.locationNamesEnum.filter(_ => _.territoryName == "O'dyllita");
-      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
-      this.groupedLocationsEnums[0].label = "Recent";
-      this.groupedLocationsEnums[0].items = recentGroup as Array<LocationNamesEnum>;
-      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
-      this.groupedLocationsEnums[1].label = "Balenos";
-      this.groupedLocationsEnums[1].items = balenosGroup as Array<LocationNamesEnum>;
-      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
-      this.groupedLocationsEnums[2].label = "Serendia";
-      this.groupedLocationsEnums[2].items = serendiaGroup as Array<LocationNamesEnum>;
-      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
-      this.groupedLocationsEnums[3].label = "Mediah";
-      this.groupedLocationsEnums[3].items = mediahGroup as Array<LocationNamesEnum>;
-      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
-      this.groupedLocationsEnums[4].label = "Valencia";
-      this.groupedLocationsEnums[4].items = valenciaGroup as Array<LocationNamesEnum>;
-      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
-      this.groupedLocationsEnums[5].label = "Kamasylvia";
-      this.groupedLocationsEnums[5].items = kamasylviaGroup as Array<LocationNamesEnum>;
-      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
-      this.groupedLocationsEnums[6].label = "Dreighan";
-      this.groupedLocationsEnums[6].items = dreighanGroup as Array<LocationNamesEnum>;
-      this.groupedLocationsEnums.push(new LocationNamesGroupedEnum);
-      this.groupedLocationsEnums[7].label = "O'dyllita";
-      this.groupedLocationsEnums[7].items = OdyllitaGroup as Array<LocationNamesEnum>;
-
-      console.log(this.groupedLocationsEnums);
+      console.log(this.combatEnums.locationNamesEnum);
     });
   }
 
   // Displayed data.
   public async updateRowGroupMetaData(data) {
-    // console.log(data);
     this.rowGroupMetadata = {};
     if (data) {
         for (let i = 0; i < data.length; i++) {
@@ -204,7 +165,6 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
           this.messageService.add({severity:'info', summary:'Class Required', detail:'Class Required.', life: 2600 });
         else
           this.messageService.add({severity:'error', summary:'Error', detail:'Failed to save class', life: 2600 });
-          console.log(err);
       });
     }
     else {
@@ -218,7 +178,6 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     this.showGrindingTableEntry = false;
 
     this.columnSelectOptions = this.columnHeaders.filter(header => header.headingId != 1);
-    // console.log(this.columnSelectOptions);
     if(this.grindingRes.length == 0 && !this.combatPageData.hasDefaultCombatHeaders) {
       this.columnChanged = true;
       this.popupHeight = "32rem";
@@ -239,7 +198,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
         if(col.isActive){
           switch(col.headingId){
             case 2: // Location
-              this.newEntry.grindLocation = this.combatEnums.locationNamesEnum[0];
+              this.newEntry.grindLocation = this.combatEnums.locationNamesEnum[0].items[0];
               break;
             case 3: // Time
               this.newEntry.timeAmount = this.combatEnums.timeAmountEnum[0];
@@ -287,6 +246,10 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       else
         this.messageService.add({severity:'error', summary:'Error', detail:'Failed to add entry.', life: 2600 });
       this.loader.stopBackground()
+    }).then(res => {
+      this.combatService.getCombatEnums().subscribe(res => {
+        this.combatEnums = res as CombatPageEnums;
+      });
     });
   }
 
@@ -345,11 +308,9 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     this.ngxCsvParser.parse(event.files[0], { header: true, delimiter: ',' })
     .pipe().subscribe((res: any) => {
       this.uploadedFiles = res;
-      console.log(this.uploadedFiles);
       if(this.uploadedFiles.length == 0)
         this.messageService.add({severity:'error', summary:'Error', detail:'Failed to upload data', life: 2600 });
     }, (error: NgxCSVParserError) => {
-      console.log('Error', error);
     });  
 
     this.loader.startBackground();

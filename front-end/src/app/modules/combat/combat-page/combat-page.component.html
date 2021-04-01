@@ -192,7 +192,7 @@
                             <div>
                                 <label>Location</label>
                             </div>
-                            <p-dropdown class="w-100" appendTo="body" [options]="groupedLocationsEnums" [(ngModel)]="newEntry.grindLocation" optionLabel="locationName" [group]="true">
+                            <p-dropdown class="w-100" appendTo="body" [options]="combatEnums.locationNamesEnum" [(ngModel)]="newEntry.grindLocation" optionLabel="locationName" [group]="true">
                                 <ng-template let-group pTemplate="group">
                                     <div class="p-d-flex p-ai-center">
                                         <span>{{group.label}}</span>

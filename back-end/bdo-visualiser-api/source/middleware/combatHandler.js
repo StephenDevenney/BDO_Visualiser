@@ -6,6 +6,7 @@ const Calc = require("../../shared/calc/gearScore");
 const NewEntry = require("../../shared/converts/combatTableEntry");
 const VisibleTableData = require("../../shared/converts/visibleCombatTableData");
 const Server = require("../../shared/converts/server");
+const LocationGroups = require("../../shared/converts/locationGroups");
 const csv = require('csv-parser');
 var globalUserId = "1";
 
@@ -101,8 +102,21 @@ exports.getAllClassNames = function(res) {
 }
 
 exports.getCombatEnums = async function(res){
+    var combatSettings = sqlContext.getCombatSettings(globalUserId);
     var classNamesEnum = sqlContext.getClassNameEnums();
-    var locationNamesEnum = sqlContext.getLocationEnums();
+    var territories = sqlContext.getTerritoryEnums();
+    var locationNamesEnum = [];
+    var recentEntries = sqlContext.recentEntries(combatSettings.combatSettingsId);
+    // Get Most Recent Locations First
+    if(typeof(recentEntries) != "undefined" || recentEntries.length > 0) {
+        locGroupVM = await LocationGroups.convertRecentToVM(combatSettings.combatSettingsId); 
+        locationNamesEnum.push(locGroupVM);
+    }
+    
+    await Promise.all(territories.map(async (ter) => {
+        locGroupVM = await LocationGroups.convertToVM(ter); 
+        locationNamesEnum.push(locGroupVM);
+    }));
     var serversEnum = sqlContext.getServerEnums();
     var combatTypesEnum = sqlContext.getCombatTypeEnums();
     var timeAmountEnum = sqlContext.getTimeEnums();
@@ -111,7 +125,6 @@ exports.getCombatEnums = async function(res){
         serverVM = Server.convertToViewModel(serverEntity); 
         serverNamesEnum.push(serverVM);
     }));
-
     return res.json({classNamesEnum, locationNamesEnum, serverNamesEnum, combatTypesEnum, timeAmountEnum});
 }
 
@@ -191,14 +204,11 @@ exports.dataUpload = async function(uploadedFiles, res) {
     await Promise.all(uploadedFiles.map(async (file) => {
         if(file) {
             if(parseInt(file.grindingId) > 0){
-                // console.log(file);
                 var insertEntry = await VisibleTableData.convertImportToEntity(file, combatSettings.combatSettingsId);
                 newEntry.push(insertEntry);
-                // console.log(insertEntry);
             }
         }
     }));
-    // console.log(uploadedFiles);
 
     // var tableDataEntity = await sqlContext.getGrindingData(globalUserId);
     // var tableData = [];

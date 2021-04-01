@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class CombatPageEnums {
     public classNamesEnum: Array<ClassNamesEnum> = new Array<ClassNamesEnum>();
-    public locationNamesEnum: Array<LocationNamesEnum> = new Array<LocationNamesEnum>();
+    public locationNamesEnum: Array<LocationNamesGroupedEnum> = new Array<LocationNamesGroupedEnum>();
     public serverNamesEnum: Array<ServerNamesEnum> = new Array<ServerNamesEnum>();
     public combatTypesEnum: Array<CombatTypesEnum> = new Array<CombatTypesEnum>();
     public timeAmountEnum: Array<TimeAmountEnum> = new Array<TimeAmountEnum>();
@@ -21,6 +21,8 @@ export class LocationNamesEnum {
     public territoryId: number = 1;
     public locationName: string = "-";
     public territoryName: string = "-";
+    public recommendedLevel: string = "";
+    public recommendedAP: string = "";
 }
 
 export class LocationNamesGroupedEnum {
