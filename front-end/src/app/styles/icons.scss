@@ -1,0 +1,261 @@
+/*
+# Sizes
+# General
+# Colours
+    ## Stroke
+    ## Fill
+    ## Dualtone
+    ## Hover
+# keyframes
+*/
+
+// # Sizes
+.icon-14 svg, .icon-16 svg, .icon-18 svg, .icon-20 svg, .icon-22 svg, .icon-24 svg, .icon-25 svg, .icon-26 svg, .icon-28 svg, .icon-30 svg, .icon-35 svg, .icon-40 svg, .icon-45 svg, .icon-50 svg {
+    width: inherit;
+    height: inherit;
+}
+
+.icon-14 {
+    width: 0.875rem;
+    height: 0.875rem;
+}
+.icon-16 {
+    width: 1rem;
+    height: 1rem;
+}
+.icon-18 {
+    width: 1.125rem;
+    height: 1.125rem;
+}
+.icon-20 {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+.icon-22 {
+    width: 1.375rem;
+    height: 1.375rem;
+}
+.icon-24 {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+.icon-25 {
+    width: 	1.5625rem;
+    height: 1.5625rem;
+}
+.icon-26 {
+    width: 1.625rem;
+    height: 1.625rem;
+}
+.icon-28 {
+    width: 1.75rem;
+    height: 1.75rem;
+}
+.icon-30 {
+    width: 1.875rem;
+    height: 1.875rem;
+}
+.icon-35 {
+    width: 2.1875rem;
+    height: 2.1875rem;
+}
+.icon-40 {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+.icon-45 {
+    width: 2.8125rem;
+    height: 2.8125rem;
+}
+.icon-50 {
+    width: 3.125rem;
+    height: 3.125rem;
+}
+
+// # General
+.icon-scale-1-25 {
+    position: relative;
+    transform: scale(1.25);
+}
+
+.icon-scale-1-5 {
+    position: relative;
+    transform: scale(1.5);
+}
+
+.icon-spin {
+    animation: spin 4s linear infinite;
+}
+
+.icon-spin-clockwise {
+    animation: spin-clockwise 4s linear infinite;
+}
+
+.icon-rotate {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.icon-hoverable, .icon-hideable {
+    transition: fill $transition-150 ease-in-out, stroke $transition-150 ease-in-out, opacity $transition-150 ease-in-out;
+}
+
+.icon-disabled, svg .disabled {
+    fill: $icon-grey;
+}
+
+.icon-flip-x {
+    transform: scaleX(-1);
+}
+
+.icon-flip-y {
+    transform: scaleY(-1);
+}
+
+// # Colours
+// ## Stroke
+.icon-stroke {
+    stroke: $icon;
+}
+
+.icon-stroke-grey {
+    stroke: $icon-grey;
+}
+
+.icon-stroke-green {
+    stroke: $icon-green;
+}
+
+.icon-stroke-white {
+    stroke: $icon-white;
+}
+
+.icon-nav {
+    stroke: $icon-grey;
+}
+
+.icon-stroke, .icon-stroke-grey, .icon-stroke-green, .icon-stroke-white, .icon-nav {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+// ## Fill
+.icon-fill {
+    fill: $icon;
+}
+
+.icon-fill-grey {
+    fill: $icon-grey;
+}
+
+.icon-fill-green {
+    fill: $icon-green;
+}
+
+.icon-fill-white {
+    fill: $icon-white;
+}
+
+// ## Dualtone
+.icon-dualtone {
+    .icon-primary {
+        fill: $icon;
+    }
+    .icon-grey {
+        fill: $icon-grey;
+    }
+    .icon-green {
+        fill: $icon-green;
+    }
+    .icon-white {
+        fill: $icon-white;
+    }
+    .icon-none {
+        fill: none;
+    }
+}
+
+// ## Hover
+.btn-primary, .btn-secondary, .btn-dark {
+    &:hover, &:focus, &:active{
+        &:not(.disabled):not(:disabled){
+            &.icon-hoverable, &.icon-dualtone {
+                .icon-hide {
+                    fill: none;
+                }
+                .icon-fill, .icon-primary {
+                    fill: LightenDarkenColor($icon, $hover-lighten);
+                }
+                .icon-fill-grey, .icon-grey {
+                    fill: LightenDarkenColor($icon-grey, $hover-lighten);
+                }               
+                .icon-fill-green, .icon-green {
+                    fill: LightenDarkenColor($icon-green, $hover-lighten);
+                }
+                .icon-fill-white, .icon-white {
+                    fill: LightenDarkenColor($icon-white, $hover-lighten);
+                }
+                .icon-stroke {
+                    stroke: LightenDarkenColor($icon, $hover-lighten);
+                }
+                .icon-stroke-grey {
+                    stroke: LightenDarkenColor($icon-grey, $hover-lighten);
+                }
+                .icon-stroke-green {
+                    stroke: LightenDarkenColor($icon-green, $hover-lighten);
+                }              
+                .icon-stroke-white {
+                    stroke: LightenDarkenColor($icon-white, $hover-lighten);
+                }              
+                .icon-nav {
+                    stroke: LightenDarkenColor($icon-grey, $hover-lighten);
+                }
+            }
+        } 
+    }
+}
+
+// # Keyframes
+@keyframes spin-clockwise {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translate3d(0, 0, 0);
+	}
+	to {
+		opacity: 1;
+		transform: translate3d(0, 0, 0);
+	}
+}
+
+@keyframes slideInLarge {
+	from {
+        opacity: 0.2;
+        right: -20vw;
+	}
+	to {
+        opacity: 1;
+		right: 0vw;
+	}
+}
+
+@keyframes slideInMedium {
+	from {
+        opacity: 0.2;
+        right: -10vw;
+	}
+	to {
+        opacity: 1;
+		right: 0vw;
+	}
+}

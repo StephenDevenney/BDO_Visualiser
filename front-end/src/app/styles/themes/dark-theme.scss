@@ -1,0 +1,509 @@
+.dark-theme {
+    /*
+        # Component Setup
+            ## Background
+            ## Main
+            ## Hover
+        # General
+            ## Body
+            ## Page
+        # Font
+            ## Headers
+            ## Label
+        # Input
+            ## Buttons
+            ## Dropdown
+                ### Text
+                ### Icon
+                ### Panel Body
+                ### Panel Items
+                ### Panel Items Hover
+            ## MultiSelect
+                ### Element
+                ### Panel
+        # Components
+            ## Side Nav
+            ## Table
+                ### Table - Row
+                ### Table - Row Hover
+                ### Table - Header
+                ### Table - Selected
+            ## Sidebar
+            ## Tabpanel
+                ### Header  
+                ### FixedTiles
+        # Overrides
+            ## Input Text
+            ## Checkboxes  
+            ## Switch
+            ## FloatLabel
+            ## Popup Dialog
+    */
+
+    /*  # Component Setup
+        ## Background
+        background-color: lighten($dark-primary, 10%);
+        ## Main Border
+        border-color: darken($dark-tertiary, 15%);
+        ## Hover Border
+        border-color: lighten($dark-tertiary, 10%);
+        ## Placeholder
+        color: $dark-tertiary;
+    */
+
+    // # General
+
+    // ## Body
+    background-color: darken($dark-primary, 2%);
+    color: $dark-primary-text;
+
+    // ## Page
+    .page {
+        .page-header {
+            border-bottom: 0.1rem solid darken($dark-primary, 20%);
+            color: $dark-primary;
+        }
+    }
+
+    .split-page .half-page:nth-child(2n) {
+        border-left: 0.1rem solid darken($dark-primary, 20%);
+    }
+
+    //# Fonts
+
+    // ## Headers
+    h1 {
+        color: $dark-primary-text;
+    }
+
+    h2 {
+        color: $dark-primary-text;
+    }
+
+    h3 {
+        color: $dark-primary-text;
+    }
+
+    // ## Label
+    label {
+        color: $dark-primary-text;
+    }
+
+    // # Input
+    // ## Search-Bar
+    .search-bar {
+        input {
+            background-color: lighten($dark-primary, 10%);
+            border-color: darken($dark-tertiary, 15%);
+            color: $dark-primary-text;
+
+            &::placeholder {
+                color: $dark-primary-text;
+            }
+
+            &:hover {
+                border-color: lighten($dark-tertiary, 10%);
+            }
+        }
+
+        .p-input-icon-right > i:last-of-type {
+            color: $dark-primary-text;
+        }
+    }
+
+    // ## Buttons
+    .btn {
+        color: $dark-primary-text;
+    }
+
+    .btn-primary {
+        background: $dark-secondary;
+        border-color: $dark-secondary;
+        color: $dark-secondary-text;
+
+        &:hover, &:focus, &:active{
+            &:not(.disabled):not(:disabled){
+                background: lighten($dark-secondary, 10%);
+                border-color: lighten($dark-secondary, 10%);
+                color: $dark-secondary-text;
+            } 
+        }
+    }
+
+    .btn-secondary {
+        background: $dark-tertiary;
+        border-color: $dark-tertiary;
+        color: $dark-tertiary-text;
+
+        &:hover, &:focus, &:active{
+            &:not(.disabled):not(:disabled){
+                background: lighten($dark-tertiary, 5%);
+                border-color: lighten($dark-tertiary, 5%);
+                color: $dark-tertiary-text;
+            } 
+        }
+    }
+
+    .btn-nav-link {
+        background: $dark-secondary;
+        border-color: $dark-secondary;
+        color: $dark-secondary-text;
+    
+        &:hover, &:focus, &:active{
+            &:not(.disabled):not(:disabled){
+                background: lighten($dark-secondary, 10%);
+                border-color: lighten($dark-secondary, 10%);
+                color: $dark-secondary-text;
+            } 
+        }
+    }
+
+    // ## Dropdowns
+    .p-dropdown {
+        background-color: lighten($dark-primary, 10%);
+        border-color: darken($dark-tertiary, 15%);
+
+        // ### Text
+        &.p-inputtext {
+            color: $dark-primary-text;
+        }  
+
+        // ### Icon
+        &.p-dropdown .p-dropdown-trigger {
+            color: $dark-primary-text;
+        }
+
+        .p-dropdown-label.p-placeholder {
+            color: $dark-tertiary;
+        }
+
+        // ### Panel Body
+        .p-dropdown-panel {
+            background: lighten($dark-primary, 5%);
+            color: $dark-primary-text;
+
+            // ### Filter
+            .p-dropdown-header {
+                background: lighten($dark-primary, 5%);
+                .p-inputtext {
+                    background: lighten($dark-primary, 5%);
+                    border-color: darken($dark-tertiary, 15%);
+                }
+                .p-inputtext:enabled:hover {
+                    border-color: lighten($dark-tertiary, 10%);
+                }
+                .p-dropdown-filter-icon {
+                    color: $dark-primary-text;
+                }
+            }
+
+            .p-dropdown-items .p-dropdown-empty-message {
+                color: $dark-primary-text;
+            }
+        }
+
+        // ### Panel Items
+        .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+            background: lighten($dark-primary, 5%);
+            color: $dark-primary-text;
+        }
+
+        .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+            background: lighten($dark-primary, 5%);
+            color: $dark-primary-text;
+        }
+
+        // ### Panel Items Hover
+        .p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled):hover {
+            background: $dark-primary;
+            color: $dark-primary-text;
+        }
+
+        .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight:hover {
+            background: $dark-primary;
+            color: $dark-primary-text;
+        }
+
+        .p-dropdown-clear-icon {
+            color: $dark-primary-text;
+        }
+
+        .p-dropdown-clear-icon:hover {
+            color: lighten($dark-primary-text, 10%);
+        }
+
+        .p-dropdown:not(.p-disabled).p-focus {
+            border-color: lighten($dark-primary-text, 10%);
+        }
+    }
+
+    .p-dropdown:not(.p-disabled):hover {
+        border-color: lighten($dark-tertiary, 10%);
+    }
+
+    .p-dropdown:not(.p-disabled).p-focus {
+        border-color: lighten($dark-tertiary, 10%);
+    }
+
+    .p-inputtext {
+        color: $dark-primary-text;
+    }
+
+    // ## MultiSelect
+
+    // ### Element
+    .p-multiselect {
+        background-color: lighten($dark-primary, 10%);
+        border-color: darken($dark-tertiary, 15%);
+
+        .p-multiselect-label.p-placeholder {
+            color: $dark-primary-text;
+        }
+
+        .p-multiselect-trigger {
+            color: $dark-tertiary;
+        }
+    }
+    
+    .p-multiselect:not(.p-disabled):hover {
+        border-color: lighten($dark-tertiary, 10%);
+    }
+
+    // ### Panel
+    .p-multiselect-panel {
+        background-color: $dark-primary;
+
+        .p-multiselect-header {
+            background-color: $dark-primary;
+            border-bottom: 1px solid $dark-tertiary;
+
+            .p-multiselect-close {
+                background-color: darken($dark-primary, 5%);
+                color: $dark-primary-text;
+            }
+
+            .p-multiselect-close:hover {
+                background-color: $dark-tertiary;
+                color: darken($dark-tertiary-text, 5%);
+            }
+
+            .p-multiselect-close:focus {
+                box-shadow: 0 0 0 0.05rem lighten($dark-tertiary, 10%);
+            }
+        }
+
+        .p-multiselect-items .p-multiselect-item {
+            color: $dark-primary-text;
+        }
+
+        .p-multiselect-items .p-multiselect-item.p-highlight {
+            background-color: darken($dark-primary, 3%);
+            color: $dark-primary-text;
+        }
+
+        .p-multiselect-items .p-multiselect-item:not(.p-highlight):not(.p-disabled):hover {
+            background-color: lighten($dark-primary, 3%);
+            color: $dark-primary-text;
+        }
+    }
+
+    .p-multiselect-filter-container .p-inputtext {
+        border-color: $dark-secondary;
+        color: $dark-tertiary-text;
+    }
+
+    // # Components
+
+    // ## Side Nav
+    .side-nav {
+        background-color: $dark-secondary;
+    }
+
+    // ## Table
+    // ### Table - Row
+    .p-datatable .p-datatable-tbody > tr {
+        background-color: $dark-primary;
+        color: $dark-primary-text;
+
+        &.table-group-subheading {
+            background-color: darken($dark-primary, 10%);
+        }
+    }
+
+    // ### Table - Row Hover
+    .p-datatable.p-datatable-hoverable-rows .p-datatable-tbody > tr:not(.p-highlight):hover {
+        background-color: lighten($dark-primary, 3%);
+        color: $dark-primary-text;
+
+        &.table-group-subheading {
+            background-color: darken($dark-primary, 10%);
+        }
+    }
+
+    // ### Table - Header
+    .p-datatable .p-datatable-thead > tr > th {
+        background-color: $dark-secondary;
+        color: $dark-secondary-text;
+    }
+
+    .p-datatable .p-datatable-scrollable-header, .p-datatable .p-datatable-scrollable-footer {
+        background-color: $dark-secondary;
+    }
+
+    // ### Table - Selected
+    .p-datatable .p-datatable-tbody > tr.p-highlight {
+        background-color: lighten($dark-primary, 4%);
+    }
+
+    // ## Sidebar
+    .p-sidebar {
+        background-color: $dark-secondary;
+        color: $dark-secondary-text;
+
+        .p-sidebar-close {
+            background-color: $dark-tertiary;
+            color: $dark-secondary-text;
+        }
+    }
+
+    // ## Tabpanel
+    .p-tabview {
+        // ### Header
+        .p-tabview-nav {
+            background-color: lighten($dark-primary, 10%);
+
+            li .p-tabview-nav-link {
+                border: solid $dark-primary;
+                border-width: 0 0 2px 0;
+                border-color: transparent transparent $dark-primary transparent;
+                background-color: lighten($dark-primary, 10%);
+                color: $dark-primary-text;
+            }
+
+            li.p-highlight .p-tabview-nav-link {
+                background-color: lighten($dark-primary, 10%);
+                border-color: $dark-secondary;
+                color: $dark-secondary-text;
+            }
+
+            .p-tabview-nav-link:hover{
+                background-color: lighten($dark-primary, 10%) !important; 
+                color: $dark-primary-text !important;
+            }
+        }   
+    }
+
+    // ### FixedTiles
+    .fixed-tile {
+        background-color: $dark-primary;
+            
+        label {
+            color: $dark-primary-text;
+        }
+
+        .fixed-tile-header {
+            background-color: $dark-secondary;
+
+            h3 {
+                color: $dark-secondary-text;
+            }
+        }
+    }
+
+    // # Overrides
+
+    // ## Input Text
+    .p-inputtext {
+        color: $dark-primary-text;
+    }
+
+    .p-inputtext {
+        background-color: $dark-primary;
+    }
+
+    .p-inputtext:enabled:focus {
+        box-shadow: 0 0 0 0.03rem $dark-secondary;
+    }
+
+    // ## Checkboxes
+    .p-checkbox .p-checkbox-box .p-checkbox-icon {
+        color: $dark-secondary-text;
+    }
+
+    .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
+        border-color: $dark-secondary;
+    }
+
+    .p-checkbox .p-checkbox-box.p-highlight {
+        background-color: $dark-secondary;
+        border-color: $dark-secondary;
+    }
+
+    .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
+        background-color: lighten($dark-secondary, 10%);
+        border-color: lighten($dark-secondary, 10%);
+    }
+
+    // ## Switch
+    .p-inputswitch .p-inputswitch-slider {
+        background: darken($dark-tertiary, 20%);
+    }
+
+    .p-inputswitch:not(.p-disabled):hover .p-inputswitch-slider {
+        background: darken($dark-tertiary, 10%);
+    }
+
+    .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+        background: $dark-secondary;
+    }
+
+    .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
+        background: lighten($dark-secondary, 10%);
+    }
+
+    .p-inputswitch.p-focus .p-inputswitch-slider {
+        box-shadow: 0 0 0 0.1rem lighten($dark-secondary, 10%);
+    }
+
+    // ## FloatLabel
+    .p-float-label {
+        .p-dropdown {
+            background-color: lighten($dark-primary, 10%);
+        }     
+    }
+
+    // ## Popup Dialog
+    .p-dialog .p-dialog-header {
+        background: $dark-secondary;  
+    }
+
+    .p-dialog .p-dialog-header {
+        color: $dark-secondary-text;  
+    }
+
+    .p-dialog .p-dialog-content {
+        background: $dark-primary;  
+    }
+
+    .p-dialog .p-dialog-content {
+        color: $dark-primary-text;  
+    }
+
+    // ## Input Number
+    .p-inputnumber .p-component {
+        border-color: $dark-tertiary;
+    }
+
+    .p-inputtext:enabled:hover {
+        border-color: lighten($dark-tertiary, 10%);
+    }
+
+    .p-inputtext:enabled:focus {
+        border-color: lighten($dark-tertiary, 10%);
+        box-shadow: none;
+    }
+
+    .p-placeholder {
+        color: lighten($dark-primary-text, 10%);
+    }
+}
