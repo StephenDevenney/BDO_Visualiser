@@ -8,8 +8,8 @@ import { PageHeaderComponent } from './page-header/page-header.component';
 })
 export class PageComponent implements OnInit {
 
-  @ContentChild(PageHeaderComponent) header: PageHeaderComponent;
-  @ViewChild("pageContent") content: ElementRef;
+  @ContentChild(PageHeaderComponent) header!: PageHeaderComponent;
+  @ViewChild("pageContent") content!: ElementRef;
 
   constructor() { }
 

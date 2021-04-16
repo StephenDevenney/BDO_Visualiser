@@ -22,10 +22,10 @@ export class SidenavComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sideNavService.getNavMenu().subscribe( res => {
-      this.navigationMenu = res;
-      this.navLoaded = true;
-    });
+    // this.sideNavService.getNavMenu().subscribe( res => {
+    //   this.navigationMenu = res;
+    //   this.navLoaded = true;
+    // });
   }
 
   public async navToPage(navRoute: string) {
@@ -33,7 +33,7 @@ export class SidenavComponent extends BaseComponent implements OnInit {
       await this.router.navigate([navRoute]).then(res => {
         this.titleService.setTitle(this.globals.config.hubName + " - " + navRoute);
         this.globals.currentUrl=navRoute;
-        this.authService.setLastPage(navRoute);
+        // this.authService.setLastPage(navRoute);
       });
   }
 

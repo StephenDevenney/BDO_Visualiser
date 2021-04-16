@@ -19,8 +19,8 @@ export class PageHeaderComponent extends BaseComponent implements OnInit {
   public showOptions: boolean = false;
   public showSideOptions: boolean = false;
   public sideOptionsId: number = 0;
-  themes: any[];
-  isLoaded: boolean;
+  public themes: Array<Theme> = new Array<Theme>();
+  public isLoaded: boolean = false;
 
   constructor(private injector: Injector,
     private pageService: PageService) {
@@ -28,10 +28,10 @@ export class PageHeaderComponent extends BaseComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.pageService.getThemes().subscribe( res => {
-      this.themes = res as Array<Theme>;
-      this.isLoaded = true;
-    });
+    // this.pageService.getThemes().subscribe( (res: Array<Theme>) => {
+    //   this.themes = res;
+    //   this.isLoaded = true;
+    // });
   }
 
   public toggleOptionsMenu() {
@@ -49,15 +49,15 @@ export class PageHeaderComponent extends BaseComponent implements OnInit {
 
   public async saveSettings(): Promise<any> {
     this.loader.startBackground();
-    await this.pageService.saveProfile().then( res => {
-      this.loader.stopBackground();
-    },
-    err => {
-      this.loader.stopBackground();
-      this.messageService.add({severity:'error', summary:'Error Saving', detail:'Server issue, cannot save settings at this time.', life: 2600 });
-    }).finally(() => {
-      this.messageService.add({severity:'success', summary:'Profile Updated', detail:'Your profile settings have been saved.', life: 1900 });
-    });
+    // await this.pageService.saveProfile().then( res => {
+    //   this.loader.stopBackground();
+    // },
+    // err => {
+    //   this.loader.stopBackground();
+    //   this.messageService.add({severity:'error', summary:'Error Saving', detail:'Server issue, cannot save settings at this time.', life: 2600 });
+    // }).finally(() => {
+    //   this.messageService.add({severity:'success', summary:'Profile Updated', detail:'Your profile settings have been saved.', life: 1900 });
+    // });
   }
 
   public sideBarClosed() {

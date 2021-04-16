@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, HostListener, Injector, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, Injector, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { CombatService } from '../combat.service';
 import { GrindingData, GrindingTableHeaders, CombatPageData, VisibleData } from "../classes/grindingTable";
 import { UserClass } from '../classes/userClass';
 import { ClassNamesEnum, CombatPageEnums, LocationNamesEnum, LocationNamesGroupedEnum } from '../classes/combatEnums';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'combat-page',
@@ -18,12 +19,17 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   }
 
   // General
+  @ViewChild('dt') public dt!: Table;
   public rowGroupMetadata: any;
   public stateOptions = [{label: 'Off', value: 0}, {label: 'On', value: 1}];
   public isLoaded: boolean = false;
   public classNames: Array<ClassNamesEnum> = new Array<ClassNamesEnum>();
   public combatEnums: CombatPageEnums = new CombatPageEnums();
   public groupedLocationsEnums: Array<LocationNamesGroupedEnum> = new Array<LocationNamesGroupedEnum>();
+  public maxSelectedLabelsNum: number = 0;
+  public modalState: boolean = true;
+  public closeOnEscapeState: boolean = true;
+  public dismissableMaskState: boolean = true;
 
   // Grinding Data
   public combatPageData: CombatPageData = new CombatPageData();
@@ -58,28 +64,28 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   public ngOnInit(): void {
     // Load grinding data and organise into row data.
-    this.loader.start();
-    this.combatService.getCombatPageData().subscribe( (res: CombatPageData) => {
-      this.combatPageData = res as CombatPageData;
-      this.columnHeaders = this.combatPageData.tableHeaders as Array<GrindingTableHeaders>;
-      this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
-      this.columnSelectOptions = this.columnHeaders.filter(header => header.headingId != 1);
-      this.activeClasses = this.combatPageData.activeClasses as Array<UserClass>;
-      if(this.combatPageData.hasMainClass)
-        this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
-      this.grindingRes = this.combatPageData.visibleData;
-      this.updateRowGroupMetaData(this.grindingRes);
-      this.isLoaded = true;
-      this.loader.stop();
-    },
-    (err: any) => {
-      this.loader.stop();
-    });
+    // this.loader.start();
+    // this.combatService.getCombatPageData().subscribe( (res: CombatPageData) => {
+    //   this.combatPageData = res as CombatPageData;
+    //   this.columnHeaders = this.combatPageData.tableHeaders as Array<GrindingTableHeaders>;
+    //   this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
+    //   this.columnSelectOptions = this.columnHeaders.filter(header => header.headingId != 1);
+    //   this.activeClasses = this.combatPageData.activeClasses as Array<UserClass>;
+    //   if(this.combatPageData.hasMainClass)
+    //     this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
+    //   this.grindingRes = this.combatPageData.visibleData;
+    //   this.updateRowGroupMetaData(this.grindingRes);
+    //   this.isLoaded = true;
+    //   this.loader.stop();
+    // },
+    // (err: any) => {
+    //   this.loader.stop();
+    // });
 
-    this.combatService.getCombatEnums().subscribe((res: CombatPageEnums) => {
-      this.combatEnums = res;
-      console.log(this.combatEnums.locationNamesEnum);
-    });
+    // this.combatService.getCombatEnums().subscribe((res: CombatPageEnums) => {
+    //   this.combatEnums = res;
+    //   console.log(this.combatEnums.locationNamesEnum);
+    // });
   }
 
   // Displayed data.
@@ -129,39 +135,39 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   public async saveDefaultColumns() {
     if(this.columnChanged) {
-      this.loader.startBackground();
-      await this.combatService.saveCombatHeaders(this.columnHeaders).then(res => {
-          this.combatPageData.hasDefaultCombatHeaders = true;
-          this.columnChanged = false;
-          this.columnHeaders = res as Array<GrindingTableHeaders>;
-      },
-      err => {
-        this.loader.stopBackground();
-        this.messageService.add({severity:'error', summary:'Error', detail:'Combat headers failed to update.', life: 2600 });
-      }).then(_ => {
-        this.addEntryPopupChecks();
-        this.loader.stopBackground();
-      });
+      // this.loader.startBackground();
+      // await this.combatService.saveCombatHeaders(this.columnHeaders).then(res => {
+      //     this.combatPageData.hasDefaultCombatHeaders = true;
+      //     this.columnChanged = false;
+      //     this.columnHeaders = res as Array<GrindingTableHeaders>;
+      // },
+      // err => {
+      //   this.loader.stopBackground();
+      //   this.messageService.add({severity:'error', summary:'Error', detail:'Combat headers failed to update.', life: 2600 });
+      // }).then(_ => {
+      //   this.addEntryPopupChecks();
+      //   this.loader.stopBackground();
+      // });
     }
   }
 
   public saveMainClass() {
     if(this.mainClass.className.length > 0) {
-      this.loader.startBackground();
-      this.combatService.addMainClass(this.mainClass).subscribe((res: UserClass) => {
-        this.mainClass = res;
-        this.combatPageData.hasMainClass = true;
-        this.combatPageData.activeClasses.push(this.mainClass);
-        this.addEntryPopupChecks();
-        this.loader.stopBackground();
-      },
-      (err: any) => {
-        this.loader.stopBackground();
-        if(err.message.msg == "Class Role Required.")
-          this.messageService.add({severity:'info', summary:'Class Required', detail:'Class Required.', life: 2600 });
-        else
-          this.messageService.add({severity:'error', summary:'Error', detail:'Failed to save class', life: 2600 });
-      });
+      // this.loader.startBackground();
+      // this.combatService.addMainClass(this.mainClass).subscribe((res: UserClass) => {
+      //   this.mainClass = res;
+      //   this.combatPageData.hasMainClass = true;
+      //   this.combatPageData.activeClasses.push(this.mainClass);
+      //   this.addEntryPopupChecks();
+      //   this.loader.stopBackground();
+      // },
+      // (err: any) => {
+      //   this.loader.stopBackground();
+      //   if(err.message.msg == "Class Role Required.")
+      //     this.messageService.add({severity:'info', summary:'Class Required', detail:'Class Required.', life: 2600 });
+      //   else
+      //     this.messageService.add({severity:'error', summary:'Error', detail:'Failed to save class', life: 2600 });
+      // });
     }
     else {
       this.messageService.add({severity:'error', summary:'Error', detail:'Class Required.', life: 2600 });
@@ -225,42 +231,42 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   }
 
   public async addEntry() {
-    this.loader.startBackground();
-    await this.combatService.saveGrindingEntry(this.newEntry).then(res => {
-      this.grindingRes.push(res.visibleData as VisibleData);
-      this.combatPageData.tableData.push(res.grindingTableEntry as GrindingData);
-    }).then(res => {
-      this.customSort();
-      this.updateRowGroupMetaData(this.grindingRes);
-      this.showGrindingTableEntry = false;
-      this.showAddEntryPopup = false;
-      this.newEntry = new GrindingData();
-      this.loader.stopBackground();
-    },err => {
-      if(err.error.msg == "Class Required.")
-        this.messageService.add({severity:'info', summary:'Class Required', detail:'Class Required.', life: 2600 });
-      else
-        this.messageService.add({severity:'error', summary:'Error', detail:'Failed to add entry.', life: 2600 });
-      this.loader.stopBackground()
-    }).then(res => {
-      this.combatService.getCombatEnums().subscribe((res: CombatPageEnums) => {
-        this.combatEnums = res as CombatPageEnums;
-      });
-    });
+    // this.loader.startBackground();
+    // await this.combatService.saveGrindingEntry(this.newEntry).then(res => {
+    //   this.grindingRes.push(res.visibleData as VisibleData);
+    //   this.combatPageData.tableData.push(res.grindingTableEntry as GrindingData);
+    // }).then(res => {
+    //   this.customSort();
+    //   this.updateRowGroupMetaData(this.grindingRes);
+    //   this.showGrindingTableEntry = false;
+    //   this.showAddEntryPopup = false;
+    //   this.newEntry = new GrindingData();
+    //   this.loader.stopBackground();
+    // },err => {
+    //   if(err.error.msg == "Class Required.")
+    //     this.messageService.add({severity:'info', summary:'Class Required', detail:'Class Required.', life: 2600 });
+    //   else
+    //     this.messageService.add({severity:'error', summary:'Error', detail:'Failed to add entry.', life: 2600 });
+    //   this.loader.stopBackground()
+    // }).then(res => {
+    //   this.combatService.getCombatEnums().subscribe((res: CombatPageEnums) => {
+    //     this.combatEnums = res as CombatPageEnums;
+    //   });
+    // });
   }
 
   public onVisibleColumnChange(event: { itemValue: GrindingTableHeaders; }) {
-    this.combatService.updateSingleVisibleColumn(event.itemValue as GrindingTableHeaders).subscribe((res: any) => {
-      let updatedHeader = res as GrindingTableHeaders;
-      let foundIndex = this.columnHeaders.findIndex(_ => _.headingId == updatedHeader.headingId);
-      if(foundIndex >= 0)
-        this.columnSelectOptions[foundIndex].isActive = updatedHeader.isActive;
+    // this.combatService.updateSingleVisibleColumn(event.itemValue as GrindingTableHeaders).subscribe((res: any) => {
+    //   let updatedHeader = res as GrindingTableHeaders;
+    //   let foundIndex = this.columnHeaders.findIndex(_ => _.headingId == updatedHeader.headingId);
+    //   if(foundIndex >= 0)
+    //     this.columnSelectOptions[foundIndex].isActive = updatedHeader.isActive;
 
-      this.cdRef.detectChanges();
-    },
-    (err: any) => {
-      this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
-    });
+    //   this.cdRef.detectChanges();
+    // },
+    // (err: any) => {
+    //   this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
+    // });
   }
 
   public toggleAddEntryColumns(target: string) {
@@ -321,5 +327,9 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
     //   this.loader.stopBackground();
     // });
+  }
+
+  applyFilterGlobal($event: any, stringVal: string) {
+    this.dt.filterGlobal(($event.target as HTMLInputElement).value, 'contains');
   }
 }

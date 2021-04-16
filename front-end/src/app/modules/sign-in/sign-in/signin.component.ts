@@ -21,13 +21,13 @@ export class SignInComponent extends BaseComponent implements OnInit {
       if(typeof(params['code']) != "undefined")
         this.discordAuthToken = params['code'];
       if(this.discordAuthToken.length > 0) {
-        this.authService.setToken(this.discordAuthToken);
+        // this.authService.setToken(this.discordAuthToken);
         this.globals.isSignedIn = true;
-        this.router.navigate(["home"]).then(res => { this.globals.currentUrl="home"; this.authService.setLastPage("home"); });
+        this.router.navigate(["home"]);
       }
       else {
         this.globals.isSignedIn = false;
-        this.router.navigate(["landing-page"]).then(res => { this.authService.emptyLocalStorage(); });
+        this.router.navigate(["landing-page"]);
       }
         
     });

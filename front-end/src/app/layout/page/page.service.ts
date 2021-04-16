@@ -10,13 +10,13 @@ export class PageService {
 
     }
 
-    public getThemes() {
-        return this.http.get(this.globals.config.appApiUrl + "security/themes")
-    }
+    // public getThemes() {
+    //     return this.http.get(this.globals.config.appApiUrl + "security/themes")
+    // }
 
-    public saveProfile(): Promise<any> {
-        return this.http.put(this.globals.config.appApiUrl + "security/config-settings", JSON.stringify(this.globals.config)).toPromise();
-    }
+    // public saveProfile(): Promise<any> {
+    //     return this.http.put(this.globals.config.appApiUrl + "security/config-settings", JSON.stringify(this.globals.config)).toPromise();
+    // }
 
     // public saveSettings() {
     //     return this.http.get(this.globals.config.appApiUrl + "security/grinding-data")

@@ -1,7 +1,7 @@
 <ngx-ui-loader></ngx-ui-loader>
 <div *ngIf="isLoaded">
-  <div [ngClass]="globals.config.theme.className + ' app-container'">
-    <sidenav *ngIf="globals.isSignedIn"></sidenav>
+  <div class="standard-theme app-container"><!-- [ngClass]="globals.config.theme.className + ' app-container'" -->
+    <sidenav *ngIf="!globals.isSignedIn"></sidenav>
     <div class="app-main-container">
       <div class="app-router">
         <router-outlet></router-outlet>

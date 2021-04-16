@@ -8,8 +8,8 @@ export class SidenavService {
               private globals: Globals){}
 
 
-    public getNavMenu() {
-      return this.http.get(this.globals.config.appApiUrl + "security/nav-menu");
-    }
+    // public getNavMenu() {
+    //   return this.http.get(this.globals.config.appApiUrl + "security/nav-menu");
+    // }
   
 } 

@@ -14,7 +14,7 @@ export class AppComponent {
   public discordAuthToken: string = "";
 
   constructor(private apiService: APIService,
-              private globals: Globals, 
+              public globals: Globals, 
               private authService: AuthService,
               private route: ActivatedRoute,
               private router: Router) {
@@ -24,6 +24,6 @@ export class AppComponent {
   public async loadApplication() {
     await this.apiService.loadConfigSettings();
     this.isLoaded = true;
-    this.router.navigate(["home"]);
+    this.router.navigate(["combat"]);
   }
 }

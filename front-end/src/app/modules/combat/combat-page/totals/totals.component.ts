@@ -12,7 +12,7 @@ export class TotalsComponent extends BaseComponent implements OnInit {
   public totals: CombatTotals = new CombatTotals;
   public trashTotals: TrashLootTotals = new TrashLootTotals;
   public locations: Array<Location> = new Array<Location>();
-  public selectedLocation: number;
+  public selectedLocation: number = 0;
   public locationSelected: boolean = false;
 
   constructor(private injector: Injector,
@@ -25,14 +25,14 @@ export class TotalsComponent extends BaseComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.combatService.getTotals().subscribe( res => {
-      this.totals = res as CombatTotals;
-    });
+    // this.combatService.getTotals().subscribe( res => {
+    //   this.totals = res as CombatTotals;
+    // });
 
-    this.combatService.getLocations().subscribe( res => {
-      this.locations = res as Array<Location>;
-      this.isLoaded = true;
-    });
+    // this.combatService.getLocations().subscribe( res => {
+    //   this.locations = res as Array<Location>;
+    //   this.isLoaded = true;
+    // });
   }
 
   public loadTrashLoot(e: any) {
@@ -40,11 +40,11 @@ export class TotalsComponent extends BaseComponent implements OnInit {
     if(locationToLoad === null)
       this.locationSelected = false;
     else {
-      this.combatService.getTrashLootTotals(locationToLoad.locationId).subscribe( res => {
-        this.trashTotals = res as TrashLootTotals;
-        console.log(this.trashTotals);
-        this.locationSelected = true;
-      });
+      // this.combatService.getTrashLootTotals(locationToLoad.locationId).subscribe( res => {
+      //   this.trashTotals = res as TrashLootTotals;
+      //   console.log(this.trashTotals);
+      //   this.locationSelected = true;
+      // });
     }
 
   }
