@@ -1,5 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { NavMenuViewModel } from 'src/server/shared/viewModels/securityViewModels';
 import { BaseComponent } from '../../shared/components/base.component';
 import { AuthService } from '../../shared/services/auth.service';
 import { SidenavService } from './sidenav.service';
@@ -10,7 +11,7 @@ import { SidenavService } from './sidenav.service';
 })
 export class SidenavComponent extends BaseComponent implements OnInit {
   public navToggle: boolean = false;
-  public navigationMenu: any;
+  public navigationMenu: Array<NavMenuViewModel> = new Array<NavMenuViewModel>();
   public navLoaded: boolean = false;
   
   constructor(private injector: Injector, 
@@ -22,10 +23,14 @@ export class SidenavComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.sideNavService.getNavMenu().subscribe( res => {
-    //   this.navigationMenu = res;
-    //   this.navLoaded = true;
-    // });
+    console.log("called");
+    this.sideNavService.getNavMenu().catch((err: any) => {
+      // Log Error
+    }).then(res => {
+      console.log(res);
+      this.navigationMenu = res as Array<NavMenuViewModel>;
+      this.navLoaded = true;
+    });
   }
 
   public async navToPage(navRoute: string) {

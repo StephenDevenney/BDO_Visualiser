@@ -16,12 +16,14 @@ import { DialogModule } from 'primeng/dialog';
 import { DateLongPipe } from '../pipes/date-long.pipe';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { ServerModule } from 'src/server/src/serverModule';
 
 @NgModule({
   imports: [
     CommonModule,
     PageModule,
-    NgxUiLoaderModule
+    NgxUiLoaderModule,
+    ServerModule
   ],
   declarations: [
     DateLongPipe

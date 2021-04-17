@@ -44,3 +44,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# DB Files
+bdo-visualiser.sqlite
+bdo-visualiser.sqlite-shm
+bdo-visualiser.sqlite-wal
+bdo-visualiser.sqlite-journal

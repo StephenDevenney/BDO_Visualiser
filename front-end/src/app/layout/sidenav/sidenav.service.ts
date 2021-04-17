@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Globals } from '../../shared/classes/globals';
-import { APIService } from '../../shared/services/api.service';
+import { NavMenuViewModel } from 'src/server/shared/viewModels/securityViewModels';
+import { SecurityController } from 'src/server/src/routes/securityController';
 
 @Injectable()
 export class SidenavService {
-  constructor(private http: APIService,
-              private globals: Globals){}
+  constructor(private secRoute: SecurityController){}
 
-
-    // public getNavMenu() {
-    //   return this.http.get(this.globals.config.appApiUrl + "security/nav-menu");
-    // }
+    public async getNavMenu(): Promise<Array<NavMenuViewModel>> {
+      console.log("sent");
+      return await this.secRoute.getNavMenu();
+    }
   
 } 
