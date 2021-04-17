@@ -16,7 +16,7 @@ export class Settings {
     /** Path to database file used by application */
     public static dbPath: string;
     /** Determines if database location can be set by user (false), or is fixed by application (true). */
-    public static hasFixedDbLocation = false;
+    public static hasFixedDbLocation = true;
     /**
      * Sets database location when hasFixedDbLocation === true.
      * For valid values see https://github.com/electron/electron/blob/master/docs/api/app.md#appgetpathname.

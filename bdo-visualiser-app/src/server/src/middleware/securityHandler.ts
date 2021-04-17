@@ -5,9 +5,9 @@ import { NavMenuEntity } from 'src/server/shared/entities/securityEntities';
 export class NavMenuHandler {
     public navMenu: NavMenuContext = new NavMenuContext();
 
-    public getNavMenu(): Array<NavMenuViewModel> {
+    public async getNavMenu(): Promise<Array<NavMenuViewModel>> {
         let nmvm = new Array<NavMenuViewModel>();
-        this.navMenu.getAll().then((_ : Array<NavMenuEntity>) => { 
+        await this.navMenu.getAll().then((_ : Array<NavMenuEntity>) => { 
             _.forEach(row => {
                 nmvm.push(new NavMenuViewModel(row.navName, row.navRoute, row.navTitle));
             });

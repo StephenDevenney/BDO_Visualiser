@@ -21,7 +21,7 @@ export class TheDb {
 
     public static selectOne(sql: string, values: {}): Promise<{}> {
         return new Promise<{}>((resolve, reject) => {
-            TheDb.db.get(sql, values, (err, row) => {
+            TheDb.db.get(sql, values, (err: any, row: any) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -33,7 +33,7 @@ export class TheDb {
 
     public static selectAll(sql: string, values: {}): Promise<Array<{}>> {
         return new Promise<Array<{}>>((resolve, reject) => {
-            TheDb.db.all(sql, values, (err, rows) => {
+            TheDb.db.all(sql, values, (err: any, rows: any) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -57,7 +57,7 @@ export class TheDb {
 
     public static query(sql: string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            TheDb.db.run(sql, {}, (err) => {
+            TheDb.db.run(sql, {}, (err: any) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -69,7 +69,7 @@ export class TheDb {
 
     public static beginTxn(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            TheDb.db.run('BEGIN', (err) => {
+            TheDb.db.run('BEGIN', (err: any) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -81,7 +81,7 @@ export class TheDb {
 
     public static commitTxn(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            TheDb.db.run('COMMIT', (err) => {
+            TheDb.db.run('COMMIT', (err: any) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -94,7 +94,7 @@ export class TheDb {
     public static rollbackTxn(reason: Error): Promise<void> {
         return new Promise<void>((_resolve, reject) => {
             console.log('Rollback transaction');
-            TheDb.db.run('ROLLBACK', (err) => {
+            TheDb.db.run('ROLLBACK', (err: any) => {
                 if (err) {
                     console.log(err);
                     reject(new Error('Unforeseen error occurred. Please restart the application'));
@@ -230,7 +230,7 @@ export class TheDb {
             return Promise.resolve();
         }
         return new Promise<void>((resolve, reject) => {
-            TheDb.db.close((err) => {
+            TheDb.db.close((err: any) => {
                 console.log('Closing current Db');
                 if (err) {
                     reject(err);
@@ -246,7 +246,7 @@ export class TheDb {
         return TheDb.closeDb()
             .then(() => {
                 return new Promise<void>((resolve, reject) => {
-                    const db = new Database(dbPath, (err) => {
+                    const db = new Database(dbPath, (err: any) => {
                         if (err) {
                             reject(err);
                         } else {
@@ -285,7 +285,7 @@ export class TheDb {
 
     private static change(sql: string, values: {}): Promise<IDbResult> {
         return new Promise<IDbResult>((resolve, reject) => {
-            TheDb.db.run(sql, values, function (err) {
+            TheDb.db.run(sql, values, function (err: any) {
                 if (err) {
                     reject(err);
                 } else {

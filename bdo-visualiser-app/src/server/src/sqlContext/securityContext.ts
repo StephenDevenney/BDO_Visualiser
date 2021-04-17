@@ -1,4 +1,4 @@
-import { TheDb } from './thedb';
+import { TheDb } from '../thedb';
 import { NavMenuEntity } from 'src/server/shared/entities/securityEntities';
 
 export class NavMenuContext {
