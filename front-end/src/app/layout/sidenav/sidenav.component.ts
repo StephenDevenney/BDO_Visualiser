@@ -23,13 +23,12 @@ export class SidenavComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("called");
     this.sideNavService.getNavMenu().catch((err: any) => {
       // Log Error
     }).then(res => {
-      console.log(res);
       this.navigationMenu = res as Array<NavMenuViewModel>;
       this.navLoaded = true;
+      console.log(this.navigationMenu);
     });
   }
 

@@ -7,7 +7,6 @@ export class SidenavService {
   constructor(private secRoute: SecurityController){}
 
     public async getNavMenu(): Promise<Array<NavMenuViewModel>> {
-      console.log("sent");
       return await this.secRoute.getNavMenu();
     }
   

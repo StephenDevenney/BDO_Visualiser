@@ -2,6 +2,11 @@
 const {app, BrowserWindow} = require('electron')
 const url = require("url");
 const path = require("path");
+// const SQLite = require("better-sqlite3");
+// const dbPath = app.getPath('userData') + "\\Local Storage";
+// console.log(dbPath);
+// const dbFile = path.resolve(dbPath, 'bdo-visualiser.sqlite');
+// const db = new SQLite(dbFile); 
 
 let mainWindow
 
@@ -39,3 +44,5 @@ app.on('window-all-closed', function () {
 app.on('activate', function () {
   if (mainWindow === null) createWindow()
 });
+
+// exports.DB = db;
