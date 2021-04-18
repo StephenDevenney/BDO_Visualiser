@@ -7,9 +7,9 @@ export class NavMenuHandler {
 
     public async getNavMenu(): Promise<Array<NavMenuViewModel>> {
         let nmvm = new Array<NavMenuViewModel>();
-        await this.navMenu.getAll().then((_ : Array<NavMenuEntity>) => { 
+        await this.navMenu.getAll().then((_ : Array<NavMenuEntity>) => {
             _.forEach(row => {
-                nmvm.push(new NavMenuViewModel(row.navName, row.navRoute, row.navTitle));
+                nmvm.push(new NavMenuViewModel(row.navName,  row.navTitle, row.navRoute));
             });
         });
         return nmvm;

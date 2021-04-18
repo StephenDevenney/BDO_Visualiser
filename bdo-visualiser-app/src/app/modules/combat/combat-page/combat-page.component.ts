@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, HostListener, Injector, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { CombatService } from '../combat.service';
-import { GrindingData, GrindingTableHeaders, CombatPageData, VisibleData } from "../classes/grindingTable";
-import { UserClass } from '../classes/userClass';
-import { ClassNamesEnum, CombatPageEnums, LocationNamesEnum, LocationNamesGroupedEnum } from '../classes/combatEnums';
+// import { GrindingData, GrindingTableHeaders, CombatPageData, VisibleData } from "../classes/grindingTable";
+// import { UserClass } from '../classes/userClass';
+// import { ClassNamesEnum, CombatPageEnums, LocationNamesEnum, LocationNamesGroupedEnum } from '../classes/combatEnums';
 import { Table } from 'primeng/table';
+import { ClassNamesEnumViewModel, CombatPageEnumsViewModel, LocationNamesGroupedEnumViewModel, CombatPageDataViewModel, GrindingDataViewModel, GrindingTableHeadersViewModel, UserClassViewModel, VisibleDataViewModel } from 'src/server/shared/viewModels/combatViewModels';
 
 @Component({
   selector: 'combat-page',
@@ -23,31 +24,31 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public rowGroupMetadata: any;
   public stateOptions = [{label: 'Off', value: 0}, {label: 'On', value: 1}];
   public isLoaded: boolean = false;
-  public classNames: Array<ClassNamesEnum> = new Array<ClassNamesEnum>();
-  public combatEnums: CombatPageEnums = new CombatPageEnums();
-  public groupedLocationsEnums: Array<LocationNamesGroupedEnum> = new Array<LocationNamesGroupedEnum>();
+  public classNames: Array<ClassNamesEnumViewModel> = new Array<ClassNamesEnumViewModel>();
+  public combatEnums: CombatPageEnumsViewModel = new CombatPageEnumsViewModel();
+  public groupedLocationsEnums: Array<LocationNamesGroupedEnumViewModel> = new Array<LocationNamesGroupedEnumViewModel>();
   public maxSelectedLabelsNum: number = 0;
   public modalState: boolean = true;
   public closeOnEscapeState: boolean = true;
   public dismissableMaskState: boolean = true;
 
   // Grinding Data
-  public combatPageData: CombatPageData = new CombatPageData();
-  public grindingRes: Array<VisibleData> = new Array<VisibleData>();
+  public combatPageData: CombatPageDataViewModel = new CombatPageDataViewModel();
+  public grindingRes: Array<VisibleDataViewModel> = new Array<VisibleDataViewModel>();
 
   // New Entry
-  public newGrindingResEntry: Array<GrindingData> = new Array<GrindingData>();
-  public newEntry: GrindingData = new GrindingData();
+  public newGrindingResEntry: Array<GrindingDataViewModel> = new Array<GrindingDataViewModel>();
+  public newEntry: GrindingDataViewModel = new GrindingDataViewModel();
 
   // Combat Headers
-  public columnSelectOptions: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
-  public filteredColumns: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
-  public columnHeaders: Array<GrindingTableHeaders> = new Array<GrindingTableHeaders>();
+  public columnSelectOptions: Array<GrindingTableHeadersViewModel> = new Array<GrindingTableHeadersViewModel>();
+  public filteredColumns: Array<GrindingTableHeadersViewModel> = new Array<GrindingTableHeadersViewModel>();
+  public columnHeaders: Array<GrindingTableHeadersViewModel> = new Array<GrindingTableHeadersViewModel>();
   public showAddEntryPopup: boolean = false;
 
   // User Classes
-  public mainClass: UserClass = new UserClass();
-  public activeClasses: Array<UserClass> = new Array<UserClass>();
+  public mainClass: UserClassViewModel = new UserClassViewModel();
+  public activeClasses: Array<UserClassViewModel> = new Array<UserClassViewModel>();
 
   // Popup Checks
   public entryPopupTitle: string = "Add New Entry";
@@ -59,8 +60,8 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public disableChecks: boolean = false;
 
   // Upload
-  public uploadedFiles: Array<GrindingData> = new Array<GrindingData>();
-  public csvRecords: Array<GrindingData> = new Array<GrindingData>();
+  public uploadedFiles: Array<GrindingDataViewModel> = new Array<GrindingDataViewModel>();
+  public csvRecords: Array<GrindingDataViewModel> = new Array<GrindingDataViewModel>();
 
   public ngOnInit(): void {
     // Load grinding data and organise into row data.
@@ -255,7 +256,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     // });
   }
 
-  public onVisibleColumnChange(event: { itemValue: GrindingTableHeaders; }) {
+  public onVisibleColumnChange(event: { itemValue: GrindingTableHeadersViewModel; }) {
     // this.combatService.updateSingleVisibleColumn(event.itemValue as GrindingTableHeaders).subscribe((res: any) => {
     //   let updatedHeader = res as GrindingTableHeaders;
     //   let foundIndex = this.columnHeaders.findIndex(_ => _.headingId == updatedHeader.headingId);
