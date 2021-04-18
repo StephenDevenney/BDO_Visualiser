@@ -28,7 +28,6 @@ export class SidenavComponent extends BaseComponent implements OnInit {
     }).then(res => {
       this.navigationMenu = res as Array<NavMenuViewModel>;
       this.navLoaded = true;
-      console.log(this.navigationMenu);
     });
   }
 
