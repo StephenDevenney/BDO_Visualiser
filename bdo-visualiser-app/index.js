@@ -28,14 +28,15 @@ let createWindow = () => {
     height: 800,
 		webPreferences: {
 			nodeIntegration: true,
-			enableRemoteModule: true
+			enableRemoteModule: true,
+			contextIsolation: false,
 		}
 	});
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show()
 	});
 
-	mainWindow.maximize();
+	// mainWindow.maximize();
 
 	// and load the index.html of the app.
 	mainWindow.loadURL('file://' + __dirname + '/dist/index.html');
