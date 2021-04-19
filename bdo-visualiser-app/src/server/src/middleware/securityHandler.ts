@@ -1,9 +1,9 @@
 import { NavMenuContext } from '../sqlContext/securityContext';
-import { NavMenuViewModel } from 'src/server/shared/viewModels/securityViewModels';
-import { NavMenuEntity } from 'src/server/shared/entities/securityEntities';
+import { NavMenuViewModel } from '../../shared/viewModels/securityViewModels';
+import { NavMenuEntity } from '../../shared/entities/securityEntities';
 
 export class NavMenuHandler {
-    public navMenu: NavMenuContext = new NavMenuContext();
+    private navMenu: NavMenuContext = new NavMenuContext();
 
     public async getNavMenu(): Promise<Array<NavMenuViewModel>> {
         let nmvm = new Array<NavMenuViewModel>();

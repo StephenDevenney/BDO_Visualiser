@@ -9,28 +9,6 @@ export class CombatSettingsEntity {
     public navMinimised: boolean = false;
 }
 
-// Combat
-export class CombatPageDataEntity {
-    public tableHeaders: Array<GrindingTableHeadersEntity> = new Array<GrindingTableHeadersEntity>();
-    public tableData: Array<GrindingDataEntity> = new Array<GrindingDataEntity>();
-    public visibleData: Array<VisibleDataEntity> = new Array<VisibleDataEntity>();
-    public hasDefaultCombatHeaders: boolean = false;
-    public activeClasses: Array<UserClassEntity> = new Array<UserClassEntity>();
-    public hasMainClass: boolean = false;
-
-    constructor(tableHeaders?: Array<GrindingTableHeadersEntity>, tableData?: Array<GrindingDataEntity>, visibleData?: Array<VisibleDataEntity>, hasDefaultCombatHeaders?: boolean, activeClasses?: Array<UserClassEntity>, hasMainClass?: boolean) {
-        if(tableHeaders) {
-            this.tableHeaders = tableHeaders;
-            this.tableData = tableData;
-            this.visibleData = visibleData;
-            this.hasDefaultCombatHeaders = hasDefaultCombatHeaders;
-            this.activeClasses = activeClasses;
-            this.hasMainClass = hasMainClass;
-        }
-    }
-}
-
-
 export class GrindingTableHeadersEntity {
     public headingId: number = 0;
     public field: string = "";
@@ -49,27 +27,57 @@ export class GrindingTableHeadersEntity {
 
 export class GrindingDataEntity {
     public grindingId: number = 0;
+    public locationId: number = 0;
+    public locationName: string = "";
+    public territoryId: number = 0;
+    public territoryName: string = "";
+    public recommendedAP: number = 0;
+    public recommendedLevel: string = "";
+    public timeId: number = 0;
+    public timeAmount: number = 0;
+    public userClassId: number = 0;
     public classId: number = 0;
+    public className: string = "";
+    public classDescription: string = "";
+    public classRoleId: number = 0;
+    public classRoleName: string = "";
+    public gearScoreId: number = 0;
+    public ap: number = 0;
+    public aap: number = 0;
+    public dp: number = 0;
+    public gearScore: number = 0;
+    public serverId: number = 0;
+    public serverDescription: string = "";
+    public isElviaRealm: boolean = false;
+    public combatTypeId: number = 0;
+    public combatTypeName: string = "";
     public dateCreated: string = "";
-    public grindLocation: LocationNamesEnumEntity = new LocationNamesEnumEntity();
-    public timeAmount: TimeAmountEnumEntity = new TimeAmountEnumEntity();
     public trashLootAmount: number = 0;
-    public userClass: UserClassEntity = new UserClassEntity();
-    public server: ServerNamesEnumEntity = new ServerNamesEnumEntity();
-    public combatType: CombatTypesEnumEntity = new CombatTypesEnumEntity();
     public afuaruSpawns: number = 0;
 
-    constructor(grindingId?: number, classId?: number, dateCreated?: string, grindLocation?: LocationNamesEnumEntity, timeAmount?: TimeAmountEnumEntity, trashLootAmount?: number, userClass?: UserClassEntity, server?: ServerNamesEnumEntity, combatType?: CombatTypesEnumEntity, afuaruSpawns?: number) {
+    constructor(grindingId?: number, locationId?: number, locationName?: string, territoryId?: number, territoryName?: string, timeId?: number, timeAmount?: number, userClassId?: number, classId?: number, className?: string, classRoleId?: number, classRoleName?: string, gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number, serverId?: number, serverDescription?: string, isElviaRealm?: boolean, combatTypeId?: number, combatTypeName?: string, trashLootAmount?: number, afuaruSpawns?: number) {
         if(grindingId) {
             this.grindingId = grindingId;
-            this.classId = classId;
-            this.dateCreated = dateCreated;
-            this.grindLocation = grindLocation;
+            this.locationId = locationId;
+            this.locationName = locationName;
+            this.timeId = timeId;
             this.timeAmount = timeAmount;
+            this.userClassId = userClassId;
+            this.classId = classId;
+            this.className = className;
+            this.classRoleId = classRoleId;
+            this.classRoleName = classRoleName;
+            this.gearScoreId = gearScoreId;
+            this.ap = ap;
+            this.aap = aap;
+            this.dp = dp;
+            this.gearScore = gearScore;
+            this.serverId = serverId;
+            this.serverDescription = serverDescription;
+            this.isElviaRealm = isElviaRealm;
+            this.combatTypeId = combatTypeId;
+            this.combatTypeName = combatTypeName;
             this.trashLootAmount = trashLootAmount;
-            this.userClass = userClass;
-            this.server = server;
-            this.combatType = combatType;
             this.afuaruSpawns = afuaruSpawns;
         }
     }
@@ -203,20 +211,30 @@ export class CombatPageEnumsEntity {
 // User Class & Gear
 export class UserClassEntity {
     public classId: number = 0;
+    public FK_gearScoreId: number = 0;
     public className: string = "";
     public classRole: string = "";
-    public primaryCombatTypeDescription: string = "";
-    public gear: GearEntity = new GearEntity();
-    public description: string = "";
+    public combatTypeName: string = "";
+    public dateCreated: string = "";
+    public classDescription: string = "";
+    public ap: number = 0;
+    public aap: number = 0;
+    public dp: number = 0;
+    public gearScore: number = 0;
 
-    constructor(classId?: number, className?: string, classRole?: string, primaryCombatTypeDescription?: string, gear?: GearEntity, description?: string) {
+    constructor(classId?: number, FK_gearScoreId?: number, className?: string, classRole?: string, combatTypeName?: string, dateCreated?: string, classDescription?: string, ap?: number, aap?: number, dp?: number, gearScore?: number) {
         if(classId) {
             this.classId = classId;
+            this.FK_gearScoreId = FK_gearScoreId;
             this.className = className;
             this.classRole = classRole;
-            this.primaryCombatTypeDescription = primaryCombatTypeDescription;
-            this.gear = gear;
-            this.description = description;
+            this.combatTypeName = combatTypeName;
+            this.dateCreated = dateCreated;
+            this.classDescription= classDescription;
+            this.ap = ap;
+            this.aap = aap;
+            this.dp = dp;
+            this.gearScore = gearScore;
         }     
     }
 }
@@ -227,14 +245,16 @@ export class GearEntity {
     public aap: number = 0;
     public dp: number = 0
     public gearScore: number = 0;
+    public dateCreated: string = "";
 
-    constructor(gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number) {
+    constructor(gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number, dateCreated?: string) {
         if(gearScoreId) {
             this.gearScoreId = gearScoreId;
             this.ap = ap;
             this.aap = aap;
             this.dp = dp;
             this.gearScore = gearScore;
+            this.dateCreated = dateCreated;
         }   
     }
 }

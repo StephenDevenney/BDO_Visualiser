@@ -1,6 +1,7 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SecurityController } from './routes/securityController';
+import { CombatController } from './routes/combatController';
 
 @NgModule({
     imports: [
@@ -13,7 +14,8 @@ import { SecurityController } from './routes/securityController';
       
     ],
     providers: [
-      SecurityController
+      SecurityController,
+      CombatController
     ]
   })
   export class ServerModule { 

@@ -1,20 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Globals } from '../../shared/classes/globals';
-import { APIService } from '../../shared/services/api.service';
-import { UserClass } from './classes/userClass';
-import { GrindingData, GrindingTableHeaders } from './classes/grindingTable';
+import { CombatPageDataViewModel } from '../../../server/shared/viewModels/combatViewModels';
+import { CombatController } from '../../../server/src/routes/combatController';
 
 @Injectable()
 export class CombatService {
+    constructor(private combatRoute: CombatController){}
 
-    constructor(private http: APIService,
-                private globals: Globals){
-
+    public async getCombatPageData(): Promise<CombatPageDataViewModel> {
+        return await this.combatRoute.getCombatData();
     }
-
-    // public getCombatPageData() {
-    //     // return this.http.get(this.globals.config.appApiUrl + "combat/grinding-data");
-    // }
 
     // public getDefaultColumns() {
     //     // return this.http.get(this.globals.config.appApiUrl + "combat/column-defaults");

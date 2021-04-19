@@ -10,20 +10,22 @@ import { BuffsComponent } from './combat-page/buffs/buffs.component';
 import { LootComponent } from './combat-page/loot/loot.component';
 import { GraphsComponent } from './combat-page/graphs/graphs.component';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { ServerModule } from 'src/server/src/serverModule';
 
 @NgModule({
+  imports: [
+    CommonModule,
+    SharedModule,
+    TabViewModule,
+    InputSwitchModule,
+    ServerModule
+  ],
   declarations: [
     CombatPageComponent,
     TotalsComponent,
     BuffsComponent,
     LootComponent,
     GraphsComponent
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    TabViewModule,
-    InputSwitchModule
   ],
   exports: [
     RouterModule

@@ -1,9 +1,9 @@
 
 import { NavMenuHandler } from '../middleware/securityHandler';
-import { NavMenuViewModel } from 'src/server/shared/viewModels/securityViewModels';
+import { NavMenuViewModel } from '../../shared/viewModels/securityViewModels';
 
 export class SecurityController {
-    public navMenu: NavMenuHandler = new NavMenuHandler();
+    private navMenu: NavMenuHandler = new NavMenuHandler();
     constructor(){}
 
     public async getNavMenu(): Promise<Array<NavMenuViewModel>> {

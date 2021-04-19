@@ -1,9 +1,6 @@
 import { ChangeDetectorRef, Component, HostListener, Injector, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { CombatService } from '../combat.service';
-// import { GrindingData, GrindingTableHeaders, CombatPageData, VisibleData } from "../classes/grindingTable";
-// import { UserClass } from '../classes/userClass';
-// import { ClassNamesEnum, CombatPageEnums, LocationNamesEnum, LocationNamesGroupedEnum } from '../classes/combatEnums';
 import { Table } from 'primeng/table';
 import { ClassNamesEnumViewModel, CombatPageEnumsViewModel, LocationNamesGroupedEnumViewModel, CombatPageDataViewModel, GrindingDataViewModel, GrindingTableHeadersViewModel, UserClassViewModel, VisibleDataViewModel } from 'src/server/shared/viewModels/combatViewModels';
 
@@ -65,23 +62,26 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
 
   public ngOnInit(): void {
     // Load grinding data and organise into row data.
-    // this.loader.start();
-    // this.combatService.getCombatPageData().subscribe( (res: CombatPageData) => {
-    //   this.combatPageData = res as CombatPageData;
-    //   this.columnHeaders = this.combatPageData.tableHeaders as Array<GrindingTableHeaders>;
-    //   this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
-    //   this.columnSelectOptions = this.columnHeaders.filter(header => header.headingId != 1);
-    //   this.activeClasses = this.combatPageData.activeClasses as Array<UserClass>;
-    //   if(this.combatPageData.hasMainClass)
-    //     this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
-    //   this.grindingRes = this.combatPageData.visibleData;
-    //   this.updateRowGroupMetaData(this.grindingRes);
-    //   this.isLoaded = true;
-    //   this.loader.stop();
-    // },
-    // (err: any) => {
-    //   this.loader.stop();
-    // });
+    this.loader.start();
+    this.combatService.getCombatPageData().catch((err: any) => {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Error Loading Data.', life: 2600 });
+      this.loader.stop();
+      // Log Error
+    }).then((res: CombatPageDataViewModel) => {
+      console.log(res);
+      this.combatPageData = res;
+      this.columnHeaders = this.combatPageData.tableHeaders as Array<GrindingTableHeadersViewModel>;
+      this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
+      this.columnSelectOptions = this.columnHeaders.filter(header => header.headingId != 1);
+      this.activeClasses = this.combatPageData.activeClasses as Array<UserClassViewModel>;
+      if(this.combatPageData.hasMainClass)
+        this.mainClass = this.activeClasses.filter(uc => uc.classRole == "Main")[0];
+      this.grindingRes = this.combatPageData.visibleData;
+      this.updateRowGroupMetaData(this.grindingRes);
+      this.messageService.add({severity:'success', summary:'success', detail:'Data Loaded.', life: 2600 });
+      this.loader.stop();
+    });
+
 
     // this.combatService.getCombatEnums().subscribe((res: CombatPageEnums) => {
     //   this.combatEnums = res;

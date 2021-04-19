@@ -1,12 +1,15 @@
-
-import { NavMenuHandler } from '../middleware/securityHandler';
-import { NavMenuViewModel } from 'src/server/shared/viewModels/securityViewModels';
+import { CombatPageDataViewModel } from '../../shared/viewModels/combatViewModels';
+import { CombatPageDataHandler } from '../middleware/combathandler';
 
 export class CombatController {
-    // public navMenu: CombatController = new CombatController();
+    private combatPageDataHandler: CombatPageDataHandler = new CombatPageDataHandler();
     constructor(){}
 
-    // public async getNavMenu(): Promise<Array<NavMenuViewModel>> {
-    //     return await this.navMenu.getNavMenu();
+    public async getCombatData(): Promise<CombatPageDataViewModel> {
+        return await this.combatPageDataHandler.getCombatData();
+    } 
+
+    // public async getCombatEnums(): Promise<CombatPageDataViewModel> {
+    //     return await this.combatPageDataHandler.getCombatEnums();
     // } 
 } 

@@ -1,23 +1,11 @@
 
-// Combat
-export class CombatSettingsViewModel {
-    public settingsId: number = 0;
-    public FK_combatSettingsId: number = 0;
-    public FK_currentGearScoreId: number = 0;
-    public FK_redBattleFieldId: number = 0;
-    public FK_appleSecsId: number = 0;
-    public FK_themeId: number = 0;
-    public hasDefaultCombatHeaders: boolean = false;
-    public navMinimised: boolean = false;
-}
-
 export class CombatPageDataViewModel {
     public tableHeaders: Array<GrindingTableHeadersViewModel> = new Array<GrindingTableHeadersViewModel>();
     public tableData: Array<GrindingDataViewModel> = new Array<GrindingDataViewModel>();
     public visibleData: Array<VisibleDataViewModel> = new Array<VisibleDataViewModel>();
     public hasDefaultCombatHeaders: boolean = false;
     public activeClasses: Array<UserClassViewModel> = new Array<UserClassViewModel>();
-    public hasMainClass: boolean = false;
+    public hasMainClass: boolean = true;
 
     constructor(tableHeaders?: Array<GrindingTableHeadersViewModel>, tableData?: Array<GrindingDataViewModel>, visibleData?: Array<VisibleDataViewModel>, hasDefaultCombatHeaders?: boolean, activeClasses?: Array<UserClassViewModel>, hasMainClass?: boolean) {
         if(tableHeaders) {
@@ -119,9 +107,9 @@ export class LocationNamesEnumViewModel {
     public locationName: string = "-";
     public territoryName: string = "-";
     public recommendedLevel: string = "";
-    public recommendedAP: string = "";
+    public recommendedAP: number = 0;
 
-    constructor(locationId?: number, territoryId?: number, locationName?: string, territoryName?: string, recommendedLevel?: string, recommendedAP?: string) {
+    constructor(locationId?: number, territoryId?: number, locationName?: string, territoryName?: string, recommendedLevel?: string, recommendedAP?: number) {
         if(locationId) {
             this.locationId = locationId;
             this.territoryId = territoryId;
@@ -208,30 +196,28 @@ export class UserClassViewModel {
     public classRole: string = "";
     public primaryCombatTypeDescription: string = "";
     public gear: GearViewModel = new GearViewModel();
-    public description: string = "";
+    public classDescription: string = "";
 
-    constructor(classId?: number, className?: string, classRole?: string, primaryCombatTypeDescription?: string, gear?: GearViewModel, description?: string) {
+    constructor(classId?: number, className?: string, classRole?: string, primaryCombatTypeDescription?: string, gear?: GearViewModel, classDescription?: string) {
         if(classId) {
             this.classId = classId;
             this.className = className;
             this.classRole = classRole;
             this.primaryCombatTypeDescription = primaryCombatTypeDescription;
             this.gear = gear;
-            this.description = description;
+            this.classDescription = classDescription;
         }     
     }
 }
 
 export class GearViewModel {
-    public gearScoreId: number = 0;
     public ap: number = 0;
     public aap: number = 0;
     public dp: number = 0
     public gearScore: number = 0;
 
-    constructor(gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number) {
-        if(gearScoreId) {
-            this.gearScoreId = gearScoreId;
+    constructor(ap?: number, aap?: number, dp?: number, gearScore?: number) {
+        if(ap) {
             this.ap = ap;
             this.aap = aap;
             this.dp = dp;
