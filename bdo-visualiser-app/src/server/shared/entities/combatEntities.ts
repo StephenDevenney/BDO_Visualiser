@@ -60,6 +60,8 @@ export class GrindingDataEntity {
             this.grindingId = grindingId;
             this.locationId = locationId;
             this.locationName = locationName;
+            this.territoryId = territoryId;
+            this.territoryName = territoryName;
             this.timeId = timeId;
             this.timeAmount = timeAmount;
             this.userClassId = userClassId;
@@ -120,6 +122,18 @@ export class ClassNamesEnumEntity {
     }
 }
 
+export class TerritoryEnumEntity {
+    public territoryId: number = 1;
+    public territoryName: string = "-";
+
+    constructor(territoryId?: number, territoryName?: string) {
+        if(territoryId) {
+            this.territoryId = territoryId;
+            this.territoryName = territoryName;
+        }
+    }
+}
+
 export class LocationNamesEnumEntity {
     public locationId: number = 1;
     public territoryId: number = 1;
@@ -154,13 +168,13 @@ export class LocationNamesGroupedEnumEntity {
 
 export class ServerNamesEnumEntity {
     public serverId: number = 1;
-    public serverDescription: string = "-";
+    public serverName: string = "-";
     public isElviaRealm: boolean = false;
 
-    constructor(serverId?: number, serverDescription?: string, isElviaRealm?: boolean) {
+    constructor(serverId?: number, serverName?: string, isElviaRealm?: boolean) {
         if(serverId) {
             this.serverId = serverId;
-            this.serverDescription = serverDescription;
+            this.serverName = serverName;
             this.isElviaRealm = isElviaRealm;
         }  
     }
