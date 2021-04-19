@@ -43,7 +43,7 @@ export class SecuritySettingsContext {
   public themeName: string = "";
   public themeClassName: string = "";
 
-  // GET Security Settings
+    // GET Security Settings
   public get(): Promise<SecuritySettingsEntity> {
     const sql = `SELECT security_user.userId, security_user.userName, security_user.FK_roleId AS userRoleId, security_settings.navMinimised, enum_appIdleSecs.idleTime AS appIdleSecs, enum_theme.themeId, enum_theme.themeName, enum_theme.themeClassName FROM security_settings INNER JOIN security_user ON security_user.userId = security_settings.FK_userId INNER JOIN enum_theme ON enum_theme.themeId = security_settings.FK_themeId INNER JOIN enum_appIdleSecs ON enum_appIdleSecs.appIdleSecsId = security_settings.FK_appIdleSecsId WHERE security_settings.settingsId = 1`;
     const values = {};
@@ -51,22 +51,34 @@ export class SecuritySettingsContext {
     return TheDb.selectOne(sql, values)
         .then((row: any) => {
             return new SecuritySettingsContext().fromRow(row);
-        });
-    }
+    });
+  }
 
-    private fromRow(row: SecuritySettingsEntity): SecuritySettingsEntity {
-      this.userId = row['userId'];
-      this.userName = row['userName'];
-      this.userRoleId = row['userRoleId'];
-      if(!!row['navMinimised'])
-        this.navMinimised = true;
-      this.idleTime = row['idleTime'];
-      this.themeId = row['themeId'];
-      this.themeName = row['themeName'];
-      this.themeClassName = row['themeClassName'];
+    // PUT Security Settings
+  public update(themeId: number, navMinimised: boolean): Promise<void> {
+    // let navMinBool = 0;
+    const sql = `UPDATE security_settings SET (FK_appIdleSecsId, FK_themeId, navMinimised) = (1, $themeId, $navMinimised) WHERE security_settings.settingsId = 1`;
+    const values = { $themeId: themeId, $navMinimised: navMinimised};
 
-      return this;
-    }
+    return TheDb.update(sql, values)
+            .then((result) => {
+
+            });
+  }
+
+  private fromRow(row: SecuritySettingsEntity): SecuritySettingsEntity {
+    this.userId = row['userId'];
+    this.userName = row['userName'];
+    this.userRoleId = row['userRoleId'];
+    if(!!row['navMinimised'])
+      this.navMinimised = true;
+    this.idleTime = row['idleTime'];
+    this.themeId = row['themeId'];
+    this.themeName = row['themeName'];
+    this.themeClassName = row['themeClassName'];
+
+    return this;
+  }
 }
 
 export class ThemesContext {

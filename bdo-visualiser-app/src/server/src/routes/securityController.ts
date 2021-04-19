@@ -1,6 +1,6 @@
 
 import { NavMenuHandler, SecuritySettingsHandler, ThemesHandler } from '../middleware/securityHandler';
-import { NavMenuViewModel, SecuritySettingsViewModel, ThemeViewModel } from '../../shared/viewModels/securityViewModels';
+import { ConfigViewModel, NavMenuViewModel, SecuritySettingsViewModel, ThemeViewModel } from '../../shared/viewModels/securityViewModels';
 
 export class SecurityController {
     private navMenu: NavMenuHandler = new NavMenuHandler();
@@ -8,6 +8,7 @@ export class SecurityController {
     private themesHandler: ThemesHandler = new ThemesHandler();
     constructor(){}
 
+        // GET
     public async getNavMenu(): Promise<Array<NavMenuViewModel>> {
         return await this.navMenu.getNavMenu();
     } 
@@ -18,5 +19,10 @@ export class SecurityController {
 
     public async getThemes(): Promise<Array<ThemeViewModel>> {
         return await this.themesHandler.getThemes();
+    } 
+
+        // PUT
+    public async saveConfigSettings(config: ConfigViewModel): Promise<void> {
+        return await this.securitySettingsHandler.saveConfigSettings(config);
     } 
 } 
