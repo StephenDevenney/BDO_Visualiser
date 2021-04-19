@@ -1,9 +1,9 @@
-import { CombatSettingsEntity, GrindingDataEntity, GrindingTableHeadersEntity, UserClassEntity } from '../../shared/entities/combatEntities';
-import { ActiveClassesContext, CombatSettingsContext, CombatTableHeadersContext, GrindingDataContext } from '../sqlContext/combatContext';
-import { CombatPageDataViewModel, CombatPageEnumsViewModel, CombatTypesEnumViewModel, GearViewModel, GrindingDataViewModel, GrindingTableHeadersViewModel, LocationNamesEnumViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, UserClassViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
+import { ClassNamesEnumEntity, CombatSettingsEntity, CombatTypesEnumEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TimeAmountEnumEntity, UserClassEntity } from '../../shared/entities/combatEntities';
+import { ActiveClassesContext, ClassNamesEnumContext, CombatSettingsContext, CombatTableHeadersContext, CombatTypesEnumContext, GrindingDataContext, LocationsEnumContext, RecentLocationsContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
+import { ClassNamesEnumViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatTypesEnumViewModel, GearViewModel, GrindingDataViewModel, GrindingTableHeadersViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, UserClassViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 
 export class CombatPageDataHandler {
-    // SQL Context
+        // SQL Context
     private combatSettingsContext: CombatSettingsContext = new CombatSettingsContext();
     private combatTableHeadersContext: CombatTableHeadersContext = new CombatTableHeadersContext();
     private activeClassesContext: ActiveClassesContext = new ActiveClassesContext();
@@ -43,14 +43,83 @@ export class CombatPageDataHandler {
         return new CombatPageDataViewModel(gthVM, gdVM, vdVM, hasDefaultCombatHeaders, acVM, hasMainClass);
     }
 
-    public async getCombatEnums(): Promise<CombatPageEnumsViewModel> {
-            // Get Combat Enums
-        // let classNames
-        // let locationNames
-        // let serverNames
-        // let combatTypes
-        // let combatTypes
+    
+}
 
-        return new CombatPageEnumsViewModel();
-    }
+export class CombatPageEnumHandler {
+        // SQL Context
+    private recentLocationsContext: RecentLocationsContext = new RecentLocationsContext();
+    private classNamesEnumContext: ClassNamesEnumContext = new ClassNamesEnumContext();
+    private territoryEnumContext: TerritoryEnumContext = new TerritoryEnumContext();
+    private locationsEnumContext: LocationsEnumContext = new LocationsEnumContext();
+    private serverEnumContext: ServerEnumContext = new ServerEnumContext();
+    private combatTypesEnumContext: CombatTypesEnumContext = new CombatTypesEnumContext();
+    private timeEnumContext: TimeEnumContext = new TimeEnumContext();
+
+    public async getCombatEnums(): Promise<CombatPageEnumsViewModel> {
+        // Get Class Enums
+    let classNamesEnum = new Array<ClassNamesEnumViewModel>();
+    await this.classNamesEnumContext.getAll().then((_: Array<ClassNamesEnumEntity>) => {
+        _.forEach(row => {
+            classNamesEnum.push(new ClassNamesEnumViewModel(row.classId, row.className));
+        });
+    });
+
+    let locationNamesEnum = new Array<LocationNamesGroupedEnumViewModel>();
+        // Get Top 3 Most Recent Location Entires First
+    await this.recentLocationsContext.getAll().then((_: Array<LocationNamesEnumEntity>) => {
+        if(_.length > 0) {
+            _.forEach(row => {
+                let description = row.locationName;
+                if(row.recommendedAP.length > 0)
+                    description += " (" + row.recommendedAP + " AP)";
+                else
+                    description += " (Lv. " + row.recommendedLevel + ")";
+
+                locationNamesEnum.push(new LocationNamesGroupedEnumViewModel(description, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, parseInt(row.recommendedAP))));
+            });
+        } 
+    });
+
+        // Get All Location Enums
+    await this.locationsEnumContext.getAll().then((_: Array<LocationNamesEnumEntity>) => {
+        _.forEach(row => {
+            let description = row.locationName;
+            let ap: number = 0;
+            if(row.recommendedAP.length > 0){
+                description += " (" + row.recommendedAP + " AP)";
+                ap = parseInt(row.recommendedAP);
+            }  
+            else
+                description += " (Lv. " + row.recommendedLevel + ")";
+
+            locationNamesEnum.push(new LocationNamesGroupedEnumViewModel(description, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, ap)));
+        });
+    });
+
+        // Get Server Enums
+    let serverNamesEnum = new Array<ServerNamesEnumViewModel>();
+    await this.serverEnumContext.getAll().then((_: Array<ServerNamesEnumEntity>) => {
+        _.forEach(row => {
+            serverNamesEnum.push(new ServerNamesEnumViewModel(row.serverId, row.serverName, row.isElviaRealm));
+        });
+    });
+        // Get Combat Type Enums
+    let combatTypesEnum = new Array<CombatTypesEnumViewModel>();
+    await this.combatTypesEnumContext.getAll().then((_: Array<CombatTypesEnumEntity>) => {
+        _.forEach(row => {
+            combatTypesEnum.push(new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName));
+        });
+    });
+        // Get Time Enums
+    let timeAmountEnum = new Array<TimeAmountEnumViewModel>();
+    await this.timeEnumContext.getAll().then((_: Array<TimeAmountEnumEntity>) => {
+        _.forEach(row => {
+            timeAmountEnum.push(new TimeAmountEnumViewModel(row.timeId, row.timeAmount));
+        });
+    });
+
+    return new CombatPageEnumsViewModel(classNamesEnum, locationNamesEnum, serverNamesEnum, combatTypesEnum, timeAmountEnum);
+}
+
 }

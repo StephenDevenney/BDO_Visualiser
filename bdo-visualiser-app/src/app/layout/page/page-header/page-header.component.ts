@@ -3,6 +3,7 @@ import { Theme } from '../../../shared/classes/config';
 import { HeaderType } from '../enums/header-type';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { PageService } from '../page.service';
+import { ThemeViewModel } from 'src/server/shared/viewModels/securityViewModels';
 
 @Component({
   selector: 'page-header',
@@ -28,10 +29,13 @@ export class PageHeaderComponent extends BaseComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    // this.pageService.getThemes().subscribe( (res: Array<Theme>) => {
-    //   this.themes = res;
-    //   this.isLoaded = true;
-    // });
+    this.pageService.getThemes().catch((err: any) => {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Failed to get themes.', life: 2600 });
+    }).then((res: Array<ThemeViewModel>) => {
+      console.log(res);
+      this.themes = res;
+      this.isLoaded = true;
+    });
   }
 
   public toggleOptionsMenu() {
@@ -68,11 +72,5 @@ export class PageHeaderComponent extends BaseComponent implements OnInit {
   public closeDropdown() {
     if(this.showOptions)
       this.showOptions = false;
-  }
-  
-  public deleteToken() {
-    localStorage.removeItem("auth_token");
-    localStorage.removeItem("last_page");
-    window.location.reload();
   }
 }

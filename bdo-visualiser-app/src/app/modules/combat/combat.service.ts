@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CombatPageDataViewModel } from '../../../server/shared/viewModels/combatViewModels';
+import { CombatPageDataViewModel, CombatPageEnumsViewModel } from '../../../server/shared/viewModels/combatViewModels';
 import { CombatController } from '../../../server/src/routes/combatController';
 
 @Injectable()
@@ -8,6 +8,10 @@ export class CombatService {
 
     public async getCombatPageData(): Promise<CombatPageDataViewModel> {
         return await this.combatRoute.getCombatData();
+    }
+
+    public async getCombatEnums(): Promise<CombatPageEnumsViewModel> {
+        return await this.combatRoute.getCombatEnums();
     }
 
     // public getDefaultColumns() {

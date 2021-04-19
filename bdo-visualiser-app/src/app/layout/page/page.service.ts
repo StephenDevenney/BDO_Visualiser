@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Globals } from '../../shared/classes/globals';
-import { APIService } from '../../shared/services/api.service';
+import { ThemeViewModel } from '../../../server/shared/viewModels/securityViewModels';
+import { SecurityController } from '../../../server/src/routes/securityController';
 
 @Injectable()
 export class PageService {
 
-    constructor(private http: APIService,
-                private globals: Globals){
+    constructor(private secRoute: SecurityController){}
 
+    public async getThemes(): Promise<Array<ThemeViewModel>> {
+        return await this.secRoute.getThemes();
     }
-
-    // public getThemes() {
-    //     return this.http.get(this.globals.config.appApiUrl + "security/themes")
-    // }
 
     // public saveProfile(): Promise<any> {
     //     return this.http.put(this.globals.config.appApiUrl + "security/config-settings", JSON.stringify(this.globals.config)).toPromise();

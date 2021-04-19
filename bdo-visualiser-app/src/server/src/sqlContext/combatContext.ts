@@ -1,6 +1,7 @@
 import { TheDb } from '../thedb';
 import { ClassNamesEnumEntity, CombatSettingsEntity, CombatTypesEnumEntity, GearEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity, UserClassEntity } from '../../shared/entities/combatEntities';
 
+// SQL Context - Data
 export class CombatSettingsContext {
   public settingsId: number = 0;
   public FK_combatSettingsId: number = 0;
@@ -35,12 +36,9 @@ export class CombatSettingsContext {
     this.FK_themeId = row['FK_themeId'];
     if(!!row['hasDefaultCombatHeaders'])
       this.hasDefaultCombatHeaders = true;
-    else
-      this.hasDefaultCombatHeaders = false;
     if(!!row['navMinimised'])
       this.navMinimised = true;
-    else
-      this.navMinimised = false;
+
     return this;
   }
 }
@@ -73,8 +71,6 @@ export class CombatTableHeadersContext {
       this.header = row['header'];
       if(!!row['isActive'])
         this.isActive = true;
-      else
-        this.isActive = false;
 
       return this;
     }
@@ -239,7 +235,43 @@ export class GrindingDataContext {
     }
 }
 
-// Enums
+export class RecentLocationsContext {
+  public locationId: number = 1;
+  public territoryId: number = 1;
+  public locationName: string = "-";
+  public territoryName: string = "-";
+  public recommendedLevel: string = "";
+  public recommendedAP: string = "";
+
+  // GET Top 3 Most Recent Grinded Locations
+  public getAll(): Promise<Array<LocationNamesEnumEntity>> {
+    const sql = `SELECT enum_locations.locationId, enum_locations.FK_territoryId, enum_locations.locationName, enum_territory.territoryName, enum_locations.recommendedLevel, enum_locations.recommendedAP FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE FK_combatSettingsId = 1 ORDER BY grindingId DESC LIMIT 3`;
+    const values = {};
+
+    return TheDb.selectAll(sql, values)
+        .then((rows: any) => {
+            const nm: Array<LocationNamesEnumEntity> = new Array<LocationNamesEnumEntity>();
+            for (const row of rows) {
+                const item = new RecentLocationsContext().fromRow(row);
+                nm.push(item);
+            }
+            return nm;
+        });
+    }
+
+    private fromRow(row: LocationNamesEnumEntity): LocationNamesEnumEntity {
+      this.locationId = row['locationId'];
+      this.territoryId = row['territoryId'];
+      this.locationName = row['locationName'];
+      this.territoryName = row['territoryName'];
+      this.recommendedLevel = row['recommendedLevel'];
+      this.recommendedAP = row['recommendedAP'];
+    
+      return this;
+    }
+}
+
+// SQL Context - Enums
 export class ClassNamesEnumContext {
   public classId: number = 0;
   public className: string = "";
@@ -291,42 +323,6 @@ export class TerritoryEnumContext {
     private fromRow(row: TerritoryEnumEntity): TerritoryEnumEntity {
       this.territoryId = row['territoryId'];
       this.territoryName = row['territoryName'];
-    
-      return this;
-    }
-}
-
-export class RecentLocationsContext {
-  public locationId: number = 1;
-  public territoryId: number = 1;
-  public locationName: string = "-";
-  public territoryName: string = "-";
-  public recommendedLevel: string = "";
-  public recommendedAP: string = "";
-
-  // GET Top 3 Most Recent Grinded Locations
-  public getAll(): Promise<Array<LocationNamesEnumEntity>> {
-    const sql = `SELECT enum_locations.locationId, enum_locations.FK_territoryId, enum_locations.locationName, enum_territory.territoryName, enum_locations.recommendedLevel, enum_locations.recommendedAP FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE FK_combatSettingsId = 1 ORDER BY grindingId DESC LIMIT 3`;
-    const values = {};
-
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<LocationNamesEnumEntity> = new Array<LocationNamesEnumEntity>();
-            for (const row of rows) {
-                const item = new RecentLocationsContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
-    }
-
-    private fromRow(row: LocationNamesEnumEntity): LocationNamesEnumEntity {
-      this.locationId = row['locationId'];
-      this.territoryId = row['territoryId'];
-      this.locationName = row['locationName'];
-      this.territoryName = row['territoryName'];
-      this.recommendedLevel = row['recommendedLevel'];
-      this.recommendedAP = row['recommendedAP'];
     
       return this;
     }
@@ -394,8 +390,6 @@ export class ServerEnumContext {
       this.serverName = row['serverName'];
       if(!!row['isElviaRealm'])
         this.isElviaRealm = true;
-      else
-        this.isElviaRealm = false;
     
       return this;
     }

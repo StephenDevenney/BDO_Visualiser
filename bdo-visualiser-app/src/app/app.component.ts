@@ -34,6 +34,8 @@ export class AppComponent {
         } else {
             this.createDb();
         }
+
+        console.log(remote.app.getPath('userData'));
         
   }
 
@@ -89,7 +91,7 @@ export class AppComponent {
   }
 
   public async loadApplication() {
-    await this.apiService.loadConfigSettings();
+    await this.apiService.loadSecuritySettings();
     this.isLoaded = true;
     this.router.navigate(["combat"]);
   }

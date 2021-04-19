@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Config } from './config';
-import { User, PageUserRoleAccess } from './user';
+import { AppUserViewModel, ConfigViewModel } from '../../../server/shared/viewModels/securityViewModels';
 
 @Injectable()
 export class Globals {
-    public user: User = new User;
+    public user: AppUserViewModel = new AppUserViewModel;
     public isSignedIn: boolean = false;
     public seriousErrorMessage: string = "";
     public previousUrl: string = "";
     public currentUrl: string = "";
-    public pageUserRoleAccess: Array<PageUserRoleAccess> = [];
-    public config: Config = new Config;
+    public config: ConfigViewModel = new ConfigViewModel;
     
 }

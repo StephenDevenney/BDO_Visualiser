@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class User {
     public userId: number = 0;
     public userName: string = "";
-    public roleId: string = "";
+    public userRoleId: number = 0;
 }
 
 @Injectable()

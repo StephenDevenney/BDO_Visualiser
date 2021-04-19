@@ -123,9 +123,9 @@ export class LocationNamesEnumViewModel {
 
 export class LocationNamesGroupedEnumViewModel {
     public label: string = "-";
-    public items: Array<LocationNamesEnumViewModel> = new Array<LocationNamesEnumViewModel>();
+    public items: LocationNamesEnumViewModel = new LocationNamesEnumViewModel();
 
-    constructor(label?: string, items?: Array<LocationNamesEnumViewModel>) {
+    constructor(label?: string, items?: LocationNamesEnumViewModel) {
         if(label) {
             this.label = label;
             this.items = items;

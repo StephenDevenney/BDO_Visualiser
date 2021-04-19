@@ -24,10 +24,10 @@ export class SidenavComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.sideNavService.getNavMenu().catch((err: any) => {
+      console.log(err);
       // Log Error
     }).then((res: Array<NavMenuViewModel>) => {
       this.navigationMenu = res;
-      console.log(this.navigationMenu);
       this.navLoaded = true;
     });
   }
@@ -37,7 +37,6 @@ export class SidenavComponent extends BaseComponent implements OnInit {
       await this.router.navigate([navRoute]).then(res => {
         this.titleService.setTitle(this.globals.config.hubName + " - " + navRoute);
         this.globals.currentUrl=navRoute;
-        // this.authService.setLastPage(navRoute);
       });
   }
 
