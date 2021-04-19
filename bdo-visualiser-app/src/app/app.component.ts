@@ -17,7 +17,6 @@ import { Menu, MenuItemConstructorOptions, OpenDialogOptions, remote, OpenDialog
 export class AppComponent {
   public title = 'BDO Visualiser';
   public isLoaded = false;
-  public discordAuthToken: string = "";
 
   constructor(private apiService: APIService,
               public globals: Globals, 

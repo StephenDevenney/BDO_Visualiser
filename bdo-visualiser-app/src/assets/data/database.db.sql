@@ -200,7 +200,7 @@ DROP TABLE IF EXISTS `enum_theme`;
 CREATE TABLE IF NOT EXISTS enum_theme (
 	themeId	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	themeName TEXT,
-	className TEXT
+	themeClassName TEXT
 );
 COMMIT;
 
@@ -380,8 +380,8 @@ INSERT INTO enum_class (className) VALUES ('Wizard');
 INSERT INTO enum_class (className) VALUES ('Warrior');
 
 -- enum_theme
-INSERT INTO enum_theme (themeName, className) VALUES ('Default', 'standard-theme');
-INSERT INTO enum_theme (themeName, className) VALUES ('Dark', 'dark-theme');
+INSERT INTO enum_theme (themeName, themeClassName) VALUES ('Default', 'standard-theme');
+INSERT INTO enum_theme (themeName, themeClassName) VALUES ('Dark', 'dark-theme');
 
 -- enum_server
 INSERT INTO enum_server (serverName, isElviaRealm) VALUES ('-', 0);

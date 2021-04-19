@@ -24,9 +24,10 @@ export class SecuritySettingsHandler {
     public async getSecuritySettings(): Promise<SecuritySettingsViewModel> { 
         let securitySettings: SecuritySettingsViewModel;
         await this.securitySettingsContext.get().then((_ : SecuritySettingsEntity) => {
+            console.log(_);
             let user = new AppUserViewModel(_.userId, _.userName, _.userRoleId);
             let theme = new ThemeViewModel(_.themeId, _.themeName, _.themeClassName);
-            let config = new ConfigViewModel(theme, _.navMinimised, _.appIdleSecs);
+            let config = new ConfigViewModel(theme, _.navMinimised, _.idleTime);
             securitySettings = new SecuritySettingsViewModel(user, true, config);
         });
 

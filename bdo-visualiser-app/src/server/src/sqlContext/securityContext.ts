@@ -38,14 +38,14 @@ export class SecuritySettingsContext {
   public userName: string = "";
   public userRoleId: number = 0;
   public navMinimised: boolean = false;
-  public appIdleSecs: number = 0;
+  public idleTime: number = 0;
   public themeId: number = 0;
   public themeName: string = "";
   public themeClassName: string = "";
 
-  // GET NavMenu
+  // GET Security Settings
   public get(): Promise<SecuritySettingsEntity> {
-    const sql = `SELECT security_user.userId, security_user.userName, security_user.FK_roleId AS userRoleId, security_settings.navMinimised, enum_appIdleSecs.idleTime AS appIdleSecs, enum_theme.themeId, enum_theme.themeName, enum_theme.className AS themeClassName FROM security_settings INNER JOIN security_user ON security_user.userId = security_settings.FK_userId INNER JOIN enum_theme ON enum_theme.themeId = security_settings.FK_themeId INNER JOIN enum_appIdleSecs ON enum_appIdleSecs.appIdleSecsId = security_settings.FK_appIdleSecsId WHERE security_settings.settingsId = 1`;
+    const sql = `SELECT security_user.userId, security_user.userName, security_user.FK_roleId AS userRoleId, security_settings.navMinimised, enum_appIdleSecs.idleTime AS appIdleSecs, enum_theme.themeId, enum_theme.themeName, enum_theme.themeClassName FROM security_settings INNER JOIN security_user ON security_user.userId = security_settings.FK_userId INNER JOIN enum_theme ON enum_theme.themeId = security_settings.FK_themeId INNER JOIN enum_appIdleSecs ON enum_appIdleSecs.appIdleSecsId = security_settings.FK_appIdleSecsId WHERE security_settings.settingsId = 1`;
     const values = {};
 
     return TheDb.selectOne(sql, values)
@@ -60,7 +60,7 @@ export class SecuritySettingsContext {
       this.userRoleId = row['userRoleId'];
       if(!!row['navMinimised'])
         this.navMinimised = true;
-      this.appIdleSecs = row['appIdleSecs'];
+      this.idleTime = row['idleTime'];
       this.themeId = row['themeId'];
       this.themeName = row['themeName'];
       this.themeClassName = row['themeClassName'];
@@ -76,7 +76,7 @@ export class ThemesContext {
 
   // GET NavMenu
   public getAll(): Promise<Array<ThemeEntity>> {
-    const sql = `SELECT security_navMenu.navMenuId AS navMenuId, security_navMenu.navName AS navName, security_navMenu.navRoute AS navRoute, security_navMenu.navTitle AS navTitle FROM security_settings INNER JOIN security_navRole ON security_navRole.FK_navMenuId = security_navMenu.navMenuId INNER JOIN security_navMenu ON security_navMenu.navMenuId = security_navRole.FK_navMenuId INNER JOIN security_user ON security_user.FK_roleId = security_navRole.FK_roleId WHERE security_settings.FK_userId = 1`;
+    const sql = `SELECT themeId, themeName, themeClassName FROM enum_theme`;
     const values = {};
 
     return TheDb.selectAll(sql, values)
