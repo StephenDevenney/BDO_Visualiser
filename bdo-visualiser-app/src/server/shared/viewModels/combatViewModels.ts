@@ -121,10 +121,10 @@ export class LocationNamesEnumViewModel {
 }
 
 export class LocationNamesGroupedEnumViewModel {
-    public label: string = "-";
-    public items: LocationNamesEnumViewModel = new LocationNamesEnumViewModel();
+    public label: string = "-"; // Group Header
+    public items: Array<LocationNamesEnumViewModel> = new Array<LocationNamesEnumViewModel>();
 
-    constructor(label?: string, items?: LocationNamesEnumViewModel) {
+    constructor(label?: string, items?: Array<LocationNamesEnumViewModel>) {
         if(label) {
             this.label = label;
             this.items = items;

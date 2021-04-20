@@ -32,7 +32,6 @@ export class PageHeaderComponent extends BaseComponent implements OnInit {
     this.pageService.getThemes().catch((err: any) => {
       this.messageService.add({severity:'error', summary:'Error', detail:'Failed to get themes.', life: 2600 });
     }).then((res: Array<ThemeViewModel>) => {
-      console.log(res);
       this.themes = res;
       this.isLoaded = true;
     });

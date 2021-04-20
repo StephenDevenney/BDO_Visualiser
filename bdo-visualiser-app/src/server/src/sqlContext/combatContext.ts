@@ -188,7 +188,7 @@ export class GearContext {
     const sql = `INSERT OR REPLACE INTO combat_gearScore (FK_combatSettingsId, ap, aap, dp, gearScore, dateCreated) VALUES (1, $ap, $aap, $dp, $gearScore, $dateCreated);`;
     const values = { $ap: gear.ap, $aap: gear.aap, $dp: gear.dp, $gearScore: new Calculations().calcGearScore(gear.ap, gear.aap, gear.dp), $dateCreated: new Calculations().calcCurrentDate() };
 
-    return TheDb.insert(sql, values).then((result) => { console.log("Gear Inserted."); console.log(result);});
+    return TheDb.insert(sql, values).then((result) => {});
   }
 
   // Update newest entry with classId

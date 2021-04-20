@@ -1,4 +1,4 @@
-import { ClassNamesEnumEntity, CombatHeadersEntity, CombatSettingsEntity, CombatTypesEnumEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TimeAmountEnumEntity, UserClassEntity } from '../../shared/entities/combatEntities';
+import { ClassNamesEnumEntity, CombatHeadersEntity, CombatSettingsEntity, CombatTypesEnumEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity, UserClassEntity } from '../../shared/entities/combatEntities';
 import { ActiveClassesContext, ClassNamesEnumContext, ClassRolesEnumContext, ColumnHeadersContext, CombatSettingsContext, CombatTableHeadersContext, CombatTypesEnumContext, GearContext, GrindingDataContext, LocationsEnumContext, RecentLocationsContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
 import { ClassNamesEnumViewModel, CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatTypesEnumViewModel, GearViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, UserClassViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 import { Calculations } from '../../shared/calc/calculations';
@@ -72,34 +72,28 @@ export class CombatPageEnumHandler {
         });
 
         let locationNamesEnum = new Array<LocationNamesGroupedEnumViewModel>();
+        let locationViewModel = new Array<LocationNamesEnumViewModel>();
             // Get Top 3 Most Recent Location Entires First
         await this.recentLocationsContext.getAll().then((_: Array<LocationNamesEnumEntity>) => {
             if(_.length > 0) {
                 _.forEach(row => {
-                    let description = row.locationName;
-                    if(row.recommendedAP.length > 0)
-                        description += " (" + row.recommendedAP + " AP)";
-                    else
-                        description += " (Lv. " + row.recommendedLevel + ")";
-
-                    locationNamesEnum.push(new LocationNamesGroupedEnumViewModel(description, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, parseInt(row.recommendedAP))));
+                    locationViewModel.push(new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, parseInt(row.recommendedAP)));
                 });
             } 
         });
+        if(locationViewModel.length > 0)
+            locationNamesEnum.push(new LocationNamesGroupedEnumViewModel("Recent", locationViewModel));
 
             // Get All Location Enums
-        await this.locationsEnumContext.getAll().then((_: Array<LocationNamesEnumEntity>) => {
-            _.forEach(row => {
-                let description = row.locationName;
-                let ap: number = 0;
-                if(row.recommendedAP.length > 0){
-                    description += " (" + row.recommendedAP + " AP)";
-                    ap = parseInt(row.recommendedAP);
-                }  
-                else
-                    description += " (Lv. " + row.recommendedLevel + ")";
+        let locationArray = await this.locationsEnumContext.getAll();
 
-                locationNamesEnum.push(new LocationNamesGroupedEnumViewModel(description, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, ap)));
+        await this.territoryEnumContext.getAll().then((_: Array<TerritoryEnumEntity>) => {
+            _.forEach(row => {
+                let locations = new Array<LocationNamesEnumViewModel>();
+                locationArray.filter((_: LocationNamesEnumEntity) => _.territoryId == row.territoryId).forEach(_ => {
+                    locations.push(new LocationNamesEnumViewModel(_.locationId, _.territoryId, _.locationName, _.territoryName, _.recommendedLevel, parseInt(_.recommendedAP)));
+                });
+                locationNamesEnum.push(new LocationNamesGroupedEnumViewModel(row.territoryName, locations));
             });
         });
 
