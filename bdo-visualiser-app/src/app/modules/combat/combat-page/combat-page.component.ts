@@ -157,25 +157,14 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.combatService.addMainUserClass(this.mainClass).catch((err: any) => {
         this.messageService.add({severity:'error', summary:'Error', detail:'Failed to save class', life: 2600 });
         this.loader.stopBackground();
-      }).then((res: void) => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Failed to save class', life: 2600 });
+      }).then((res: UserClassViewModel) => {
+        console.log(res);
+        this.mainClass = res;
+        this.combatPageData.hasMainClass = true;
+        this.combatPageData.activeClasses.push(this.mainClass);
+        this.addEntryPopupChecks();
         this.loader.stopBackground();
       });
-      // this.loader.startBackground();
-      // this.combatService.addMainClass(this.mainClass).subscribe((res: UserClass) => {
-      //   this.mainClass = res;
-      //   this.combatPageData.hasMainClass = true;
-      //   this.combatPageData.activeClasses.push(this.mainClass);
-      //   this.addEntryPopupChecks();
-      //   this.loader.stopBackground();
-      // },
-      // (err: any) => {
-      //   this.loader.stopBackground();
-      //   if(err.message.msg == "Class Role Required.")
-      //     this.messageService.add({severity:'info', summary:'Class Required', detail:'Class Required.', life: 2600 });
-      //   else
-      //     this.messageService.add({severity:'error', summary:'Error', detail:'Failed to save class', life: 2600 });
-      // });
     }
     else {
       this.messageService.add({severity:'error', summary:'Error', detail:'Class Required.', life: 2600 });
@@ -186,7 +175,6 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     this.showCombatDefaultColumns = false;
     this.showAddMainClass = false;
     this.showGrindingTableEntry = false;
-
     this.columnSelectOptions = this.columnHeaders.filter(header => header.headingId != 1);
     if(this.grindingRes.length == 0 && !this.combatPageData.hasDefaultCombatHeaders) {
       this.columnChanged = true;
@@ -291,51 +279,14 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   }
 
   public exportCSV() {
-    // const options = { 
-    //   fieldSeparator: ',',
-    //   quoteStrings: '"',
-    //   decimalSeparator: '.',
-    //   showLabels: true, 
-    //   showTitle: false,
-    //   title: 'Title',
-    //   useTextFile: false,
-    //   useBom: true,
-    //   useKeysAsHeaders: true,
-    //   filename: 'grindingData'
-    // };
 
-    // const csvExporter = new ExportToCsv(options); 
-    // csvExporter.generateCsv(this.grindingRes);
   }
 
   public async onDataUpload(event: any): Promise<any> {
-    // await Promise.all(event.files.map(async (file) => {
-    //   await this.uploadedFiles.push(file);
-    // }));
 
-    // this.ngxCsvParser.parse(event.files[0], { header: true, delimiter: ',' })
-    // .pipe().subscribe((res: any) => {
-    //   this.uploadedFiles = res;
-    //   if(this.uploadedFiles.length == 0)
-    //     this.messageService.add({severity:'error', summary:'Error', detail:'Failed to upload data', life: 2600 });
-    // }, (error: NgxCSVParserError) => {
-    // });  
-
-    // this.loader.startBackground();
-    // if(this.uploadedFiles.length > 0)
-    //   await this.combatService.uploadGrindingData(this.uploadedFiles).then(res => {
-
-    // },
-    // err => {
-    //   this.loader.stopBackground();
-    //   this.messageService.add({severity:'error', summary:'Error', detail:'Failed to upload data', life: 2600 });
-    // }).then(_ => {
-
-    //   this.loader.stopBackground();
-    // });
   }
 
-  applyFilterGlobal($event: any, stringVal: string) {
+  public applyFilterGlobal($event: any, stringVal: string) {
     this.dt.filterGlobal(($event.target as HTMLInputElement).value, 'contains');
   }
 }

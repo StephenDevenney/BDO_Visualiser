@@ -1,6 +1,7 @@
 import { TheDb } from '../thedb';
 import { ClassNamesEnumEntity, ClassRoleEnumEntity, CombatHeadersEntity, CombatSettingsEntity, CombatTypesEnumEntity, GearEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity, UserClassEntity } from '../../shared/entities/combatEntities';
-import { CombatHeadersViewModel } from '../../shared/viewModels/combatViewModels';
+import { CombatHeadersViewModel, GearViewModel } from '../../shared/viewModels/combatViewModels';
+import { Calculations } from '../../shared/calc/calculations';
 
 // SQL Context - Data
 export class CombatSettingsContext {
@@ -90,7 +91,7 @@ export class ActiveClassesContext {
 
   // GET Active Classes
   public async getAll(): Promise<Array<UserClassEntity>> {
-    const sql = `SELECT combat_classes.classId, combat_classes.FK_gearScoreId, enum_class.className as className, (className || ' (' || cast(combat_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeName, combat_classes.dateCreated, combat_gearScore.ap, combat_gearScore.aap, combat_gearScore.dp, combat_gearScore.gearScore FROM combat_classes INNER JOIN enum_class ON enum_class.classId = combat_classes.FK_classNameId INNER JOIN combat_gearScore ON combat_gearScore.gearScoreId = combat_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = combat_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = combat_classes.FK_primaryCombatTypeId WHERE combat_classes.FK_combatSettingsId = 1`;
+    const sql = `SELECT combat_classes.classId, combat_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, (className || ' (' || cast(combat_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, combat_classes.dateCreated, combat_gearScore.ap, combat_gearScore.aap, combat_gearScore.dp, combat_gearScore.gearScore FROM combat_classes INNER JOIN enum_class ON enum_class.classId = combat_classes.FK_classNameId INNER JOIN combat_gearScore ON combat_gearScore.gearScoreId = combat_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = combat_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = combat_classes.FK_primaryCombatTypeId WHERE combat_classes.FK_combatSettingsId = 1`;
     const values = {};
 
     return TheDb.selectAll(sql, values).then((rows: any) => {
@@ -103,9 +104,20 @@ export class ActiveClassesContext {
     });
   }
 
+  // GET Most Recent Class Entry
+  public async getMostRecent(): Promise<UserClassEntity> {
+    const sql = `SELECT combat_classes.classId, combat_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, (className || ' (' || cast(combat_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, combat_classes.dateCreated, combat_gearScore.ap, combat_gearScore.aap, combat_gearScore.dp, combat_gearScore.gearScore FROM combat_classes INNER JOIN enum_class ON enum_class.classId = combat_classes.FK_classNameId INNER JOIN combat_gearScore ON combat_gearScore.gearScoreId = combat_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = combat_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = combat_classes.FK_primaryCombatTypeId WHERE combat_classes.FK_combatSettingsId = 1 ORDER BY gearScoreId DESC LIMIT 1`;
+    const values = { };
+
+    return TheDb.selectOne(sql, values).then((row: any) => {
+      if(row)
+        return new ActiveClassesContext().fromRow(row);
+    });
+  }
+
   public async insert(userClass: UserClassEntity): Promise<void> {
-    const sql = `INSERT OR REPLACE INTO combat_classes (FK_combatSettingsId, FK_classNameId, FK_classRoleId, FK_primaryCombatTypeId, dateCreated) VALUES (1, $FK_classNameId, $FK_classRoleId, $FK_primaryCombatTypeId, $dateCreated);`;
-    const values = { $FK_classNameId: userClass.classNameId, $FK_classRoleId: userClass.classRoleId, $FK_primaryCombatTypeId: userClass.combatTypeId, $dateCreated: userClass.dateCreated };
+    const sql = `INSERT OR REPLACE INTO combat_classes (FK_combatSettingsId, FK_classNameId, FK_classRoleId, FK_gearScoreId, FK_primaryCombatTypeId, dateCreated) VALUES (1, $FK_classNameId, $FK_classRoleId, $FK_gearScoreId, $FK_primaryCombatTypeId, $dateCreated);`;
+    const values = { $FK_classNameId: userClass.classNameId, $FK_classRoleId: userClass.classRoleId, $FK_gearScoreId: userClass.FK_gearScoreId, $FK_primaryCombatTypeId: userClass.combatTypeId, $dateCreated: userClass.dateCreated };
 
     return TheDb.insert(sql, values).then((result) => {});
   }
@@ -120,7 +132,7 @@ export class ActiveClassesContext {
     this.combatTypeId = row['combatTypeId'];
     this.combatTypeName = row['combatTypeName'];
     this.dateCreated = row['dateCreated'];
-    this.classDescription = row['description'];
+    this.classDescription = row['classDescription'];
     this.ap = row['ap'];
     this.aap = row['aap'];
     this.dp = row['dp'];
@@ -147,6 +159,44 @@ export class GearContext {
       if(row)
         return new GearContext().fromRow(row);
     });
+  }
+
+  // GET Single Classes Gear Via ClassId
+  public async getViaClassId(classId: number): Promise<GearEntity> {
+    const sql = `SELECT gearScoreId, ap, aap, dp, gearScore, dateCreated FROM combat_gearScore WHERE combat_gearScore.FK_classId = $classId`;
+    const values = { $classId: classId };
+
+    return TheDb.selectOne(sql, values).then((row: any) => {
+      if(row)
+        return new GearContext().fromRow(row);
+    });
+  }
+
+  // GET Most Recent Gear Entry
+  public async getMostRecent(): Promise<GearEntity> {
+    const sql = `SELECT gearScoreId, ap, aap, dp, gearScore, dateCreated FROM combat_gearScore ORDER BY gearScoreId DESC LIMIT 1`;
+    const values = { };
+
+    return TheDb.selectOne(sql, values).then((row: any) => {
+      if(row)
+        return new GearContext().fromRow(row);
+    });
+  }
+
+  // Create New Entry
+  public async insert(gear: GearViewModel): Promise<void> {
+    const sql = `INSERT OR REPLACE INTO combat_gearScore (FK_combatSettingsId, ap, aap, dp, gearScore, dateCreated) VALUES (1, $ap, $aap, $dp, $gearScore, $dateCreated);`;
+    const values = { $ap: gear.ap, $aap: gear.aap, $dp: gear.dp, $gearScore: new Calculations().calcGearScore(gear.ap, gear.aap, gear.dp), $dateCreated: new Calculations().calcCurrentDate() };
+
+    return TheDb.insert(sql, values).then((result) => { console.log("Gear Inserted."); console.log(result);});
+  }
+
+  // Update newest entry with classId
+  public updateClassId(gearScoreId: number, classId: number): Promise<void> {
+    const sql = `UPDATE combat_gearScore SET FK_classId = $classId WHERE gearScoreId = $gearScoreId`;
+    const values = { $gearScoreId: gearScoreId, $classId: classId};
+
+    return TheDb.update(sql, values).then((result) => {});
   }
 
   private fromRow(row: GearEntity): GearEntity {
@@ -298,6 +348,14 @@ export class ColumnHeadersContext {
   public update(headingId: number, isActive: boolean): Promise<void> {
     const sql = `UPDATE combat_columnDefaults SET isActive = $isActive WHERE FK_combatSettingsId = 1 AND FK_headingId = $headingId`;
     const values = { $headingId: headingId, $isActive: isActive};
+
+    return TheDb.update(sql, values).then((result) => {});
+  }
+
+  // Update Settings
+  public updateHasColumnsSet(): Promise<void> {
+    const sql = `UPDATE combat_settings SET hasDefaultCombatHeaders = 1 WHERE combatSettingsId = 1`;
+    const values = { };
 
     return TheDb.update(sql, values).then((result) => {});
   }

@@ -1,5 +1,5 @@
 import { ClassNamesEnumEntity, CombatHeadersEntity, CombatSettingsEntity, CombatTypesEnumEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TimeAmountEnumEntity, UserClassEntity } from '../../shared/entities/combatEntities';
-import { ActiveClassesContext, ClassNamesEnumContext, ClassRolesEnumContext, ColumnHeadersContext, CombatSettingsContext, CombatTableHeadersContext, CombatTypesEnumContext, GrindingDataContext, LocationsEnumContext, RecentLocationsContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
+import { ActiveClassesContext, ClassNamesEnumContext, ClassRolesEnumContext, ColumnHeadersContext, CombatSettingsContext, CombatTableHeadersContext, CombatTypesEnumContext, GearContext, GrindingDataContext, LocationsEnumContext, RecentLocationsContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
 import { ClassNamesEnumViewModel, CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatTypesEnumViewModel, GearViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, UserClassViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 import { Calculations } from '../../shared/calc/calculations';
 
@@ -155,6 +155,8 @@ export class ColumnHeadersHandler {
         await Promise.all(combatHeaders.map(async (column: CombatHeadersViewModel) => {
             await this.columnHeadersContext.update(column.headingId, column.isActive);
         }));
+        await this.columnHeadersContext.updateHasColumnsSet();
+
         return await this.getDefaultColumns();
         
     }
@@ -164,7 +166,7 @@ export class UserClassHandler {
     private activeClassesContext: ActiveClassesContext = new ActiveClassesContext();
 
     public async getActiveClasses(): Promise<Array<UserClassViewModel>> {
-        // Get Active Classes
+            // Get Active Classes
         let acVM = new Array<UserClassViewModel>();
         await this.activeClassesContext.getAll().then((_ : Array<UserClassEntity>) => {
             _.forEach(async row => {
@@ -174,21 +176,29 @@ export class UserClassHandler {
         return acVM;
     }
 
-    public async addUserClass(userClass: UserClassViewModel): Promise<void> {
+    public async addUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
         let ucE = await convertToEntity(userClass);
-        console.log(ucE);
-        // await this.activeClassesContext.insert(userClass)
-        return;
+        await this.activeClassesContext.insert(ucE);
+        let ncE = await new ActiveClassesContext().getMostRecent();
+        await new GearContext().updateClassId(ncE.FK_gearScoreId, ncE.classId );
+
+        return new UserClassViewModel(ncE.classId, ncE.className, ncE.classRole, new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(ncE.ap, ncE.aap, ncE.dp, ncE.gearScore), ncE.classDescription);
 
         async function convertToEntity(userClass: UserClassViewModel): Promise<UserClassEntity> {
             let userClassEntity: UserClassEntity = new UserClassEntity();     
                 // GET Ids
             userClassEntity.classNameId = (await new ClassNamesEnumContext().get(userClass.className)).classId;
             userClassEntity.classRoleId = (await new ClassRolesEnumContext().get(userClass.classRole)).roleId;
-            // create gearScore entry
+                // Create gearScore entry
+            await new GearContext().insert(userClass.gear);
+            // get most recent entry
+            let gE = (await new GearContext().getMostRecent());
+            
+            userClassEntity.FK_gearScoreId = gE.gearScoreId;
+            userClassEntity.gearScore = gE.gearScore;
 
-                // Fill Rest
-            userClassEntity.classId = userClass.classId;
+            
+                // Fill The Rest
             userClassEntity.className = userClass.className;
             userClassEntity.classRole = userClass.classRole;
             userClassEntity.classDescription = userClass.classDescription;
@@ -197,7 +207,6 @@ export class UserClassHandler {
             userClassEntity.ap = userClass.gear.ap;
             userClassEntity.aap = userClass.gear.aap;
             userClassEntity.dp = userClass.gear.dp;
-            userClassEntity.gearScore = new Calculations().calcGearScore(userClass.gear.ap, userClass.gear.aap, userClass.gear.dp);
             userClassEntity.dateCreated = new Calculations().calcCurrentDate();
 
             return userClassEntity;

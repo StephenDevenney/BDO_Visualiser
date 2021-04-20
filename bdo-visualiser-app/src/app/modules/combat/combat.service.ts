@@ -25,7 +25,7 @@ export class CombatService {
     }
 
         // POST
-    public async addMainUserClass(userClass: UserClassViewModel): Promise<void> {
+    public async addMainUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
         return await this.combatRoute.addMainUserClass(userClass);
     }
 

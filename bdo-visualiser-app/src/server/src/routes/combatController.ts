@@ -30,15 +30,13 @@ export class CombatController {
     }
 
         // POST
-    public async addMainUserClass(userClass: UserClassViewModel): Promise<void> {
+    public async addMainUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
         userClass.classRole = "Main";
-        this.addUserClass(userClass);
-        return;
+        return this.addUserClass(userClass);
     }
 
-    public async addUserClass(userClass: UserClassViewModel): Promise<void> {
-        await new UserClassHandler().addUserClass(userClass);
-        return;
+    public async addUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
+        return await new UserClassHandler().addUserClass(userClass);
     }
 
     public async addGrindingEntry(): Promise<void> {
