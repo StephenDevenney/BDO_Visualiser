@@ -1,17 +1,27 @@
 import { Injectable } from '@angular/core';
-import { CombatPageDataViewModel, CombatPageEnumsViewModel } from '../../../server/shared/viewModels/combatViewModels';
+import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel } from '../../../server/shared/viewModels/combatViewModels';
 import { CombatController } from '../../../server/src/routes/combatController';
 
 @Injectable()
 export class CombatService {
     constructor(private combatRoute: CombatController){}
 
+        // GET
     public async getCombatPageData(): Promise<CombatPageDataViewModel> {
         return await this.combatRoute.getCombatData();
     }
 
     public async getCombatEnums(): Promise<CombatPageEnumsViewModel> {
         return await this.combatRoute.getCombatEnums();
+    }
+
+        // PUT
+    public async saveCombatHeaders(columns: Array<CombatHeadersViewModel>): Promise<void> {
+        return await this.combatRoute.updateCombatHeaders(columns);
+    }
+
+    public async saveSingleCombatHeader(column: CombatHeadersViewModel): Promise<void> {
+        return await this.combatRoute.updateSingleVisibleColumn(column);
     }
 
     // public getDefaultColumns() {

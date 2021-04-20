@@ -1,13 +1,13 @@
 
 export class CombatPageDataViewModel {
-    public tableHeaders: Array<GrindingTableHeadersViewModel> = new Array<GrindingTableHeadersViewModel>();
+    public tableHeaders: Array<CombatHeadersViewModel> = new Array<CombatHeadersViewModel>();
     public tableData: Array<GrindingDataViewModel> = new Array<GrindingDataViewModel>();
     public visibleData: Array<VisibleDataViewModel> = new Array<VisibleDataViewModel>();
     public hasDefaultCombatHeaders: boolean = false;
     public activeClasses: Array<UserClassViewModel> = new Array<UserClassViewModel>();
     public hasMainClass: boolean = true;
 
-    constructor(tableHeaders?: Array<GrindingTableHeadersViewModel>, tableData?: Array<GrindingDataViewModel>, visibleData?: Array<VisibleDataViewModel>, hasDefaultCombatHeaders?: boolean, activeClasses?: Array<UserClassViewModel>, hasMainClass?: boolean) {
+    constructor(tableHeaders?: Array<CombatHeadersViewModel>, tableData?: Array<GrindingDataViewModel>, visibleData?: Array<VisibleDataViewModel>, hasDefaultCombatHeaders?: boolean, activeClasses?: Array<UserClassViewModel>, hasMainClass?: boolean) {
         if(tableHeaders) {
             this.tableHeaders = tableHeaders;
             this.tableData = tableData;
@@ -15,23 +15,6 @@ export class CombatPageDataViewModel {
             this.hasDefaultCombatHeaders = hasDefaultCombatHeaders;
             this.activeClasses = activeClasses;
             this.hasMainClass = hasMainClass;
-        }
-    }
-}
-
-
-export class GrindingTableHeadersViewModel {
-    public headingId: number = 0;
-    public field: string = "";
-    public header: string = "";
-    public isActive: boolean = false;
-
-    constructor(headingId?: number, field?: string, header?: string, isActive?: boolean) {
-        if(headingId) {
-            this.headingId = headingId;
-            this.field = field;
-            this.header = header;
-            this.isActive = isActive;
         }
     }
 }
@@ -85,6 +68,22 @@ export class VisibleDataViewModel {
         this.serverName = serverName;
         this.combatTypeName = combatTypeName;
         this.afuaruSpawns = afuaruSpawns;
+    }
+}
+
+export class CombatHeadersViewModel {
+    public headingId: number = 0;
+    public field: string = "";
+    public header: string = "";
+    public isActive: boolean = false;
+
+    constructor(headingId?: number, field?: string, header?: string, isActive?: boolean) {
+        if(headingId) {
+            this.headingId = headingId;
+            this.field = field;
+            this.header = header;
+            this.isActive = isActive;
+        }
     }
 }
 

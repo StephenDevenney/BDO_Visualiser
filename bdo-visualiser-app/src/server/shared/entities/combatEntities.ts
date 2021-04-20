@@ -109,6 +109,22 @@ export class VisibleDataEntity {
     }
 }
 
+export class CombatHeadersEntity {
+    public headingId: number = 0;
+    public field: string = "";
+    public header: string = "";
+    public isActive: boolean = false;
+
+    constructor(headingId?: number, field?: string, header?: string, isActive?: boolean) {
+        if(headingId) {
+            this.headingId = headingId;
+            this.field = field;
+            this.header = header;
+            this.isActive = isActive;
+        }
+    }
+}
+
 // Enums
 export class ClassNamesEnumEntity {
     public classId: number = 1;
@@ -118,6 +134,18 @@ export class ClassNamesEnumEntity {
         if(classId) {
             this.classId = classId;
             this.className = className;
+        }
+    }
+}
+
+export class ClassRoleEnumEntity {
+    public roleId: number = 1;
+    public roleDescription: string = "-";
+
+    constructor(roleId?: number, roleDescription?: string) {
+        if(roleId) {
+            this.roleId = roleId;
+            this.roleDescription = roleDescription;
         }
     }
 }
@@ -226,8 +254,11 @@ export class CombatPageEnumsEntity {
 export class UserClassEntity {
     public classId: number = 0;
     public FK_gearScoreId: number = 0;
+    public classNameId: number = 1;
     public className: string = "";
+    public classRoleId: number = 5;
     public classRole: string = "";
+    public combatTypeId: number = 1;
     public combatTypeName: string = "";
     public dateCreated: string = "";
     public classDescription: string = "";
@@ -236,12 +267,15 @@ export class UserClassEntity {
     public dp: number = 0;
     public gearScore: number = 0;
 
-    constructor(classId?: number, FK_gearScoreId?: number, className?: string, classRole?: string, combatTypeName?: string, dateCreated?: string, classDescription?: string, ap?: number, aap?: number, dp?: number, gearScore?: number) {
+    constructor(classId?: number, FK_gearScoreId?: number, classNameId?: number, className?: string, classRoleId?: number, classRole?: string, combatTypeId?: number, combatTypeName?: string, dateCreated?: string, classDescription?: string, ap?: number, aap?: number, dp?: number, gearScore?: number) {
         if(classId) {
             this.classId = classId;
             this.FK_gearScoreId = FK_gearScoreId;
+            this.classNameId = classNameId;
             this.className = className;
+            this.classRoleId = classRoleId;
             this.classRole = classRole;
+            this.combatTypeId = combatTypeId;
             this.combatTypeName = combatTypeName;
             this.dateCreated = dateCreated;
             this.classDescription= classDescription;

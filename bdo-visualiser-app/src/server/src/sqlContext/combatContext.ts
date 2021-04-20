@@ -1,5 +1,6 @@
 import { TheDb } from '../thedb';
-import { ClassNamesEnumEntity, CombatSettingsEntity, CombatTypesEnumEntity, GearEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity, UserClassEntity } from '../../shared/entities/combatEntities';
+import { ClassNamesEnumEntity, ClassRoleEnumEntity, CombatHeadersEntity, CombatSettingsEntity, CombatTypesEnumEntity, GearEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity, UserClassEntity } from '../../shared/entities/combatEntities';
+import { CombatHeadersViewModel } from '../../shared/viewModels/combatViewModels';
 
 // SQL Context - Data
 export class CombatSettingsContext {
@@ -17,14 +18,10 @@ export class CombatSettingsContext {
     const sql = `SELECT * FROM combat_settings INNER JOIN security_settings ON combat_settings.combatSettingsId = security_settings.FK_combatSettingsId WHERE security_settings.FK_userId = 1`;
     const values = {};
 
-    return TheDb.selectOne(sql, values)
-        .then((row: any) => {
-            if (row) {
-                return new CombatSettingsContext().fromRow(row);
-            } else {
-                throw new Error('Failed to get combatSettingsEntity');
-            }
-        });
+    return TheDb.selectOne(sql, values).then((row: any) => {
+      if(row)
+        return new CombatSettingsContext().fromRow(row);
+    });
   }
 
   private fromRow(row: CombatSettingsEntity): CombatSettingsEntity {
@@ -54,34 +51,36 @@ export class CombatTableHeadersContext {
     const sql = `SELECT enum_combatTableHeadings.headingId, enum_combatTableHeadings.field, enum_combatTableHeadings.header, combat_columnDefaults.isActive FROM enum_combatTableHeadings INNER JOIN combat_columnDefaults ON combat_columnDefaults.FK_headingId = enum_combatTableHeadings.headingId WHERE combat_columnDefaults.FK_combatSettingsId = 1`;
     const values = {};
 
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<GrindingTableHeadersEntity> = new Array<GrindingTableHeadersEntity>();
-            for (const row of rows) {
-                const item = new CombatTableHeadersContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
-    }
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<GrindingTableHeadersEntity> = new Array<GrindingTableHeadersEntity>();
+      for (const row of rows) {
+          const item = new CombatTableHeadersContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
 
-    private fromRow(row: GrindingTableHeadersEntity): GrindingTableHeadersEntity {
-      this.headingId = row['headingId'];
-      this.field = row['field'];
-      this.header = row['header'];
-      if(!!row['isActive'])
-        this.isActive = true;
+  private fromRow(row: GrindingTableHeadersEntity): GrindingTableHeadersEntity {
+    this.headingId = row['headingId'];
+    this.field = row['field'];
+    this.header = row['header'];
+    if(!!row['isActive'])
+      this.isActive = true;
 
-      return this;
-    }
+    return this;
+  }
 }
 
 export class ActiveClassesContext {
   public classId: number = 0;
   public FK_gearScoreId: number = 0;
+  public classNameId: number = 0;
   public className: string = "";
   public classDescription: string = "";
+  public classRoleId: number = 0;
   public classRole: string = "";
+  public combatTypeId: number = 0;
   public combatTypeName: string = "";
   public dateCreated: string = "";
   public ap: number = 0;
@@ -90,36 +89,45 @@ export class ActiveClassesContext {
   public gearScore: number = 0;
 
   // GET Active Classes
-  public getAll(): Promise<Array<UserClassEntity>> {
+  public async getAll(): Promise<Array<UserClassEntity>> {
     const sql = `SELECT combat_classes.classId, combat_classes.FK_gearScoreId, enum_class.className as className, (className || ' (' || cast(combat_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeName, combat_classes.dateCreated, combat_gearScore.ap, combat_gearScore.aap, combat_gearScore.dp, combat_gearScore.gearScore FROM combat_classes INNER JOIN enum_class ON enum_class.classId = combat_classes.FK_classNameId INNER JOIN combat_gearScore ON combat_gearScore.gearScoreId = combat_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = combat_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = combat_classes.FK_primaryCombatTypeId WHERE combat_classes.FK_combatSettingsId = 1`;
     const values = {};
 
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<UserClassEntity> = new Array<UserClassEntity>();
-            for (const row of rows) {
-                const item = new ActiveClassesContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
-    }
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<UserClassEntity> = new Array<UserClassEntity>();
+      for (const row of rows) {
+          const item = new ActiveClassesContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
 
-    private fromRow(row: UserClassEntity): UserClassEntity {
-      this.classId = row['classId'];
-      this.FK_gearScoreId = row['FK_gearScoreId'];
-      this.className = row['className'];
-      this.classRole = row['classRole'];
-      this.combatTypeName = row['combatTypeName'];
-      this.dateCreated = row['dateCreated'];
-      this.classDescription = row['description'];
-      this.ap = row['ap'];
-      this.aap = row['aap'];
-      this.dp = row['dp'];
-      this.gearScore = row['gearScore'];
+  public async insert(userClass: UserClassEntity): Promise<void> {
+    const sql = `INSERT OR REPLACE INTO combat_classes (FK_combatSettingsId, FK_classNameId, FK_classRoleId, FK_primaryCombatTypeId, dateCreated) VALUES (1, $FK_classNameId, $FK_classRoleId, $FK_primaryCombatTypeId, $dateCreated);`;
+    const values = { $FK_classNameId: userClass.classNameId, $FK_classRoleId: userClass.classRoleId, $FK_primaryCombatTypeId: userClass.combatTypeId, $dateCreated: userClass.dateCreated };
 
-      return this;
-    }
+    return TheDb.insert(sql, values).then((result) => {});
+  }
+
+  private fromRow(row: UserClassEntity): UserClassEntity {
+    this.classId = row['classId'];
+    this.FK_gearScoreId = row['FK_gearScoreId'];
+    this.classNameId = row['classNameId'];
+    this.className = row['className'];
+    this.classRoleId = row['classRoleId'];
+    this.classRole = row['classRole'];
+    this.combatTypeId = row['combatTypeId'];
+    this.combatTypeName = row['combatTypeName'];
+    this.dateCreated = row['dateCreated'];
+    this.classDescription = row['description'];
+    this.ap = row['ap'];
+    this.aap = row['aap'];
+    this.dp = row['dp'];
+    this.gearScore = row['gearScore'];
+
+    return this;
+  }
 }
 
 export class GearContext {
@@ -135,14 +143,10 @@ export class GearContext {
     const sql = `SELECT gearScoreId, ap, aap, dp, gearScore, dateCreated FROM combat_gearScore WHERE combat_gearScore.gearScoreId = $gearScoreId`;
     const values = { $gearScoreId: gearScoreId };
 
-    return TheDb.selectOne(sql, values)
-        .then((row: any) => {
-            if (row) {
-                return new GearContext().fromRow(row);
-            } else {
-                throw new Error('Failed to get gearEntity.');
-            }
-        });
+    return TheDb.selectOne(sql, values).then((row: any) => {
+      if(row)
+        return new GearContext().fromRow(row);
+    });
   }
 
   private fromRow(row: GearEntity): GearEntity {
@@ -191,48 +195,47 @@ export class GrindingDataContext {
     const sql = `SELECT grindingId, enum_locations.locationId, enum_locations.locationName, enum_territory.territoryId, enum_territory.territoryName, enum_locations.recommendedAP, enum_locations.recommendedLevel, enum_time.timeId, enum_time.timeAmount, combat_classes.classId AS userClassId, enum_class.classId, enum_class.className, (className || ' (' || cast(combat_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId AS classRoleId, enum_classRole.roleDescription AS classRoleName, combat_gearScore.gearScoreId, combat_gearScore.ap, combat_gearScore.aap, combat_gearScore.dp, combat_gearScore.gearScore, enum_server.serverId, enum_server.serverName, enum_server.isElviaRealm, combatType.combatTypeId, combatType.combatTypeName AS combatTypeName, combat_grinding.dateCreated, combat_grinding.trashLootAmount, combat_grinding.afuaruSpawns FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = combat_grinding.FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId INNER JOIN combat_classes ON combat_classes.classId = combat_grinding.FK_classId INNER JOIN enum_class ON enum_class.classId = combat_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = combat_classes.FK_classRoleId INNER JOIN combat_gearScore ON combat_gearScore.gearScoreId = combat_grinding.FK_gearScoreId INNER JOIN enum_server ON enum_server.serverId = combat_grinding.FK_serverId INNER JOIN enum_combatType AS combatType ON combatType.combatTypeId = combat_grinding.FK_combatTypeId INNER JOIN enum_combatType AS primaryCombatType ON primaryCombatType.combatTypeId = combat_classes.FK_primaryCombatTypeId WHERE combat_grinding.FK_combatSettingsId = 1`;
     const values = {};
 
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<GrindingDataEntity> = new Array<GrindingDataEntity>();
-            for (const row of rows) {
-                const item = new GrindingDataContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
-    }
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<GrindingDataEntity> = new Array<GrindingDataEntity>();
+      for (const row of rows) {
+          const item = new GrindingDataContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
 
-    private fromRow(row: GrindingDataEntity): GrindingDataEntity {
-      this.grindingId = row['grindingId'];
-      this.locationId = row['locationId'];
-      this.locationName = row['locationName'];
-      this.territoryId = row['territoryId'];
-      this.territoryName = row['territoryName'];
-      this.recommendedAP = row['recommendedAP'];
-      this.recommendedLevel = row['recommendedLevel'];
-      this.timeId = row['timeId'];
-      this.timeAmount = row['timeAmount'];
-      this.userClassId = row['userClassId'];
-      this.classId = row['classId'];
-      this.className = row['className'];
-      this.classDescription = row['classDescription'];
-      this.classRoleId = row['classRoleId'];
-      this.classRoleName = row['classRoleName'];
-      this.gearScoreId = row['gearScoreId'];
-      this.ap = row['ap'];
-      this.aap = row['aap'];
-      this.dp = row['dp'];
-      this.gearScore = row['gearScore'];
-      this.serverId = row['serverId'];
-      this.serverDescription = row['serverDescription'];
-      this.isElviaRealm = row['isElviaRealm'];
-      this.combatTypeId = row['combatTypeId'];
-      this.combatTypeName = row['combatTypeName'];
-      this.dateCreated = row['dateCreated'];
-      this.trashLootAmount = row['trashLootAmount'];
+  private fromRow(row: GrindingDataEntity): GrindingDataEntity {
+    this.grindingId = row['grindingId'];
+    this.locationId = row['locationId'];
+    this.locationName = row['locationName'];
+    this.territoryId = row['territoryId'];
+    this.territoryName = row['territoryName'];
+    this.recommendedAP = row['recommendedAP'];
+    this.recommendedLevel = row['recommendedLevel'];
+    this.timeId = row['timeId'];
+    this.timeAmount = row['timeAmount'];
+    this.userClassId = row['userClassId'];
+    this.classId = row['classId'];
+    this.className = row['className'];
+    this.classDescription = row['classDescription'];
+    this.classRoleId = row['classRoleId'];
+    this.classRoleName = row['classRoleName'];
+    this.gearScoreId = row['gearScoreId'];
+    this.ap = row['ap'];
+    this.aap = row['aap'];
+    this.dp = row['dp'];
+    this.gearScore = row['gearScore'];
+    this.serverId = row['serverId'];
+    this.serverDescription = row['serverDescription'];
+    this.isElviaRealm = row['isElviaRealm'];
+    this.combatTypeId = row['combatTypeId'];
+    this.combatTypeName = row['combatTypeName'];
+    this.dateCreated = row['dateCreated'];
+    this.trashLootAmount = row['trashLootAmount'];
 
-      return this;
-    }
+    return this;
+  }
 }
 
 export class RecentLocationsContext {
@@ -248,27 +251,66 @@ export class RecentLocationsContext {
     const sql = `SELECT enum_locations.locationId, enum_locations.FK_territoryId, enum_locations.locationName, enum_territory.territoryName, enum_locations.recommendedLevel, enum_locations.recommendedAP FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE FK_combatSettingsId = 1 ORDER BY grindingId DESC LIMIT 3`;
     const values = {};
 
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<LocationNamesEnumEntity> = new Array<LocationNamesEnumEntity>();
-            for (const row of rows) {
-                const item = new RecentLocationsContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
-    }
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<LocationNamesEnumEntity> = new Array<LocationNamesEnumEntity>();
+      for (const row of rows) {
+          const item = new RecentLocationsContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
 
-    private fromRow(row: LocationNamesEnumEntity): LocationNamesEnumEntity {
-      this.locationId = row['locationId'];
-      this.territoryId = row['territoryId'];
-      this.locationName = row['locationName'];
-      this.territoryName = row['territoryName'];
-      this.recommendedLevel = row['recommendedLevel'];
-      this.recommendedAP = row['recommendedAP'];
-    
-      return this;
-    }
+  private fromRow(row: LocationNamesEnumEntity): LocationNamesEnumEntity {
+    this.locationId = row['locationId'];
+    this.territoryId = row['territoryId'];
+    this.locationName = row['locationName'];
+    this.territoryName = row['territoryName'];
+    this.recommendedLevel = row['recommendedLevel'];
+    this.recommendedAP = row['recommendedAP'];
+  
+    return this;
+  }
+}
+
+export class ColumnHeadersContext {
+  public headingId: number = 0;
+  public field: string = "";
+  public header: string = "";
+  public isActive: boolean = false;
+
+  // GET Default Column Headers
+  public getAll(): Promise<Array<CombatHeadersViewModel>> {
+    const sql = `SELECT enum_combatTableHeadings.headingId, enum_combatTableHeadings.field, enum_combatTableHeadings.header, combat_columnDefaults.isActive FROM enum_combatTableHeadings INNER JOIN combat_columnDefaults ON combat_columnDefaults.FK_headingId = enum_combatTableHeadings.headingId WHERE combat_columnDefaults.FK_combatSettingsId = 1`;
+    const values = {};
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<CombatHeadersEntity> = new Array<CombatHeadersEntity>();
+      for (const row of rows) {
+          const item = new ColumnHeadersContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
+  // PUT Single Column Header Active State
+  public update(headingId: number, isActive: boolean): Promise<void> {
+    const sql = `UPDATE combat_columnDefaults SET isActive = $isActive WHERE FK_combatSettingsId = 1 AND FK_headingId = $headingId`;
+    const values = { $headingId: headingId, $isActive: isActive};
+
+    return TheDb.update(sql, values).then((result) => {});
+  }
+
+  private fromRow(row: CombatHeadersEntity): CombatHeadersEntity {
+    this.headingId = row['headingId'];
+    this.field = row['field'];
+    this.header = row['header'];
+    if(!!row['isActive'])
+      this.isActive = true;
+  
+    return this;
+  }
 }
 
 // SQL Context - Enums
@@ -281,23 +323,71 @@ export class ClassNamesEnumContext {
     const sql = `SELECT * FROM enum_class WHERE enum_class.classId != 1`;
     const values = {};
 
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<ClassNamesEnumEntity> = new Array<ClassNamesEnumEntity>();
-            for (const row of rows) {
-                const item = new ClassNamesEnumContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
-    }
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<ClassNamesEnumEntity> = new Array<ClassNamesEnumEntity>();
+      for (const row of rows) {
+          const item = new ClassNamesEnumContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
 
-    private fromRow(row: ClassNamesEnumEntity): ClassNamesEnumEntity {
-      this.classId = row['classId'];
-      this.className = row['className'];
-    
-      return this;
-    }
+  // Get Single Class Enum
+  public async get(className: string): Promise<ClassNamesEnumEntity> {
+    const sql = `SELECT * FROM enum_class WHERE enum_class.className = $className`;
+    const values = { $className: className };
+
+    return TheDb.selectOne(sql, values).then((row: any) => {
+      if(row) 
+        return new ClassNamesEnumContext().fromRow(row);
+    });
+  }
+
+  private fromRow(row: ClassNamesEnumEntity): ClassNamesEnumEntity {
+    this.classId = row['classId'];
+    this.className = row['className'];
+  
+    return this;
+  }
+}
+
+export class ClassRolesEnumContext {
+  public roleId: number = 1;
+  public roleDescription: string = "-";
+
+  // GET Class Role Enums
+  public getAll(): Promise<Array<ClassRoleEnumEntity>> {
+    const sql = `SELECT * FROM enum_classRole`;
+    const values = {};
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<ClassRoleEnumEntity> = new Array<ClassRoleEnumEntity>();
+      for (const row of rows) {
+          const item = new ClassRolesEnumContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
+  // Get Single Role Enum
+  public async get(roleDescription: string): Promise<ClassRoleEnumEntity> {
+    const sql = `SELECT * FROM enum_classRole WHERE enum_classRole.roleDescription = $roleDescription`;
+    const values = { $roleDescription: roleDescription };
+
+    return TheDb.selectOne(sql, values).then((row: any) => {
+      if(row) 
+        return new ClassRolesEnumContext().fromRow(row);
+    });
+  }
+
+  private fromRow(row: ClassRoleEnumEntity): ClassRoleEnumEntity {
+    this.roleId = row['roleId'];
+    this.roleDescription = row['roleDescription'];
+  
+    return this;
+  }
 }
 
 export class TerritoryEnumContext {
@@ -309,23 +399,22 @@ export class TerritoryEnumContext {
     const sql = `SELECT * FROM enum_territory WHERE territoryId != 1`;
     const values = {};
 
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<TerritoryEnumEntity> = new Array<TerritoryEnumEntity>();
-            for (const row of rows) {
-                const item = new TerritoryEnumContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
-    }
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<TerritoryEnumEntity> = new Array<TerritoryEnumEntity>();
+      for (const row of rows) {
+        const item = new TerritoryEnumContext().fromRow(row);
+        nm.push(item);
+      }
+      return nm;
+    });
+  }
 
-    private fromRow(row: TerritoryEnumEntity): TerritoryEnumEntity {
-      this.territoryId = row['territoryId'];
-      this.territoryName = row['territoryName'];
-    
-      return this;
-    }
+  private fromRow(row: TerritoryEnumEntity): TerritoryEnumEntity {
+    this.territoryId = row['territoryId'];
+    this.territoryName = row['territoryName'];
+  
+    return this;
+  }
 }
 
 export class LocationsEnumContext {
@@ -341,27 +430,26 @@ export class LocationsEnumContext {
     const sql = `SELECT enum_locations.locationId, enum_territory.territoryId, enum_locations.locationName, enum_territory.territoryName, enum_locations.recommendedLevel, enum_locations.recommendedAP FROM enum_locations INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE enum_locations.locationId != 1`;
     const values = {};
 
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<LocationNamesEnumEntity> = new Array<LocationNamesEnumEntity>();
-            for (const row of rows) {
-                const item = new LocationsEnumContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
-    }
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<LocationNamesEnumEntity> = new Array<LocationNamesEnumEntity>();
+      for (const row of rows) {
+        const item = new LocationsEnumContext().fromRow(row);
+        nm.push(item);
+      }
+      return nm;
+    });
+  }
 
-    private fromRow(row: LocationNamesEnumEntity): LocationNamesEnumEntity {
-      this.locationId = row['locationId'];
-      this.territoryId = row['territoryId'];
-      this.locationName = row['locationName'];
-      this.territoryName = row['territoryName'];
-      this.recommendedLevel = row['recommendedLevel'];
-      this.recommendedAP = row['recommendedAP'];
-    
-      return this;
-    }
+  private fromRow(row: LocationNamesEnumEntity): LocationNamesEnumEntity {
+    this.locationId = row['locationId'];
+    this.territoryId = row['territoryId'];
+    this.locationName = row['locationName'];
+    this.territoryName = row['territoryName'];
+    this.recommendedLevel = row['recommendedLevel'];
+    this.recommendedAP = row['recommendedAP'];
+  
+    return this;
+  }
 }
 
 export class ServerEnumContext {
@@ -374,25 +462,24 @@ export class ServerEnumContext {
     const sql = `SELECT * FROM enum_server WHERE serverId != 1`;
     const values = {};
 
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<ServerNamesEnumEntity> = new Array<ServerNamesEnumEntity>();
-            for (const row of rows) {
-                const item = new ServerEnumContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
-    }
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<ServerNamesEnumEntity> = new Array<ServerNamesEnumEntity>();
+      for (const row of rows) {
+          const item = new ServerEnumContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
 
-    private fromRow(row: ServerNamesEnumEntity): ServerNamesEnumEntity {
-      this.serverId = row['serverId'];
-      this.serverName = row['serverName'];
-      if(!!row['isElviaRealm'])
-        this.isElviaRealm = true;
-    
-      return this;
-    }
+  private fromRow(row: ServerNamesEnumEntity): ServerNamesEnumEntity {
+    this.serverId = row['serverId'];
+    this.serverName = row['serverName'];
+    if(!!row['isElviaRealm'])
+      this.isElviaRealm = true;
+  
+    return this;
+  }
 }
 
 export class CombatTypesEnumContext {
@@ -404,23 +491,33 @@ export class CombatTypesEnumContext {
     const sql = `SELECT * FROM enum_combatType WHERE combatTypeId != 1`;
     const values = {};
 
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<CombatTypesEnumEntity> = new Array<CombatTypesEnumEntity>();
-            for (const row of rows) {
-                const item = new CombatTypesEnumContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
-    }
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<CombatTypesEnumEntity> = new Array<CombatTypesEnumEntity>();
+      for (const row of rows) {
+        const item = new CombatTypesEnumContext().fromRow(row);
+        nm.push(item);
+      }
+      return nm;
+    });
+  }
 
-    private fromRow(row: CombatTypesEnumEntity): CombatTypesEnumEntity {
-      this.combatTypeId = row['combatTypeId'];
-      this.combatTypeName = row['combatTypeName'];
-    
-      return this;
-    }
+   // Get Single Combat Type Enum
+   public async get(combatTypeName: string): Promise<CombatTypesEnumEntity> {
+    const sql = `SELECT * FROM enum_combatType WHERE enum_combatType.combatTypeName = $combatTypeName`;
+    const values = { $combatTypeName: combatTypeName };
+
+    return TheDb.selectOne(sql, values).then((row: any) => {
+      if(row) 
+        return new CombatTypesEnumContext().fromRow(row);
+    });
+  }
+
+  private fromRow(row: CombatTypesEnumEntity): CombatTypesEnumEntity {
+    this.combatTypeId = row['combatTypeId'];
+    this.combatTypeName = row['combatTypeName'];
+  
+    return this;
+  }
 }
 
 export class TimeEnumContext {
@@ -432,21 +529,20 @@ export class TimeEnumContext {
     const sql = `SELECT * FROM enum_time`;
     const values = {};
 
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<TimeAmountEnumEntity> = new Array<TimeAmountEnumEntity>();
-            for (const row of rows) {
-                const item = new TimeEnumContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
-    }
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<TimeAmountEnumEntity> = new Array<TimeAmountEnumEntity>();
+      for (const row of rows) {
+          const item = new TimeEnumContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
 
-    private fromRow(row: TimeAmountEnumEntity): TimeAmountEnumEntity {
-      this.timeId = row['timeId'];
-      this.timeAmount = row['timeAmount'];
-    
-      return this;
-    }
+  private fromRow(row: TimeAmountEnumEntity): TimeAmountEnumEntity {
+    this.timeId = row['timeId'];
+    this.timeAmount = row['timeAmount'];
+  
+    return this;
+  }
 }
