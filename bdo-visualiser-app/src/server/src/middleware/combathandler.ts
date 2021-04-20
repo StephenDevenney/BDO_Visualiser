@@ -42,7 +42,7 @@ export class CombatPageDataHandler {
             _.forEach(row => {
                 let timeDescription = row.timeAmount + " Minutes";
                 vdVM.push(new VisibleDataViewModel(row.grindingId, row.dateCreated, row.locationName, timeDescription, row.trashLootAmount, row.className, row.serverDescription, row.combatTypeName, row.afuaruSpawns));
-                gdVM.push(new GrindingDataViewModel(row.grindingId, row.classId, row.dateCreated, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, row.recommendedAP), new TimeAmountEnumViewModel(row.timeId, row.timeAmount), row.trashLootAmount, new UserClassViewModel(row.userClassId, row.className, row.classRoleName, row.combatTypeName, new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription), new ServerNamesEnumViewModel(row.serverId, row.serverDescription, row.isElviaRealm), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), row.afuaruSpawns));
+                gdVM.push(new GrindingDataViewModel(row.grindingId, row.classId, row.dateCreated, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, row.recommendedAP), new TimeAmountEnumViewModel(row.timeId, row.timeAmount), row.trashLootAmount, new UserClassViewModel(row.userClassId, row.className, row.classRoleName, new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription), new ServerNamesEnumViewModel(row.serverId, row.serverDescription, row.isElviaRealm), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), row.afuaruSpawns));
             });
         });
 
@@ -145,17 +145,18 @@ export class ColumnHeadersHandler {
     }
 
         // Update Single Column Header
-    public async updateSingleVisibleColumn(column: CombatHeadersViewModel): Promise<void> {
+    public async updateSingleVisibleColumn(column: CombatHeadersViewModel): Promise<CombatHeadersViewModel> {
         await this.columnHeadersContext.update(column.headingId, column.isActive);
-        return;
+        return column;
     }
 
         // Update All Column Headers
-    public async updateCombatHeaders(combatHeaders: Array<CombatHeadersViewModel>): Promise<void> {
+    public async updateCombatHeaders(combatHeaders: Array<CombatHeadersViewModel>): Promise<Array<CombatHeadersViewModel>> {
         await Promise.all(combatHeaders.map(async (column: CombatHeadersViewModel) => {
             await this.columnHeadersContext.update(column.headingId, column.isActive);
         }));
-        return;
+        return await this.getDefaultColumns();
+        
     }
 }
 
@@ -167,7 +168,7 @@ export class UserClassHandler {
         let acVM = new Array<UserClassViewModel>();
         await this.activeClassesContext.getAll().then((_ : Array<UserClassEntity>) => {
             _.forEach(async row => {
-                acVM.push(new UserClassViewModel(row.classId,  row.className, row.classRole, row.combatTypeName, new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription));
+                acVM.push(new UserClassViewModel(row.classId,  row.className, row.classRole, new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription));
             });
         });
         return acVM;
@@ -184,14 +185,15 @@ export class UserClassHandler {
                 // GET Ids
             userClassEntity.classNameId = (await new ClassNamesEnumContext().get(userClass.className)).classId;
             userClassEntity.classRoleId = (await new ClassRolesEnumContext().get(userClass.classRole)).roleId;
-            userClassEntity.combatTypeId = (await new CombatTypesEnumContext().get(userClass.classRole)).combatTypeId;
+            // create gearScore entry
 
                 // Fill Rest
             userClassEntity.classId = userClass.classId;
             userClassEntity.className = userClass.className;
             userClassEntity.classRole = userClass.classRole;
-            userClassEntity.classDescription = userClass.classDescription
-            userClassEntity.combatTypeName = userClass.primaryCombatTypeDescription;
+            userClassEntity.classDescription = userClass.classDescription;
+            userClassEntity.combatTypeId = userClass.primaryCombatTypeDescription.combatTypeId;
+            userClassEntity.combatTypeName = userClass.primaryCombatTypeDescription.combatTypeName;
             userClassEntity.ap = userClass.gear.ap;
             userClassEntity.aap = userClass.gear.aap;
             userClassEntity.dp = userClass.gear.dp;

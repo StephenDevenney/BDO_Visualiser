@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel } from '../../../server/shared/viewModels/combatViewModels';
+import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, UserClassViewModel } from '../../../server/shared/viewModels/combatViewModels';
 import { CombatController } from '../../../server/src/routes/combatController';
 
 @Injectable()
@@ -16,12 +16,17 @@ export class CombatService {
     }
 
         // PUT
-    public async saveCombatHeaders(columns: Array<CombatHeadersViewModel>): Promise<void> {
+    public async saveCombatHeaders(columns: Array<CombatHeadersViewModel>): Promise<Array<CombatHeadersViewModel>> {
         return await this.combatRoute.updateCombatHeaders(columns);
     }
 
-    public async saveSingleCombatHeader(column: CombatHeadersViewModel): Promise<void> {
+    public async saveSingleCombatHeader(column: CombatHeadersViewModel): Promise<CombatHeadersViewModel> {
         return await this.combatRoute.updateSingleVisibleColumn(column);
+    }
+
+        // POST
+    public async addMainUserClass(userClass: UserClassViewModel): Promise<void> {
+        return await this.combatRoute.addMainUserClass(userClass);
     }
 
     // public getDefaultColumns() {

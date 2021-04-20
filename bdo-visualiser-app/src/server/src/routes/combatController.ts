@@ -21,11 +21,11 @@ export class CombatController {
     }
 
         // PUT
-    public async updateSingleVisibleColumn(column: CombatHeadersViewModel): Promise<void> {
+    public async updateSingleVisibleColumn(column: CombatHeadersViewModel): Promise<CombatHeadersViewModel> {
         return await this.columnHeadersHandler.updateSingleVisibleColumn(column);
     }
     
-    public async updateCombatHeaders(combatHeaders: Array<CombatHeadersViewModel>): Promise<void> {
+    public async updateCombatHeaders(combatHeaders: Array<CombatHeadersViewModel>): Promise<Array<CombatHeadersViewModel>> {
         return await this.columnHeadersHandler.updateCombatHeaders(combatHeaders);
     }
 
@@ -36,7 +36,6 @@ export class CombatController {
         return;
     }
 
-        // POST
     public async addUserClass(userClass: UserClassViewModel): Promise<void> {
         await new UserClassHandler().addUserClass(userClass);
         return;

@@ -193,11 +193,11 @@ export class UserClassViewModel {
     public classId: number = 0;
     public className: string = "";
     public classRole: string = "";
-    public primaryCombatTypeDescription: string = "";
+    public primaryCombatTypeDescription: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
     public gear: GearViewModel = new GearViewModel();
     public classDescription: string = "";
 
-    constructor(classId?: number, className?: string, classRole?: string, primaryCombatTypeDescription?: string, gear?: GearViewModel, classDescription?: string) {
+    constructor(classId?: number, className?: string, classRole?: string, primaryCombatTypeDescription?: CombatTypesEnumViewModel, gear?: GearViewModel, classDescription?: string) {
         if(classId) {
             this.classId = classId;
             this.className = className;

@@ -137,22 +137,30 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public async saveDefaultColumns() {
     this.loader.startBackground();
     if(this.columnChanged) {
-      // this.combatService.saveCombatHeaders(this.columnHeaders).catch((err: any) => {
-      //   this.messageService.add({severity:'error', summary:'Error', detail:'Combat headers failed to update.', life: 2600 });
-      //   this.loader.stopBackground();
-      // }).then((_: void) => {
-      //     this.combatPageData.hasDefaultCombatHeaders = true;
-      //     this.columnChanged = false;
-      //     // this.columnHeaders = res as Array<GrindingTableHeaders>;
-      // }).finally((_: void) => {
-      //   this.addEntryPopupChecks();
-      //   this.loader.stopBackground();
-      // });
+      this.combatService.saveCombatHeaders(this.columnHeaders).catch((err: any) => {
+        this.messageService.add({severity:'error', summary:'Error', detail:'Combat headers failed to update.', life: 2600 });
+        this.loader.stopBackground();
+      }).then((res: Array<CombatHeadersViewModel>) => {
+          this.combatPageData.hasDefaultCombatHeaders = true;
+          this.columnChanged = false;
+          this.columnHeaders = res;
+      }).finally(() => {
+        this.addEntryPopupChecks();
+        this.loader.stopBackground();
+      });
     }
   }
 
   public saveMainClass() {
+    this.loader.startBackground();
     if(this.mainClass.className.length > 0) {
+      this.combatService.addMainUserClass(this.mainClass).catch((err: any) => {
+        this.messageService.add({severity:'error', summary:'Error', detail:'Failed to save class', life: 2600 });
+        this.loader.stopBackground();
+      }).then((res: void) => {
+        this.messageService.add({severity:'error', summary:'Error', detail:'Failed to save class', life: 2600 });
+        this.loader.stopBackground();
+      });
       // this.loader.startBackground();
       // this.combatService.addMainClass(this.mainClass).subscribe((res: UserClass) => {
       //   this.mainClass = res;
@@ -256,27 +264,15 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   }
 
   public onVisibleColumnChange(event: { itemValue: CombatHeadersViewModel; }) {
-    // this.combatService.saveSingleCombatHeader(event.itemValue).catch((err: any) => {
-    //   this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
-    // }).then((_: void) => {
-    //   let foundIndex = this.columnHeaders.findIndex(_ => _.headingId == updatedHeader.headingId);
-    //     if(foundIndex >= 0)
-    //       this.columnSelectOptions[foundIndex].isActive = updatedHeader.isActive;
-
-    //   this.cdRef.detectChanges();
-    // });
-    
-    // this.combatService.updateSingleVisibleColumn(event.itemValue as GrindingTableHeaders).subscribe((res: any) => {
-    //   let updatedHeader = res as GrindingTableHeaders;
-    //   let foundIndex = this.columnHeaders.findIndex(_ => _.headingId == updatedHeader.headingId);
-    //   if(foundIndex >= 0)
-    //     this.columnSelectOptions[foundIndex].isActive = updatedHeader.isActive;
-
-    //   this.cdRef.detectChanges();
-    // },
-    // (err: any) => {
-    //   this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
-    // });
+    this.combatService.saveSingleCombatHeader(event.itemValue).catch((err: any) => {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
+    }).then((res: CombatHeadersViewModel) => {
+      let updatedHeader = res;
+      let foundIndex = this.columnHeaders.findIndex(_ => _.headingId == updatedHeader.headingId);
+      if(foundIndex >= 0)
+        this.columnSelectOptions[foundIndex].isActive = updatedHeader.isActive;
+      this.cdRef.detectChanges();
+    });
   }
 
   public toggleAddEntryColumns(target: string) {
