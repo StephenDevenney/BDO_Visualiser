@@ -1,7 +1,7 @@
 <page>
-    <page-header></page-header>
-    <div *ngIf="isLoaded" class="split-page">
-        <div class="half-page">
+    <!-- <page-header></page-header> -->
+    <div *ngIf="isLoaded" class="row overflow-hidden">
+        <div class="col-6 border-right border-secondary pr-0"><!-- half-page -->
             <div *ngIf="grindingRes.length > 0">
                 <div class="d-flex align-items-center justify-content-between mb-2">
                     <div class="d-flex">
@@ -23,8 +23,6 @@
                         </p-multiSelect>
                     </div>
                     <div class="d-flex align-items-center justify-content-end">
-                        <!-- <p-fileUpload class="mr-2" name="uploadedFiles[]" accept=".csv" maxFileSize="1000000" fileLimit="1" [auto]="true" customUpload="true" (uploadHandler)="onDataUpload($event)" mode="basic" [showUploadButton]="true" (onError)="catchError($event)"></p-fileUpload> -->
-                        <!-- <button class="btn btn-primary mr-2" (click)="exportCSV()">Export</button> -->
                         <button class="btn btn-primary mr-2">Delete</button>
                         <button class="btn btn-primary mr-2" (click)="addEntryPopupChecks()">Add</button>
                     </div>
@@ -73,7 +71,7 @@
                 </div>              
             </div> 
             <!-- Empty Datasource -->
-            <div *ngIf="grindingRes.length == 0">
+            <div *ngIf="grindingRes.length != 0">
                 <div>
                     <h2>Grinding</h2>
                     <div class="d-flex align-items-center justify-content-center" style="height: 60vh;">
@@ -87,9 +85,20 @@
                         </div>
                     </div>
                 </div>
-            </div>        
+            </div>  
+            <!-- Table Insert -->
+            <div *ngIf="grindingRes.length == 0">
+                <div>
+                    <table-insert 
+                        *ngIf="globals.isSignedIn"
+                        [combatHeaders]="columnSelectOptions"
+                        [activeClasses]="activeClasses"
+                        [tableLength]="grindingRes.length">
+                    </table-insert>
+                </div>
+            </div>      
         </div>
-        <div class="half-page p-0">
+        <div class="col-6 pl-0"><!-- half-page p-0 -->
             <p-tabView>
                 <p-tabPanel header="Graphs">
                     <div class="tab-container">

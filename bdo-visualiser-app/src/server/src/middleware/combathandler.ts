@@ -1,5 +1,5 @@
 import { ClassNamesEnumEntity, CombatHeadersEntity, CombatSettingsEntity, CombatTypesEnumEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity, UserClassEntity } from '../../shared/entities/combatEntities';
-import { ActiveClassesContext, ClassNamesEnumContext, ClassRolesEnumContext, ColumnHeadersContext, CombatSettingsContext, CombatTableHeadersContext, CombatTypesEnumContext, GearContext, GrindingDataContext, LocationsEnumContext, RecentLocationsContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
+import { UserClassContext, ClassNamesEnumContext, ClassRolesEnumContext, ColumnHeadersContext, CombatSettingsContext, CombatTableHeadersContext, CombatTypesEnumContext, GearContext, GrindingDataContext, LocationsEnumContext, RecentLocationsContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
 import { ClassNamesEnumViewModel, CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatTypesEnumViewModel, GearViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, UserClassViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 import { Calculations } from '../../shared/calc/calculations';
 
@@ -7,7 +7,6 @@ export class CombatPageDataHandler {
         // SQL Context
     private combatSettingsContext: CombatSettingsContext = new CombatSettingsContext();
     private combatTableHeadersContext: CombatTableHeadersContext = new CombatTableHeadersContext();
-    private activeClassesContext: ActiveClassesContext = new ActiveClassesContext();
     private grindingDataContext: GrindingDataContext = new GrindingDataContext();
     private userClassHandler: UserClassHandler = new UserClassHandler();
 
@@ -20,19 +19,9 @@ export class CombatPageDataHandler {
                 gthVM.push(new CombatHeadersViewModel(row.headingId,  row.field, row.header, row.isActive));
             });
         });
-        //     // Get Active Classes
-        // let acVM = new Array<UserClassViewModel>();
-        // let hasMainClass = true;
-        // await this.activeClassesContext.getAll().then((_ : Array<UserClassEntity>) => {
-        //     _.forEach(async row => {
-        //         acVM.push(new UserClassViewModel(row.classId,  row.className, row.classRole, row.combatTypeName, new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription));
-        //     });
-
-        //     if(acVM.length == 0 || !acVM)
-        //         hasMainClass = false;
-        // });
+            // Get Classes
         let hasMainClass = true;
-        let acVM = await this.userClassHandler.getActiveClasses();
+        let acVM = await this.userClassHandler.getUserClasses();
         if(acVM.length == 0)
             hasMainClass = false
             // Get Grinding Data (Visible Data is what the user will see on screen, GrindingData is used as a data source)
@@ -157,12 +146,12 @@ export class ColumnHeadersHandler {
 }
 
 export class UserClassHandler {
-    private activeClassesContext: ActiveClassesContext = new ActiveClassesContext();
+    private userClassContext: UserClassContext = new UserClassContext();
 
-    public async getActiveClasses(): Promise<Array<UserClassViewModel>> {
+    public async getUserClasses(): Promise<Array<UserClassViewModel>> {
             // Get Active Classes
         let acVM = new Array<UserClassViewModel>();
-        await this.activeClassesContext.getAll().then((_ : Array<UserClassEntity>) => {
+        await this.userClassContext.getAll().then((_ : Array<UserClassEntity>) => {
             _.forEach(async row => {
                 acVM.push(new UserClassViewModel(row.classId,  row.className, row.classRole, new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription));
             });
@@ -172,8 +161,8 @@ export class UserClassHandler {
 
     public async addUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
         let ucE = await convertToEntity(userClass);
-        await this.activeClassesContext.insert(ucE);
-        let ncE = await new ActiveClassesContext().getMostRecent();
+        await this.userClassContext.insert(ucE);
+        let ncE = await new UserClassContext().getMostRecent();
         await new GearContext().updateClassId(ncE.FK_gearScoreId, ncE.classId );
 
         return new UserClassViewModel(ncE.classId, ncE.className, ncE.classRole, new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(ncE.ap, ncE.aap, ncE.dp, ncE.gearScore), ncE.classDescription);
@@ -209,5 +198,9 @@ export class UserClassHandler {
 }
 
 export class GearHandler {
+
+}
+
+export class NewEntryHandler {
 
 }

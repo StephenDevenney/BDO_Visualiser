@@ -55,12 +55,18 @@
     background-color: darken($standard-primary, 2%);
     color: $standard-primary-text;
 
-    // ## Page
-    .page {
-        .page-header {
-            border-bottom: 0.1rem solid darken($standard-primary, 20%);
-            color: $standard-primary;
+    .pi {
+        color: lighten($standard-secondary, 20%);
+        &:hover {
+            color: lighten($standard-secondary, 30%);
         }
+    }
+
+    // ## Page
+    .page-header {
+        border-bottom: 0.1rem solid darken($standard-primary, 20%);
+        color: $standard-primary;
+        background-color: $standard-secondary;
     }
 
     .split-page .half-page:nth-child(2n) {
@@ -448,6 +454,9 @@
     .p-inputswitch .p-inputswitch-slider {
         background: $standard-tertiary;
     }
+    // .switch-secondary .p-inputswitch .p-inputswitch-slider {
+    //     background: red !important;
+    // }
 
     .p-inputswitch:not(.p-disabled):hover .p-inputswitch-slider {
         background: lighten($standard-tertiary, 10%);
@@ -456,9 +465,15 @@
     .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
         background: $standard-secondary;
     }
+    .switch-secondary .p-inputswitch.p-inputswitch-checked .p-inputswitch-slider {
+        background: lighten($standard-secondary, 20%);
+    }
 
     .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
         background: lighten($standard-secondary, 10%);
+    }
+    .switch-secondary .p-inputswitch.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
+        background: lighten($standard-secondary, 30%);
     }
 
     .p-inputswitch.p-focus .p-inputswitch-slider {

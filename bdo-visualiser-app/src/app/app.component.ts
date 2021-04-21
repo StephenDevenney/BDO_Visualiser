@@ -9,6 +9,7 @@ import { TheDb } from '../server/src/thedb';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Menu, MenuItemConstructorOptions, OpenDialogOptions, remote, OpenDialogSyncOptions, SaveDialogSyncOptions } from 'electron';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -22,10 +23,10 @@ export class AppComponent {
               public globals: Globals, 
               private authService: AuthService,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private titleService: Title) {
 
         Settings.initialize();
-
         if (fs.existsSync(Settings.dbPath)) {
             this.openDb(Settings.dbPath);
         } else if (Settings.hasFixedDbLocation) {
@@ -34,7 +35,7 @@ export class AppComponent {
             this.createDb();
         }
 
-        console.log(remote.app.getPath('userData'));
+        // console.log(remote.app.getPath('userData'));
         
   }
 
@@ -93,5 +94,10 @@ export class AppComponent {
     await this.apiService.loadSecuritySettings();
     this.isLoaded = true;
     this.router.navigate(["combat"]);
+    this.titleService.setTitle(this.globals.config.hubName + " - Combat");
+        // if(this.globals.currentPageId > 0)
+        //   this.globals.previousPageId = this.globals.currentPageId;
+
+        this.globals.currentPageId = 2;
   }
 }

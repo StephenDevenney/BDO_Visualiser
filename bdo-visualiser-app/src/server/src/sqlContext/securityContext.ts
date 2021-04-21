@@ -45,7 +45,7 @@ export class SecuritySettingsContext {
 
     // GET Security Settings
   public get(): Promise<SecuritySettingsEntity> {
-    const sql = `SELECT security_user.userId, security_user.userName, security_user.FK_roleId AS userRoleId, security_settings.navMinimised, enum_appIdleSecs.idleTime AS appIdleSecs, enum_theme.themeId, enum_theme.themeName, enum_theme.themeClassName FROM security_settings INNER JOIN security_user ON security_user.userId = security_settings.FK_userId INNER JOIN enum_theme ON enum_theme.themeId = security_settings.FK_themeId INNER JOIN enum_appIdleSecs ON enum_appIdleSecs.appIdleSecsId = security_settings.FK_appIdleSecsId WHERE security_settings.settingsId = 1`;
+    const sql = `SELECT security_user.userId, security_user.userName, security_user.FK_roleId AS userRoleId, security_settings.navMinimised, enum_appIdleSecs.idleTime, enum_theme.themeId, enum_theme.themeName, enum_theme.themeClassName FROM security_settings INNER JOIN security_user ON security_user.userId = security_settings.FK_userId INNER JOIN enum_theme ON enum_theme.themeId = security_settings.FK_themeId INNER JOIN enum_appIdleSecs ON enum_appIdleSecs.appIdleSecsId = security_settings.FK_appIdleSecsId WHERE security_settings.settingsId = 1`;
     const values = {};
 
     return TheDb.selectOne(sql, values)

@@ -68,7 +68,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.loader.stop();
       // Log Error
     }).then((res: CombatPageDataViewModel) => {
-      console.log(res);
+      // console.log(res);
       this.combatPageData = res;
       this.columnHeaders = this.combatPageData.tableHeaders as Array<CombatHeadersViewModel>;
       this.filteredColumns = this.columnHeaders.filter(header => header.isActive == true);
@@ -86,7 +86,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     this.combatService.getCombatEnums().catch((err: any) => {
       this.messageService.add({severity:'error', summary:'Error', detail:'Error Loading Enums.', life: 2600 });
     }).then((res: CombatPageEnumsViewModel) => {
-      console.log(res);
+      // console.log(res);
       this.combatEnums = res;
     });
   }
@@ -277,14 +277,6 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.showGrindingTableEntry = true;
       this.popupHeight = "21rem";
     }
-  }
-
-  public exportCSV() {
-
-  }
-
-  public async onDataUpload(event: any): Promise<any> {
-
   }
 
   public applyFilterGlobal($event: any, stringVal: string) {

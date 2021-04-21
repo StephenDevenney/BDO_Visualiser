@@ -1,13 +1,17 @@
 
 export class NavMenuViewModel {
+    public navMenuId: number = 0;
     public navName: string = "";
     public navTitle: string = "";
     public navRoute: string = "";
 
-    constructor(navName: string, navTitle: string, navRoute: string) {
-        this.navName = navName;
-        this.navTitle = navTitle;
-        this.navRoute = navRoute;
+    constructor(navMenuId: number, navName: string, navTitle: string, navRoute: string) {
+        if(navMenuId) {
+            this.navMenuId = navMenuId;
+            this.navName = navName;
+            this.navTitle = navTitle;
+            this.navRoute = navRoute;
+        }
     }
 }
 

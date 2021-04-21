@@ -73,7 +73,7 @@ export class CombatTableHeadersContext {
   }
 }
 
-export class ActiveClassesContext {
+export class UserClassContext {
   public classId: number = 0;
   public FK_gearScoreId: number = 0;
   public classNameId: number = 0;
@@ -97,7 +97,7 @@ export class ActiveClassesContext {
     return TheDb.selectAll(sql, values).then((rows: any) => {
       const nm: Array<UserClassEntity> = new Array<UserClassEntity>();
       for (const row of rows) {
-          const item = new ActiveClassesContext().fromRow(row);
+          const item = new UserClassContext().fromRow(row);
           nm.push(item);
       }
       return nm;
@@ -111,7 +111,7 @@ export class ActiveClassesContext {
 
     return TheDb.selectOne(sql, values).then((row: any) => {
       if(row)
-        return new ActiveClassesContext().fromRow(row);
+        return new UserClassContext().fromRow(row);
     });
   }
 

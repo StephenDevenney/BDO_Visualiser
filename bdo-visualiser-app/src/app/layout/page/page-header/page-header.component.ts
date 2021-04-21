@@ -3,7 +3,9 @@ import { Theme } from '../../../shared/classes/config';
 import { HeaderType } from '../enums/header-type';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { PageService } from '../page.service';
-import { ThemeViewModel } from 'src/server/shared/viewModels/securityViewModels';
+import { NavMenuViewModel, ThemeViewModel } from 'src/server/shared/viewModels/securityViewModels';
+import { Title } from '@angular/platform-browser';
+import { InputSwitch } from 'primeng/inputswitch';
 
 @Component({
   selector: 'page-header',
@@ -20,54 +22,64 @@ export class PageHeaderComponent extends BaseComponent implements OnInit {
   public showOptions: boolean = false;
   public showSideOptions: boolean = false;
   public sideOptionsId: number = 0;
-  public themes: Array<Theme> = new Array<Theme>();
-  public isLoaded: boolean = false;
+  public themes: Array<ThemeViewModel> = new Array<ThemeViewModel>();
+  public navToggle: boolean = false;
+  public navigationMenu: Array<NavMenuViewModel> = new Array<NavMenuViewModel>();
+  public navLoaded: boolean = false;
+  public selectedThemeStatus: boolean = false;
 
   constructor(private injector: Injector,
-    private pageService: PageService) {
+    private pageService: PageService,
+    private titleService: Title) {
     super(injector);
    }
 
   ngOnInit(): void {
+    if(this.globals.config.theme.themeId == 1)
+        this.selectedThemeStatus = true;
+
     this.pageService.getThemes().catch((err: any) => {
       this.messageService.add({severity:'error', summary:'Error', detail:'Failed to get themes.', life: 2600 });
     }).then((res: Array<ThemeViewModel>) => {
       this.themes = res;
-      this.isLoaded = true;
+    });
+
+    this.pageService.getNavMenu().catch((err: any) => {
+      // Log Error
+    }).then((res: Array<NavMenuViewModel>) => {
+      this.navigationMenu = res;
+      this.navLoaded = true;
     });
   }
 
-  public toggleOptionsMenu() {
-    if(this.showOptions)
-      this.showOptions = false;
-    else 
-      this.showOptions = true;
+  public changeTheme(e: InputSwitch) {
+    if(e.checked)
+      this.globals.config.theme = this.themes[0];
+    else
+      this.globals.config.theme = this.themes[1];
+
+    this.loader.start();
+    this.saveSettings();
   }
 
-  public getSideTabId(id: number) {
-    this.showSideOptions = true;
-    this.sideOptionsId = id;
-    this.showOptions = false;
-  }
-
-  public async saveSettings(): Promise<any> {
-    this.loader.startBackground();
+  public async saveSettings(): Promise<void> {
     this.pageService.saveConfigSettings().catch((err: any) => {
-      this.loader.stopBackground();
-      this.messageService.add({severity:'error', summary:'Error Saving', detail:'Server issue, cannot save settings at this time.', life: 2600 });
+      this.loader.stop();
+      return;
     }).finally(() => {
-      this.messageService.add({severity:'success', summary:'Profile Updated', detail:'Your profile settings have been saved.', life: 1900 });
-      this.loader.stopBackground();
+      this.loader.stop();
     });
   }
 
-  public sideBarClosed() {
-    this.showSideOptions = false;
-    this.sideOptionsId = 0;
-  }
+  public async navToPage(navMenu: NavMenuViewModel) {
+    console.log(navMenu);
+    if(navMenu.navRoute != "" || navMenu.navRoute != undefined)
+      await this.router.navigate([navMenu.navRoute]).then(res => {
+        this.titleService.setTitle(this.globals.config.hubName + " - " + navMenu.navName);
+        if(this.globals.currentPageId > 0)
+          this.globals.previousPageId = this.globals.currentPageId;
 
-  public closeDropdown() {
-    if(this.showOptions)
-      this.showOptions = false;
+        this.globals.currentPageId = navMenu.navMenuId;
+      });
   }
 }

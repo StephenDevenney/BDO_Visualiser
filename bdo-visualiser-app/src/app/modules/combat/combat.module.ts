@@ -9,7 +9,6 @@ import { TotalsComponent } from './combat-page/totals/totals.component';
 import { BuffsComponent } from './combat-page/buffs/buffs.component';
 import { LootComponent } from './combat-page/loot/loot.component';
 import { GraphsComponent } from './combat-page/graphs/graphs.component';
-import { InputSwitchModule } from 'primeng/inputswitch';
 import { ServerModule } from 'src/server/src/serverModule';
 
 @NgModule({
@@ -17,7 +16,6 @@ import { ServerModule } from 'src/server/src/serverModule';
     CommonModule,
     SharedModule,
     TabViewModule,
-    InputSwitchModule,
     ServerModule
   ],
   declarations: [

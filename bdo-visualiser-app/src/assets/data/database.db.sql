@@ -312,9 +312,10 @@ INSERT INTO combat_settings (combatSettingsId, FK_currentGearScoreId, FK_redBatt
 INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Home', 'Overview', 'home');
 INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Combat', 'Combat Stats Visualised', 'combat');
 INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Life', 'Life Stats Visualised', 'life');
-INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Map', 'Map Overlay', 'map');
 INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Fail Stacks', 'Fail Stacks Tracker', 'fail-stacks');
-INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Scrolls', 'Track your scrolls', 'scrolls');
+INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Scrolls', 'Track Your Scrolls', 'scrolls');
+INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Barter', 'Manage Your Bartering', 'barter');
+INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Classes', 'Character Creation', 'user-classes');
 
 -- security_navIcon
 
@@ -325,10 +326,14 @@ INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (2, 1); -- Combat 
 INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (2, 2); -- Combat - admin
 INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (3, 1); -- Life - user
 INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (3, 2); -- Life - admin
-INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (4, 1); -- Map - user
-INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (4, 2); -- Map - admin
-INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (5, 1); -- FailStacks - user
-INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (5, 2); -- FailStacks - admin
+INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (4, 1); -- Fail Stacks - user
+INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (4, 2); -- Fail Stacks - admin
+INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (5, 1); -- Scrolls - user
+INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (5, 2); -- Scrolls - admin
+INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (6, 1); -- Barter - user
+INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (6, 2); -- Barter - admin
+INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (7, 1); -- UserClasses - user
+INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (7, 2); -- UserClasses - admin
 
 -- Combat - ColumnDefaults
 INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 1, 1, 0);

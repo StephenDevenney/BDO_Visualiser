@@ -20,6 +20,9 @@ import { MessageService } from 'primeng/api';
 import { TableInsertComponent } from './shared/components/table-insert/table-insert.component';
 import { LoadingService } from './shared/services/loading.service';
 import { NgxUiLoaderModule, NgxUiLoaderConfig, POSITION, SPINNER, PB_DIRECTION } from 'ngx-ui-loader';
+import { BarterModule } from './modules/barter/barter.module';
+import { UserClassesModule } from './modules/user-classes/user-classes.module';
+import { ScrollsModule } from './modules/scrolls/scrolls.module';
 
 /*
   bgs = bottomRight Small loader
@@ -44,8 +47,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
 @NgModule({
   declarations: [
     AppComponent,
-    RedirectToComponent,
-    TableInsertComponent
+    RedirectToComponent
   ],
   imports: [
     BrowserModule,
@@ -56,6 +58,9 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     LifeModule,
     MapModule,
     FailStacksModule,
+    BarterModule,
+    UserClassesModule,
+    ScrollsModule,
     SignInModule,
     SharedModule,
     HttpClientModule,

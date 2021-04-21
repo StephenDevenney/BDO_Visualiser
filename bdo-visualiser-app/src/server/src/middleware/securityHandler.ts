@@ -10,7 +10,7 @@ export class NavMenuHandler {
         let nmvm = new Array<NavMenuViewModel>();
         await this.navMenu.getAll().then((_ : Array<NavMenuEntity>) => {
             _.forEach(row => {
-                nmvm.push(new NavMenuViewModel(row.navName,  row.navTitle, row.navRoute));
+                nmvm.push(new NavMenuViewModel(row.navMenuId, row.navName,  row.navTitle, row.navRoute));
             });
         });
         return nmvm;
@@ -33,7 +33,7 @@ export class SecuritySettingsHandler {
         return securitySettings;
     }
 
-    public async saveConfigSettings(config: ConfigViewModel): Promise<void> { 
+    public async saveConfigSettings(config: ConfigViewModel): Promise<void> {
         await this.securitySettingsContext.update(config.theme.themeId, config.navMinimised);
 
         return;

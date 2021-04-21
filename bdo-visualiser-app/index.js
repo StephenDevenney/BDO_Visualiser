@@ -24,8 +24,9 @@ let createWindow = () => {
 	// Create the browser window.
 	mainWindow = new BrowserWindow({
 		show: false,
-    width: 1780,
-    height: 800,
+		width: 1300, height: 600,
+		minHeight: 600,
+		minWidth: 1300,
 		webPreferences: {
 			nodeIntegration: true,
 			enableRemoteModule: true,
@@ -49,6 +50,10 @@ let createWindow = () => {
 	// Emitted when the window is closed.
 	mainWindow.on('closed', () => {
 		mainWindow = null;
+	});
+
+	mainWindow.webContents.on('did-fail-load', () => {
+		mainWindow.loadURL('file://' + __dirname + '/dist/index.html');
 	});
 }
 
@@ -81,13 +86,6 @@ app.on('activate', () => {
 //     }
 //   })
 
-//   mainWindow.loadURL(
-//     url.format({
-//       pathname: path.join(__dirname, `/dist/index.html`),
-//       protocol: "file:",
-//       slashes: true
-//     })
-//   );
 //   // Open the DevTools.
 //   mainWindow.webContents.openDevTools()
 

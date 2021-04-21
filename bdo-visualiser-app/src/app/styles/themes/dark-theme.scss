@@ -53,16 +53,22 @@
 
     // # General
 
+    .pi {
+        color: darken($dark-tertiary, 20%);
+        &:hover {
+            color: darken($dark-tertiary, 10%);
+        }
+    }
+
     // ## Body
     background-color: darken($dark-primary, 2%);
     color: $dark-primary-text;
 
     // ## Page
-    .page {
-        .page-header {
-            border-bottom: 0.1rem solid darken($dark-primary, 20%);
-            color: $dark-primary;
-        }
+    .page-header {
+        border-bottom: 0.1rem solid darken($dark-primary, 20%);
+        color: $dark-primary;
+        background-color: $dark-secondary;
     }
 
     .split-page .half-page:nth-child(2n) {

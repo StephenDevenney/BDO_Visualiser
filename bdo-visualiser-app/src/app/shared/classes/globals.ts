@@ -6,8 +6,8 @@ export class Globals {
     public user: AppUserViewModel = new AppUserViewModel;
     public isSignedIn: boolean = false;
     public seriousErrorMessage: string = "";
-    public previousUrl: string = "";
-    public currentUrl: string = "";
+    public previousPageId: number = 0;
+    public currentPageId: number = 0;
     public config: ConfigViewModel = new ConfigViewModel;
     
 }

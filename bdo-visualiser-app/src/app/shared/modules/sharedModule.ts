@@ -17,20 +17,25 @@ import { DateLongPipe } from '../pipes/date-long.pipe';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { ServerModule } from 'src/server/src/serverModule';
+import { TableInsertComponent } from '../components/table-insert/table-insert.component';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
   imports: [
     CommonModule,
     PageModule,
     NgxUiLoaderModule,
-    ServerModule
+    ServerModule,
+    InputSwitchModule
   ],
   declarations: [
-    DateLongPipe
+    DateLongPipe,
+    TableInsertComponent
   ],
   exports: [
     PageComponent,
     PageHeaderComponent,
+    TableInsertComponent,
     FormsModule,
     BrowserModule,
     BrowserAnimationsModule,
@@ -46,7 +51,8 @@ import { ServerModule } from 'src/server/src/serverModule';
     Globals,
     MessageService,
     MultiSelectModule,
-    DateLongPipe
+    DateLongPipe,
+    TableInsertComponent
   ]
 })
 export class SharedModule { 
