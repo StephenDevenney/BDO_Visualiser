@@ -35,20 +35,6 @@ CREATE TABLE security_navRole (
 	FK_roleId INTEGER NOT NULL DEFAULT 0
 );
 
--- CREATE TABLE security_navSubMenu (
--- 	navSubMenuId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
--- 	navName INTEGER NOT NULL DEFAULT 0,
--- 	navTitle INTEGER NOT NULL DEFAULT 0,
--- 	navRoute TEXT NOT NULL DEFAULT 0,
--- 	FK_navRoleId INTEGER NOT NULL DEFAULT 0
--- );
-
--- CREATE TABLE security_navSubRole (
--- 	navSubRoleId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
--- 	FK_navSubMenuId INTEGER NOT NULL DEFAULT 0,
--- 	FK_roleId INTEGER NOT NULL DEFAULT 0
--- );
-
 -- Combat
 CREATE TABLE combat_settings (
 	combatSettingsId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -224,6 +210,26 @@ CREATE TABLE enum_combatTableHeadings (
 	headingId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	field TEXT,
 	header TEXT
+);
+
+-- Scrolls
+CREATE TABLE scroll_scrolls (
+	scrollId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	FK_scrollTypeId TEXT,
+	FK_classId INTEGER,
+	memoryFragsDrop INTEGER,
+	memoryFragsBundle INTEGER,
+);
+
+CREATE TABLE enum_scrollType (
+	scrollTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	scrollTypeName TEXT
+);
+
+CREATE TABLE enum_scrollTrashLoot (
+	scrollTrashLootId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	FK_scrollTypeId NUMBER,
+	scrollTrashLootName TEXT
 );
 
 -- Post Publish Script

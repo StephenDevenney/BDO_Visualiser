@@ -80,14 +80,13 @@ export class CombatPageEnumHandler {
     private timeEnumContext: TimeEnumContext = new TimeEnumContext();
 
     public async getCombatEnums(): Promise<CombatPageEnumsViewModel> {
-            // Get Class Enums
         let classNamesEnum = new Array<ClassNamesEnumViewModel>();
         await this.classNamesEnumContext.getAll().then((_: Array<ClassNamesEnumEntity>) => {
             _.forEach(row => {
                 classNamesEnum.push(new ClassNamesEnumViewModel(row.classId, row.className));
             });
         });
-
+        
         let locationNamesEnum = new Array<LocationNamesGroupedEnumViewModel>();
         let locationViewModel = new Array<LocationNamesEnumViewModel>();
             // Get Top 3 Most Recent Location Entires First
@@ -101,7 +100,6 @@ export class CombatPageEnumHandler {
         if(locationViewModel.length > 0)
             locationNamesEnum.push(new LocationNamesGroupedEnumViewModel("Recent", locationViewModel));
 
-            // Get All Location Enums
         let locationArray = await this.locationsEnumContext.getAll();
 
         await this.territoryEnumContext.getAll().then((_: Array<TerritoryEnumEntity>) => {
@@ -114,21 +112,22 @@ export class CombatPageEnumHandler {
             });
         });
 
-            // Get Server Enums
+       
         let serverNamesEnum = new Array<ServerNamesEnumViewModel>();
         await this.serverEnumContext.getAll().then((_: Array<ServerNamesEnumEntity>) => {
             _.forEach(row => {
                 serverNamesEnum.push(new ServerNamesEnumViewModel(row.serverId, row.serverName, row.isElviaRealm));
             });
         });
-            // Get Combat Type Enums
+        
         let combatTypesEnum = new Array<CombatTypesEnumViewModel>();
         await this.combatTypesEnumContext.getAll().then((_: Array<CombatTypesEnumEntity>) => {
             _.forEach(row => {
                 combatTypesEnum.push(new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName));
             });
         });
-            // Get Time Enums
+
+           
         let timeAmountEnum = new Array<TimeAmountEnumViewModel>();
         await this.timeEnumContext.getAll().then((_: Array<TimeAmountEnumEntity>) => {
             _.forEach(row => {
@@ -136,16 +135,18 @@ export class CombatPageEnumHandler {
             });
         });
 
-        // Get Previous Entries Data
+        
         let previousEntry = new PreviousCombatValuesViewModel();
         await new GrindingDataContext().getMostRecent().then((_: GrindingDataEntity) => {
-            previousEntry.combatType = new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName);
-            previousEntry.grindLocation = new LocationNamesEnumViewModel(_.locationId, _.territoryId, _.locationName, _.territoryName, _.recommendedLevel, _.recommendedAP);
-            previousEntry.server = new ServerNamesEnumViewModel(_.serverId, _.serverDescription, _.isElviaRealm);
-            previousEntry.timeAmount = new TimeAmountEnumViewModel(_.timeId, _.timeAmount);
-            previousEntry.userClass = new UserClassViewModel(_.userClassId, _.className, _.classRoleName, new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName), new GearViewModel(_.ap, _.aap, _.dp, _.gearScore), _.classDescription);
+            if(typeof(_) != "undefined") {
+                previousEntry.combatType = new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName);
+                previousEntry.grindLocation = new LocationNamesEnumViewModel(_.locationId, _.territoryId, _.locationName, _.territoryName, _.recommendedLevel, _.recommendedAP);
+                previousEntry.server = new ServerNamesEnumViewModel(_.serverId, _.serverDescription, _.isElviaRealm);
+                previousEntry.timeAmount = new TimeAmountEnumViewModel(_.timeId, _.timeAmount);
+                previousEntry.userClass = new UserClassViewModel(_.userClassId, _.className, _.classRoleName, new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName), new GearViewModel(_.ap, _.aap, _.dp, _.gearScore), _.classDescription);    
+            }
         });
-
+        
         return new CombatPageEnumsViewModel(classNamesEnum, locationNamesEnum, serverNamesEnum, combatTypesEnum, timeAmountEnum, previousEntry);
     }
 

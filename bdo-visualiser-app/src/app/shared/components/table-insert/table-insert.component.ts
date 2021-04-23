@@ -47,6 +47,7 @@ export class TableInsertComponent extends BaseComponent implements OnInit {
         
         this.isLoaded = true;
       }).catch((err: any) => {
+        console.log(err);
         this.messageService.add({severity:'error', summary:'Error', detail:'Error Loading Enums.', life: 2600 });
       });
     }
