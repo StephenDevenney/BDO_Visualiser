@@ -18,15 +18,14 @@ export class NavMenuHandler {
 }
 
 export class SecuritySettingsHandler {
-        // SQL Context
-    private securitySettingsContext: SecuritySettingsContext = new SecuritySettingsContext();
-
     public async getSecuritySettings(): Promise<SecuritySettingsViewModel> { 
         let securitySettings: SecuritySettingsViewModel;
-        await this.securitySettingsContext.get().then((_ : SecuritySettingsEntity) => {
+        await new SecuritySettingsContext().get().then(async (_ : SecuritySettingsEntity) => {        
             let user = new AppUserViewModel(_.userId, _.userName, _.userRoleId);
             let theme = new ThemeViewModel(_.themeId, _.themeName, _.themeClassName);
-            let config = new ConfigViewModel(theme, _.navMinimised, _.idleTime);
+            let previousPage = await new NavMenuContext().get(_.previousPageId);       
+            let config = new ConfigViewModel(theme, _.navMinimised, _.idleTime, previousPage);
+            
             securitySettings = new SecuritySettingsViewModel(user, true, config);
         });
 
@@ -34,8 +33,7 @@ export class SecuritySettingsHandler {
     }
 
     public async saveConfigSettings(config: ConfigViewModel): Promise<void> {
-        await this.securitySettingsContext.update(config.theme.themeId, config.navMinimised);
-
+        await new SecuritySettingsContext().update(config.theme.themeId, config.navMinimised, config.previousPage.navMenuId);
         return;
     }
 }

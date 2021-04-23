@@ -1,6 +1,6 @@
 import { ClassNamesEnumEntity, CombatHeadersEntity, CombatSettingsEntity, CombatTypesEnumEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity, UserClassEntity } from '../../shared/entities/combatEntities';
 import { UserClassContext, ClassNamesEnumContext, ClassRolesEnumContext, ColumnHeadersContext, CombatSettingsContext, CombatTableHeadersContext, CombatTypesEnumContext, GearContext, GrindingDataContext, LocationsEnumContext, RecentLocationsContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
-import { ClassNamesEnumViewModel, CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatTypesEnumViewModel, GearViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, UserClassViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
+import { ClassNamesEnumViewModel, CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatTypesEnumViewModel, GearViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, PreviousCombatValuesViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, UserClassViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 import { Calculations } from '../../shared/calc/calculations';
 
 export class CombatPageDataHandler {
@@ -31,11 +31,39 @@ export class CombatPageDataHandler {
             _.forEach(row => {
                 let timeDescription = row.timeAmount + " Minutes";
                 vdVM.push(new VisibleDataViewModel(row.grindingId, row.dateCreated, row.locationName, timeDescription, row.trashLootAmount, row.className, row.serverDescription, row.combatTypeName, row.afuaruSpawns));
-                gdVM.push(new GrindingDataViewModel(row.grindingId, row.classId, row.dateCreated, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, row.recommendedAP), new TimeAmountEnumViewModel(row.timeId, row.timeAmount), row.trashLootAmount, new UserClassViewModel(row.userClassId, row.className, row.classRoleName, new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription), new ServerNamesEnumViewModel(row.serverId, row.serverDescription, row.isElviaRealm), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), row.afuaruSpawns));
+                gdVM.push(new GrindingDataViewModel(row.grindingId, row.userClassId, row.dateCreated, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, row.recommendedAP), new TimeAmountEnumViewModel(row.timeId, row.timeAmount), row.trashLootAmount, new UserClassViewModel(row.userClassId, row.className, row.classRoleName, new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription), new ServerNamesEnumViewModel(row.serverId, row.serverDescription, row.isElviaRealm), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), row.afuaruSpawns));
             });
         });
 
         return new CombatPageDataViewModel(gthVM, gdVM, vdVM, hasDefaultCombatHeaders, acVM, hasMainClass);
+    }
+
+    public async addEntry(entry: GrindingDataViewModel, combatHeaders: Array<CombatHeadersViewModel>): Promise<VisibleDataViewModel> {
+        let eE = await convertToEntity(entry, combatHeaders);
+        await new GrindingDataContext().insert(eE);
+        let gdE = await new GrindingDataContext().getMostRecent();
+        return new VisibleDataViewModel(gdE.grindingId, gdE.dateCreated, gdE.locationName, gdE.timeAmount.toString() + " Minutes", gdE.trashLootAmount, gdE.className, gdE.serverDescription, gdE.combatTypeName, gdE.afuaruSpawns);
+
+        async function convertToEntity(eVM: GrindingDataViewModel, headers: Array<CombatHeadersViewModel>): Promise<GrindingDataEntity> {
+            let res: GrindingDataEntity = new GrindingDataEntity();
+            if(headers.filter(_ => _.header == "Location")[0].isActive)
+                res.locationId = eVM.grindLocation.locationId;
+            res.userClassId = eVM.userClass.classId;
+            if(headers.filter(_ => _.header == "Time")[0].isActive)
+                res.timeId = eVM.timeAmount.timeId;
+            if(headers.filter(_ => _.header == "Server")[0].isActive)
+                res.serverId = eVM.server.serverId;
+            if(headers.filter(_ => _.header == "Combat Type")[0].isActive)
+                res.combatTypeId = eVM.combatType.combatTypeId;
+            else 
+                res.combatTypeId = eVM.userClass.combatTypeDescription.combatTypeId;
+            res.gearScoreId = (await new GearContext().getViaClassId(eVM.userClass.classId)).gearScoreId;
+            res.trashLootAmount = eVM.trashLootAmount;
+            res.afuaruSpawns = eVM.afuaruSpawns;
+
+            return res;
+        }
+
     }
 
     
@@ -108,7 +136,17 @@ export class CombatPageEnumHandler {
             });
         });
 
-        return new CombatPageEnumsViewModel(classNamesEnum, locationNamesEnum, serverNamesEnum, combatTypesEnum, timeAmountEnum);
+        // Get Previous Entries Data
+        let previousEntry = new PreviousCombatValuesViewModel();
+        await new GrindingDataContext().getMostRecent().then((_: GrindingDataEntity) => {
+            previousEntry.combatType = new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName);
+            previousEntry.grindLocation = new LocationNamesEnumViewModel(_.locationId, _.territoryId, _.locationName, _.territoryName, _.recommendedLevel, _.recommendedAP);
+            previousEntry.server = new ServerNamesEnumViewModel(_.serverId, _.serverDescription, _.isElviaRealm);
+            previousEntry.timeAmount = new TimeAmountEnumViewModel(_.timeId, _.timeAmount);
+            previousEntry.userClass = new UserClassViewModel(_.userClassId, _.className, _.classRoleName, new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName), new GearViewModel(_.ap, _.aap, _.dp, _.gearScore), _.classDescription);
+        });
+
+        return new CombatPageEnumsViewModel(classNamesEnum, locationNamesEnum, serverNamesEnum, combatTypesEnum, timeAmountEnum, previousEntry);
     }
 
 }
@@ -128,9 +166,9 @@ export class ColumnHeadersHandler {
     }
 
         // Update Single Column Header
-    public async updateSingleVisibleColumn(column: CombatHeadersViewModel): Promise<CombatHeadersViewModel> {
+    public async updateSingleVisibleColumn(column: CombatHeadersViewModel): Promise<void> {
         await this.columnHeadersContext.update(column.headingId, column.isActive);
-        return column;
+        return;
     }
 
         // Update All Column Headers
@@ -185,8 +223,8 @@ export class UserClassHandler {
             userClassEntity.className = userClass.className;
             userClassEntity.classRole = userClass.classRole;
             userClassEntity.classDescription = userClass.classDescription;
-            userClassEntity.combatTypeId = userClass.primaryCombatTypeDescription.combatTypeId;
-            userClassEntity.combatTypeName = userClass.primaryCombatTypeDescription.combatTypeName;
+            userClassEntity.combatTypeId = userClass.combatTypeDescription.combatTypeId;
+            userClassEntity.combatTypeName = userClass.combatTypeDescription.combatTypeName;
             userClassEntity.ap = userClass.gear.ap;
             userClassEntity.aap = userClass.gear.aap;
             userClassEntity.dp = userClass.gear.dp;
@@ -195,12 +233,4 @@ export class UserClassHandler {
             return userClassEntity;
         }
     }
-}
-
-export class GearHandler {
-
-}
-
-export class NewEntryHandler {
-
 }

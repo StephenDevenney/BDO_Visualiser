@@ -1,4 +1,4 @@
-import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, UserClassViewModel } from '../../shared/viewModels/combatViewModels';
+import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, GrindingDataViewModel, UserClassViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 import { ColumnHeadersHandler, CombatPageDataHandler, CombatPageEnumHandler, UserClassHandler } from '../middleware/combathandler';
 
 export class CombatController {
@@ -21,8 +21,9 @@ export class CombatController {
     }
 
         // PUT
-    public async updateSingleVisibleColumn(column: CombatHeadersViewModel): Promise<CombatHeadersViewModel> {
-        return await this.columnHeadersHandler.updateSingleVisibleColumn(column);
+    public async updateSingleVisibleColumn(column: CombatHeadersViewModel): Promise<void> {
+        await this.columnHeadersHandler.updateSingleVisibleColumn(column);
+        return;
     }
     
     public async updateCombatHeaders(combatHeaders: Array<CombatHeadersViewModel>): Promise<Array<CombatHeadersViewModel>> {
@@ -39,8 +40,7 @@ export class CombatController {
         return await new UserClassHandler().addUserClass(userClass);
     }
 
-    public async addGrindingEntry(): Promise<void> {
-    
-        return;
+    public async addGrindingEntry(newEntry: GrindingDataViewModel, combatHeaders: Array<CombatHeadersViewModel>): Promise<VisibleDataViewModel> {
+        return new CombatPageDataHandler().addEntry(newEntry, combatHeaders);
     }
 } 

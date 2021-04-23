@@ -1,5 +1,5 @@
 <div class="page-header" [ngClass]="headerType">
-    <div class="btn-nav-bar col-6 pl-0 pr-0">
+    <div class="btn-nav-bar col-6 pl-0 pr-0 h-100">
         <div *ngFor="let navMenu of navigationMenu; let i = index">
             <button class="btn btn-nav-link d-flex align-items-center justify-content-center p-4 w-100" (click)="navToPage(navMenu);" title="{{ navMenu.navTitle }}">
                 <span class="w-100">{{ navMenu.navName }}</span>
@@ -8,7 +8,7 @@
     </div>
     <div class="d-flex justify-content-end col-6">
         <p-inputSwitch class="mr-4 mt-2 switch-secondary" (onChange)="changeTheme($event);" [(ngModel)]="selectedThemeStatus" title="Toggle Light / Dark Theme"></p-inputSwitch>
-        <button pButton icon="pi pi-question-circle" type="button" iconPos="left" class="btn btn-primary btn-no-bg" title="Discord Link / Donate"></button>
+        <button pButton icon="pi pi-cog" type="button" iconPos="left" class="btn btn-primary btn-no-bg" title="Discord Link / Donate"></button>
     </div>
 </div>
 

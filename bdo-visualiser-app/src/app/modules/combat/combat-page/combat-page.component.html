@@ -1,9 +1,10 @@
 <page>
-    <!-- <page-header></page-header> -->
     <div *ngIf="isLoaded" class="row overflow-hidden">
-        <div class="col-6 border-right border-secondary pr-0"><!-- half-page -->
-            <div *ngIf="grindingRes.length > 0">
-                <div class="d-flex align-items-center justify-content-between mb-2">
+
+
+        <div class="col-6 border-right border-secondary pr-0">
+            <div *ngIf="grindingRes.length > 0 && !isAddingEntry">
+                <div class="d-flex align-items-center justify-content-between p-2">
                     <div class="d-flex">
                         <div class="search-bar p-d-flex mr-2">
                             <span class="p-input-icon-right">      
@@ -13,7 +14,7 @@
                         </div>
                         <p-multiSelect 
                             class="mr-2" 
-                            [options]="columnSelectOptions" 
+                            [options]="displayableHeaders" 
                             [(ngModel)]="filteredColumns" 
                             optionLabel="header"
                             placeholder="Select Columns"
@@ -22,13 +23,11 @@
                             (onChange)="onVisibleColumnChange($event)">
                         </p-multiSelect>
                     </div>
-                    <div class="d-flex align-items-center justify-content-end">
-                        <button class="btn btn-primary mr-2">Delete</button>
-                        <button class="btn btn-primary mr-2" (click)="addEntryPopupChecks()">Add</button>
+                    <div class="d-flex align-items-center justify-content-end primary-pi-group">
+                        <button pButton icon="pi pi-plus" type="button" iconPos="left" class="btn btn-primary btn-no-bg mr-2" title="Add Entry" (click)="addEntryChecks()"></button>
+                        <button pButton icon="pi pi-trash" type="button" iconPos="left" class="btn btn-primary btn-no-bg" title="Remove Entry"></button>
                     </div>
-                </div>
-                
-                <!-- Table --><!--[(selection)]="selectedRow"-->
+                </div>          
                 <div class="table-container">
                     <p-table 
                         #table
@@ -44,8 +43,6 @@
                         styleClass="h-100"
                         (sortFunction)="customSort()" 
                         [customSort]="true">
-
-                        <!-- Header -->
                         <ng-template pTemplate="header">
                             <tr>
                                 <th pReorderableColumn *ngFor="let col of filteredColumns;">
@@ -54,11 +51,9 @@
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-                            <!-- Subheader Group -->
                             <tr class="table-group-subheading" *ngIf="rowGroupMetadata[item.dateCreated].index === rowIndex">
-                                <td [colSpan]="filteredColumns.length"><h3 class="mb-0">{{ item[columnHeaders[0].field] | dateLong }}</h3></td>
+                                <td [colSpan]="filteredColumns.length"><h3 class="mb-0">{{ item[combatPageData.tableHeaders[0].field] | dateLong }}</h3></td>
                             </tr>                     
-                            <!-- Main Data -->
                             <tr [pSelectableRow]="item">
                                 <td *ngFor="let col of filteredColumns;">{{ item[col.field] }}</td>
                             </tr>
@@ -70,8 +65,7 @@
                     </p-table>               
                 </div>              
             </div> 
-            <!-- Empty Datasource -->
-            <div *ngIf="grindingRes.length != 0">
+            <div *ngIf="grindingRes.length == 0 && !isAddingEntry">
                 <div>
                     <h2>Grinding</h2>
                     <div class="d-flex align-items-center justify-content-center" style="height: 60vh;">
@@ -80,25 +74,28 @@
                             <label class="d-flex align-items-center justify-content-center mt-2">Start by selecting what data you wish to track</label>
                             <label class="d-flex align-items-center justify-content-center">followed by a new entry.</label>
                             <div class="d-flex align-items-center justify-content-center mt-4">
-                                <button class="btn btn-primary mr-2" (click)="addEntryPopupChecks()">Begin</button>
+                                <button class="btn btn-primary mr-2" (click)="isAddingEntry = true;">Begin</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>  
-            <!-- Table Insert -->
-            <div *ngIf="grindingRes.length == 0">
+            <div *ngIf="isAddingEntry">
                 <div>
                     <table-insert 
                         *ngIf="globals.isSignedIn"
-                        [combatHeaders]="columnSelectOptions"
+                        [combatHeaders]="displayableHeaders"
                         [activeClasses]="activeClasses"
-                        [tableLength]="grindingRes.length">
+                        [tableLength]="grindingRes.length"
+                        (updateCombatRes)="emittedInsertEntry($event)"
+                        (cancelInsert)="isAddingEntry = false;">
                     </table-insert>
                 </div>
             </div>      
         </div>
-        <div class="col-6 pl-0"><!-- half-page p-0 -->
+             
+
+        <div class="col-6 pl-0">
             <p-tabView>
                 <p-tabPanel header="Graphs">
                     <div class="tab-container">
@@ -124,139 +121,3 @@
         </div>      
     </div>
 </page>
-
-
-<p-dialog 
-    header="{{entryPopupTitle}}" 
-    [(visible)]="showAddEntryPopup"
-    [style]="{width: popupHeight, height: 'auto'}"
-    styleClass="popupDialog addEntryPopup"
-    [modal]="modalState"
-    [closeOnEscape]="closeOnEscapeState"
-    [dismissableMask]="dismissableMaskState">
-
-    <div class="mt-4">
-        <!-- Choose Columns -->
-        <div class="row" *ngIf="showCombatDefaultColumns">
-            <div class="col-md-4 col-sm-6 col" *ngFor="let col of columnSelectOptions; let i = index">
-                <div *ngIf="col.headingId != 1" class="mb-2">
-                    <div class="d-flex align-items-center">
-                        <label>{{col.header}}</label>
-                        <label class="ml-2" *ngIf="col.headingId == 3">(Minutes)</label>
-                    </div>
-                    <div>
-                        <p-inputSwitch (onChange)="columnChanged = true;" [(ngModel)]="col.isActive"></p-inputSwitch>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Select Main Class -->
-        <div *ngIf="showAddMainClass">
-            <div class="row item-widths">
-                <div class="col mb-4">
-                    <div>
-                        <label>Mainhand AP</label>
-                    </div>
-                    <p-inputNumber [(ngModel)]="mainClass.gear.ap" [min]="0" [max]="332"></p-inputNumber>
-                </div>
-                <div class="col mb-4">
-                    <div>
-                        <label>Awakening AP</label>
-                    </div>
-                    <p-inputNumber [(ngModel)]="mainClass.gear.aap" [min]="0" [max]="334"></p-inputNumber>
-                </div>
-                <div class="col mb-4">
-                    <div>
-                        <label>DP</label>
-                    </div>
-                    <p-inputNumber [(ngModel)]="mainClass.gear.dp" [min]="0" [max]="554"></p-inputNumber>
-                </div>
-                <div class="col mb-4">
-                    <div>
-                        <label>Class</label>
-                    </div>
-                    <p-dropdown appendTo="body" [options]="combatEnums.classNamesEnum" placeholder="Select Class" [(ngModel)]="mainClass.className" optionLabel="className" optionValue="className">
-                        <ng-template let-item pTemplate="item">
-                            <div>
-                                <div>{{item.className}}</div>
-                            </div>
-                        </ng-template>
-                    </p-dropdown>
-                </div>
-                <div class="col mb-4">
-                    <div>
-                        <label>Main Combat Type</label>
-                    </div>
-                    <p-dropdown appendTo="body" [options]="combatEnums.combatTypesEnum" placeholder="Primary Combat Type" [(ngModel)]="mainClass.primaryCombatTypeDescription" optionLabel="combatTypeName"></p-dropdown>
-                </div>
-            </div>
-        </div>
-        <!-- Add Entry -->
-        <div *ngIf="showGrindingTableEntry">
-            <div class="row mb-2">
-                <div class="col-8" *ngFor="let col of columnSelectOptions;">
-                    <div *ngIf="col.isActive" class="mb-2 item-widths">
-                        <div *ngIf="col.headingId == 2">
-                            <div>
-                                <label>Location</label>
-                            </div>
-                            <p-dropdown class="w-100" appendTo="body" [options]="combatEnums.locationNamesEnum" [(ngModel)]="newEntry.grindLocation" optionLabel="locationName" [group]="true">
-                                <ng-template let-group pTemplate="group">
-                                    <div class="p-d-flex p-ai-center">
-                                        <span>{{group.label}}</span>
-                                    </div>
-                                </ng-template>
-                            </p-dropdown>
-                        </div>
-                        <div *ngIf="col.headingId == 3">
-                            <div>
-                                <label>Time Grinded (Minutes)</label>
-                            </div>
-                            <p-dropdown appendTo="body" [options]="combatEnums.timeAmountEnum" [(ngModel)]="newEntry.timeAmount" optionLabel="timeAmount"></p-dropdown>
-                        </div>
-                        <div *ngIf="col.headingId == 4">
-                            <div>
-                                <label>Primary Trash Loot Dropped</label>
-                            </div>
-                            <p-inputNumber [(ngModel)]="newEntry.trashLootAmount" [min]="0"></p-inputNumber>
-                        </div>
-                        <div *ngIf="col.headingId == 5">
-                            <div>
-                                <label>Character</label>
-                            </div>
-                            <p-dropdown appendTo="body" [options]="activeClasses" [(ngModel)]="newEntry.userClass" optionLabel="classDescription"></p-dropdown>
-                        </div>
-                        <div *ngIf="col.headingId == 6">
-                            <div>
-                                <label>Server</label>
-                            </div>
-                            <p-dropdown appendTo="body" [options]="combatEnums.serverNamesEnum" [(ngModel)]="newEntry.server" optionLabel="serverDescription"></p-dropdown>
-                        </div>
-                        <div *ngIf="col.headingId == 7">
-                            <div>
-                                <label>Combat Type</label>
-                            </div>
-                            <p-dropdown appendTo="body" [options]="combatEnums.combatTypesEnum" [(ngModel)]="newEntry.combatType" optionLabel="combatTypeName"></p-dropdown>
-                        </div>
-                        <div *ngIf="col.headingId == 8">
-                            <div>
-                                <label>Afuaru Spawns</label>
-                            </div>
-                            <p-inputNumber [(ngModel)]="newEntry.afuaruSpawns" [min]="0"></p-inputNumber>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="btn-group-addEntryPopup">
-            <div class="d-flex align-items-center justify-content-end">
-                <button *ngIf="showCombatDefaultColumns" class="btn btn-primary mr-2" (click)="saveDefaultColumns();">Continue</button>
-                <button *ngIf="showAddMainClass" class="btn btn-primary" (click)="saveMainClass()">Add Class</button>
-                <button *ngIf="showGrindingTableEntry" class="btn btn-primary mr-2" (click)="addEntry()">Add</button>
-                <button *ngIf="grindingRes.length > 0 && showGrindingTableEntry" class="btn btn-primary" (click)="toggleAddEntryColumns('columnChooser')">Toggle Columns</button>
-                <button *ngIf="grindingRes.length > 0 && showCombatDefaultColumns" class="btn btn-primary" (click)="toggleAddEntryColumns('addEntry'); saveDefaultColumns();">Return</button>
-                <button class="btn btn-primary ml-2" (click)="showAddEntryPopup = false;">Close</button>
-            </div>
-        </div>
-    </div>
-</p-dialog>

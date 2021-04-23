@@ -5,7 +5,7 @@ export class NavMenuViewModel {
     public navTitle: string = "";
     public navRoute: string = "";
 
-    constructor(navMenuId: number, navName: string, navTitle: string, navRoute: string) {
+    constructor(navMenuId?: number, navName?: string, navTitle?: string, navRoute?: string) {
         if(navMenuId) {
             this.navMenuId = navMenuId;
             this.navName = navName;
@@ -34,15 +34,17 @@ export class SecuritySettingsViewModel {
 
 export class ConfigViewModel {
     public hubName: string = "BDO Visualiser";
-    public theme: ThemeViewModel = new ThemeViewModel;
+    public theme: ThemeViewModel = new ThemeViewModel();
     public navMinimised: boolean = false;
     public appIdleSecs: number = 0;
+    public previousPage: NavMenuViewModel = new NavMenuViewModel();
 
-    constructor(theme?: ThemeViewModel, navMinimised?: boolean, appIdleSecs?: number) {
+    constructor(theme?: ThemeViewModel, navMinimised?: boolean, appIdleSecs?: number, previousPage?: NavMenuViewModel) {
         if(theme) {
             this.theme = theme;
             this.navMinimised = navMinimised;
             this.appIdleSecs = appIdleSecs;
+            this.previousPage = previousPage;
         }
     }
 }

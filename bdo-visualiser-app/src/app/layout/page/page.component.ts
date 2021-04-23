@@ -18,12 +18,7 @@ export class PageComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
-    // let offsetHeight = 0;
-    // if(!this.header) {
-    //   switch(this.header.headerType) {
-
-    //   }
-    // }
+    
   }
 
 }

@@ -19,6 +19,7 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { ServerModule } from 'src/server/src/serverModule';
 import { TableInsertComponent } from '../components/table-insert/table-insert.component';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { ButtonModule } from 'primeng/button';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     PageModule,
     NgxUiLoaderModule,
     ServerModule,
-    InputSwitchModule
+    InputSwitchModule,
+    ButtonModule
   ],
   declarations: [
     DateLongPipe,
@@ -45,7 +47,8 @@ import { InputSwitchModule } from 'primeng/inputswitch';
     DialogModule,
     InputNumberModule,
     ToastModule,
-    DateLongPipe
+    DateLongPipe,
+    ButtonModule
   ],
   providers: [
     Globals,

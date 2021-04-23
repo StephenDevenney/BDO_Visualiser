@@ -176,15 +176,35 @@ export class CombatPageEnumsViewModel {
     public serverNamesEnum: Array<ServerNamesEnumViewModel> = new Array<ServerNamesEnumViewModel>();
     public combatTypesEnum: Array<CombatTypesEnumViewModel> = new Array<CombatTypesEnumViewModel>();
     public timeAmountEnum: Array<TimeAmountEnumViewModel> = new Array<TimeAmountEnumViewModel>();
+    public previousCombatValuesViewModel: PreviousCombatValuesViewModel = new PreviousCombatValuesViewModel();
 
-    constructor(classNamesEnum?: Array<ClassNamesEnumViewModel>, locationNamesEnum?: Array<LocationNamesGroupedEnumViewModel>, serverNamesEnum?: Array<ServerNamesEnumViewModel>, combatTypesEnum?: Array<CombatTypesEnumViewModel>, timeAmountEnum?: Array<TimeAmountEnumViewModel>) {
+    constructor(classNamesEnum?: Array<ClassNamesEnumViewModel>, locationNamesEnum?: Array<LocationNamesGroupedEnumViewModel>, serverNamesEnum?: Array<ServerNamesEnumViewModel>, combatTypesEnum?: Array<CombatTypesEnumViewModel>, timeAmountEnum?: Array<TimeAmountEnumViewModel>, previousCombatValuesViewModel?: PreviousCombatValuesViewModel) {
         if(classNamesEnum) {
             this.classNamesEnum = classNamesEnum;
             this.locationNamesEnum = locationNamesEnum;
             this.serverNamesEnum = serverNamesEnum;
             this.combatTypesEnum = combatTypesEnum;
             this.timeAmountEnum = timeAmountEnum;
+            this.previousCombatValuesViewModel = previousCombatValuesViewModel;
         }    
+    }
+}
+
+export class PreviousCombatValuesViewModel {
+    public userClass: UserClassViewModel = new UserClassViewModel();
+    public grindLocation: LocationNamesEnumViewModel = new LocationNamesEnumViewModel();
+    public timeAmount: TimeAmountEnumViewModel = new TimeAmountEnumViewModel();
+    public server: ServerNamesEnumViewModel = new ServerNamesEnumViewModel();
+    public combatType: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
+
+    constructor(userClass?: UserClassViewModel, grindLocation?: LocationNamesEnumViewModel, timeAmount?: TimeAmountEnumViewModel, server?: ServerNamesEnumViewModel, combatType?: CombatTypesEnumViewModel) {
+        if(userClass) {
+            this.userClass = userClass;
+            this.grindLocation = grindLocation;
+            this.timeAmount = timeAmount;
+            this.server = server;
+            this.combatType = combatType;
+        }
     }
 }
 
@@ -193,16 +213,16 @@ export class UserClassViewModel {
     public classId: number = 0;
     public className: string = "";
     public classRole: string = "";
-    public primaryCombatTypeDescription: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
+    public combatTypeDescription: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
     public gear: GearViewModel = new GearViewModel();
     public classDescription: string = "";
 
-    constructor(classId?: number, className?: string, classRole?: string, primaryCombatTypeDescription?: CombatTypesEnumViewModel, gear?: GearViewModel, classDescription?: string) {
+    constructor(classId?: number, className?: string, classRole?: string, combatTypeDescription?: CombatTypesEnumViewModel, gear?: GearViewModel, classDescription?: string) {
         if(classId) {
             this.classId = classId;
             this.className = className;
             this.classRole = classRole;
-            this.primaryCombatTypeDescription = primaryCombatTypeDescription;
+            this.combatTypeDescription = combatTypeDescription;
             this.gear = gear;
             this.classDescription = classDescription;
         }     

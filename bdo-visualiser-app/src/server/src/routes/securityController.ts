@@ -23,6 +23,7 @@ export class SecurityController {
 
         // PUT
     public async saveConfigSettings(config: ConfigViewModel): Promise<void> {
-        return await this.securitySettingsHandler.saveConfigSettings(config);
+        await this.securitySettingsHandler.saveConfigSettings(config);
+        return;
     } 
 } 

@@ -9,6 +9,7 @@ import { SignInComponent } from './modules/sign-in/sign-in/signin.component';
 import { LandingPageComponent } from './modules/sign-in/landing-page/landingPage.component';
 import { BarterPageComponent } from './modules/barter/barter/barter-page.component';
 import { ScrollsPageComponent } from './modules/scrolls/scrolls/scrolls-page.component';
+import { UserClassesPageComponent } from './modules/user-classes/user-classes/user-classes-page.component';
 
 const routes: Routes = [
   { path: 'home', component: OverviewComponent, data: {page: 'home'} },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'landing-page', component: LandingPageComponent, data: {page: 'landing-page'} },
   { path: 'barter', component: BarterPageComponent, data: {page: 'barter'} },
   { path: 'scrolls', component: ScrollsPageComponent, data: {page: 'scrolls'} },
+  { path: 'user-classes', component: UserClassesPageComponent, data: {page: 'user-classes'} },
   { path: '**', redirectTo:'home', data: {page: 'home'} }
 ];
 

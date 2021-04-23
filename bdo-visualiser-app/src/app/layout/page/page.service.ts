@@ -14,7 +14,8 @@ export class PageService {
     }
 
     public async saveConfigSettings(): Promise<void> {
-        return await this.secRoute.saveConfigSettings(this.globals.config);
+        await this.secRoute.saveConfigSettings(this.globals.config);
+        return;
     }
 
     public async getNavMenu(): Promise<Array<NavMenuViewModel>> {

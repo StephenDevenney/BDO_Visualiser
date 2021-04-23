@@ -93,11 +93,7 @@ export class AppComponent {
   public async loadApplication() {
     await this.apiService.loadSecuritySettings();
     this.isLoaded = true;
-    this.router.navigate(["combat"]);
-    this.titleService.setTitle(this.globals.config.hubName + " - Combat");
-        // if(this.globals.currentPageId > 0)
-        //   this.globals.previousPageId = this.globals.currentPageId;
-
-        this.globals.currentPageId = 2;
+    this.router.navigate([this.globals.config.previousPage.navRoute]);
+    this.titleService.setTitle(this.globals.config.hubName + " - " + this.globals.config.previousPage.navName);
   }
 }

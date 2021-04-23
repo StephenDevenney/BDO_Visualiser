@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS security_settings (
 	FK_themeId INTEGER NOT NULL DEFAULT 1,
 	FK_userId INTEGER DEFAULT 0,
 	FK_combatSettingsId	INTEGER DEFAULT 0,
-	navMinimised DEFAULT 0
+	navMinimised DEFAULT 0,
+	previousPageId DEFAULT 1
 );
 COMMIT;
 
@@ -298,6 +299,15 @@ CREATE TABLE IF NOT EXISTS enum_combatTableHeadings (
 	headingId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	field TEXT,
 	header TEXT
+);
+COMMIT;
+
+BEGIN TRANSACTION;
+DROP TABLE IF EXISTS `image_classPortraits`;
+CREATE TABLE IF NOT EXISTS image_classPortraits (
+	portraitId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	FK_classNameId INTEGER DEFAULT 1,
+	portraitJSON TEXT DEFAULT ''
 );
 COMMIT;
 

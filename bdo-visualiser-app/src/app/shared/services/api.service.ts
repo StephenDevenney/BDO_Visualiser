@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { CombatPageEnumsViewModel } from 'src/server/shared/viewModels/combatViewModels';
+import { CombatHeadersViewModel, CombatPageEnumsViewModel, GrindingDataViewModel, VisibleDataViewModel } from 'src/server/shared/viewModels/combatViewModels';
 import { CombatController } from 'src/server/src/routes/combatController';
 import { SecuritySettingsViewModel } from '../../../server/shared/viewModels/securityViewModels';
 import { SecurityController } from '../../../server/src/routes/securityController';
@@ -26,5 +26,14 @@ export class APIService {
 
     public async getCombatEnums(): Promise<CombatPageEnumsViewModel> {
         return await this.combatRoute.getCombatEnums();
+    }
+
+    public async saveSingleCombatHeader(column: CombatHeadersViewModel): Promise<void> {
+       await this.combatRoute.updateSingleVisibleColumn(column);
+       return;
+    }
+
+    public async addGrindingEntry(newEntry: GrindingDataViewModel, combatHeaders: Array<CombatHeadersViewModel>): Promise<VisibleDataViewModel> {
+        return await this.combatRoute.addGrindingEntry(newEntry, combatHeaders);
     }
 }

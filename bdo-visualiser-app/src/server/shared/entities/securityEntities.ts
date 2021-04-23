@@ -23,8 +23,9 @@ export class SecuritySettingsEntity {
     public themeId: number = 0;
     public themeName: string = "";
     public themeClassName: string = "";
+    public previousPageId: number = 0;
 
-    constructor(userId?: number, userName?: string, userRoleId?: number, navMinimised?: boolean, idleTime?: number, themeId?: number, themeName?: string, themeClassName?: string) {
+    constructor(userId?: number, userName?: string, userRoleId?: number, navMinimised?: boolean, idleTime?: number, themeId?: number, themeName?: string, themeClassName?: string, previousPageId?: number) {
         if(userId) {
             this.userId = userId;
             this.userName = userName;
@@ -34,6 +35,7 @@ export class SecuritySettingsEntity {
             this.themeId = themeId;
             this.themeName = themeName;
             this.themeClassName = themeClassName;
+            this.previousPageId = previousPageId;
         }
     }
 }

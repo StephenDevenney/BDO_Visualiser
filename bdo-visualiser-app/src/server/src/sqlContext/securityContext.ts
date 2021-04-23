@@ -12,15 +12,23 @@ export class NavMenuContext {
     const sql = `SELECT security_navMenu.navMenuId AS navMenuId, security_navMenu.navName AS navName, security_navMenu.navRoute AS navRoute, security_navMenu.navTitle AS navTitle FROM security_settings INNER JOIN security_navRole ON security_navRole.FK_navMenuId = security_navMenu.navMenuId INNER JOIN security_navMenu ON security_navMenu.navMenuId = security_navRole.FK_navMenuId INNER JOIN security_user ON security_user.FK_roleId = security_navRole.FK_roleId WHERE security_settings.FK_userId = 1`;
     const values = {};
 
-    return TheDb.selectAll(sql, values)
-        .then((rows: any) => {
-            const nm: Array<NavMenuEntity> = new Array<NavMenuEntity>();
-            for (const row of rows) {
-                const item = new NavMenuContext().fromRow(row);
-                nm.push(item);
-            }
-            return nm;
-        });
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<NavMenuEntity> = new Array<NavMenuEntity>();
+      for (const row of rows) {
+        const item = new NavMenuContext().fromRow(row);
+        nm.push(item);
+      }
+      return nm;
+    });
+  }
+
+    public get(navMenuId: number): Promise<NavMenuEntity> {
+      const sql = `SELECT security_navMenu.navMenuId AS navMenuId, security_navMenu.navName AS navName, security_navMenu.navRoute AS navRoute, security_navMenu.navTitle AS navTitle FROM security_settings INNER JOIN security_navRole ON security_navRole.FK_navMenuId = security_navMenu.navMenuId INNER JOIN security_navMenu ON security_navMenu.navMenuId = security_navRole.FK_navMenuId INNER JOIN security_user ON security_user.FK_roleId = security_navRole.FK_roleId WHERE security_settings.FK_userId = 1 AND security_navMenu.navMenuId = $navMenuId`;
+      const values = { $navMenuId: navMenuId};
+  
+      return TheDb.selectOne(sql, values).then((row: any) => {
+        return new NavMenuContext().fromRow(row);
+      });
     }
 
     private fromRow(row: NavMenuEntity): NavMenuEntity {
@@ -42,10 +50,11 @@ export class SecuritySettingsContext {
   public themeId: number = 0;
   public themeName: string = "";
   public themeClassName: string = "";
+  public previousPageId: number = 0;
 
     // GET Security Settings
   public get(): Promise<SecuritySettingsEntity> {
-    const sql = `SELECT security_user.userId, security_user.userName, security_user.FK_roleId AS userRoleId, security_settings.navMinimised, enum_appIdleSecs.idleTime, enum_theme.themeId, enum_theme.themeName, enum_theme.themeClassName FROM security_settings INNER JOIN security_user ON security_user.userId = security_settings.FK_userId INNER JOIN enum_theme ON enum_theme.themeId = security_settings.FK_themeId INNER JOIN enum_appIdleSecs ON enum_appIdleSecs.appIdleSecsId = security_settings.FK_appIdleSecsId WHERE security_settings.settingsId = 1`;
+    const sql = `SELECT security_user.userId, security_user.userName, security_user.FK_roleId AS userRoleId, security_settings.navMinimised, enum_appIdleSecs.idleTime, enum_theme.themeId, enum_theme.themeName, enum_theme.themeClassName, security_settings.previousPageId FROM security_settings INNER JOIN security_user ON security_user.userId = security_settings.FK_userId INNER JOIN enum_theme ON enum_theme.themeId = security_settings.FK_themeId INNER JOIN enum_appIdleSecs ON enum_appIdleSecs.appIdleSecsId = security_settings.FK_appIdleSecsId WHERE security_settings.settingsId = 1`;
     const values = {};
 
     return TheDb.selectOne(sql, values)
@@ -55,10 +64,10 @@ export class SecuritySettingsContext {
   }
 
     // PUT Security Settings
-  public update(themeId: number, navMinimised: boolean): Promise<void> {
+  public update(themeId: number, navMinimised: boolean, previousPageId: number): Promise<void> {
     // let navMinBool = 0;
-    const sql = `UPDATE security_settings SET (FK_appIdleSecsId, FK_themeId, navMinimised) = (1, $themeId, $navMinimised) WHERE security_settings.settingsId = 1`;
-    const values = { $themeId: themeId, $navMinimised: navMinimised};
+    const sql = `UPDATE security_settings SET (FK_appIdleSecsId, FK_themeId, navMinimised, previousPageId) = (1, $themeId, $navMinimised, $previousPageId) WHERE security_settings.settingsId = 1`;
+    const values = { $themeId: themeId, $navMinimised: navMinimised, $previousPageId: previousPageId };
 
     return TheDb.update(sql, values)
             .then((result) => {
@@ -76,6 +85,7 @@ export class SecuritySettingsContext {
     this.themeId = row['themeId'];
     this.themeName = row['themeName'];
     this.themeClassName = row['themeClassName'];
+    this.previousPageId = row['previousPageId'];
 
     return this;
   }

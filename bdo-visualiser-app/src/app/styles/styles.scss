@@ -134,6 +134,10 @@
     outline: none;
 }
 
+.primary-pi-group .pi {
+    font-size: 1.5rem;
+}
+
 // Nav
 .btn-nav-link {
     font-size: 1.2rem;
@@ -255,7 +259,7 @@
 
 // ## Containers 
 .table-container {
-    height: calc(90vh - 6rem);
+    height: calc(90vh - 4rem + 6px);
 }
 
 .tab-container {

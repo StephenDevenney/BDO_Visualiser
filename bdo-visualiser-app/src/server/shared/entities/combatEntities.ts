@@ -27,16 +27,16 @@ export class GrindingTableHeadersEntity {
 
 export class GrindingDataEntity {
     public grindingId: number = 0;
-    public locationId: number = 0;
-    public locationName: string = "";
-    public territoryId: number = 0;
-    public territoryName: string = "";
+    public locationId: number = 1;
+    public locationName: string = "-";
+    public territoryId: number = 1;
+    public territoryName: string = "-";
     public recommendedAP: number = 0;
     public recommendedLevel: string = "";
-    public timeId: number = 0;
-    public timeAmount: number = 0;
+    public timeId: number = 1;
+    public timeAmount: number = 60;
     public userClassId: number = 0;
-    public classId: number = 0;
+    public classNameId: number = 0;
     public className: string = "";
     public classDescription: string = "";
     public classRoleId: number = 0;
@@ -46,16 +46,16 @@ export class GrindingDataEntity {
     public aap: number = 0;
     public dp: number = 0;
     public gearScore: number = 0;
-    public serverId: number = 0;
-    public serverDescription: string = "";
+    public serverId: number = 1;
+    public serverDescription: string = "-";
     public isElviaRealm: boolean = false;
-    public combatTypeId: number = 0;
-    public combatTypeName: string = "";
+    public combatTypeId: number = 1;
+    public combatTypeName: string = "-";
     public dateCreated: string = "";
     public trashLootAmount: number = 0;
     public afuaruSpawns: number = 0;
 
-    constructor(grindingId?: number, locationId?: number, locationName?: string, territoryId?: number, territoryName?: string, timeId?: number, timeAmount?: number, userClassId?: number, classId?: number, className?: string, classRoleId?: number, classRoleName?: string, gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number, serverId?: number, serverDescription?: string, isElviaRealm?: boolean, combatTypeId?: number, combatTypeName?: string, trashLootAmount?: number, afuaruSpawns?: number) {
+    constructor(grindingId?: number, locationId?: number, locationName?: string, territoryId?: number, territoryName?: string, timeId?: number, timeAmount?: number, userClassId?: number, classNameId?: number, className?: string, classRoleId?: number, classRoleName?: string, gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number, serverId?: number, serverDescription?: string, isElviaRealm?: boolean, combatTypeId?: number, combatTypeName?: string, trashLootAmount?: number, afuaruSpawns?: number) {
         if(grindingId) {
             this.grindingId = grindingId;
             this.locationId = locationId;
@@ -65,7 +65,7 @@ export class GrindingDataEntity {
             this.timeId = timeId;
             this.timeAmount = timeAmount;
             this.userClassId = userClassId;
-            this.classId = classId;
+            this.classNameId = classNameId;
             this.className = className;
             this.classRoleId = classRoleId;
             this.classRoleName = classRoleName;
