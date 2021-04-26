@@ -1,0 +1,17 @@
+<page class="scroll-container-v">
+    <div class="d-flex align-items-center p-2">
+        <div class="col-9">
+            <div class="row userClass-selection-container">
+                <div *ngFor="let item of classNamesEnum" class="col-md-3 btn btn-primary btn-no-bg p-1">
+                    <div class="character-creation-container">
+                        <img class="character-card-class-image" src="./assets/images/classPortraits/{{item.className}}.PNG"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            test2
+        </div>
+    </div>
+    <div></div>
+</page>

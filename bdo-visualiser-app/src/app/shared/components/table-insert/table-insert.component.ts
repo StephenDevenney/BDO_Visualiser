@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Injector, Input, OnInit, Output } from '@angular/core';
-import { CombatHeadersViewModel, CombatPageEnumsViewModel, GrindingDataViewModel, UserClassViewModel, VisibleDataViewModel } from 'src/server/shared/viewModels/combatViewModels';
+import { CombatHeadersViewModel, CombatPageEnumsViewModel, GrindingDataViewModel, VisibleDataViewModel } from 'src/server/shared/viewModels/combatViewModels';
+import { UserClassViewModel } from 'src/server/shared/viewModels/userClassViewModel';
 import { APIService } from '../../services/api.service';
 import { BaseComponent } from '../base.component';
 

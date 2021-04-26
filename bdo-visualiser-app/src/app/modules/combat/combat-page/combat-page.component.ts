@@ -1,8 +1,9 @@
-import { ChangeDetectorRef, Component, HostListener, Injector, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { CombatService } from '../combat.service';
 import { Table } from 'primeng/table';
-import { CombatPageDataViewModel, CombatHeadersViewModel, UserClassViewModel, VisibleDataViewModel } from 'src/server/shared/viewModels/combatViewModels';
+import { CombatPageDataViewModel, CombatHeadersViewModel, VisibleDataViewModel } from 'src/server/shared/viewModels/combatViewModels';
+import { UserClassViewModel } from 'src/server/shared/viewModels/userClassViewModel';
 
 @Component({
   selector: 'combat-page',
@@ -49,23 +50,23 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public async updateRowGroupMetaData(data: string | any[]) {
     this.rowGroupMetadata = {};
     if (data) {
-        for (let i = 0; i < data.length; i++) {
-            let rowData = data[i];
-            let date = rowData.dateCreated;
-            
-            if (i == 0)
-              this.rowGroupMetadata[date] = { index: 0, size: 1 };
-            else {
-              let previousRowData = data[i - 1];
-              let previousRowGroup = previousRowData.dateCreated;
-              if (date === previousRowGroup)
-                  this.rowGroupMetadata[date].size++;
-              else
-                  this.rowGroupMetadata[date] = { index: i, size: 1 };
-            }
-        }
-        if(this.isAddingEntry)
-          this.isAddingEntry = false;
+      for (let i = 0; i < data.length; i++) {
+          let rowData = data[i];
+          let date = rowData.dateCreated;
+          
+          if (i == 0)
+            this.rowGroupMetadata[date] = { index: 0, size: 1 };
+          else {
+            let previousRowData = data[i - 1];
+            let previousRowGroup = previousRowData.dateCreated;
+            if (date === previousRowGroup)
+                this.rowGroupMetadata[date].size++;
+            else
+                this.rowGroupMetadata[date] = { index: i, size: 1 };
+          }
+      }
+      if(this.isAddingEntry)
+        this.isAddingEntry = false;
     }
   } 
 

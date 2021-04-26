@@ -1,33 +1,33 @@
-import { ClassNamesEnumEntity, CombatHeadersEntity, CombatSettingsEntity, CombatTypesEnumEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity, UserClassEntity } from '../../shared/entities/combatEntities';
-import { UserClassContext, ClassNamesEnumContext, ClassRolesEnumContext, ColumnHeadersContext, CombatSettingsContext, CombatTableHeadersContext, CombatTypesEnumContext, GearContext, GrindingDataContext, LocationsEnumContext, RecentLocationsContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
-import { ClassNamesEnumViewModel, CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatTypesEnumViewModel, GearViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, PreviousCombatValuesViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, UserClassViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
+import { CombatHeadersEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
+import { ColumnHeadersContext, CombatSettingsContext, CombatTableHeadersContext, GrindingDataContext, LocationsEnumContext, RecentLocationsContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
+import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, PreviousCombatValuesViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 import { Calculations } from '../../shared/calc/calculations';
+import { ClassNamesEnumViewModel, CombatTypesEnumViewModel, GearViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
+import { ClassNamesEnumEntity, CombatTypesEnumEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
+import { GearContext, ClassNamesEnumContext, CombatTypesEnumContext, UserClassContext, ClassRolesEnumContext } from '../sqlContext/userClassContext';
 
 export class CombatPageDataHandler {
-        // SQL Context
-    private combatSettingsContext: CombatSettingsContext = new CombatSettingsContext();
-    private combatTableHeadersContext: CombatTableHeadersContext = new CombatTableHeadersContext();
-    private grindingDataContext: GrindingDataContext = new GrindingDataContext();
-    private userClassHandler: UserClassHandler = new UserClassHandler();
 
     public async getCombatData(): Promise<CombatPageDataViewModel> {
-        let hasDefaultCombatHeaders = (await this.combatSettingsContext.get()).hasDefaultCombatHeaders;
-            // Get Table Headers
+        let hasDefaultCombatHeaders = (await new CombatSettingsContext().get()).hasDefaultCombatHeaders;
         let gthVM = new Array<CombatHeadersViewModel>();
-        await this.combatTableHeadersContext.getAll().then((_ : Array<GrindingTableHeadersEntity>) => {
+        await new CombatTableHeadersContext().getAll().then((_ : Array<GrindingTableHeadersEntity>) => {
             _.forEach(row => {
                 gthVM.push(new CombatHeadersViewModel(row.headingId,  row.field, row.header, row.isActive));
             });
         });
-            // Get Classes
+
         let hasMainClass = true;
-        let acVM = await this.userClassHandler.getUserClasses();
+        let acVM = await new UserClassHandler().getUserClasses();
         if(acVM.length == 0)
             hasMainClass = false
-            // Get Grinding Data (Visible Data is what the user will see on screen, GrindingData is used as a data source)
+        /* 
+            VisibleData is what the user will see on screen.
+            GrindingData is used as a front-end data source.
+        */
         let gdVM = new Array<GrindingDataViewModel>();
         let vdVM = new Array<VisibleDataViewModel>();
-        await this.grindingDataContext.getAll().then((_ : Array<GrindingDataEntity>) => {
+        await new GrindingDataContext().getAll().then((_ : Array<GrindingDataEntity>) => {
             _.forEach(row => {
                 let timeDescription = row.timeAmount + " Minutes";
                 vdVM.push(new VisibleDataViewModel(row.grindingId, row.dateCreated, row.locationName, timeDescription, row.trashLootAmount, row.className, row.serverDescription, row.combatTypeName, row.afuaruSpawns));
@@ -63,46 +63,34 @@ export class CombatPageDataHandler {
 
             return res;
         }
-
     }
-
-    
 }
 
 export class CombatPageEnumHandler {
-        // SQL Context
-    private recentLocationsContext: RecentLocationsContext = new RecentLocationsContext();
-    private classNamesEnumContext: ClassNamesEnumContext = new ClassNamesEnumContext();
-    private territoryEnumContext: TerritoryEnumContext = new TerritoryEnumContext();
-    private locationsEnumContext: LocationsEnumContext = new LocationsEnumContext();
-    private serverEnumContext: ServerEnumContext = new ServerEnumContext();
-    private combatTypesEnumContext: CombatTypesEnumContext = new CombatTypesEnumContext();
-    private timeEnumContext: TimeEnumContext = new TimeEnumContext();
-
     public async getCombatEnums(): Promise<CombatPageEnumsViewModel> {
         let classNamesEnum = new Array<ClassNamesEnumViewModel>();
-        await this.classNamesEnumContext.getAll().then((_: Array<ClassNamesEnumEntity>) => {
+        await new ClassNamesEnumContext().getAll().then((_: Array<ClassNamesEnumEntity>) => {
             _.forEach(row => {
                 classNamesEnum.push(new ClassNamesEnumViewModel(row.classId, row.className));
             });
         });
         
-        let locationNamesEnum = new Array<LocationNamesGroupedEnumViewModel>();
         let locationViewModel = new Array<LocationNamesEnumViewModel>();
-            // Get Top 3 Most Recent Location Entires First
-        await this.recentLocationsContext.getAll().then((_: Array<LocationNamesEnumEntity>) => {
+        await new RecentLocationsContext().getAll().then((_: Array<LocationNamesEnumEntity>) => {
             if(_.length > 0) {
                 _.forEach(row => {
                     locationViewModel.push(new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, parseInt(row.recommendedAP)));
                 });
             } 
         });
+
+        let locationNamesEnum = new Array<LocationNamesGroupedEnumViewModel>();
         if(locationViewModel.length > 0)
             locationNamesEnum.push(new LocationNamesGroupedEnumViewModel("Recent", locationViewModel));
 
-        let locationArray = await this.locationsEnumContext.getAll();
+        let locationArray = await new LocationsEnumContext().getAll();
 
-        await this.territoryEnumContext.getAll().then((_: Array<TerritoryEnumEntity>) => {
+        await new TerritoryEnumContext().getAll().then((_: Array<TerritoryEnumEntity>) => {
             _.forEach(row => {
                 let locations = new Array<LocationNamesEnumViewModel>();
                 locationArray.filter((_: LocationNamesEnumEntity) => _.territoryId == row.territoryId).forEach(_ => {
@@ -114,14 +102,14 @@ export class CombatPageEnumHandler {
 
        
         let serverNamesEnum = new Array<ServerNamesEnumViewModel>();
-        await this.serverEnumContext.getAll().then((_: Array<ServerNamesEnumEntity>) => {
+        await new ServerEnumContext().getAll().then((_: Array<ServerNamesEnumEntity>) => {
             _.forEach(row => {
                 serverNamesEnum.push(new ServerNamesEnumViewModel(row.serverId, row.serverName, row.isElviaRealm));
             });
         });
         
         let combatTypesEnum = new Array<CombatTypesEnumViewModel>();
-        await this.combatTypesEnumContext.getAll().then((_: Array<CombatTypesEnumEntity>) => {
+        await new CombatTypesEnumContext().getAll().then((_: Array<CombatTypesEnumEntity>) => {
             _.forEach(row => {
                 combatTypesEnum.push(new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName));
             });
@@ -129,12 +117,11 @@ export class CombatPageEnumHandler {
 
            
         let timeAmountEnum = new Array<TimeAmountEnumViewModel>();
-        await this.timeEnumContext.getAll().then((_: Array<TimeAmountEnumEntity>) => {
+        await new TimeEnumContext().getAll().then((_: Array<TimeAmountEnumEntity>) => {
             _.forEach(row => {
                 timeAmountEnum.push(new TimeAmountEnumViewModel(row.timeId, row.timeAmount));
             });
         });
-
         
         let previousEntry = new PreviousCombatValuesViewModel();
         await new GrindingDataContext().getMostRecent().then((_: GrindingDataEntity) => {
@@ -145,39 +132,31 @@ export class CombatPageEnumHandler {
                 previousEntry.timeAmount = new TimeAmountEnumViewModel(_.timeId, _.timeAmount);
                 previousEntry.userClass = new UserClassViewModel(_.userClassId, _.className, _.classRoleName, new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName), new GearViewModel(_.ap, _.aap, _.dp, _.gearScore), _.classDescription);    
             }
-        });
-        
+        });    
         return new CombatPageEnumsViewModel(classNamesEnum, locationNamesEnum, serverNamesEnum, combatTypesEnum, timeAmountEnum, previousEntry);
     }
-
 }
 
 export class ColumnHeadersHandler {
-    private columnHeadersContext: ColumnHeadersContext = new ColumnHeadersContext();
-
-        // Get Default Column Headers
     public async getDefaultColumns(): Promise<Array<CombatHeadersViewModel>> {
         let combatHeaders = new Array<CombatHeadersEntity>();
-        await this.columnHeadersContext.getAll().then((_: Array<CombatHeadersEntity>) => {
+        await new ColumnHeadersContext().getAll().then((_: Array<CombatHeadersEntity>) => {
             _.forEach(row => {
                 combatHeaders.push(new CombatHeadersViewModel(row.headingId, row.field, row.header, row.isActive));
             });
         });
         return combatHeaders;
     }
-
-        // Update Single Column Header
     public async updateSingleVisibleColumn(column: CombatHeadersViewModel): Promise<void> {
-        await this.columnHeadersContext.update(column.headingId, column.isActive);
+        await new ColumnHeadersContext().update(column.headingId, column.isActive);
         return;
     }
 
-        // Update All Column Headers
     public async updateCombatHeaders(combatHeaders: Array<CombatHeadersViewModel>): Promise<Array<CombatHeadersViewModel>> {
         await Promise.all(combatHeaders.map(async (column: CombatHeadersViewModel) => {
-            await this.columnHeadersContext.update(column.headingId, column.isActive);
+            await new ColumnHeadersContext().update(column.headingId, column.isActive);
         }));
-        await this.columnHeadersContext.updateHasColumnsSet();
+        await new ColumnHeadersContext().updateHasColumnsSet();
 
         return await this.getDefaultColumns();
         
@@ -185,12 +164,9 @@ export class ColumnHeadersHandler {
 }
 
 export class UserClassHandler {
-    private userClassContext: UserClassContext = new UserClassContext();
-
     public async getUserClasses(): Promise<Array<UserClassViewModel>> {
-            // Get Active Classes
         let acVM = new Array<UserClassViewModel>();
-        await this.userClassContext.getAll().then((_ : Array<UserClassEntity>) => {
+        await new UserClassContext().getAll().then((_ : Array<UserClassEntity>) => {
             _.forEach(async row => {
                 acVM.push(new UserClassViewModel(row.classId,  row.className, row.classRole, new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription));
             });
@@ -200,27 +176,24 @@ export class UserClassHandler {
 
     public async addUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
         let ucE = await convertToEntity(userClass);
-        await this.userClassContext.insert(ucE);
+        await new UserClassContext().insert(ucE);
         let ncE = await new UserClassContext().getMostRecent();
         await new GearContext().updateClassId(ncE.FK_gearScoreId, ncE.classId );
 
         return new UserClassViewModel(ncE.classId, ncE.className, ncE.classRole, new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(ncE.ap, ncE.aap, ncE.dp, ncE.gearScore), ncE.classDescription);
 
         async function convertToEntity(userClass: UserClassViewModel): Promise<UserClassEntity> {
+            /*
+                Get unavailble ids before continuing with filling the rest.
+            */
             let userClassEntity: UserClassEntity = new UserClassEntity();     
-                // GET Ids
             userClassEntity.classNameId = (await new ClassNamesEnumContext().get(userClass.className)).classId;
             userClassEntity.classRoleId = (await new ClassRolesEnumContext().get(userClass.classRole)).roleId;
-                // Create gearScore entry
             await new GearContext().insert(userClass.gear);
-            // get most recent entry
             let gE = (await new GearContext().getMostRecent());
-            
             userClassEntity.FK_gearScoreId = gE.gearScoreId;
             userClassEntity.gearScore = gE.gearScore;
 
-            
-                // Fill The Rest
             userClassEntity.className = userClass.className;
             userClassEntity.classRole = userClass.classRole;
             userClassEntity.classDescription = userClass.classDescription;

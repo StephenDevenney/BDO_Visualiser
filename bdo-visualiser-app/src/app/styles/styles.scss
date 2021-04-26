@@ -30,6 +30,7 @@
             ### FixedTiles
     # Specifics
         ## Dropdown-Options
+        ## Class Selection
     # Logo
     # Bootstrap Override
     # PrimeNG Override
@@ -615,6 +616,11 @@ input {
     .btn {
         border-radius: 0px;
     }
+}
+
+// ## Class Selection 
+.userClass-selection-container {
+    max-height: 80%;
 }
 
 // # Logo

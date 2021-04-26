@@ -7,6 +7,7 @@
     ## Dualtone
     ## Hover
 # keyframes
+# Images
 */
 
 // # Sizes
@@ -258,4 +259,9 @@
         opacity: 1;
 		right: 0vw;
 	}
+}
+
+// # Images
+.character-card-class-image {
+    max-height: 10rem;
 }

@@ -2,6 +2,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SecurityController } from './routes/securityController';
 import { CombatController } from './routes/combatController';
+import { UserClassController } from './routes/userClassController';
 
 @NgModule({
     imports: [
@@ -15,7 +16,8 @@ import { CombatController } from './routes/combatController';
     ],
     providers: [
       SecurityController,
-      CombatController
+      CombatController,
+      UserClassController
     ]
   })
   export class ServerModule { 

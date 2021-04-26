@@ -3,12 +3,15 @@ import { CommonModule } from '@angular/common';
 import { UserClassesPageComponent } from './user-classes/user-classes-page.component';
 import { SharedModule } from '../../shared/modules/sharedModule';
 import { RouterModule } from '@angular/router';
+import { ClassCreationPageComponent } from './class-creation/class-creation-page.component';
+import { UserClassesService } from './user-classes.service';
 
 
 
 @NgModule({
   declarations: [
-    UserClassesPageComponent
+    UserClassesPageComponent,
+    ClassCreationPageComponent
   ],
   imports: [
     CommonModule,
@@ -16,6 +19,9 @@ import { RouterModule } from '@angular/router';
   ],
   exports: [
     RouterModule
+  ],
+  providers: [
+    UserClassesService
   ]
 })
 
