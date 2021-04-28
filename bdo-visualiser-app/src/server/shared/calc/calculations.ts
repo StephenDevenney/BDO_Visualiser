@@ -1,10 +1,11 @@
 import * as moment from 'moment';
+import { GearViewModel } from '../viewModels/userClassViewModel';
 
 export class Calculations { 
     
         // GearScore
-    public calcGearScore(ap: number, aap: number, dp: number): number {
-        return (Math.floor((ap + aap) / 2) + dp);
+    public calcGearScore(gear: GearViewModel): number {
+        return (Math.floor((gear.ap + gear.aap) / 2) + gear.dp);
     }
 
         // Current Date - Formatted

@@ -20,7 +20,7 @@ export class UserClassContext {
   public gearScore: number = 0;
 
   public async getAll(): Promise<Array<UserClassEntity>> {
-    const sql = `SELECT combat_classes.classId, combat_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, (className || ' (' || cast(combat_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, combat_classes.dateCreated, combat_gearScore.ap, combat_gearScore.aap, combat_gearScore.dp, combat_gearScore.gearScore FROM combat_classes INNER JOIN enum_class ON enum_class.classId = combat_classes.FK_classNameId INNER JOIN combat_gearScore ON combat_gearScore.gearScoreId = combat_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = combat_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = combat_classes.FK_primaryCombatTypeId WHERE combat_classes.FK_combatSettingsId = 1`;
+    const sql = `SELECT userClass_classes.classId, userClass_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, userClass_classes.dateCreated, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore FROM userClass_classes INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = userClass_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE userClass_classes.FK_combatSettingsId = 1`;
     const values = {};
 
     return TheDb.selectAll(sql, values).then((rows: any) => {
@@ -34,7 +34,7 @@ export class UserClassContext {
   }
 
   public async getMostRecent(): Promise<UserClassEntity> {
-    const sql = `SELECT combat_classes.classId, combat_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, (className || ' (' || cast(combat_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, combat_classes.dateCreated, combat_gearScore.ap, combat_gearScore.aap, combat_gearScore.dp, combat_gearScore.gearScore FROM combat_classes INNER JOIN enum_class ON enum_class.classId = combat_classes.FK_classNameId INNER JOIN combat_gearScore ON combat_gearScore.gearScoreId = combat_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = combat_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = combat_classes.FK_primaryCombatTypeId WHERE combat_classes.FK_combatSettingsId = 1 ORDER BY gearScoreId DESC LIMIT 1`;
+    const sql = `SELECT userClass_classes.classId, userClass_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, userClass_classes.dateCreated, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore FROM userClass_classes INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = userClass_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE userClass_classes.FK_combatSettingsId = 1 ORDER BY gearScoreId DESC LIMIT 1`;
     const values = { };
 
     return TheDb.selectOne(sql, values).then((row: any) => {
@@ -44,7 +44,7 @@ export class UserClassContext {
   }
 
   public async insert(userClass: UserClassEntity): Promise<void> {
-    const sql = `INSERT OR REPLACE INTO combat_classes (FK_combatSettingsId, FK_classNameId, FK_classRoleId, FK_gearScoreId, FK_primaryCombatTypeId, dateCreated) VALUES (1, $FK_classNameId, $FK_classRoleId, $FK_gearScoreId, $FK_primaryCombatTypeId, $dateCreated);`;
+    const sql = `INSERT OR REPLACE INTO userClass_classes (FK_combatSettingsId, FK_classNameId, FK_classRoleId, FK_gearScoreId, FK_primaryCombatTypeId, dateCreated) VALUES (1, $FK_classNameId, $FK_classRoleId, $FK_gearScoreId, $FK_primaryCombatTypeId, $dateCreated);`;
     const values = { $FK_classNameId: userClass.classNameId, $FK_classRoleId: userClass.classRoleId, $FK_gearScoreId: userClass.FK_gearScoreId, $FK_primaryCombatTypeId: userClass.combatTypeId, $dateCreated: userClass.dateCreated };
 
     return TheDb.insert(sql, values).then((result) => {});
@@ -124,6 +124,20 @@ export class ClassRolesEnumContext {
     });
   }
 
+  public getAllWithoutMain(): Promise<Array<ClassRoleEnumEntity>> {
+    const sql = `SELECT * FROM enum_classRole WHERE roleId != 1`;
+    const values = {};
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<ClassRoleEnumEntity> = new Array<ClassRoleEnumEntity>();
+      for (const row of rows) {
+          const item = new ClassRolesEnumContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
   public async get(roleDescription: string): Promise<ClassRoleEnumEntity> {
     const sql = `SELECT * FROM enum_classRole WHERE enum_classRole.roleDescription = $roleDescription`;
     const values = { $roleDescription: roleDescription };
@@ -151,7 +165,7 @@ export class GearContext {
   public dateCreated: string = "";
 
   public async get(gearScoreId: number): Promise<GearEntity> {
-    const sql = `SELECT gearScoreId, ap, aap, dp, gearScore, dateCreated FROM combat_gearScore WHERE combat_gearScore.gearScoreId = $gearScoreId`;
+    const sql = `SELECT gearScoreId, ap, aap, dp, gearScore, dateCreated FROM userClass_gearScore WHERE userClass_gearScore.gearScoreId = $gearScoreId`;
     const values = { $gearScoreId: gearScoreId };
 
     return TheDb.selectOne(sql, values).then((row: any) => {
@@ -161,7 +175,7 @@ export class GearContext {
   }
 
   public async getViaClassId(classId: number): Promise<GearEntity> {
-    const sql = `SELECT gearScoreId, ap, aap, dp, gearScore, dateCreated FROM combat_gearScore WHERE combat_gearScore.FK_classId = $classId`;
+    const sql = `SELECT gearScoreId, ap, aap, dp, gearScore, dateCreated FROM userClass_gearScore WHERE userClass_gearScore.FK_classId = $classId`;
     const values = { $classId: classId };
 
     return TheDb.selectOne(sql, values).then((row: any) => {
@@ -171,7 +185,7 @@ export class GearContext {
   }
 
   public async getMostRecent(): Promise<GearEntity> {
-    const sql = `SELECT gearScoreId, ap, aap, dp, gearScore, dateCreated FROM combat_gearScore ORDER BY gearScoreId DESC LIMIT 1`;
+    const sql = `SELECT gearScoreId, ap, aap, dp, gearScore, dateCreated FROM userClass_gearScore ORDER BY gearScoreId DESC LIMIT 1`;
     const values = { };
 
     return TheDb.selectOne(sql, values).then((row: any) => {
@@ -181,14 +195,14 @@ export class GearContext {
   }
 
   public async insert(gear: GearViewModel): Promise<void> {
-    const sql = `INSERT OR REPLACE INTO combat_gearScore (FK_combatSettingsId, ap, aap, dp, gearScore, dateCreated) VALUES (1, $ap, $aap, $dp, $gearScore, $dateCreated);`;
-    const values = { $ap: gear.ap, $aap: gear.aap, $dp: gear.dp, $gearScore: new Calculations().calcGearScore(gear.ap, gear.aap, gear.dp), $dateCreated: new Calculations().calcCurrentDate() };
+    const sql = `INSERT OR REPLACE INTO userClass_gearScore (FK_combatSettingsId, ap, aap, dp, gearScore, dateCreated) VALUES (1, $ap, $aap, $dp, $gearScore, $dateCreated);`;
+    const values = { $ap: gear.ap, $aap: gear.aap, $dp: gear.dp, $gearScore: new Calculations().calcGearScore(gear), $dateCreated: new Calculations().calcCurrentDate() };
 
     return TheDb.insert(sql, values).then((result) => {});
   }
 
   public async updateClassId(gearScoreId: number, classId: number): Promise<void> {
-    const sql = `UPDATE combat_gearScore SET FK_classId = $classId WHERE gearScoreId = $gearScoreId`;
+    const sql = `UPDATE userClass_gearScore SET FK_classId = $classId WHERE gearScoreId = $gearScoreId`;
     const values = { $gearScoreId: gearScoreId, $classId: classId};
 
     return TheDb.update(sql, values).then((result) => {});

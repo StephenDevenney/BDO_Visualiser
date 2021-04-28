@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AppUserViewModel, ConfigViewModel } from '../../../server/shared/viewModels/securityViewModels';
+import { remote } from 'electron';
 
 @Injectable()
 export class Globals {
@@ -9,5 +10,9 @@ export class Globals {
     public previousPageId: number = 0;
     public currentPageId: number = 0;
     public config: ConfigViewModel = new ConfigViewModel;
+
     
+    public getUserPath(): string {
+        return remote.app.getPath('userData');
+    }
 }

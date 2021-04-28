@@ -31,6 +31,8 @@
             ## Tabpanel
                 ### Header 
                 ### FixedTiles   
+        # Specifics
+            ## Class Selection
         # Overrides
             ## Input Text
             ## Checkboxes
@@ -417,6 +419,16 @@
             color: $standard-primary-text;
             border-radius: 3px;
             border: 1px solid $standard-secondary;
+        }
+    }
+
+    // # Specifics
+
+    // ## Class Selection
+    .character-card-class-image {
+        border: 4px solid darken($dark-primary, 2%);
+        &:hover {
+            border-color: goldenrod;
         }
     }
 

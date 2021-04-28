@@ -1,17 +1,45 @@
-<page class="scroll-container-v">
-    <div class="d-flex align-items-center p-2">
+<page>
+    <div *ngIf="isLoaded" class="d-flex p-2">
         <div class="col-9">
+            <h2 *ngIf="!classCreationData.hasMainUserClass" class="mb-0">Create Main Class</h2>
+            <h2 *ngIf="classCreationData.hasMainUserClass" class="mb-0">Create Class</h2>
             <div class="row userClass-selection-container">
-                <div *ngFor="let item of classNamesEnum" class="col-md-3 btn btn-primary btn-no-bg p-1">
-                    <div class="character-creation-container">
-                        <img class="character-card-class-image" src="./assets/images/classPortraits/{{item.className}}.PNG"/>
-                    </div>
-                </div>
+                <button *ngFor="let item of classCreationData.classNamesEnum" class="col-md-4 btn btn-primary p-1 btn-no-bg class-portrait-hoverable" [ngClass]="{'userClass-selected' : item.isSelected, 'userClass-unselected' : !item.isSelected}" (click)="selectClass(item);">
+                    <div class="character-card-class-image" title="{{item.className}}">
+                        <img src="./assets/images/classPortraits/{{item.className}}.PNG"/>
+                    </div>    
+                </button>
             </div>
         </div>
         <div class="col-3">
-            test2
+            <div>
+                <label class="mt-2">Mainhand AP</label>
+            </div>
+            <p-inputNumber [disabled]="!userClassHasBeenSelected" [(ngModel)]="classCreationData.newUserClass.gear.ap" [min]="0">{{classCreationData.newUserClass.gear.ap}}</p-inputNumber>
+            <div>
+                <label class="mt-2">Awakening AP</label>
+            </div>
+            <p-inputNumber [disabled]="!userClassHasBeenSelected" [(ngModel)]="classCreationData.newUserClass.gear.aap" [min]="0">{{classCreationData.newUserClass.gear.aap}}</p-inputNumber>
+            <div>
+                <label class="mt-2">DP</label>
+            </div>
+            <p-inputNumber [disabled]="!userClassHasBeenSelected" [(ngModel)]="classCreationData.newUserClass.gear.dp" [min]="0">{{classCreationData.newUserClass.gear.dp}}</p-inputNumber>
+            <div>
+                <label class="mt-2">Class Role</label>
+            </div>
+            <p-dropdown *ngIf="classCreationData.hasMainUserClass" [disabled]="!userClassHasBeenSelected" [options]="classRolesEnumFiltered" [(ngModel)]="classCreationData.newUserClass.classRole" optionLabel="classRole"></p-dropdown>
+            <div *ngIf="classCreationData.hasMainUserClass">
+                <label class="mt-2">Primary Combat Type</label>
+            </div>
+            <div class="d-flex align-items-center">
+                <p-dropdown [disabled]="!userClassHasBeenSelected" [options]="classCreationData.combatTypesEnum" [(ngModel)]="classCreationData.newUserClass.combatTypeDescription" optionLabel="combatTypeName"></p-dropdown>
+                <button [disabled]="classCreationData.newUserClass.gear.ap == 0 || classCreationData.newUserClass.gear.aap == 0 || classCreationData.newUserClass.gear.dp == 0" class="btn btn-primary ml-3" (click)="createClass()">Create</button>
+            </div>
+            <div *ngIf="userClassHasBeenSelected">
+                <div class="character-card-class-image mt-2">
+                    <img src="./assets/images/classPortraits/{{classCreationData.newUserClass.className}}.PNG"/>
+                </div>
+            </div>
         </div>
     </div>
-    <div></div>
 </page>

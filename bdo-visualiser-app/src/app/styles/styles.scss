@@ -620,7 +620,9 @@ input {
 
 // ## Class Selection 
 .userClass-selection-container {
-    max-height: 80%;
+    max-height: calc(90vh - 5rem);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 // # Logo
@@ -667,5 +669,38 @@ body {
 .item-widths {
     .p-dropdown, .p-inputnumber .p-component {
         width: 18rem;
+    }
+}
+
+
+/*
+    TODO: move this
+*/
+.class-portrait-hoverable {
+    &.userClass-selected, &.userClass-unselected {
+        .character-card-class-image {
+            img {
+                opacity: 0.6;
+            }
+        } 
+        &:hover {
+            img {
+                opacity: 1;
+            }
+        }
+    }
+
+    &.userClass-selected {
+        .character-card-class-image {
+            background-color: goldenrod;
+            img {
+                opacity: 0.8;
+            }  
+        }
+        &:hover {
+            img {
+                opacity: 0.9;
+            }
+        }
     }
 }

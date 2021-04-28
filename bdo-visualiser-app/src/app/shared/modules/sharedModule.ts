@@ -20,6 +20,7 @@ import { ServerModule } from 'src/server/src/serverModule';
 import { TableInsertComponent } from '../components/table-insert/table-insert.component';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ButtonModule } from 'primeng/button';
+import { Calculations } from '../../../server/shared/calc/calculations';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { ButtonModule } from 'primeng/button';
     MessageService,
     MultiSelectModule,
     DateLongPipe,
-    TableInsertComponent
+    TableInsertComponent,
+    Calculations
   ]
 })
 export class SharedModule { 

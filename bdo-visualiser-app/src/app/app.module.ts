@@ -23,6 +23,7 @@ import { NgxUiLoaderModule, NgxUiLoaderConfig, POSITION, SPINNER, PB_DIRECTION }
 import { BarterModule } from './modules/barter/barter.module';
 import { UserClassesModule } from './modules/user-classes/user-classes.module';
 import { ScrollsModule } from './modules/scrolls/scrolls.module';
+import { ExtrasModule } from './modules/extras/extras.module';
 
 /*
   bgs = bottomRight Small loader
@@ -62,6 +63,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
     UserClassesModule,
     ScrollsModule,
     SignInModule,
+    ExtrasModule,
     SharedModule,
     HttpClientModule,
     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig)

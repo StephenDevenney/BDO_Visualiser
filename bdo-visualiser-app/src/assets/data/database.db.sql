@@ -62,20 +62,6 @@ CREATE TABLE IF NOT EXISTS combat_settings (
 COMMIT;
 
 BEGIN TRANSACTION;
-DROP TABLE IF EXISTS `combat_gearScore`;
-CREATE TABLE IF NOT EXISTS combat_gearScore (
-	gearScoreId	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	FK_combatSettingsId	INTEGER DEFAULT 0,
-	FK_classId INTEGER DEFAULT 0,
-	ap INTEGER DEFAULT 0,
-	aap INTEGER DEFAULT 0,
-	dp INTEGER DEFAULT 0,
-	gearScore INTEGER DEFAULT 0,
-	dateCreated TEXT NOT NULL
-);
-COMMIT;
-
-BEGIN TRANSACTION;
 DROP TABLE IF EXISTS `combat_grinding`;
 CREATE TABLE IF NOT EXISTS combat_grinding (
 	grindingId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -121,19 +107,6 @@ CREATE TABLE IF NOT EXISTS combat_favLocations (
 	favLocationId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	FK_combatSettingsId	INTEGER DEFAULT 0,
 	FK_locationId INTEGER DEFAULT 0
-);
-COMMIT;
-
-BEGIN TRANSACTION;
-DROP TABLE IF EXISTS `combat_classes`;
-CREATE TABLE IF NOT EXISTS combat_classes (
-	classId	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	FK_combatSettingsId	INTEGER DEFAULT 0,
-	FK_classNameId INTEGER DEFAULT 0,
-	FK_classRoleId INTEGER DEFAULT 0,
-	FK_gearScoreId INTEGER DEFAULT 0,
-	FK_primaryCombatTypeId INTEGER DEFAULT 2,
-	dateCreated TEXT NOT NULL
 );
 COMMIT;
 
@@ -311,6 +284,33 @@ CREATE TABLE IF NOT EXISTS image_classPortraits (
 );
 COMMIT;
 
+BEGIN TRANSACTION;
+DROP TABLE IF EXISTS `userClass_classes`;
+CREATE TABLE IF NOT EXISTS userClass_classes (
+	classId	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	FK_combatSettingsId	INTEGER DEFAULT 0,
+	FK_classNameId INTEGER DEFAULT 0,
+	FK_classRoleId INTEGER DEFAULT 0,
+	FK_gearScoreId INTEGER DEFAULT 0,
+	FK_primaryCombatTypeId INTEGER DEFAULT 2,
+	dateCreated TEXT NOT NULL
+);
+COMMIT;
+
+BEGIN TRANSACTION;
+DROP TABLE IF EXISTS `userClass_gearScore`;
+CREATE TABLE IF NOT EXISTS userClass_gearScore (
+	gearScoreId	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	FK_combatSettingsId	INTEGER DEFAULT 0,
+	FK_classId INTEGER DEFAULT 0,
+	ap INTEGER DEFAULT 0,
+	aap INTEGER DEFAULT 0,
+	dp INTEGER DEFAULT 0,
+	gearScore INTEGER DEFAULT 0,
+	dateCreated TEXT NOT NULL
+);
+COMMIT;
+
 -- Post Publish Script
 
 -- Native Users
@@ -391,8 +391,9 @@ INSERT INTO enum_class (className) VALUES ('Striker');
 INSERT INTO enum_class (className) VALUES ('Shai');
 INSERT INTO enum_class (className) VALUES ('Tamer');
 INSERT INTO enum_class (className) VALUES ('Valkyrie');
-INSERT INTO enum_class (className) VALUES ('Wizard');
 INSERT INTO enum_class (className) VALUES ('Warrior');
+INSERT INTO enum_class (className) VALUES ('Wizard');
+INSERT INTO enum_class (className) VALUES ('Witch');
 
 -- enum_theme
 INSERT INTO enum_theme (themeName, themeClassName) VALUES ('Default', 'standard-theme');

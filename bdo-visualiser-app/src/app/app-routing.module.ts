@@ -11,6 +11,7 @@ import { BarterPageComponent } from './modules/barter/barter/barter-page.compone
 import { ScrollsPageComponent } from './modules/scrolls/scrolls/scrolls-page.component';
 import { UserClassesPageComponent } from './modules/user-classes/user-classes/user-classes-page.component';
 import { ClassCreationPageComponent } from './modules/user-classes/class-creation/class-creation-page.component';
+import { ExtrasPageComponent } from './modules/extras/extras-page/extras-page.component';
 
 const routes: Routes = [
   { path: 'home', component: OverviewComponent, data: {page: 'home'} },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'scrolls', component: ScrollsPageComponent, data: {page: 'scrolls'} },
   { path: 'user-classes', component: UserClassesPageComponent, data: {page: 'user-classes'} },
   { path: 'user-classes/creation', component: ClassCreationPageComponent, data: {page: 'user-classes/creation'} },
+  { path: 'extras', component: ExtrasPageComponent, data: {page: 'extras'} },
   { path: '**', redirectTo:'home', data: {page: 'home'} }
 ];
 

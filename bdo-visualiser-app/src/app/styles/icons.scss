@@ -263,5 +263,11 @@
 
 // # Images
 .character-card-class-image {
-    max-height: 10rem;
+    img {
+        max-height: 25vh;
+    }
 }
+
+.userClass-selected, .userClass-unselected .character-card-class-image.character-card-class-image:hover {
+    border: 4px solid goldenrod; 
+}   

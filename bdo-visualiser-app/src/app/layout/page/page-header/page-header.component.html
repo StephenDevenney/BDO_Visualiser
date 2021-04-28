@@ -8,7 +8,7 @@
     </div>
     <div class="d-flex justify-content-end col-6">
         <p-inputSwitch class="mr-4 mt-2 switch-secondary" (onChange)="changeTheme($event);" [(ngModel)]="selectedThemeStatus" title="Toggle Light / Dark Theme"></p-inputSwitch>
-        <button pButton icon="pi pi-cog" type="button" iconPos="left" class="btn btn-primary btn-no-bg" title="Discord Link / Donate"></button>
+        <button pButton icon="pi pi-cog" type="button" iconPos="left" class="btn btn-primary btn-no-bg" title="Extras" (click)="router.navigate(['extras']);"></button>
     </div>
 </div>
 

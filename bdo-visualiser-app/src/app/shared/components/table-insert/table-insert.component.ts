@@ -33,7 +33,7 @@ export class TableInsertComponent extends BaseComponent implements OnInit {
           this.newEntry.timeAmount = this.combatEnums.timeAmountEnum[0];
           this.newEntry.server = this.combatEnums.serverNamesEnum[0];
           this.newEntry.combatType = this.combatEnums.combatTypesEnum[0];
-          this.newEntry.userClass = this.activeClasses.filter(_ => _.classRole == "Main")[0];
+          this.newEntry.userClass = this.activeClasses.filter(_ => _.classRole.classRole == "Main")[0];
         }
         else {
           /*
