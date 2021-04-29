@@ -12,6 +12,14 @@ export class UserClassesPageComponent extends BaseComponent implements OnInit  {
   }
 
   ngOnInit(): void {
+    /*
+      Ap + Ap Bracket
+      Aap + Aap Bracket
+      Dp + Dp Bracket
+      Hours Grinded Total.
+      Classname
+      classRole
+    */
   }
 
 }

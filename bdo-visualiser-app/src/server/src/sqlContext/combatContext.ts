@@ -98,9 +98,10 @@ export class GrindingDataContext {
   public dateCreated: string = "";
   public trashLootAmount: number = 0;
   public afuaruSpawns: number = 0;
+  public afuaruSpawnable: boolean = false;
 
   public getAll(): Promise<Array<GrindingDataEntity>> {
-    const sql = `SELECT grindingId, enum_locations.locationId, enum_locations.locationName, enum_territory.territoryId, enum_territory.territoryName, enum_locations.recommendedAP, enum_locations.recommendedLevel, enum_time.timeId, enum_time.timeAmount, userClass_classes.classId AS userClassId, enum_class.classId AS classNameId, enum_class.className, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId AS classRoleId, enum_classRole.roleDescription AS classRoleName, userClass_gearScore.gearScoreId, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore, enum_server.serverId, enum_server.serverName as serverDescription, enum_server.isElviaRealm, combatType.combatTypeId, combatType.combatTypeName AS combatTypeName, combat_grinding.dateCreated, combat_grinding.trashLootAmount, combat_grinding.afuaruSpawns FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = combat_grinding.FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId INNER JOIN userClass_classes ON userClass_classes.classId = combat_grinding.FK_classId INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = combat_grinding.FK_gearScoreId INNER JOIN enum_server ON enum_server.serverId = combat_grinding.FK_serverId INNER JOIN enum_combatType AS combatType ON combatType.combatTypeId = combat_grinding.FK_combatTypeId INNER JOIN enum_combatType AS primaryCombatType ON primaryCombatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE combat_grinding.FK_combatSettingsId = 1 ORDER BY grindingId DESC`;
+    const sql = `SELECT grindingId, enum_locations.locationId, enum_locations.locationName, enum_territory.territoryId, enum_territory.territoryName, enum_locations.recommendedAP, enum_locations.recommendedLevel, enum_time.timeId, enum_time.timeAmount, userClass_classes.classId AS userClassId, enum_class.classId AS classNameId, enum_class.className, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId AS classRoleId, enum_classRole.roleDescription AS classRoleName, userClass_gearScore.gearScoreId, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore, enum_server.serverId, enum_server.serverName as serverDescription, enum_server.isElviaRealm, combatType.combatTypeId, combatType.combatTypeName AS combatTypeName, combat_grinding.dateCreated, combat_grinding.trashLootAmount, combat_grinding.afuaruSpawns, enum_locations.afuaruSpawnable FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = combat_grinding.FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId INNER JOIN userClass_classes ON userClass_classes.classId = combat_grinding.FK_classId INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = combat_grinding.FK_gearScoreId INNER JOIN enum_server ON enum_server.serverId = combat_grinding.FK_serverId INNER JOIN enum_combatType AS combatType ON combatType.combatTypeId = combat_grinding.FK_combatTypeId INNER JOIN enum_combatType AS primaryCombatType ON primaryCombatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE combat_grinding.FK_combatSettingsId = 1 ORDER BY grindingId DESC`;
     const values = {};
 
     return TheDb.selectAll(sql, values).then((rows: any) => {
@@ -114,7 +115,7 @@ export class GrindingDataContext {
   }
 
   public async getMostRecent(): Promise<GrindingDataEntity> {
-    const sql = `SELECT grindingId, enum_locations.locationId, enum_locations.locationName, enum_territory.territoryId, enum_territory.territoryName, enum_locations.recommendedAP, enum_locations.recommendedLevel, enum_time.timeId, enum_time.timeAmount, userClass_classes.classId AS userClassId, enum_class.classId AS classNameId, enum_class.className, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId AS classRoleId, enum_classRole.roleDescription AS classRoleName, userClass_gearScore.gearScoreId, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore, enum_server.serverId, enum_server.serverName as serverDescription, enum_server.isElviaRealm, combatType.combatTypeId, combatType.combatTypeName AS combatTypeName, combat_grinding.dateCreated, combat_grinding.trashLootAmount, combat_grinding.afuaruSpawns FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = combat_grinding.FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId INNER JOIN userClass_classes ON userClass_classes.classId = combat_grinding.FK_classId INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = combat_grinding.FK_gearScoreId INNER JOIN enum_server ON enum_server.serverId = combat_grinding.FK_serverId INNER JOIN enum_combatType AS combatType ON combatType.combatTypeId = combat_grinding.FK_combatTypeId INNER JOIN enum_combatType AS primaryCombatType ON primaryCombatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE combat_grinding.FK_combatSettingsId = 1 ORDER BY grindingId DESC LIMIT 1`;
+    const sql = `SELECT grindingId, enum_locations.locationId, enum_locations.locationName, enum_territory.territoryId, enum_territory.territoryName, enum_locations.recommendedAP, enum_locations.recommendedLevel, enum_time.timeId, enum_time.timeAmount, userClass_classes.classId AS userClassId, enum_class.classId AS classNameId, enum_class.className, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId AS classRoleId, enum_classRole.roleDescription AS classRoleName, userClass_gearScore.gearScoreId, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore, enum_server.serverId, enum_server.serverName as serverDescription, enum_server.isElviaRealm, combatType.combatTypeId, combatType.combatTypeName AS combatTypeName, combat_grinding.dateCreated, combat_grinding.trashLootAmount, combat_grinding.afuaruSpawns, enum_locations.afuaruSpawnable FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = combat_grinding.FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId INNER JOIN userClass_classes ON userClass_classes.classId = combat_grinding.FK_classId INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = combat_grinding.FK_gearScoreId INNER JOIN enum_server ON enum_server.serverId = combat_grinding.FK_serverId INNER JOIN enum_combatType AS combatType ON combatType.combatTypeId = combat_grinding.FK_combatTypeId INNER JOIN enum_combatType AS primaryCombatType ON primaryCombatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE combat_grinding.FK_combatSettingsId = 1 ORDER BY grindingId DESC LIMIT 1`;
     const values = { };
 
     return TheDb.selectOne(sql, values).then((row: any) => {
@@ -159,47 +160,52 @@ export class GrindingDataContext {
     this.dateCreated = row['dateCreated'];
     this.trashLootAmount = row['trashLootAmount'];
     this.afuaruSpawns = row['afuaruSpawns'];
+    if(!!row['afuaruSpawnable'])
+      this.afuaruSpawnable = true;
 
     return this;
   }
 }
 
-export class RecentLocationsContext {
-  public locationId: number = 1;
-  public territoryId: number = 1;
-  public locationName: string = "-";
-  public territoryName: string = "-";
-  public recommendedLevel: string = "";
-  public recommendedAP: string = "";
+// export class RecentLocationsContext {
+//   public locationId: number = 1;
+//   public territoryId: number = 1;
+//   public locationName: string = "-";
+//   public territoryName: string = "-";
+//   public recommendedLevel: string = "";
+//   public recommendedAP: string = "";
+//   public afuaruSpawnable: boolean = false;
 
-  /*
-    Cut off for recent locations count is 3.
-  */
-  public getAll(): Promise<Array<LocationNamesEnumEntity>> {
-    const sql = `SELECT DISTINCT enum_locations.locationId, enum_locations.FK_territoryId, enum_locations.locationName, enum_territory.territoryName, enum_locations.recommendedLevel, enum_locations.recommendedAP FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE FK_combatSettingsId = 1 ORDER BY grindingId DESC LIMIT 3`;
-    const values = {};
+//   /*
+//     Cut off for recent locations count is 3.
+//   */
+//   public getAll(): Promise<Array<LocationNamesEnumEntity>> {
+//     const sql = `SELECT DISTINCT enum_locations.locationId, enum_locations.FK_territoryId, enum_locations.locationName, enum_territory.territoryName, enum_locations.recommendedLevel, enum_locations.recommendedAP, enum_locations.afuaruSpawnable FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE FK_combatSettingsId = 1 ORDER BY grindingId DESC LIMIT 3`;
+//     const values = {};
 
-    return TheDb.selectAll(sql, values).then((rows: any) => {
-      const nm: Array<LocationNamesEnumEntity> = new Array<LocationNamesEnumEntity>();
-      for (const row of rows) {
-          const item = new RecentLocationsContext().fromRow(row);
-          nm.push(item);
-      }
-      return nm;
-    });
-  }
+//     return TheDb.selectAll(sql, values).then((rows: any) => {
+//       const nm: Array<LocationNamesEnumEntity> = new Array<LocationNamesEnumEntity>();
+//       for (const row of rows) {
+//           const item = new RecentLocationsContext().fromRow(row);
+//           nm.push(item);
+//       }
+//       return nm;
+//     });
+//   }
 
-  private fromRow(row: LocationNamesEnumEntity): LocationNamesEnumEntity {
-    this.locationId = row['locationId'];
-    this.territoryId = row['territoryId'];
-    this.locationName = row['locationName'];
-    this.territoryName = row['territoryName'];
-    this.recommendedLevel = row['recommendedLevel'];
-    this.recommendedAP = row['recommendedAP'];
+//   private fromRow(row: LocationNamesEnumEntity): LocationNamesEnumEntity {
+//     this.locationId = row['locationId'];
+//     this.territoryId = row['territoryId'];
+//     this.locationName = row['locationName'];
+//     this.territoryName = row['territoryName'];
+//     this.recommendedLevel = row['recommendedLevel'];
+//     this.recommendedAP = row['recommendedAP'];
+//     if(!!row['afuaruSpawnable'])
+//       this.afuaruSpawnable = true;
   
-    return this;
-  }
-}
+//     return this;
+//   }
+// }
 
 export class ColumnHeadersContext {
   public headingId: number = 0;
@@ -231,6 +237,13 @@ export class ColumnHeadersContext {
   public updateHasColumnsSet(): Promise<void> {
     const sql = `UPDATE combat_settings SET hasDefaultCombatHeaders = 1 WHERE combatSettingsId = 1`;
     const values = { };
+
+    return TheDb.update(sql, values).then((result) => {});
+  }
+
+  public toggleFullHeaders(fullHeaders: boolean): Promise<void> {
+    const sql = `UPDATE combat_columnDefaults SET isActive = $fullHeaders WHERE FK_combatSettingsId = 1`;
+    const values = { $fullHeaders: fullHeaders };
 
     return TheDb.update(sql, values).then((result) => {});
   }
@@ -279,9 +292,10 @@ export class LocationsEnumContext {
   public territoryName: string = "-";
   public recommendedLevel: string = "";
   public recommendedAP: string = "";
+  public afuaruSpawnable: boolean = false;
 
   public getAll(): Promise<Array<LocationNamesEnumEntity>> {
-    const sql = `SELECT enum_locations.locationId, enum_territory.territoryId, enum_locations.locationName, enum_territory.territoryName, enum_locations.recommendedLevel, enum_locations.recommendedAP FROM enum_locations INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE enum_locations.locationId != 1`;
+    const sql = `SELECT enum_locations.locationId, enum_territory.territoryId, enum_locations.locationName, enum_territory.territoryName, enum_locations.recommendedLevel, enum_locations.recommendedAP, enum_locations.afuaruSpawnable FROM enum_locations INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE enum_locations.locationId != 1`;
     const values = {};
 
     return TheDb.selectAll(sql, values).then((rows: any) => {
@@ -294,6 +308,23 @@ export class LocationsEnumContext {
     });
   }
 
+  /*
+    Cut off for recent locations count is 3.
+  */
+  public getMostRecent(): Promise<Array<LocationNamesEnumEntity>> {
+    const sql = `SELECT DISTINCT enum_locations.locationId, enum_territory.territoryId, enum_locations.locationName, enum_territory.territoryName, enum_locations.recommendedLevel, enum_locations.recommendedAP, enum_locations.afuaruSpawnable FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE FK_combatSettingsId = 1 ORDER BY grindingId DESC LIMIT 3`;
+    const values = {};
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<LocationNamesEnumEntity> = new Array<LocationNamesEnumEntity>();
+      for (const row of rows) {
+          const item = new LocationsEnumContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
   private fromRow(row: LocationNamesEnumEntity): LocationNamesEnumEntity {
     this.locationId = row['locationId'];
     this.territoryId = row['territoryId'];
@@ -301,6 +332,8 @@ export class LocationsEnumContext {
     this.territoryName = row['territoryName'];
     this.recommendedLevel = row['recommendedLevel'];
     this.recommendedAP = row['recommendedAP'];
+    if(!!row['afuaruSpawnable'])
+      this.afuaruSpawnable = true;
   
     return this;
   }
@@ -360,6 +393,3 @@ export class TimeEnumContext {
     return this;
   }
 }
-/*
-  TODO: afuaru spawns not saving, update selected columns on save, have selected combat type change when class is changed when adding entry.
-*/

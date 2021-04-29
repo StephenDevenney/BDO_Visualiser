@@ -1,6 +1,5 @@
 import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, GrindingDataViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
-import { UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
-import { ColumnHeadersHandler, CombatPageDataHandler, CombatPageEnumHandler, UserClassHandler } from '../middleware/combathandler';
+import { ColumnHeadersHandler, CombatPageDataHandler, CombatPageNewEntryHandler } from '../middleware/combathandler';
 
 export class CombatController {
     constructor(){}
@@ -10,8 +9,8 @@ export class CombatController {
         return await new CombatPageDataHandler().getCombatData();
     } 
 
-    public async getCombatEnums(): Promise<CombatPageEnumsViewModel> {
-        return await new CombatPageEnumHandler().getCombatEnums();
+    public async getCombatNewEntryData(): Promise<CombatPageEnumsViewModel> {
+        return await new CombatPageNewEntryHandler().getCombatNewEntryData();
     } 
 
     public async getDefaultColumns(): Promise<Array<CombatHeadersViewModel>> {
@@ -24,8 +23,8 @@ export class CombatController {
         return;
     }
     
-    public async updateCombatHeaders(combatHeaders: Array<CombatHeadersViewModel>): Promise<Array<CombatHeadersViewModel>> {
-        return await new ColumnHeadersHandler().updateCombatHeaders(combatHeaders);
+    public async toggleFullHeaders(fullHeaders: boolean): Promise<void> {
+        return await new ColumnHeadersHandler().toggleFullHeaders(fullHeaders);
     }
 
         // POST

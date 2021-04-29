@@ -1,7 +1,5 @@
 <page>
     <div *ngIf="isLoaded" class="row overflow-hidden">
-
-
         <div class="col-6 border-right border-secondary pr-0">
             <div *ngIf="grindingRes.length > 0 && !isAddingEntry">
                 <div class="d-flex align-items-center justify-content-between p-2">
@@ -58,11 +56,7 @@
                                 <td *ngFor="let col of filteredColumns;">{{ item[col.field] }}</td>
                             </tr>
                         </ng-template>
-                    </p-table>    
-                    <p-table *ngIf="false"
-                        #hiddenTable
-                        [value]="combatPageData.visibleData">  
-                    </p-table>               
+                    </p-table>
                 </div>              
             </div> 
             <div *ngIf="grindingRes.length == 0 && !isAddingEntry">
@@ -74,7 +68,7 @@
                             <label class="d-flex align-items-center justify-content-center mt-2">Start by selecting what data you wish to track</label>
                             <label class="d-flex align-items-center justify-content-center">followed by a new entry.</label>
                             <div class="d-flex align-items-center justify-content-center mt-4">
-                                <button class="btn btn-primary mr-2" (click)="isAddingEntry = true;">Begin</button>
+                                <button class="btn btn-primary mr-2" (click)="addEntryChecks()">Begin</button>
                             </div>
                         </div>
                     </div>
@@ -85,10 +79,9 @@
                     <table-insert 
                         *ngIf="globals.isSignedIn"
                         [combatHeaders]="displayableHeaders"
-                        [activeClasses]="activeClasses"
                         [tableLength]="grindingRes.length"
                         (updateCombatRes)="emittedInsertEntry($event)"
-                        (cancelInsert)="isAddingEntry = false;">
+                        (cancelInsert)="emittedInsertCancel($event)">
                     </table-insert>
                 </div>
             </div>      

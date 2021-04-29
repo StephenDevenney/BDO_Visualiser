@@ -139,7 +139,8 @@ CREATE TABLE IF NOT EXISTS enum_locations (
 	FK_territoryId INTEGER,
 	locationName TEXT,
 	recommendedLevel TEXT DEFAULT '',
-	recommendedAP TEXT DEFAULT ''
+	recommendedAP TEXT DEFAULT '',
+	afuaruSpawnable INTEGER DEFAULT 0;
 );
 COMMIT;
 
@@ -528,23 +529,23 @@ INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES 
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Crescent Shrine', 9, '140');
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Desert Naga Temple', 9, '100');
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Gahaz Bandit Lair', 9, '140');
-INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Pila Ku Jail', 9, '210');
-INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Roud Sulfer Mine', 9, '210');
+INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP, afuaruSpawnable) VALUES ('Pila Ku Jail', 9, '210', 1);
+INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP, afuaruSpawnable) VALUES ('Roud Sulfer Mine', 9, '210', 1);
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Titium Valley (Fogan)', 9, '100');
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Waragon Nest', 9, '165');
 -- Kamasylvia
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Ash Forest', 5, '300');
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Fadus Habitat', 5, '120-190');
-INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Forest Ronaros Area', 5, '240');
+INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP, afuaruSpawnable) VALUES ('Forest Ronaros Area', 5, '240', 1);
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Gyfin Rhasia Temple', 5, '270');
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Manshaum Forest', 5, '240');
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Mirumok Ruins', 5, '240');
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Navarn Steppe', 5, '210');
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Polly''s Forest', 5, '160');
 -- Dreighan
-INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Blood Wolf Settlement', 4, '190');
-INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Sherekhan Necropolis', 4, '210');
-INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Tshira Ruins', 4, '140');
+INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP, afuaruSpawnable) VALUES ('Blood Wolf Settlement', 4, '190', 1);
+INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP, afuaruSpawnable) VALUES ('Sherekhan Necropolis', 4, '210', 1);
+INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP, afuaruSpawnable) VALUES ('Tshira Ruins', 4, '140', 1);
 -- O'dyllita
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Crypt of Resting Thoughts', 7, '310');
 INSERT INTO enum_locations (locationName, FK_territoryId, recommendedAP) VALUES ('Olun''s Valley', 7, '300');

@@ -56,8 +56,9 @@ export class GrindingDataEntity {
     public dateCreated: string = "";
     public trashLootAmount: number = 0;
     public afuaruSpawns: number = 0;
+    public afuaruSpawnable: boolean = false;
 
-    constructor(grindingId?: number, locationId?: number, locationName?: string, territoryId?: number, territoryName?: string, timeId?: number, timeAmount?: number, userClassId?: number, classNameId?: number, className?: string, classRoleId?: number, classRoleName?: string, gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number, serverId?: number, serverDescription?: string, isElviaRealm?: boolean, combatTypeId?: number, combatTypeName?: string, trashLootAmount?: number, afuaruSpawns?: number) {
+    constructor(grindingId?: number, locationId?: number, locationName?: string, territoryId?: number, territoryName?: string, timeId?: number, timeAmount?: number, userClassId?: number, classNameId?: number, className?: string, classRoleId?: number, classRoleName?: string, gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number, serverId?: number, serverDescription?: string, isElviaRealm?: boolean, combatTypeId?: number, combatTypeName?: string, trashLootAmount?: number, afuaruSpawns?: number, afuaruSpawnable?: boolean) {
         if(grindingId) {
             this.grindingId = grindingId;
             this.locationId = locationId;
@@ -83,6 +84,7 @@ export class GrindingDataEntity {
             this.combatTypeName = combatTypeName;
             this.trashLootAmount = trashLootAmount;
             this.afuaruSpawns = afuaruSpawns;
+            this.afuaruSpawnable = afuaruSpawnable;
         }
     }
 }
@@ -146,8 +148,9 @@ export class LocationNamesEnumEntity {
     public territoryName: string = "-";
     public recommendedLevel: string = "";
     public recommendedAP: string = "";
+    public afuaruSpawnable: boolean = false;
 
-    constructor(locationId?: number, territoryId?: number, locationName?: string, territoryName?: string, recommendedLevel?: string, recommendedAP?: string) {
+    constructor(locationId?: number, territoryId?: number, locationName?: string, territoryName?: string, recommendedLevel?: string, recommendedAP?: string, afuaruSpawnable?: boolean) {
         if(locationId) {
             this.locationId = locationId;
             this.territoryId = territoryId;
@@ -155,6 +158,7 @@ export class LocationNamesEnumEntity {
             this.territoryName = territoryName;
             this.recommendedLevel = recommendedLevel;
             this.recommendedAP = recommendedAP; 
+            this.afuaruSpawnable = afuaruSpawnable;
         }
     }
 }

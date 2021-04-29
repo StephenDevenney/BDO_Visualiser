@@ -57,9 +57,9 @@ export class VisibleDataViewModel {
     public className: string = "";
     public serverName: string = "";
     public combatTypeName: string = "";
-    public afuaruSpawns: number = 0;
+    public afuaruSpawns: string = "-";
 
-    constructor(grindingId?: number, dateCreated?: string, locationName?: string, timeAmount?: string, trashLootAmount?: number, className?: string, serverName?: string, combatTypeName?: string, afuaruSpawns?: number) {
+    constructor(grindingId?: number, dateCreated?: string, locationName?: string, timeAmount?: string, trashLootAmount?: number, className?: string, serverName?: string, combatTypeName?: string, afuaruSpawns?: string) {
         this.grindingId = grindingId;
         this.dateCreated = dateCreated;
         this.locationName = locationName;
@@ -95,8 +95,9 @@ export class LocationNamesEnumViewModel {
     public territoryName: string = "-";
     public recommendedLevel: string = "";
     public recommendedAP: number = 0;
+    public afuaruSpawnable: boolean = false;
 
-    constructor(locationId?: number, territoryId?: number, locationName?: string, territoryName?: string, recommendedLevel?: string, recommendedAP?: number) {
+    constructor(locationId?: number, territoryId?: number, locationName?: string, territoryName?: string, recommendedLevel?: string, recommendedAP?: number, afuaruSpawnable?: boolean) {
         if(locationId) {
             this.locationId = locationId;
             this.territoryId = territoryId;
@@ -104,6 +105,7 @@ export class LocationNamesEnumViewModel {
             this.territoryName = territoryName;
             this.recommendedLevel = recommendedLevel;
             this.recommendedAP = recommendedAP; 
+            this.afuaruSpawnable = afuaruSpawnable;
         }
     }
 }
@@ -153,8 +155,9 @@ export class CombatPageEnumsViewModel {
     public combatTypesEnum: Array<CombatTypesEnumViewModel> = new Array<CombatTypesEnumViewModel>();
     public timeAmountEnum: Array<TimeAmountEnumViewModel> = new Array<TimeAmountEnumViewModel>();
     public previousCombatValuesViewModel: PreviousCombatValuesViewModel = new PreviousCombatValuesViewModel();
+    public activeClasses: Array<UserClassViewModel> = new Array<UserClassViewModel>();
 
-    constructor(classNamesEnum?: Array<ClassNamesEnumViewModel>, locationNamesEnum?: Array<LocationNamesGroupedEnumViewModel>, serverNamesEnum?: Array<ServerNamesEnumViewModel>, combatTypesEnum?: Array<CombatTypesEnumViewModel>, timeAmountEnum?: Array<TimeAmountEnumViewModel>, previousCombatValuesViewModel?: PreviousCombatValuesViewModel) {
+    constructor(classNamesEnum?: Array<ClassNamesEnumViewModel>, locationNamesEnum?: Array<LocationNamesGroupedEnumViewModel>, serverNamesEnum?: Array<ServerNamesEnumViewModel>, combatTypesEnum?: Array<CombatTypesEnumViewModel>, timeAmountEnum?: Array<TimeAmountEnumViewModel>, previousCombatValuesViewModel?: PreviousCombatValuesViewModel, activeClasses?: Array<UserClassViewModel>) {
         if(classNamesEnum) {
             this.classNamesEnum = classNamesEnum;
             this.locationNamesEnum = locationNamesEnum;
@@ -162,6 +165,7 @@ export class CombatPageEnumsViewModel {
             this.combatTypesEnum = combatTypesEnum;
             this.timeAmountEnum = timeAmountEnum;
             this.previousCombatValuesViewModel = previousCombatValuesViewModel;
+            this.activeClasses = activeClasses;
         }    
     }
 }

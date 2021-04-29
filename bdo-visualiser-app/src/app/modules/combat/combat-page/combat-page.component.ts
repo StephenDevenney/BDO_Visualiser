@@ -2,15 +2,16 @@ import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { CombatService } from '../combat.service';
 import { Table } from 'primeng/table';
-import { CombatPageDataViewModel, CombatHeadersViewModel, VisibleDataViewModel } from 'src/server/shared/viewModels/combatViewModels';
-import { UserClassViewModel } from 'src/server/shared/viewModels/userClassViewModel';
+import { CombatPageDataViewModel, CombatHeadersViewModel, VisibleDataViewModel } from '../../../../server/shared/viewModels/combatViewModels';
+import { UserClassViewModel } from '../../../../server/shared/viewModels/userClassViewModel';
+import { CombatNewEntryViewModel } from '../../../shared/classes/newEntryEmitted';
 
 @Component({
   selector: 'combat-page',
   templateUrl: './combat-page.component.html'
 })
 export class CombatPageComponent extends BaseComponent implements OnInit {
-  @ViewChild('dt') public dt!: Table;
+  @ViewChild('table') public dt!: Table;
   public rowGroupMetadata: any;
   public isLoaded: boolean = false;
   public maxSelectedLabelsNum: number = 0;
@@ -32,7 +33,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
       this.combatPageData = res;
       this.filteredColumns = res.tableHeaders.filter(header => header.isActive == true);
       this.displayableHeaders = res.tableHeaders.filter(header => header.headingId != 1);
-      this.activeClasses = this.combatPageData.activeClasses as Array<UserClassViewModel>;
+      this.activeClasses = this.combatPageData.activeClasses;
       this.grindingRes = this.combatPageData.visibleData;
       this.updateRowGroupMetaData(this.grindingRes);
       this.isLoaded = true;
@@ -91,34 +92,46 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public addEntryChecks() {
     if(this.activeClasses.length > 0)
       this.isAddingEntry = true;
-
-    /*
-      TODO: else { createClass redirect };
-    */
+    else {
+      this.messageService.add({severity:'info', summary:'Main Class Required.', detail:'Create a class before adding an entry.', life: 2600 });
+    }
   }
 
-  public onVisibleColumnChange(event: { itemValue: CombatHeadersViewModel; }) {
-    if(event.itemValue.isActive)
-      event.itemValue.isActive = false;
-    else
-      event.itemValue.isActive = true;
+  public async onVisibleColumnChange(event: { itemValue: CombatHeadersViewModel, value: Array<CombatHeadersViewModel> }) {
+    if(typeof(event.itemValue) == "undefined") {
+      let fullHeaders = false;
+      if(event.value.length > 0)
+        fullHeaders = true;
 
-    this.combatService.saveSingleCombatHeader(event.itemValue).catch((err: any) => {
-      this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
-    });
+      await this.combatService.saveCombatHeaders(fullHeaders).catch((err: any) => {
+        this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
+      });
+    }
+    else {
+      if(event.itemValue.isActive)
+        event.itemValue.isActive = false;
+      else
+        event.itemValue.isActive = true;
+
+      await this.combatService.saveSingleCombatHeader(event.itemValue).catch((err: any) => {
+        this.messageService.add({severity:'error', summary:'Error', detail:'Failed to updateColumn.', life: 2600 });
+      });
+    }
   }
 
   public applyFilterGlobal($event: any, stringVal: string) {
     this.dt.filterGlobal(($event.target as HTMLInputElement).value, 'contains');
   }
 
-  public emittedInsertEntry(vdVM: VisibleDataViewModel) {
-    this.grindingRes.push(vdVM);
+  public emittedInsertEntry(cneVM: CombatNewEntryViewModel) {
+    this.grindingRes.push(cneVM.vdVM);
+    this.filteredColumns = cneVM.chVM.filter(header => header.isActive == true);
     this.customSort();
     this.updateRowGroupMetaData(this.grindingRes);
-    
-    /*
-      TODO: update isActive columns
-    */
+  }
+
+  public emittedInsertCancel(fcVM: Array<CombatHeadersViewModel>) {
+    this.isAddingEntry = false; 
+    this.filteredColumns = fcVM.filter(header => header.isActive == true);
   }
 }

@@ -223,7 +223,6 @@ export class CombatTypesEnumContext {
   public combatTypeId: number = 1;
   public combatTypeName: string = "-";
 
-  // GET Combat Type Enums
   public getAll(): Promise<Array<CombatTypesEnumEntity>> {
     const sql = `SELECT * FROM enum_combatType WHERE combatTypeId != 1`;
     const values = {};
@@ -238,7 +237,20 @@ export class CombatTypesEnumContext {
     });
   }
 
-   // Get Single Combat Type Enum
+  public getNewEntryCombatTypes(): Promise<Array<CombatTypesEnumEntity>> {
+    const sql = `SELECT * FROM enum_combatType WHERE combatTypeId != 1 AND combatTypeId != 5`;
+    const values = {};
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<CombatTypesEnumEntity> = new Array<CombatTypesEnumEntity>();
+      for (const row of rows) {
+        const item = new CombatTypesEnumContext().fromRow(row);
+        nm.push(item);
+      }
+      return nm;
+    });
+  }
+
    public async get(combatTypeName: string): Promise<CombatTypesEnumEntity> {
     const sql = `SELECT * FROM enum_combatType WHERE enum_combatType.combatTypeName = $combatTypeName`;
     const values = { $combatTypeName: combatTypeName };

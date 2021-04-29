@@ -24,8 +24,8 @@ export class APIService {
         });
     }
 
-    public async getCombatEnums(): Promise<CombatPageEnumsViewModel> {
-        return await this.combatRoute.getCombatEnums();
+    public async getCombatNewEntryData(): Promise<CombatPageEnumsViewModel> {
+        return await this.combatRoute.getCombatNewEntryData();
     }
 
     public async saveSingleCombatHeader(column: CombatHeadersViewModel): Promise<void> {
