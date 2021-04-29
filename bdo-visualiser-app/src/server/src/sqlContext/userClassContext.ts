@@ -1,7 +1,7 @@
 import { TheDb } from '../thedb';
 import { Calculations } from '../../shared/calc/calculations';
 import { GearViewModel } from '../../shared/viewModels/userClassViewModel';
-import { UserClassEntity, ClassNamesEnumEntity, ClassRoleEnumEntity, GearEntity, CombatTypesEnumEntity } from '../../shared/entities/userClassEntities';
+import { UserClassEntity, ClassNamesEnumEntity, ClassRoleEnumEntity, GearEntity, CombatTypesEnumEntity, GearBracketsEntity } from '../../shared/entities/userClassEntities';
 
 export class UserClassContext {
   public classId: number = 0;
@@ -267,4 +267,48 @@ export class CombatTypesEnumContext {
   
     return this;
   }
+}
+
+export class GearBracketContext {
+  public bracketId: number = 0;
+  public apBracket: string = "";
+  public apBracketBonus: number = 0;
+  public dpBracket: string = "";
+  public dpBracketBonus: number = 0;
+
+  public getAll(): Promise<Array<GearBracketsEntity>> {
+    const sql = `SELECT * FROM enum_combatBrackets`;
+    const values = {};
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<GearBracketsEntity> = new Array<GearBracketsEntity>();
+      for (const row of rows) {
+        const item = new GearBracketContext().fromRow(row);
+        nm.push(item);
+      }
+      return nm;
+    });
+  }
+
+  public async get(): Promise<GearBracketsEntity> {
+    const sql = ``;
+    const values = { };
+
+    return TheDb.selectOne(sql, values).then((row: any) => {
+      if(row) 
+        return new GearBracketContext().fromRow(row);
+    });
+  }
+
+  private fromRow(row: GearBracketsEntity): GearBracketsEntity {
+    this.bracketId = row['bracketId'];
+    this.apBracket = row['apBracket'];
+    this.apBracketBonus = row['apBracketBonus'];
+    this.dpBracket = row['dpBracket'];
+    this.dpBracketBonus = row['dpBracketBonus'];
+  
+    return this;
+  }
+
+    
 }

@@ -67,13 +67,15 @@ export class GearViewModel {
     public aap: number = 0;
     public dp: number = 0
     public gearScore: number = 0;
+    public gearBrackets: GearBracketsViewModel = new GearBracketsViewModel();
 
-    constructor(ap?: number, aap?: number, dp?: number, gearScore?: number) {
+    constructor(ap?: number, aap?: number, dp?: number, gearScore?: number, gearBrackets?: GearBracketsViewModel) {
         if(ap) {
             this.ap = ap;
             this.aap = aap;
             this.dp = dp;
             this.gearScore = gearScore;
+            this.gearBrackets = gearBrackets;
         }   
     }
 }
@@ -87,5 +89,25 @@ export class CombatTypesEnumViewModel {
             this.combatTypeId = combatTypeId;
             this.combatTypeName = combatTypeName;
         }  
+    }
+}
+
+export class GearBracketsViewModel {
+    public apBracket: string = "";
+    public apBracketBonus: number = 0;
+    public aapBracket: string = "";
+    public aapBracketBonus: number = 0;
+    public dpBracket: string = "";
+    public dpBracketBonus: number = 0;
+
+    constructor(apBracket?: string, apBracketBonus?: number, aapBracket?: string, aapBracketBonus?: number, dpBracket?: string, dpBracketBonus?: number) {
+        if(apBracket) {
+            this.apBracket = apBracket;
+            this.apBracketBonus = apBracketBonus;
+            this.aapBracket = aapBracket;
+            this.aapBracketBonus = aapBracketBonus;
+            this.dpBracket = dpBracket;
+            this.dpBracketBonus = dpBracketBonus;
+        }
     }
 }

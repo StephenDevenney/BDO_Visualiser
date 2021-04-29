@@ -90,3 +90,21 @@ export class GearEntity {
         }   
     }
 }
+
+export class GearBracketsEntity {
+    public bracketId: number = 0;
+    public apBracket: string = "";
+    public apBracketBonus: number = 0;
+    public dpBracket: string = "";
+    public dpBracketBonus: number = 0;
+
+    constructor(bracketId?: number, apBracket?: string, apBracketBonus?: number, dpBracket?: string, dpBracketBonus?: number) {
+        if(bracketId) {
+            this.bracketId = bracketId;
+            this.apBracket = apBracket;
+            this.apBracketBonus = apBracketBonus;
+            this.dpBracket = dpBracket;
+            this.dpBracketBonus = dpBracketBonus;
+        }
+    }
+}

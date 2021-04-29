@@ -1,5 +1,6 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseComponent } from '../../../shared/components/base.component';
+import { UserClassesService } from '../user-classes.service';
 
 @Component({
   selector: 'user-classes-page',
@@ -7,7 +8,8 @@ import { BaseComponent } from '../../../shared/components/base.component';
 })
 export class UserClassesPageComponent extends BaseComponent implements OnInit  {
 
-  constructor(private injector: Injector) {
+  constructor(private injector: Injector,
+              private userClassService: UserClassesService) {
     super(injector);
   }
 
@@ -20,6 +22,11 @@ export class UserClassesPageComponent extends BaseComponent implements OnInit  {
       Classname
       classRole
     */
+    this.userClassService.getClassCardsData().then((_: void) => {
+      
+    }).catch(() => {
+
+    });
   }
 
 }

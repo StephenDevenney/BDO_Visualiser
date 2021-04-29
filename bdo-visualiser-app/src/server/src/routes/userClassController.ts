@@ -1,5 +1,5 @@
 import { ClassCreationViewModel, ClassNamesEnumViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
-import { UserClassCreationHandler, UserClassHandler, UserClassNameHandler } from '../middleware/userClassHandler';
+import { UserClassCardsHandler, UserClassCreationHandler, UserClassHandler, UserClassNameHandler } from '../middleware/userClassHandler';
 
 export class UserClassController {
     constructor(){}
@@ -9,13 +9,15 @@ export class UserClassController {
         return await new UserClassNameHandler().getClassNames();
     } 
 
+    public async getClassCardsData(): Promise<void> {
+        return await new UserClassCardsHandler().getClassCardsData();
+    } 
+
+    public async getClassCreationData(): Promise<ClassCreationViewModel> {
+        return await new UserClassCreationHandler().getClassCreationData();
+    } 
         // POST
     public async addUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
         return await new UserClassHandler().addUserClass(userClass);
     }
-
-        // GET
-    public async getClassCreationData(): Promise<ClassCreationViewModel> {
-        return await new UserClassCreationHandler().getClassCreationData();
-    } 
 } 

@@ -90,3 +90,9 @@ export class UserClassCreationHandler {
         return new ClassCreationViewModel(cneVM, cteVM, creVM, new UserClassViewModel(), hasMainUserClass);
     }
 }
+
+export class UserClassCardsHandler {
+    public getClassCardsData(): Promise<void> {
+        return;
+    }
+}

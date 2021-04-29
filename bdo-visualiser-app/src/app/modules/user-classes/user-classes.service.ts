@@ -11,6 +11,10 @@ export class UserClassesService {
         return await this.userClassRoute.getClassNameEnums();
     } 
 
+    public async getClassCardsData(): Promise<void> {
+        return await this.userClassRoute.getClassCardsData();
+    } 
+
     public async getClassCreationData(): Promise<ClassCreationViewModel> {
         return await this.userClassRoute.getClassCreationData();
     } 
