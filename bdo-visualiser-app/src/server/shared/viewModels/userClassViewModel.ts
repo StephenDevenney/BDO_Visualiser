@@ -1,3 +1,5 @@
+import { CombatStatTotals } from "./statTotalViewModels";
+
 export class ClassCreationViewModel {
     public classNamesEnum: Array<ClassNamesEnumViewModel> = new Array<ClassNamesEnumViewModel>();
     public combatTypesEnum: Array<CombatTypesEnumViewModel> = new Array<CombatTypesEnumViewModel>();
@@ -13,6 +15,16 @@ export class ClassCreationViewModel {
             this.newUserClass = newUserClass;
             this.hasMainUserClass = hasMainUserClass;
         }
+    }
+}
+
+export class CharacterCardsViewModel {
+    public userClasses: Array<UserClassViewModel> = new Array<UserClassViewModel>();
+    public statTotals: CombatStatTotals = new CombatStatTotals();
+
+    constructor(userClasses?: Array<UserClassViewModel>, statTotals?: CombatStatTotals) {
+        this.userClasses = userClasses;
+        this.statTotals = statTotals;
     }
 }
 
@@ -98,9 +110,9 @@ export class GearBracketsViewModel {
     public aapBracket: string = "";
     public aapBracketBonus: number = 0;
     public dpBracket: string = "";
-    public dpBracketBonus: number = 0;
+    public dpBracketBonus: string = "";
 
-    constructor(apBracket?: string, apBracketBonus?: number, aapBracket?: string, aapBracketBonus?: number, dpBracket?: string, dpBracketBonus?: number) {
+    constructor(apBracket?: string, apBracketBonus?: number, aapBracket?: string, aapBracketBonus?: number, dpBracket?: string, dpBracketBonus?: string) {
         if(apBracket) {
             this.apBracket = apBracket;
             this.apBracketBonus = apBracketBonus;

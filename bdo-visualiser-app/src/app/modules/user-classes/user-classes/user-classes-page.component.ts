@@ -1,4 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
+import { CharacterCardsViewModel, UserClassViewModel } from '../../../../server/shared/viewModels/userClassViewModel';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { UserClassesService } from '../user-classes.service';
 
@@ -7,6 +8,8 @@ import { UserClassesService } from '../user-classes.service';
   templateUrl: './user-classes-page.component.html'
 })
 export class UserClassesPageComponent extends BaseComponent implements OnInit  {
+  public pageData: CharacterCardsViewModel = new CharacterCardsViewModel();
+  public isLoaded: boolean = false;
 
   constructor(private injector: Injector,
               private userClassService: UserClassesService) {
@@ -22,10 +25,15 @@ export class UserClassesPageComponent extends BaseComponent implements OnInit  {
       Classname
       classRole
     */
-    this.userClassService.getClassCardsData().then((_: void) => {
-      
+   this.loader.start();
+    this.userClassService.getClassCardsData().then((res: CharacterCardsViewModel) => {
+      this.pageData = res;
+      this.isLoaded = true;
+      console.log(res);
     }).catch(() => {
 
+    }).then(() => {
+      this.loader.stop();
     });
   }
 

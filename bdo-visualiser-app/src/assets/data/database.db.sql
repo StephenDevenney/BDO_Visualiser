@@ -241,9 +241,11 @@ BEGIN TRANSACTION;
 DROP TABLE IF EXISTS `enum_combatBrackets`;
 CREATE TABLE IF NOT EXISTS enum_combatBrackets (
 	combatBracketsId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	apBracket TEXT,
+	apBracketLow INTEGER,
+	apBracketHigh INTEGER,
 	apBracketBonus INTEGER,
-	dpBracket TEXT,
+	dpBracketLow INTEGER,
+	dpBracketHigh INTEGER,
 	dpBracketBonus INTEGER
 );
 COMMIT;
@@ -563,36 +565,37 @@ INSERT INTO enum_combatType (combatTypeName) VALUES ('Mainhand');
 INSERT INTO enum_combatType (combatTypeName) VALUES ('Mixed');
 
 -- enum_combatBrackets
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('100 - 139', 5, '203 - 210', 1);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('140 - 169', 10, '211 - 217', 2);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('170 - 183', 15, '218 - 255', 3);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('184 - 208', 20, '226 - 232', 4);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('209 - 234', 30, '233 - 240', 5);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('235 - 244', 40, '241 - 247', 6);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('245 - 248', 48, '248 - 255', 7);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('249 - 252', 57, '256 - 262', 8);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('253 - 256', 69, '263 - 270', 9);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('257 - 260', 83, '271 - 277', 10);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('261 - 264', 101, '278 - 285', 11);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('269 - 272', 122, '286 - 292', 12);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('273 - 276', 137, '293 - 300', 13);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('277 - 280', 142, '301 - 307', 14);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('281 - 284', 148, '308 - 314', 15);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('285 - 288', 154, '315 - 321', 16);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('289 - 292', 160, '322 - 328', 17);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('293 - 296', 167, '329 - 334', 18);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('297 - 300', 174, '335 - 340', 19);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('301 - 304', 181, '341 - 346', 20);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('305 - 308', 188, '347 - 352', 21);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('309 - 315', 196, '353 - 358', 22);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('316 - 322', 200, '359 - 364', 23);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('323 - 329', 203, '365 - 370', 24);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('330 - 339', 205, '371 - 376', 25);
-INSERT INTO enum_combatBrackets (apBracket, apBracketBonus, dpBracket, dpBracketBonus) VALUES ('340 +', 210, '377 - 382', 26);
-INSERT INTO enum_combatBrackets (dpBracket, dpBracketBonus) VALUES ('383 - 388', 27);
-INSERT INTO enum_combatBrackets (dpBracket, dpBracketBonus) VALUES ('389 - 394', 28);
-INSERT INTO enum_combatBrackets (dpBracket, dpBracketBonus) VALUES ('395 - 400', 29);
-INSERT INTO enum_combatBrackets (dpBracket, dpBracketBonus) VALUES ('401 +', 30);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (0, 99, 0, 0, 202, 0);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (100, 139, 5, 203, 210, 1);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (140, 169, 10, 211, 217, 2);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (170, 183, 15, 218, 255, 3);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (184, 208, 20, 226, 232, 4);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (209, 234, 30, 233, 240, 5);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (235, 244, 40, 241, 247, 6);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (245, 248, 48, 248, 255, 7);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (249, 252, 57, 256, 262, 8);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (253, 256, 69, 263, 270, 9);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (257, 260, 83, 271, 277, 10);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (261, 264, 101, 278, 285, 11);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (265, 268, 122, 286, 292, 12);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (269, 272, 137, 293, 300, 13);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (273, 276, 142, 301, 307, 14);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (277, 280, 148, 308, 314, 15);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (281, 284, 154, 315, 321, 16);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (285, 288, 160, 322, 328, 17);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (289, 292, 167, 329, 334, 18);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (293, 296, 174, 335, 340, 19);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (297, 300, 181, 341, 346, 20);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (301, 304, 188, 347, 352, 21);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (305, 308, 196, 353, 358, 22);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (309, 315, 200, 359, 364, 23);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (316, 322, 203, 365, 370, 24);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (323, 329, 205, 371, 376, 25);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketHigh, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (330, 339, 207, 371, 382, 26);
+INSERT INTO enum_combatBrackets (apBracketLow, apBracketBonus, dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (340, 210, 383, 388, 27);
+INSERT INTO enum_combatBrackets (dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (389, 394, 28);
+INSERT INTO enum_combatBrackets (dpBracketLow, dpBracketHigh, dpBracketBonus) VALUES (395, 400, 29);
+INSERT INTO enum_combatBrackets (dpBracketLow, dpBracketBonus) VALUES (401, 30);
 
 -- enum_treasureItems
 INSERT INTO enum_treasureItems (itemName, FK_completedItemId, FK_Location, droppedByMob) VALUES ('Map of Unknown Piece', 1, 12, 'Lava Tukar');
@@ -624,3 +627,13 @@ INSERT INTO enum_combatTableHeadings (field, header) VALUES ('className', 'Class
 INSERT INTO enum_combatTableHeadings (field, header) VALUES ('serverName', 'Server');
 INSERT INTO enum_combatTableHeadings (field, header) VALUES ('combatTypeName', 'Combat Type');
 INSERT INTO enum_combatTableHeadings (field, header) VALUES ('afuaruSpawns', 'Afuaru Spawns');
+
+/*
+SELECT userClass_classes.classId, userClass_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, userClass_classes.dateCreated, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore 
+FROM userClass_classes 
+INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId 
+INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = userClass_classes.FK_gearScoreId 
+INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId 
+INNER JOIN enum_combatType ON enum_combatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId 
+WHERE userClass_classes.FK_combatSettingsId = 1
+*/

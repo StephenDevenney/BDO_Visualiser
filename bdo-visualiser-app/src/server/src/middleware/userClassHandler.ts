@@ -1,7 +1,8 @@
-import { UserClassViewModel, CombatTypesEnumViewModel, GearViewModel, ClassNamesEnumViewModel, ClassCreationViewModel, ClassRolesEnumViewModel } from '../../shared/viewModels/userClassViewModel';
-import { UserClassContext, ClassNamesEnumContext, ClassRolesEnumContext, GearContext, CombatTypesEnumContext } from '../sqlContext/userClassContext';
+import { UserClassViewModel, CombatTypesEnumViewModel, GearViewModel, ClassNamesEnumViewModel, ClassCreationViewModel, ClassRolesEnumViewModel, GearBracketsViewModel, CharacterCardsViewModel } from '../../shared/viewModels/userClassViewModel';
+import { UserClassContext, ClassNamesEnumContext, ClassRolesEnumContext, GearContext, CombatTypesEnumContext, GearBracketContext } from '../sqlContext/userClassContext';
 import { Calculations } from '../../shared/calc/calculations';
-import { ClassNamesEnumEntity, ClassRoleEnumEntity, CombatTypesEnumEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
+import { ClassNamesEnumEntity, ClassRoleEnumEntity, CombatTypesEnumEntity, GearBracketsEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
+import { CombatStatTotals } from '../../shared/viewModels/statTotalViewModels';
 
 
 export class UserClassHandler {
@@ -92,7 +93,25 @@ export class UserClassCreationHandler {
 }
 
 export class UserClassCardsHandler {
-    public getClassCardsData(): Promise<void> {
-        return;
+    public async getClassCardsData(): Promise<CharacterCardsViewModel> {
+        let ucVM = await new UserClassHandler().getUserClasses();
+        await new GearBracketContext().getAll().then(async (bracketsArray: Array<GearBracketsEntity>) => {
+            await Promise.all(ucVM.map((userClass: UserClassViewModel) => {
+                userClass.gear.gearBrackets = new GearBracketsViewModel();
+                let currentClassApBracket: GearBracketsEntity = bracketsArray.filter(_ => _.userClassId == userClass.classId && _.description == "AP")[0];
+                userClass.gear.gearBrackets.apBracket = currentClassApBracket.bracketLow + " - " + currentClassApBracket.bracketHigh;
+                userClass.gear.gearBrackets.apBracketBonus = currentClassApBracket.bracketBonus;
+
+                let currentClassAapBracket: GearBracketsEntity = bracketsArray.filter(_ => _.userClassId == userClass.classId && _.description == "AAP")[0];
+                userClass.gear.gearBrackets.aapBracket = currentClassAapBracket.bracketLow + " - " + currentClassAapBracket.bracketHigh;
+                userClass.gear.gearBrackets.aapBracketBonus = currentClassAapBracket.bracketBonus;
+
+                let currentClassDpBracket: GearBracketsEntity = bracketsArray.filter(_ => _.userClassId == userClass.classId && _.description == "DP")[0];
+                userClass.gear.gearBrackets.dpBracket = currentClassDpBracket.bracketLow + " - " + currentClassDpBracket.bracketHigh;
+                userClass.gear.gearBrackets.dpBracketBonus = currentClassDpBracket.bracketBonus + "%";
+            }));
+        });
+        
+        return new CharacterCardsViewModel(ucVM, new CombatStatTotals());
     }
 }

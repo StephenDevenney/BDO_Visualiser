@@ -93,18 +93,20 @@ export class GearEntity {
 
 export class GearBracketsEntity {
     public bracketId: number = 0;
-    public apBracket: string = "";
-    public apBracketBonus: number = 0;
-    public dpBracket: string = "";
-    public dpBracketBonus: number = 0;
+    public userClassId: number = 0;
+    public bracketLow: number = 0;
+    public bracketHigh: number = 0;
+    public bracketBonus: number = 0;
+    public description: string = "";
 
-    constructor(bracketId?: number, apBracket?: string, apBracketBonus?: number, dpBracket?: string, dpBracketBonus?: number) {
+    constructor(bracketId?: number, userClassId?: number, bracketLow?: number, bracketHigh?: number, bracketBonus?: number, description?: string) {
         if(bracketId) {
             this.bracketId = bracketId;
-            this.apBracket = apBracket;
-            this.apBracketBonus = apBracketBonus;
-            this.dpBracket = dpBracket;
-            this.dpBracketBonus = dpBracketBonus;
+            this.userClassId = userClassId;
+            this.bracketLow = bracketLow;
+            this.bracketHigh = bracketHigh;
+            this.bracketBonus = bracketBonus;
+            this.description = description;
         }
     }
 }

@@ -21,6 +21,7 @@ import { TableInsertComponent } from '../components/table-insert/table-insert.co
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { ButtonModule } from 'primeng/button';
 import { Calculations } from '../../../server/shared/calc/calculations';
+import { TabViewModule } from 'primeng/tabview';
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { Calculations } from '../../../server/shared/calc/calculations';
     NgxUiLoaderModule,
     ServerModule,
     InputSwitchModule,
-    ButtonModule
+    ButtonModule,
+    TabViewModule
   ],
   declarations: [
     DateLongPipe,
@@ -49,7 +51,8 @@ import { Calculations } from '../../../server/shared/calc/calculations';
     InputNumberModule,
     ToastModule,
     DateLongPipe,
-    ButtonModule
+    ButtonModule,
+    TabViewModule
   ],
   providers: [
     Globals,

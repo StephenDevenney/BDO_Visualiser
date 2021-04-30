@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ClassCreationViewModel, ClassNamesEnumViewModel, UserClassViewModel } from 'src/server/shared/viewModels/userClassViewModel';
-import { UserClassController } from 'src/server/src/routes/userClassController';
+import { CharacterCardsViewModel, ClassCreationViewModel, ClassNamesEnumViewModel, UserClassViewModel } from '../../../server/shared/viewModels/userClassViewModel';
+import { UserClassController } from '../../../server/src/routes/userClassController';
 
 @Injectable()
 export class UserClassesService {
@@ -11,7 +11,7 @@ export class UserClassesService {
         return await this.userClassRoute.getClassNameEnums();
     } 
 
-    public async getClassCardsData(): Promise<void> {
+    public async getClassCardsData(): Promise<CharacterCardsViewModel> {
         return await this.userClassRoute.getClassCardsData();
     } 
 

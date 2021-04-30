@@ -532,6 +532,13 @@ input {
     }
 }
 
+.character-card .p-tabview {
+    .p-tabview-panels {
+        height: 0rem;
+        background: transparent;
+    }
+}
+
 // ### FixedTiles
 .fixed-tile {
     margin: 0.5rem;
@@ -625,6 +632,12 @@ input {
     overflow-x: hidden;
 }
 
+.userClass-card-container  {
+    max-height: calc(90vh - 5rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .class-portrait-hoverable {
     &.userClass-selected, &.userClass-unselected {
         .character-card-class-image {
@@ -699,4 +712,8 @@ body {
     .p-dropdown, .p-inputnumber .p-component {
         width: 18rem;
     }
+}
+
+.character-card-background {
+    background-color: darken($standard-primary, 10%);
 }

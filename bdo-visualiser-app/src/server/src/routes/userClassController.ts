@@ -1,4 +1,4 @@
-import { ClassCreationViewModel, ClassNamesEnumViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
+import { CharacterCardsViewModel, ClassCreationViewModel, ClassNamesEnumViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
 import { UserClassCardsHandler, UserClassCreationHandler, UserClassHandler, UserClassNameHandler } from '../middleware/userClassHandler';
 
 export class UserClassController {
@@ -9,7 +9,7 @@ export class UserClassController {
         return await new UserClassNameHandler().getClassNames();
     } 
 
-    public async getClassCardsData(): Promise<void> {
+    public async getClassCardsData(): Promise<CharacterCardsViewModel> {
         return await new UserClassCardsHandler().getClassCardsData();
     } 
 
