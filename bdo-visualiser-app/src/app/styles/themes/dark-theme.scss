@@ -428,6 +428,10 @@
         }
     }
 
+    .character-card-background {
+        background-color: darken($dark-primary, 6%);
+    }
+
     // # Overrides
 
     // ## Input Text

@@ -1,5 +1,5 @@
-<page>
-    <div class="d-flex align-items-center">
+<page *ngIf="isLoaded">
+    <div *ngIf="pageData.userClasses.length > 0" class="d-flex align-items-center">
         <div class="col-10">
             <h2 class="p-2">Character Cards</h2>
         </div>
@@ -7,7 +7,7 @@
             <button class="btn btn-primary" (click)="router.navigate(['user-classes/creation']);">Add Class</button>
         </div>  
     </div>
-    <div class="row userClass-card-container mr-2">
+    <div *ngIf="pageData.userClasses.length > 0" class="row userClass-card-container mr-2">
         <div *ngFor="let item of pageData.userClasses" class="col-6 pr-0 mb-4 character-card">
             <div class="ml-2 border border-secondary">
                 <div class="row ml-0 mr-0 character-card-background">
@@ -71,6 +71,21 @@
                     </div>
                     <div class="col-3">
                         <button class="btn btn-primary">Edit Character</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="pageData.userClasses.length == 0">
+        <div>
+            <div class="d-flex align-items-center justify-content-center" style="height: 60vh;">
+                <div class="d-flex flex-column">
+                    <h2>Characters Classes</h2>
+                    <label class="d-flex align-items-center justify-content-center">No characters available.</label>
+                    <label class="d-flex align-items-center justify-content-center mt-2">Start by adding your main grinder</label>
+                    <label class="d-flex align-items-center justify-content-center">along with that characters gear</label>
+                    <div class="d-flex align-items-center justify-content-center mt-4">
+                        <button class="btn btn-primary mr-2" (click)="router.navigate(['user-classes/creation']);">Begin</button>
                     </div>
                 </div>
             </div>

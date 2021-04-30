@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS combat_treasureItems (
 	treasureItemId INTEGER PRIMARY KEY AUTOINCREMENT,
 	FK_combatSettingsId	INTEGER DEFAULT 0,
 	huntingTime	INTEGER DEFAULT 0,
-	date TEXT NOT NULL,
+	dateCreated TEXT NOT NULL,
 	FK_treasureItemId INTEGER DEFAULT 0,
 	FK_dropLocationId INTEGER DEFAULT 0,
 	FK_serverId	INTEGER DEFAULT 0
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS enum_locations (
 	locationName TEXT,
 	recommendedLevel TEXT DEFAULT '',
 	recommendedAP TEXT DEFAULT '',
-	afuaruSpawnable INTEGER DEFAULT 0;
+	afuaruSpawnable INTEGER DEFAULT 0
 );
 COMMIT;
 
