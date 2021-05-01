@@ -20,7 +20,7 @@ export class TotalsComponent extends BaseComponent implements OnInit {
     super(injector);
   }
   /*
-    Max Weekly Metrics, Monthly and higher are for homepage dashboard.
+    Max Weekly Metrics
   */
   ngOnInit(): void {
 
@@ -40,3 +40,14 @@ export class TotalsComponent extends BaseComponent implements OnInit {
   }
   
 }
+
+/*
+Stats:
+Trashloot /hr/day/week/total - (slider?)
+afuaru /hr/day/week/total
+agris /hr/day/week/total
+
+timeAmount /day/week/total
+hrs as class /day/week/total - dropdown to change class
+
+*/
