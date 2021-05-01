@@ -11,6 +11,10 @@ export class CombatService {
         return await this.combatRoute.getCombatData();
     }
 
+    public async getCombatStatsTabData(): Promise<void> {
+        return await this.combatRoute.getStatsData();
+    }
+
         // PUT
     public async saveCombatHeaders(fullHeaders: boolean): Promise<void> {
         await this.combatRoute.toggleFullHeaders(fullHeaders);

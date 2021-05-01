@@ -4,21 +4,23 @@ import { CombatPageComponent } from './combat-page/combat-page.component';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/modules/sharedModule';
 import { CombatService } from './combat.service';
-import { TotalsComponent } from './combat-page/totals/totals.component';
+import { StatsComponent } from './combat-page/stats/stats.component';
 import { BuffsComponent } from './combat-page/buffs/buffs.component';
 import { LootComponent } from './combat-page/loot/loot.component';
 import { GraphsComponent } from './combat-page/graphs/graphs.component';
-import { ServerModule } from 'src/server/src/serverModule';
+import { ServerModule } from '../../../server/src/serverModule';
+import { CarouselModule } from 'primeng/carousel';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
-    ServerModule
+    ServerModule,
+    CarouselModule
   ],
   declarations: [
     CombatPageComponent,
-    TotalsComponent,
+    StatsComponent,
     BuffsComponent,
     LootComponent,
     GraphsComponent

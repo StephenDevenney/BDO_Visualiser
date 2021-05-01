@@ -165,3 +165,9 @@ export class ColumnHeadersHandler {
         return; 
     }
 }
+
+export class CombatStatsTabHandler { 
+    public async getCombatStats(): Promise<void> {
+        return;
+    }
+}

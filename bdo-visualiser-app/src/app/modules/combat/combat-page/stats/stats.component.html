@@ -1,0 +1,116 @@
+<div class="page-tab">
+    <div class="page-tab-content">
+        <div class="row">
+            <p-carousel class="w-100" [value]="carouselTabs" [numVisible]="1" [numScroll]="1">
+                <ng-template let-tab pTemplate="tab">
+                    <div #trashLootTab *ngIf="tab.id == 1">
+                        {{tab.label}}
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between" style="height: 30vh;">
+                                <div class="d-flex flex-column"></div>
+                                <div class="d-flex flex-column">
+                                    <label>Avg.</label>
+                                    <div class="d-flex align-items-center justify-content-center mt-4">
+                                        <label>0000</label>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label>Day.</label>
+                                    <div class="d-flex align-items-center justify-content-center mt-4">
+                                        <label>0000</label>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <label>Week.</label>
+                                    <div class="d-flex align-items-center justify-content-center mt-4">
+                                        <label>0000</label>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div #afuaruTab *ngIf="tab.id == 2">
+                        {{tab.label}}
+                    </div>
+                    <div #agrisTab *ngIf="tab.id == 3">
+                        {{tab.label}}
+                    </div>
+                    <div #locationTab *ngIf="tab.id == 4">
+                        {{tab.label}}
+                    </div>
+                </ng-template>
+            </p-carousel>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <div>
+                    <label>Hours Today</label>
+                </div>
+                <div>
+                    0000
+                </div>
+            </div>
+            <div class="col-3">
+                <div>
+                    <label>Hours This Week</label>
+                </div>
+                <div>
+                    0000
+                </div>
+            </div>
+            <div class="col-3">
+                <div>
+                    <label>Favourite Servers</label>
+                </div>
+                <div>
+                    0000
+                </div>
+            </div>
+            <div class="col-3">
+                <div>
+                    <label>Favourite Combat Types</label>
+                </div>
+                <div>
+                    0000
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <div>
+                    <label>Favourite Loactions</label>
+                </div>
+                <div>
+                    0000
+                </div>
+            </div>
+            <div class="col-3">
+                <div>
+                    <label>Favourite Class</label>
+                </div>
+                <div>
+                    0000
+                </div>
+            </div>
+            <div class="col-3">
+                <div>
+                    <label>Filters</label>
+                </div>
+                <div>
+                    <label>Class</label>
+                    <div>
+                        0000
+                    </div>
+                </div>
+                <div>
+                    <label>Loaction</label>
+                    <div>
+                        0000
+                    </div>
+                </div>
+            </div>
+            <div calss="col"></div>
+        </div>
+    </div>
+</div>
