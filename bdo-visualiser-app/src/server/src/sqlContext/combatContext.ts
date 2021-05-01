@@ -355,3 +355,8 @@ export class TimeEnumContext {
     return this;
   }
 }
+
+export class CombatStatsContext {
+  public trashLootAmount: number = 0;
+  public trashLootAmountDescription: string = "";
+}
