@@ -10,7 +10,7 @@ export class UserClassHandler {
         let acVM = new Array<UserClassViewModel>();
         await new UserClassContext().getAll().then((_ : Array<UserClassEntity>) => {
             _.forEach(async row => {
-                acVM.push(new UserClassViewModel(row.classId,  row.className, new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription));
+                acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription));
             });
         });
         return acVM;
@@ -22,21 +22,21 @@ export class UserClassHandler {
         let ncE = await new UserClassContext().getMostRecent();
         await new GearContext().updateClassId(ncE.FK_gearScoreId, ncE.classId );
 
-        return new UserClassViewModel(ncE.classId, ncE.className, new ClassRolesEnumViewModel(ncE.classRoleId, ncE.classRole), new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(ncE.ap, ncE.aap, ncE.dp, ncE.gearScore), ncE.classDescription);
+        return new UserClassViewModel(ncE.classId, new ClassNamesEnumViewModel(ncE.classNameId, ncE.className, ncE.fileName), new ClassRolesEnumViewModel(ncE.classRoleId, ncE.classRole), new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(ncE.ap, ncE.aap, ncE.dp, ncE.gearScore), ncE.classDescription);
 
         async function convertToEntity(userClass: UserClassViewModel): Promise<UserClassEntity> {
             let userClassEntity: UserClassEntity = new UserClassEntity(); 
-            userClassEntity.classNameId = (await new ClassNamesEnumContext().get(userClass.className)).classId;
+            userClassEntity.classNameId = (await new ClassNamesEnumContext().get(userClass.classNameEnum.className)).classId;
             await new GearContext().insert(userClass.gear);
             let gE = (await new GearContext().getMostRecent());       
             userClassEntity.FK_gearScoreId = gE.gearScoreId;
             userClassEntity.gearScore = gE.gearScore;
-            userClassEntity.className = userClass.className;
-            userClassEntity.classRole = userClass.classRole.classRole;
-            userClassEntity.classRoleId = userClass.classRole.classRoleId
+            userClassEntity.className = userClass.classNameEnum.className;
+            userClassEntity.classRole = userClass.classRoleEnum.classRole;
+            userClassEntity.classRoleId = userClass.classRoleEnum.classRoleId
             userClassEntity.classDescription = userClass.classDescription;
-            userClassEntity.combatTypeId = userClass.combatTypeDescription.combatTypeId;
-            userClassEntity.combatTypeName = userClass.combatTypeDescription.combatTypeName;
+            userClassEntity.combatTypeId = userClass.combatTypeEnum.combatTypeId;
+            userClassEntity.combatTypeName = userClass.combatTypeEnum.combatTypeName;
             userClassEntity.ap = userClass.gear.ap;
             userClassEntity.aap = userClass.gear.aap;
             userClassEntity.dp = userClass.gear.dp;
@@ -65,7 +65,7 @@ export class UserClassCreationHandler {
         let cneVM = new Array<ClassNamesEnumViewModel>();
         await new ClassNamesEnumContext().getAll().then((_: Array<ClassNamesEnumEntity>) => {
             _.forEach(row => {
-                cneVM.push(new ClassNamesEnumViewModel(row.classId, row.className, false));
+                cneVM.push(new ClassNamesEnumViewModel(row.classId, row.className, row.fileName, false));
             });
         });
 

@@ -427,9 +427,13 @@
     // ## Class Selection
     .character-card-class-image {
         border: 4px solid darken($dark-primary, 2%);
-        &:hover {
-            border-color: goldenrod;
-        }
+        // &:hover {
+        //     border-color: goldenrod;
+        // }
+    }
+
+    .character-card-class-image-alt {
+        border: 4px solid darken($dark-primary, 2%);
     }
 
     .character-card-background {

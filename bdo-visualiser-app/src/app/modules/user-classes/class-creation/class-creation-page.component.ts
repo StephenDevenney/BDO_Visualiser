@@ -23,9 +23,10 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
     this.loader.start();
     this.userClassService.getClassCreationData().then((res: ClassCreationViewModel) => {
       this.classCreationData = res;
+      console.log(res);
       this.classRolesEnumFiltered = res.classRolesEnum.filter(_ => _.classRole != "Main");
       if(!res.hasMainUserClass)
-        this.classCreationData.newUserClass.classRole = this.classCreationData.classRolesEnum[0];
+        this.classCreationData.newUserClass.classRoleEnum = this.classCreationData.classRolesEnum[0];
 
       this.isLoaded = true;
     }).catch((err: any) => {
@@ -39,7 +40,8 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
   public async selectClass(e: ClassNamesEnumViewModel) {
     await Promise.all(this.classCreationData.classNamesEnum.map( _ => { _.isSelected = false; }));
     e.isSelected = true;
-    this.classCreationData.newUserClass.className = e.className;
+    this.classCreationData.newUserClass.classNameEnum.className = e.className;
+    this.classCreationData.newUserClass.classNameEnum.fileName = e.fileName;
     this.userClassHasBeenSelected = true;
   }
 

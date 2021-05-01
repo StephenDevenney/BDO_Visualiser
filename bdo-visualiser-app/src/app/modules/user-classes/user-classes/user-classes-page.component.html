@@ -11,7 +11,7 @@
         <div *ngFor="let item of pageData.userClasses" class="col-6 pr-0 mb-4 character-card">
             <div class="ml-2 border border-secondary">
                 <div class="row ml-0 mr-0 character-card-background">
-                    <div class="col-6 pl-0 pr-0 character-card-class-image-alt" [ngStyle]="{ 'background-image': 'url(' + './assets/images/classPortraits/' + item.className + '.PNG' + ')' }"></div>
+                    <div class="col-6 pl-0 pr-0 character-card-class-image-alt" [ngStyle]="{ 'background-image': 'url(' + './assets/images/classPortraits/' + item.classNameEnum.fileName + '.PNG' + ')' }"></div>
                     <div class="col-6 pl-0 pr-0">
                         <p-tabView>
                             <p-tabPanel header="Combat">
@@ -63,10 +63,10 @@
                 <div class="row ml-0 mr-0 pt-2 pb-1 character-card-background"> 
                     <div class="col-9">
                         <div>
-                            <label>{{item.className}}</label>
+                            <label>{{item.classNameEnum.className}}</label>
                         </div>
                         <div>
-                            <label>Role: {{item.classRole.classRole}}</label>
+                            <label>Primary Role: {{item.classRoleEnum.classRole}}</label>
                         </div>
                     </div>
                     <div class="col-3">

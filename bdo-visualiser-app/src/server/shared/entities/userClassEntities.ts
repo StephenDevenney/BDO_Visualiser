@@ -2,11 +2,13 @@
 export class ClassNamesEnumEntity {
     public classId: number = 1;
     public className: string = "-";
+    public fileName: string = "-";
 
-    constructor(classId?: number, className?: string) {
+    constructor(classId?: number, className?: string, fileName?: string) {
         if(classId) {
             this.classId = classId;
             this.className = className;
+            this.fileName = fileName;
         }
     }
 }
@@ -40,6 +42,7 @@ export class UserClassEntity {
     public FK_gearScoreId: number = 0;
     public classNameId: number = 1;
     public className: string = "";
+    public fileName: string = "";
     public classRoleId: number = 5;
     public classRole: string = "";
     public combatTypeId: number = 1;
@@ -51,12 +54,13 @@ export class UserClassEntity {
     public dp: number = 0;
     public gearScore: number = 0;
 
-    constructor(classId?: number, FK_gearScoreId?: number, classNameId?: number, className?: string, classRoleId?: number, classRole?: string, combatTypeId?: number, combatTypeName?: string, dateCreated?: string, classDescription?: string, ap?: number, aap?: number, dp?: number, gearScore?: number) {
+    constructor(classId?: number, FK_gearScoreId?: number, classNameId?: number, className?: string, fileName?: string, classRoleId?: number, classRole?: string, combatTypeId?: number, combatTypeName?: string, dateCreated?: string, classDescription?: string, ap?: number, aap?: number, dp?: number, gearScore?: number) {
         if(classId) {
             this.classId = classId;
             this.FK_gearScoreId = FK_gearScoreId;
             this.classNameId = classNameId;
             this.className = className;
+            this.fileName = fileName;
             this.classRoleId = classRoleId;
             this.classRole = classRole;
             this.combatTypeId = combatTypeId;

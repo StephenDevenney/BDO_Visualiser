@@ -8,6 +8,7 @@ export class UserClassContext {
   public FK_gearScoreId: number = 0;
   public classNameId: number = 0;
   public className: string = "";
+  public fileName: string = "";
   public classDescription: string = "";
   public classRoleId: number = 0;
   public classRole: string = "";
@@ -20,7 +21,7 @@ export class UserClassContext {
   public gearScore: number = 0;
 
   public async getAll(): Promise<Array<UserClassEntity>> {
-    const sql = `SELECT userClass_classes.classId, userClass_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, userClass_classes.dateCreated, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore FROM userClass_classes INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = userClass_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE userClass_classes.FK_combatSettingsId = 1`;
+    const sql = `SELECT userClass_classes.classId, userClass_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, enum_class.fileName, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, userClass_classes.dateCreated, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore FROM userClass_classes INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = userClass_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE userClass_classes.FK_combatSettingsId = 1`;
     const values = {};
 
     return TheDb.selectAll(sql, values).then((rows: any) => {
@@ -34,7 +35,7 @@ export class UserClassContext {
   }
 
   public async getMostRecent(): Promise<UserClassEntity> {
-    const sql = `SELECT userClass_classes.classId, userClass_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, userClass_classes.dateCreated, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore FROM userClass_classes INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = userClass_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE userClass_classes.FK_combatSettingsId = 1 ORDER BY gearScoreId DESC LIMIT 1`;
+    const sql = `SELECT userClass_classes.classId, userClass_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, enum_class.fileName, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, userClass_classes.dateCreated, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore FROM userClass_classes INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = userClass_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE userClass_classes.FK_combatSettingsId = 1 ORDER BY gearScoreId DESC LIMIT 1`;
     const values = { };
 
     return TheDb.selectOne(sql, values).then((row: any) => {
@@ -55,6 +56,7 @@ export class UserClassContext {
     this.FK_gearScoreId = row['FK_gearScoreId'];
     this.classNameId = row['classNameId'];
     this.className = row['className'];
+    this.fileName = row['fileName'];
     this.classRoleId = row['classRoleId'];
     this.classRole = row['classRole'];
     this.combatTypeId = row['combatTypeId'];
@@ -73,6 +75,7 @@ export class UserClassContext {
 export class ClassNamesEnumContext {
   public classId: number = 0;
   public className: string = "";
+  public fileName: string = "";
 
   public getAll(): Promise<Array<ClassNamesEnumEntity>> {
     const sql = `SELECT * FROM enum_class WHERE enum_class.classId != 1`;
@@ -101,6 +104,7 @@ export class ClassNamesEnumContext {
   private fromRow(row: ClassNamesEnumEntity): ClassNamesEnumEntity {
     this.classId = row['classId'];
     this.className = row['className'];
+    this.fileName = row['fileName'];
   
     return this;
   }

@@ -35,7 +35,7 @@ export class CombatPageDataHandler {
                 if(row.afuaruSpawnable)
                     afuaruSpawns = row.afuaruSpawns.toString();
                 vdVM.push(new VisibleDataViewModel(row.grindingId, row.dateCreated, row.locationName, timeDescription, row.trashLootAmount, row.className, row.serverDescription, row.combatTypeName, afuaruSpawns));
-                gdVM.push(new GrindingDataViewModel(row.grindingId, row.userClassId, row.dateCreated, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, row.recommendedAP), new TimeAmountEnumViewModel(row.timeId, row.timeAmount), row.trashLootAmount, new UserClassViewModel(row.userClassId, row.className, new ClassRolesEnumViewModel(row.classRoleId, row.classRoleName), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription), new ServerNamesEnumViewModel(row.serverId, row.serverDescription, row.isElviaRealm), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), row.afuaruSpawns));
+                gdVM.push(new GrindingDataViewModel(row.grindingId, row.userClassId, row.dateCreated, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, row.recommendedAP), new TimeAmountEnumViewModel(row.timeId, row.timeAmount), row.trashLootAmount, new UserClassViewModel(row.userClassId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRoleName), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription), new ServerNamesEnumViewModel(row.serverId, row.serverDescription, row.isElviaRealm), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), row.afuaruSpawns));
             });
         });
 
@@ -63,7 +63,7 @@ export class CombatPageDataHandler {
             if(headers.filter(_ => _.header == "Combat Type")[0].isActive)
                 res.combatTypeId = eVM.combatType.combatTypeId;
             else 
-                res.combatTypeId = eVM.userClass.combatTypeDescription.combatTypeId;
+                res.combatTypeId = eVM.userClass.combatTypeEnum.combatTypeId;
             if(headers.filter(_ => _.header == "Afuaru Spawns")[0].isActive && eVM.grindLocation.afuaruSpawnable)
                 res.afuaruSpawns = eVM.afuaruSpawns;
             
@@ -137,7 +137,7 @@ export class CombatPageNewEntryHandler {
                 previousEntry.grindLocation = new LocationNamesEnumViewModel(_.locationId, _.territoryId, _.locationName, _.territoryName, _.recommendedLevel, _.recommendedAP);
                 previousEntry.server = new ServerNamesEnumViewModel(_.serverId, _.serverDescription, _.isElviaRealm);
                 previousEntry.timeAmount = new TimeAmountEnumViewModel(_.timeId, _.timeAmount);
-                previousEntry.userClass = new UserClassViewModel(_.userClassId, _.className, new ClassRolesEnumViewModel(_.classRoleId, _.classRoleName), new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName), new GearViewModel(_.ap, _.aap, _.dp, _.gearScore), _.classDescription);    
+                previousEntry.userClass = new UserClassViewModel(_.userClassId, new ClassNamesEnumViewModel(_.classNameId, _.className, _.fileName), new ClassRolesEnumViewModel(_.classRoleId, _.classRoleName), new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName), new GearViewModel(_.ap, _.aap, _.dp, _.gearScore), _.classDescription);    
             }
         });
 

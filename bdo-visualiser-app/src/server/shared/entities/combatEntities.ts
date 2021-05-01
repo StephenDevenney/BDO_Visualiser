@@ -40,6 +40,7 @@ export class GrindingDataEntity {
     public userClassId: number = 0;
     public classNameId: number = 0;
     public className: string = "";
+    public fileName: string = "";
     public classDescription: string = "";
     public classRoleId: number = 0;
     public classRoleName: string = "";
@@ -58,7 +59,7 @@ export class GrindingDataEntity {
     public afuaruSpawns: number = 0;
     public afuaruSpawnable: boolean = false;
 
-    constructor(grindingId?: number, locationId?: number, locationName?: string, territoryId?: number, territoryName?: string, timeId?: number, timeAmount?: number, userClassId?: number, classNameId?: number, className?: string, classRoleId?: number, classRoleName?: string, gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number, serverId?: number, serverDescription?: string, isElviaRealm?: boolean, combatTypeId?: number, combatTypeName?: string, trashLootAmount?: number, afuaruSpawns?: number, afuaruSpawnable?: boolean) {
+    constructor(grindingId?: number, locationId?: number, locationName?: string, territoryId?: number, territoryName?: string, timeId?: number, timeAmount?: number, userClassId?: number, classNameId?: number, className?: string, fileName?: string, classRoleId?: number, classRoleName?: string, gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number, serverId?: number, serverDescription?: string, isElviaRealm?: boolean, combatTypeId?: number, combatTypeName?: string, trashLootAmount?: number, afuaruSpawns?: number, afuaruSpawnable?: boolean) {
         if(grindingId) {
             this.grindingId = grindingId;
             this.locationId = locationId;
@@ -70,6 +71,7 @@ export class GrindingDataEntity {
             this.userClassId = userClassId;
             this.classNameId = classNameId;
             this.className = className;
+            this.fileName = fileName;
             this.classRoleId = classRoleId;
             this.classRoleName = classRoleName;
             this.gearScoreId = gearScoreId;

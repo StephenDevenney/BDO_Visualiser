@@ -5,9 +5,7 @@
             <h2 *ngIf="classCreationData.hasMainUserClass" class="mb-0">Add Class</h2>
             <div class="row userClass-selection-container">
                 <button *ngFor="let item of classCreationData.classNamesEnum" class="col-md-4 btn btn-primary p-1 btn-no-bg class-portrait-hoverable" [ngClass]="{'userClass-selected' : item.isSelected, 'userClass-unselected' : !item.isSelected}" (click)="selectClass(item);">
-                    <div class="character-card-class-image" title="{{item.className}}">
-                        <img src="./assets/images/classPortraits/{{item.className}}.PNG"/>
-                    </div>    
+                    <div class="col-12 character-card-class-image-alt portrait-hoverable" [ngStyle]="{ 'background-image': 'url(' + './assets/images/classPortraits/' + item.fileName + '.PNG' + ')' }"></div>
                 </button>
             </div>
         </div>
@@ -25,20 +23,18 @@
             </div>
             <p-inputNumber [disabled]="!userClassHasBeenSelected" [(ngModel)]="classCreationData.newUserClass.gear.dp" [min]="0">{{classCreationData.newUserClass.gear.dp}}</p-inputNumber>
             <div>
-                <label class="mt-2">Class Role</label>
+                <label class="mt-2">Character Primary Role</label>
             </div>
-            <p-dropdown *ngIf="classCreationData.hasMainUserClass" [disabled]="!userClassHasBeenSelected" [options]="classRolesEnumFiltered" [(ngModel)]="classCreationData.newUserClass.classRole" optionLabel="classRole"></p-dropdown>
+            <p-dropdown *ngIf="classCreationData.hasMainUserClass" [disabled]="!userClassHasBeenSelected" [options]="classRolesEnumFiltered" [(ngModel)]="classCreationData.newUserClass.classRoleEnum" optionLabel="classRole"></p-dropdown>
             <div *ngIf="classCreationData.hasMainUserClass">
                 <label class="mt-2">Primary Combat Type</label>
             </div>
             <div class="d-flex align-items-center">
-                <p-dropdown [disabled]="!userClassHasBeenSelected" [options]="classCreationData.combatTypesEnum" [(ngModel)]="classCreationData.newUserClass.combatTypeDescription" optionLabel="combatTypeName"></p-dropdown>
+                <p-dropdown [disabled]="!userClassHasBeenSelected" [options]="classCreationData.combatTypesEnum" [(ngModel)]="classCreationData.newUserClass.combatTypeEnum" optionLabel="combatTypeName"></p-dropdown>
                 <button [disabled]="classCreationData.newUserClass.gear.ap == 0 || classCreationData.newUserClass.gear.aap == 0 || classCreationData.newUserClass.gear.dp == 0" class="btn btn-primary ml-3" (click)="createClass()">Add</button>
             </div>
             <div *ngIf="userClassHasBeenSelected">
-                <div class="character-card-class-image mt-2">
-                    <img src="./assets/images/classPortraits/{{classCreationData.newUserClass.className}}.PNG"/>
-                </div>
+                <div class="col-12 mt-2 character-card-class-image-alt" [ngStyle]="{ 'background-image': 'url(' + './assets/images/classPortraits/' + classCreationData.newUserClass.classNameEnum.fileName + '.PNG' + ')' }"></div>
             </div>
         </div>
     </div>

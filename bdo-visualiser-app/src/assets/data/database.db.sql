@@ -217,7 +217,8 @@ BEGIN TRANSACTION;
 DROP TABLE IF EXISTS `enum_class`;
 CREATE TABLE IF NOT EXISTS enum_class (
 	classId	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	className TEXT
+	className TEXT,
+	fileName TEXT
 );
 COMMIT;
 
@@ -376,27 +377,27 @@ INSERT INTO enum_classRole (roleDescription) VALUES ('Life Skiller');
 INSERT INTO enum_classRole (roleDescription) VALUES ('Alt');
 
 -- enum_class
-INSERT INTO enum_class (className) VALUES ('-');
-INSERT INTO enum_class (className) VALUES ('Archer');
-INSERT INTO enum_class (className) VALUES ('Beserker');
-INSERT INTO enum_class (className) VALUES ('Dark Knight');
-INSERT INTO enum_class (className) VALUES ('Guardian');
-INSERT INTO enum_class (className) VALUES ('Hashashin');
-INSERT INTO enum_class (className) VALUES ('Kunoichi');
-INSERT INTO enum_class (className) VALUES ('Lahn');
-INSERT INTO enum_class (className) VALUES ('Maehwa');
-INSERT INTO enum_class (className) VALUES ('Musa');
-INSERT INTO enum_class (className) VALUES ('Mystic');
-INSERT INTO enum_class (className) VALUES ('Nova');
-INSERT INTO enum_class (className) VALUES ('Ranger');
-INSERT INTO enum_class (className) VALUES ('Sorceress');
-INSERT INTO enum_class (className) VALUES ('Striker');
-INSERT INTO enum_class (className) VALUES ('Shai');
-INSERT INTO enum_class (className) VALUES ('Tamer');
-INSERT INTO enum_class (className) VALUES ('Valkyrie');
-INSERT INTO enum_class (className) VALUES ('Warrior');
-INSERT INTO enum_class (className) VALUES ('Wizard');
-INSERT INTO enum_class (className) VALUES ('Witch');
+INSERT INTO enum_class (className, fileName) VALUES ('-', '-');
+INSERT INTO enum_class (className, fileName) VALUES ('Archer', 'archer');
+INSERT INTO enum_class (className, fileName) VALUES ('Beserker', 'beserker');
+INSERT INTO enum_class (className, fileName) VALUES ('Dark Knight', 'dark_knight');
+INSERT INTO enum_class (className, fileName) VALUES ('Guardian', 'guardian');
+INSERT INTO enum_class (className, fileName) VALUES ('Hashashin', 'hashashin');
+INSERT INTO enum_class (className, fileName) VALUES ('Kunoichi', 'kunoichi');
+INSERT INTO enum_class (className, fileName) VALUES ('Lahn', 'lahn');
+INSERT INTO enum_class (className, fileName) VALUES ('Maehwa', 'maehwa');
+INSERT INTO enum_class (className, fileName) VALUES ('Musa', 'musa');
+INSERT INTO enum_class (className, fileName) VALUES ('Mystic', 'mystic');
+INSERT INTO enum_class (className, fileName) VALUES ('Nova', 'nova');
+INSERT INTO enum_class (className, fileName) VALUES ('Ranger', 'ranger');
+INSERT INTO enum_class (className, fileName) VALUES ('Sorceress', 'sorceress');
+INSERT INTO enum_class (className, fileName) VALUES ('Striker', 'striker');
+INSERT INTO enum_class (className, fileName) VALUES ('Shai', 'shai');
+INSERT INTO enum_class (className, fileName) VALUES ('Tamer', 'tamer');
+INSERT INTO enum_class (className, fileName) VALUES ('Valkyrie', 'valkyrie');
+INSERT INTO enum_class (className, fileName) VALUES ('Warrior', 'warrior');
+INSERT INTO enum_class (className, fileName) VALUES ('Wizard', 'wizard');
+INSERT INTO enum_class (className, fileName) VALUES ('Witch', 'witch');
 
 -- enum_theme
 INSERT INTO enum_theme (themeName, themeClassName) VALUES ('Default', 'standard-theme');

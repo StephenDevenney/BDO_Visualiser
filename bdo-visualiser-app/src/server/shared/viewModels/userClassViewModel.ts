@@ -31,12 +31,14 @@ export class CharacterCardsViewModel {
 export class ClassNamesEnumViewModel {
     public classId: number = 1;
     public className: string = "-";
+    public fileName: string = "-";
     public isSelected: boolean = false;
 
-    constructor(classId?: number, className?: string, isSelected?: boolean) {
+    constructor(classId?: number, className?: string, fileName?: string, isSelected?: boolean) {
         if(classId) {
             this.classId = classId;
             this.className = className;
+            this.fileName = fileName;
             this.isSelected = isSelected;
         }
     }
@@ -56,18 +58,18 @@ export class ClassRolesEnumViewModel {
 
 export class UserClassViewModel {
     public classId: number = 0;
-    public className: string = "";
-    public classRole: ClassRolesEnumViewModel = new ClassRolesEnumViewModel();
-    public combatTypeDescription: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
+    public classNameEnum: ClassNamesEnumViewModel = new ClassNamesEnumViewModel();
+    public classRoleEnum: ClassRolesEnumViewModel = new ClassRolesEnumViewModel();
+    public combatTypeEnum: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
     public gear: GearViewModel = new GearViewModel();
     public classDescription: string = "";
 
-    constructor(classId?: number, className?: string, classRole?: ClassRolesEnumViewModel, combatTypeDescription?: CombatTypesEnumViewModel, gear?: GearViewModel, classDescription?: string) {
+    constructor(classId?: number, className?: ClassNamesEnumViewModel, classRole?: ClassRolesEnumViewModel, combatTypeDescription?: CombatTypesEnumViewModel, gear?: GearViewModel, classDescription?: string) {
         if(classId) {
             this.classId = classId;
-            this.className = className;
-            this.classRole = classRole;
-            this.combatTypeDescription = combatTypeDescription;
+            this.classNameEnum = className;
+            this.classRoleEnum = classRole;
+            this.combatTypeEnum = combatTypeDescription;
             this.gear = gear;
             this.classDescription = classDescription;
         }     

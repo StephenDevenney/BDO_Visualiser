@@ -33,7 +33,7 @@ export class TableInsertComponent extends BaseComponent implements AfterViewInit
           this.newEntry.timeAmount = this.combatEnums.timeAmountEnum[0];
           this.newEntry.server = this.combatEnums.serverNamesEnum[0];
           this.newEntry.combatType = this.combatEnums.combatTypesEnum[0];
-          this.newEntry.userClass = this.combatEnums.activeClasses.filter(_ => _.classRole.classRole == "Main")[0];
+          this.newEntry.userClass = this.combatEnums.activeClasses.filter(_ => _.classRoleEnum.classRole == "Main")[0];
         }
         else {
           this.newEntry.timeAmount = this.combatEnums.timeAmountEnum.filter((_) => _.timeId == this.combatEnums.previousCombatValuesViewModel.timeAmount.timeId)[0];
@@ -77,7 +77,7 @@ export class TableInsertComponent extends BaseComponent implements AfterViewInit
 
   public currentClassChanged(e: { originalEvent: MouseEvent, value: UserClassViewModel }) {
     if(this.newEntry.combatType.combatTypeId != 5)
-      this.newEntry.combatType = e.value.combatTypeDescription;
+      this.newEntry.combatType = e.value.combatTypeEnum;
     else if (this.combatEnums.previousCombatValuesViewModel.combatType.combatTypeId != 5 && this.combatEnums.previousCombatValuesViewModel.combatType.combatTypeId != 1)
       this.newEntry.combatType = this.combatEnums.previousCombatValuesViewModel.combatType;
   }
