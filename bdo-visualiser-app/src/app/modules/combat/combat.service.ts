@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CombatHeadersViewModel, CombatPageDataViewModel } from '../../../server/shared/viewModels/combatViewModels';
+import { CombatHeadersViewModel, CombatPageDataViewModel, CombatStatsViewModel } from '../../../server/shared/viewModels/combatViewModels';
 import { CombatController } from '../../../server/src/routes/combatController';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class CombatService {
         return await this.combatRoute.getCombatData();
     }
 
-    public async getCombatStatsTabData(): Promise<void> {
+    public async getCombatStatsTabData(): Promise<CombatStatsViewModel> {
         return await this.combatRoute.getStatsData();
     }
 

@@ -13,7 +13,7 @@ import { MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { DialogModule } from 'primeng/dialog';
-import { DateLongPipe } from '../pipes/date-long.pipe';
+import { DateLongPipe, TimeAmountPipe } from '../pipes/date-long.pipe';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { ServerModule } from 'src/server/src/serverModule';
@@ -35,6 +35,7 @@ import { TabViewModule } from 'primeng/tabview';
   ],
   declarations: [
     DateLongPipe,
+    TimeAmountPipe,
     TableInsertComponent
   ],
   exports: [
@@ -51,6 +52,7 @@ import { TabViewModule } from 'primeng/tabview';
     InputNumberModule,
     ToastModule,
     DateLongPipe,
+    TimeAmountPipe,
     ButtonModule,
     TabViewModule
   ],

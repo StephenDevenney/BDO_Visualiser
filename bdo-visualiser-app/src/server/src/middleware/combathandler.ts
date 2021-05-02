@@ -168,7 +168,7 @@ export class ColumnHeadersHandler {
 }
 
 export class CombatStatsTabHandler { 
-    public async getCombatStats(): Promise<void> {
+    public async getCombatStats(): Promise<CombatStatsViewModel> {
         let calc: Calculations = new Calculations();
         let stats: CombatStatsViewModel = new CombatStatsViewModel();
         await new CombatStatsContext().getAll(calc.calcCurrentDate(), calc.calcWeekStartDate()).then((row: Array<CombatStatsEntity>) => {
@@ -185,8 +185,6 @@ export class CombatStatsTabHandler {
             stats.timeAmount.weekly = row[2].timeAmount;
         });
 
-        console.log(stats);
-
-        return;
+        return stats;
     }
 }
