@@ -1,5 +1,3 @@
-import { CombatStatTotals } from "./statTotalViewModels";
-
 export class ClassCreationViewModel {
     public classNamesEnum: Array<ClassNamesEnumViewModel> = new Array<ClassNamesEnumViewModel>();
     public combatTypesEnum: Array<CombatTypesEnumViewModel> = new Array<CombatTypesEnumViewModel>();
@@ -20,11 +18,9 @@ export class ClassCreationViewModel {
 
 export class CharacterCardsViewModel {
     public userClasses: Array<UserClassViewModel> = new Array<UserClassViewModel>();
-    public statTotals: CombatStatTotals = new CombatStatTotals();
-
-    constructor(userClasses?: Array<UserClassViewModel>, statTotals?: CombatStatTotals) {
+    
+    constructor(userClasses?: Array<UserClassViewModel>) {
         this.userClasses = userClasses;
-        this.statTotals = statTotals;
     }
 }
 

@@ -255,6 +255,7 @@ export class LocationsEnumContext {
   public recommendedLevel: string = "";
   public recommendedAP: string = "";
   public afuaruSpawnable: boolean = false;
+  public locationCount: number = 0;
 
   public getAll(): Promise<Array<LocationNamesEnumEntity>> {
     const sql = `SELECT enum_locations.locationId, enum_territory.territoryId, enum_locations.locationName, enum_territory.territoryName, enum_locations.recommendedLevel, enum_locations.recommendedAP, enum_locations.afuaruSpawnable FROM enum_locations INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId WHERE enum_locations.locationId != 1`;
@@ -305,6 +306,7 @@ export class ServerEnumContext {
   public serverId: number = 1;
   public serverName: string = "-";
   public isElviaRealm: boolean = false;
+  public serverCount: number = 0;
 
   public getAll(): Promise<Array<ServerNamesEnumEntity>> {
     const sql = `SELECT * FROM enum_server WHERE serverId != 1`;
@@ -318,6 +320,10 @@ export class ServerEnumContext {
       }
       return nm;
     });
+  }
+
+  public getServerCount() {
+    
   }
 
   private fromRow(row: ServerNamesEnumEntity): ServerNamesEnumEntity {
@@ -362,7 +368,7 @@ export class CombatStatsContext {
   public timeAmount: number = 0;
 
   public getAll(todaysDate: string, weekStartDate: string): Promise<Array<CombatStatsEntity>> {
-    const sql = `SELECT AVG(t1.trashLootAmount) AS trashLootAmount, AVG(t1.afuaruSpawns) AS afuaruSpawns, AVG(enum_time.timeAmount) AS timeAmount FROM combat_grinding AS t1 INNER JOIN enum_time ON enum_time.timeId = t1.FK_timeId UNION ALL SELECT SUM(t2.trashLootAmount), SUM(t2.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t2 INNER JOIN enum_time ON enum_time.timeId = t2.FK_timeId WHERE t2.dateCreated == $todaysDate UNION ALL SELECT SUM(t3.trashLootAmount), SUM(t3.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t3 INNER JOIN enum_time ON enum_time.timeId = t3.FK_timeId WHERE t3.dateCreated BETWEEN $weekStartDate AND $todaysDate`;
+    const sql = `SELECT ROUND(AVG(t1.trashLootAmount), 2) AS trashLootAmount, ROUND(AVG(t1.afuaruSpawns), 2) AS afuaruSpawns, ROUND(AVG(enum_time.timeAmount), 2) AS timeAmount FROM combat_grinding AS t1 INNER JOIN enum_time ON enum_time.timeId = t1.FK_timeId UNION ALL SELECT SUM(t2.trashLootAmount), SUM(t2.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t2 INNER JOIN enum_time ON enum_time.timeId = t2.FK_timeId WHERE t2.dateCreated == $todaysDate UNION ALL SELECT SUM(t3.trashLootAmount), SUM(t3.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t3 INNER JOIN enum_time ON enum_time.timeId = t3.FK_timeId WHERE t3.dateCreated BETWEEN $weekStartDate AND $todaysDate`;
     const values = { $todaysDate: todaysDate, $weekStartDate: weekStartDate };
 
     return TheDb.selectAll(sql, values).then((rows: any) => {

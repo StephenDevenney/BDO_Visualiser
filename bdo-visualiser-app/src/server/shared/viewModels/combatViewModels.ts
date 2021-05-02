@@ -213,3 +213,43 @@ export class StatViewModel {
         this.weekly = weekly;
     }
 }
+
+export class ServerCountViewModel {
+    public serverNameEnum: ServerNamesEnumViewModel = new ServerNamesEnumViewModel();
+    public serverCount: number = 0;
+
+    constructor(serverNameEnum?: ServerNamesEnumViewModel, serverCount?: number) {
+        this.serverNameEnum = serverNameEnum;
+        this.serverCount = serverCount;
+    }
+}
+
+export class CombatTypeCountViewModel {
+    public combatTypeEnum: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
+    public combatTypeCount: number = 0;
+
+    constructor(combatTypeEnum?: CombatTypesEnumViewModel, combatTypeCount?: number) {
+        this.combatTypeEnum = combatTypeEnum;
+        this.combatTypeCount = combatTypeCount;
+    }
+}
+
+export class LocationsCountViewModel {
+    public locationNameEnum: LocationNamesEnumViewModel = new LocationNamesEnumViewModel();
+    public locationCount: number = 0;
+
+    constructor(locationNameEnum?: LocationNamesEnumViewModel, locationCount?: number) {
+        this.locationNameEnum = locationNameEnum;
+        this.locationCount = locationCount;
+    }
+}
+
+export class UserClassCountViewModel {
+    public userClass: UserClassViewModel = new UserClassViewModel();
+    public userClassCount: number = 0;
+
+    constructor(userClass?: UserClassViewModel, userClassCount?: number) {
+        this.userClass = userClass;
+        this.userClassCount = userClassCount;
+    }
+}

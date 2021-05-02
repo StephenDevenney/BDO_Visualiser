@@ -19,6 +19,7 @@ export class UserClassContext {
   public aap: number = 0;
   public dp: number = 0;
   public gearScore: number = 0;
+  public userClassCount: number = 0;
 
   public async getAll(): Promise<Array<UserClassEntity>> {
     const sql = `SELECT userClass_classes.classId, userClass_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, enum_class.fileName, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, userClass_classes.dateCreated, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore FROM userClass_classes INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = userClass_classes.FK_gearScoreId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN enum_combatType ON enum_combatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE userClass_classes.FK_combatSettingsId = 1`;
@@ -226,6 +227,7 @@ export class GearContext {
 export class CombatTypesEnumContext {
   public combatTypeId: number = 1;
   public combatTypeName: string = "-";
+  public combatTypeCount: number = 0;
 
   public getAll(): Promise<Array<CombatTypesEnumEntity>> {
     const sql = `SELECT * FROM enum_combatType WHERE combatTypeId != 1`;

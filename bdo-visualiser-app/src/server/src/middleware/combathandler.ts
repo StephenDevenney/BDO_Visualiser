@@ -5,7 +5,7 @@ import { ClassNamesEnumViewModel, ClassRolesEnumViewModel, CombatTypesEnumViewMo
 import { ClassNamesEnumEntity, CombatTypesEnumEntity } from '../../shared/entities/userClassEntities';
 import { GearContext, ClassNamesEnumContext, CombatTypesEnumContext } from '../sqlContext/userClassContext';
 import { UserClassHandler } from './userClassHandler';
-import { Calculations } from 'src/server/shared/calc/calculations';
+import { Calculations } from '../../../server/shared/calc/calculations';
 
 export class CombatPageDataHandler {
 

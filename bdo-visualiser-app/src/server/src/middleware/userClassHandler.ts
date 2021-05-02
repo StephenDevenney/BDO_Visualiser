@@ -2,7 +2,6 @@ import { UserClassViewModel, CombatTypesEnumViewModel, GearViewModel, ClassNames
 import { UserClassContext, ClassNamesEnumContext, ClassRolesEnumContext, GearContext, CombatTypesEnumContext, GearBracketContext } from '../sqlContext/userClassContext';
 import { Calculations } from '../../shared/calc/calculations';
 import { ClassNamesEnumEntity, ClassRoleEnumEntity, CombatTypesEnumEntity, GearBracketsEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
-import { CombatStatTotals } from '../../shared/viewModels/statTotalViewModels';
 
 
 export class UserClassHandler {
@@ -112,6 +111,6 @@ export class UserClassCardsHandler {
             }));
         });
         
-        return new CharacterCardsViewModel(ucVM, new CombatStatTotals());
+        return new CharacterCardsViewModel(ucVM);
     }
 }

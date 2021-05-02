@@ -11,19 +11,19 @@
                                 <div class="d-flex flex-column">
                                     <label>Avg.</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
-                                        <label>{{combatStats.trashLootAmount.average}}</label>
+                                        <label>{{combatStats.trashLootAmount.average | noRecordPipe}}</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column">
                                     <label>Day.</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
-                                        <label>{{combatStats.trashLootAmount.daily}}</label>
+                                        <label>{{combatStats.trashLootAmount.daily | noRecordPipe}}</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column">
                                     <label>Week.</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
-                                        <label>{{combatStats.trashLootAmount.weekly}}</label>
+                                        <label>{{combatStats.trashLootAmount.weekly | noRecordPipe}}</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column"></div>
@@ -104,7 +104,7 @@
                     </div>
                 </div>
                 <div>
-                    <label>Loaction</label>
+                    <label>Locaction</label>
                     <div>
                         0000
                     </div>

@@ -151,8 +151,9 @@ export class LocationNamesEnumEntity {
     public recommendedLevel: string = "";
     public recommendedAP: string = "";
     public afuaruSpawnable: boolean = false;
+    public locationCount: number = 0;
 
-    constructor(locationId?: number, territoryId?: number, locationName?: string, territoryName?: string, recommendedLevel?: string, recommendedAP?: string, afuaruSpawnable?: boolean) {
+    constructor(locationId?: number, territoryId?: number, locationName?: string, territoryName?: string, recommendedLevel?: string, recommendedAP?: string, afuaruSpawnable?: boolean, locationCount?: number) {
         if(locationId) {
             this.locationId = locationId;
             this.territoryId = territoryId;
@@ -162,6 +163,9 @@ export class LocationNamesEnumEntity {
             this.recommendedAP = recommendedAP; 
             this.afuaruSpawnable = afuaruSpawnable;
         }
+
+        if(locationCount) 
+            this.locationCount = locationCount;
     }
 }
 
@@ -181,13 +185,16 @@ export class ServerNamesEnumEntity {
     public serverId: number = 1;
     public serverName: string = "-";
     public isElviaRealm: boolean = false;
+    public serverCount: number = 0
 
-    constructor(serverId?: number, serverName?: string, isElviaRealm?: boolean) {
+    constructor(serverId?: number, serverName?: string, isElviaRealm?: boolean, serverCount?: number) {
         if(serverId) {
             this.serverId = serverId;
             this.serverName = serverName;
             this.isElviaRealm = isElviaRealm;
         }  
+        if(serverCount)
+            this.serverCount = serverCount;
     }
 }
 

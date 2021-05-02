@@ -28,12 +28,16 @@ export class ClassRoleEnumEntity {
 export class CombatTypesEnumEntity {
     public combatTypeId: number = 1;
     public combatTypeName: string = "-";
+    public combatTypeCount: number = 0;
 
-    constructor(combatTypeId?: number, combatTypeName?: string) {
+    constructor(combatTypeId?: number, combatTypeName?: string, combatTypeCount?: number) {
         if(combatTypeId) {
             this.combatTypeId = combatTypeId;
             this.combatTypeName = combatTypeName;
         }  
+
+        if(combatTypeCount)
+            this.combatTypeCount = combatTypeCount;
     }
 }
 
@@ -53,8 +57,9 @@ export class UserClassEntity {
     public aap: number = 0;
     public dp: number = 0;
     public gearScore: number = 0;
+    public userClassCount: number = 0;
 
-    constructor(classId?: number, FK_gearScoreId?: number, classNameId?: number, className?: string, fileName?: string, classRoleId?: number, classRole?: string, combatTypeId?: number, combatTypeName?: string, dateCreated?: string, classDescription?: string, ap?: number, aap?: number, dp?: number, gearScore?: number) {
+    constructor(classId?: number, FK_gearScoreId?: number, classNameId?: number, className?: string, fileName?: string, classRoleId?: number, classRole?: string, combatTypeId?: number, combatTypeName?: string, dateCreated?: string, classDescription?: string, ap?: number, aap?: number, dp?: number, gearScore?: number, userClassCount?: number) {
         if(classId) {
             this.classId = classId;
             this.FK_gearScoreId = FK_gearScoreId;
@@ -71,6 +76,7 @@ export class UserClassEntity {
             this.aap = aap;
             this.dp = dp;
             this.gearScore = gearScore;
+            this.userClassCount = userClassCount;
         }     
     }
 }
