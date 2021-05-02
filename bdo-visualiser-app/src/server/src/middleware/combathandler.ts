@@ -1,10 +1,11 @@
-import { CombatHeadersEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
-import { ColumnHeadersContext, CombatSettingsContext, CombatTableHeadersContext, GrindingDataContext, LocationsEnumContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
-import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, PreviousCombatValuesViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
+import { CombatHeadersEntity, CombatStatsEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
+import { ColumnHeadersContext, CombatSettingsContext, CombatStatsContext, CombatTableHeadersContext, GrindingDataContext, LocationsEnumContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
+import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatStatsViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, PreviousCombatValuesViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 import { ClassNamesEnumViewModel, ClassRolesEnumViewModel, CombatTypesEnumViewModel, GearViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
 import { ClassNamesEnumEntity, CombatTypesEnumEntity } from '../../shared/entities/userClassEntities';
 import { GearContext, ClassNamesEnumContext, CombatTypesEnumContext } from '../sqlContext/userClassContext';
 import { UserClassHandler } from './userClassHandler';
+import { Calculations } from 'src/server/shared/calc/calculations';
 
 export class CombatPageDataHandler {
 
@@ -168,6 +169,24 @@ export class ColumnHeadersHandler {
 
 export class CombatStatsTabHandler { 
     public async getCombatStats(): Promise<void> {
+        let calc: Calculations = new Calculations();
+        let stats: CombatStatsViewModel = new CombatStatsViewModel();
+        await new CombatStatsContext().getAll(calc.calcCurrentDate(), calc.calcWeekStartDate()).then((row: Array<CombatStatsEntity>) => {
+            stats.trashLootAmount.average = row[0].trashLootAmount;
+            stats.trashLootAmount.daily = row[1].trashLootAmount;
+            stats.trashLootAmount.weekly = row[2].trashLootAmount;
+
+            stats.afuaruSpawns.average = row[0].afuaruSpawns;
+            stats.afuaruSpawns.daily = row[1].afuaruSpawns;
+            stats.afuaruSpawns.weekly = row[2].afuaruSpawns;
+
+            stats.timeAmount.average = row[0].timeAmount;
+            stats.timeAmount.daily = row[1].timeAmount;
+            stats.timeAmount.weekly = row[2].timeAmount;
+        });
+
+        console.log(stats);
+
         return;
     }
 }

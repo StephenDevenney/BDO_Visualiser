@@ -187,3 +187,29 @@ export class PreviousCombatValuesViewModel {
         }
     }
 }
+
+export class CombatStatsViewModel {
+    public trashLootAmount: StatViewModel = new StatViewModel();
+    public afuaruSpawns: StatViewModel = new StatViewModel();
+    public timeAmount: StatViewModel = new StatViewModel();
+
+    constructor (trashLootAmount?: StatViewModel, afuaruSpawns?: StatViewModel, timeAmount?: StatViewModel) {
+        if(trashLootAmount) {
+            this.timeAmount = trashLootAmount;
+            this.afuaruSpawns = afuaruSpawns;
+            this.timeAmount = timeAmount;
+        }
+    }
+}
+
+export class StatViewModel {
+    public average: number = 0;
+    public daily: number = 0;
+    public weekly: number = 0;
+
+    constructor(average?: number, daily?: number, weekly?: number) {
+        this.average = average;
+        this.daily = daily;
+        this.weekly = weekly;
+    }
+}

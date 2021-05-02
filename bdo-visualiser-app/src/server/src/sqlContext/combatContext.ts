@@ -1,5 +1,5 @@
 import { TheDb } from '../thedb';
-import { CombatHeadersEntity, CombatSettingsEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
+import { CombatHeadersEntity, CombatSettingsEntity, CombatStatsEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
 import { Calculations } from '../../shared/calc/calculations';
 
 export class CombatSettingsContext {
@@ -358,5 +358,28 @@ export class TimeEnumContext {
 
 export class CombatStatsContext {
   public trashLootAmount: number = 0;
-  public trashLootAmountDescription: string = "";
+  public afuaruSpawns: number = 0;
+  public timeAmount: number = 0;
+
+  public getAll(todaysDate: string, weekStartDate: string): Promise<Array<CombatStatsEntity>> {
+    const sql = `SELECT AVG(t1.trashLootAmount) AS trashLootAmount, AVG(t1.afuaruSpawns) AS afuaruSpawns, AVG(enum_time.timeAmount) AS timeAmount FROM combat_grinding AS t1 INNER JOIN enum_time ON enum_time.timeId = t1.FK_timeId UNION ALL SELECT SUM(t2.trashLootAmount), SUM(t2.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t2 INNER JOIN enum_time ON enum_time.timeId = t2.FK_timeId WHERE t2.dateCreated == $todaysDate UNION ALL SELECT SUM(t3.trashLootAmount), SUM(t3.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t3 INNER JOIN enum_time ON enum_time.timeId = t3.FK_timeId WHERE t3.dateCreated BETWEEN $weekStartDate AND $todaysDate`;
+    const values = { $todaysDate: todaysDate, $weekStartDate: weekStartDate };
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<CombatStatsEntity> = new Array<CombatStatsEntity>();
+      for (const row of rows) {
+          const item = new CombatStatsContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
+  private fromRow(row: CombatStatsEntity): CombatStatsEntity {
+    this.trashLootAmount = row['trashLootAmount'];
+    this.afuaruSpawns = row['afuaruSpawns'];
+    this.timeAmount = row['timeAmount'];
+  
+    return this;
+  }
 }

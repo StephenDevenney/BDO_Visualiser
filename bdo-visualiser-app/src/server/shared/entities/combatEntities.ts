@@ -220,3 +220,17 @@ export class CombatPageEnumsEntity {
         }    
     }
 }
+
+export class CombatStatsEntity {
+    public trashLootAmount: number = 0;
+    public afuaruSpawns: number = 0;
+    public timeAmount: number = 0;
+
+    constructor (trashLootAmount?: number, afuaruSpawns?: number, timeAmount?: number) {
+        if(trashLootAmount) {
+            this.timeAmount = trashLootAmount;
+            this.afuaruSpawns = afuaruSpawns;
+            this.timeAmount = timeAmount;
+        }
+    }
+}
