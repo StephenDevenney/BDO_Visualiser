@@ -646,6 +646,31 @@ input {
     border: none
 }
 
+// Stat Container
+.combat-stats-container {
+    height: calc(54vh - 4rem - 2em);
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .p-disabled, .p-component:disabled {
+        opacity: 1;
+    }
+}
+
+.stat-container-a, .stat-container-b {
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+}
+
+.stat-container-a { 
+    padding: 2rem 1.25rem;
+}
+
+.stat-container-b {
+    padding: 1rem;
+}
+
 // # Logo
 .logo-sm {
     height: 2.8125rem;

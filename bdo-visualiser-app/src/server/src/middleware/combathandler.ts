@@ -1,9 +1,9 @@
 import { CombatHeadersEntity, CombatStatsEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
 import { ColumnHeadersContext, CombatSettingsContext, CombatStatsContext, CombatTableHeadersContext, GrindingDataContext, LocationsEnumContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
-import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatStatsViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, PreviousCombatValuesViewModel, ServerNamesEnumViewModel, TimeAmountEnumViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
+import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatStatsViewModel, CombatTypeCountViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, LocationsCountViewModel, PreviousCombatValuesViewModel, ServerCountViewModel, ServerNamesEnumViewModel, TerritoryCountViewModel, TimeAmountEnumViewModel, UserClassCountViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 import { ClassNamesEnumViewModel, ClassRolesEnumViewModel, CombatTypesEnumViewModel, GearViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
-import { ClassNamesEnumEntity, CombatTypesEnumEntity } from '../../shared/entities/userClassEntities';
-import { GearContext, ClassNamesEnumContext, CombatTypesEnumContext } from '../sqlContext/userClassContext';
+import { ClassNamesEnumEntity, CombatTypesEnumEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
+import { GearContext, ClassNamesEnumContext, CombatTypesEnumContext, UserClassContext } from '../sqlContext/userClassContext';
 import { UserClassHandler } from './userClassHandler';
 import { Calculations } from '../../../server/shared/calc/calculations';
 
@@ -171,19 +171,68 @@ export class CombatStatsTabHandler {
     public async getCombatStats(): Promise<CombatStatsViewModel> {
         let calc: Calculations = new Calculations();
         let stats: CombatStatsViewModel = new CombatStatsViewModel();
-        await new CombatStatsContext().getAll(calc.calcCurrentDate(), calc.calcWeekStartDate()).then((row: Array<CombatStatsEntity>) => {
+        await new CombatStatsContext().getAll(calc.calcCurrentDate(), calc.calcWeekStartDate(), calc.calcMonthStartDate(), calc.calcYearStartDate()).then((row: Array<CombatStatsEntity>) => {
             stats.trashLootAmount.average = row[0].trashLootAmount;
             stats.trashLootAmount.daily = row[1].trashLootAmount;
             stats.trashLootAmount.weekly = row[2].trashLootAmount;
+            stats.trashLootAmount.monthly = row[3].trashLootAmount;
+            stats.trashLootAmount.yearly = row[4].trashLootAmount;
+            stats.trashLootAmount.total = row[5].trashLootAmount;
 
             stats.afuaruSpawns.average = row[0].afuaruSpawns;
             stats.afuaruSpawns.daily = row[1].afuaruSpawns;
             stats.afuaruSpawns.weekly = row[2].afuaruSpawns;
+            stats.afuaruSpawns.monthly = row[3].afuaruSpawns;
+            stats.afuaruSpawns.yearly = row[4].afuaruSpawns;
+            stats.afuaruSpawns.total = row[5].afuaruSpawns;
 
             stats.timeAmount.average = row[0].timeAmount;
             stats.timeAmount.daily = row[1].timeAmount;
             stats.timeAmount.weekly = row[2].timeAmount;
+            stats.timeAmount.monthly = row[3].timeAmount;
+            stats.timeAmount.yearly = row[4].timeAmount;
+            stats.timeAmount.total = row[5].timeAmount;
         });
+
+        let scVM = new Array<ServerCountViewModel>();
+        await new ServerEnumContext().getServerCount().then((row: Array<ServerNamesEnumEntity>) => {
+            row.forEach((_: ServerNamesEnumEntity) => {
+                scVM.push(new ServerCountViewModel(_.serverName, _.serverCount, _.serverName + " - " + _.serverCount));
+            });
+        });
+        stats.serverCount = scVM;
+
+        let ctcVM = new Array<CombatTypeCountViewModel>();
+        await new CombatTypesEnumContext().getCombatTypeCount().then((row: Array<CombatTypesEnumEntity>) => {
+            row.forEach((_: CombatTypesEnumEntity) => {
+                ctcVM.push(new CombatTypeCountViewModel(_.combatTypeName, _.combatTypeCount, _.combatTypeName + " - " + _.combatTypeCount));
+            });
+        });
+        stats.combatTypeCount = ctcVM;
+
+        let lcVM = new Array<LocationsCountViewModel>();
+        await new LocationsEnumContext().getLocationCount().then((row: Array<LocationNamesEnumEntity>) => {
+            row.forEach((_: LocationNamesEnumEntity) => {
+                lcVM.push(new LocationsCountViewModel(_.locationName, _.locationCount, _.locationName + " - " + _.locationCount));
+            });
+        });
+        stats.locationCount = lcVM;
+
+        let tcVM = new Array<TerritoryCountViewModel>();
+        await new LocationsEnumContext().getTerritoryCount().then((row: Array<LocationNamesEnumEntity>) => {
+            row.forEach((_: LocationNamesEnumEntity) => {
+                tcVM.push(new TerritoryCountViewModel(_.territoryName, _.locationCount, _.territoryName + " - " + _.locationCount));
+            });
+        });
+        stats.territoryCount = tcVM;
+
+        let uccVM = new Array<UserClassCountViewModel>();
+        await new UserClassContext().getUserClassCount().then((row: Array<UserClassEntity>) => {
+            row.forEach((_: UserClassEntity) => {
+                uccVM.push(new UserClassCountViewModel(_.className, _.userClassCount, _.className + " - " + _.userClassCount));
+            });
+        });
+        stats.userClassCount = uccVM;
 
         return stats;
     }

@@ -440,6 +440,14 @@
         background-color: darken($standard-primary, 10%);
     }
 
+    // ## Combat Stat Containers
+
+    .stat-container-a, .stat-container-b {
+        background-color: lighten($standard-secondary-text, 5%);
+        color: $standard-primary-text;
+        border: 1px solid $standard-tertiary;
+    }
+
     // # Overrides
 
     // ## Input Text
@@ -529,5 +537,20 @@
     .p-inputtext:enabled:focus {
         border-color: lighten($standard-tertiary, 30%);;
         box-shadow: none;
+    }
+
+    // Listboxes
+    .p-listbox {
+        background-color: lighten($standard-secondary-text, 5%);
+        border: 1px solid $standard-tertiary;
+    }
+
+    .p-listbox .p-listbox-list .p-listbox-item {
+        color: $standard-primary-text;  
+    }
+
+    // Carousel
+    .p-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight button {
+        background-color: $standard-secondary;
     }
 }

@@ -12,7 +12,7 @@ export class StatsComponent extends BaseComponent implements OnInit {
   public locations: Array<Location> = new Array<Location>();
   public selectedLocation: number = 0;
   public locationSelected: boolean = false;
-  private carouselTabs: any[] = [{id: 1, label: "Trash Loot"},{id: 2, label: "Afuaru"},{id: 3, label: "Agris"},{id: 4, label: "Locations"}];
+  private carouselTabs: any[] = [{id: 1, label: "Trash Loot"},{ id: 2, label: "Trash Loot By Location" },{id: 3, label: "Agris"},{ id: 4, label: "Afuaru" }];
   public combatStats: CombatStatsViewModel = new CombatStatsViewModel();
 
   constructor(private injector: Injector,
@@ -47,17 +47,5 @@ export class StatsComponent extends BaseComponent implements OnInit {
 }
 
 /*
-Stats Carousel:
-locations ?
-Trashloot /hr/day/week/total - (slider?)
-afuaru /hr/day/week/total
-agris /hr/day/week/total (compare with total possible)
-
-
-timeAmount /day/week/total
-hrs as class /day/week/total - dropdown to change class
-popular server.
-char level
-filter - character/locations
-
+  todo: track luckiest server when item drops added
 */

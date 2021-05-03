@@ -436,6 +436,13 @@
         background-color: darken($dark-primary, 6%);
     }
 
+    // ## Combat Stat Containers
+    .stat-container-a, .stat-container-b {
+        background-color: darken($dark-primary, 6%);
+        color: $dark-primary-text;
+        border: 1px solid lighten($dark-tertiary, 10%);
+    }
+
     // # Overrides
 
     // ## Input Text
@@ -531,5 +538,20 @@
 
     .p-placeholder {
         color: lighten($dark-primary-text, 10%);
+    }
+
+    // Listboxes
+    .p-listbox {
+        background-color: darken($dark-primary, 6%);
+        border: 1px solid lighten($dark-tertiary, 10%);
+    }
+
+    .p-listbox .p-listbox-list .p-listbox-item {
+        color: $dark-secondary-text;  
+    }
+
+    // Carousel
+    .p-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight button {
+        background-color: $dark-secondary;
     }
 }

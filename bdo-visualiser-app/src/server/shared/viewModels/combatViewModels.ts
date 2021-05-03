@@ -192,6 +192,11 @@ export class CombatStatsViewModel {
     public trashLootAmount: StatViewModel = new StatViewModel();
     public afuaruSpawns: StatViewModel = new StatViewModel();
     public timeAmount: StatViewModel = new StatViewModel();
+    public serverCount: Array<ServerCountViewModel> = new Array<ServerCountViewModel>();
+    public combatTypeCount: Array<CombatTypeCountViewModel> = new Array<CombatTypeCountViewModel>();
+    public locationCount: Array<LocationsCountViewModel> = new Array<LocationsCountViewModel>();
+    public territoryCount: Array<TerritoryCountViewModel> = new Array<TerritoryCountViewModel>();
+    public userClassCount: Array<UserClassCountViewModel> = new Array<UserClassCountViewModel>();
 
     constructor (trashLootAmount?: StatViewModel, afuaruSpawns?: StatViewModel, timeAmount?: StatViewModel) {
         if(trashLootAmount) {
@@ -206,50 +211,76 @@ export class StatViewModel {
     public average: number = 0;
     public daily: number = 0;
     public weekly: number = 0;
+    public monthly: number = 0;
+    public yearly: number = 0;
+    public total: number = 0;
 
-    constructor(average?: number, daily?: number, weekly?: number) {
+    constructor(average?: number, daily?: number, weekly?: number, monthly?: number, yearly?: number, total?: number) {
         this.average = average;
         this.daily = daily;
         this.weekly = weekly;
+        this.monthly = monthly;
+        this.yearly = yearly;
+        this.total = total;
     }
 }
 
 export class ServerCountViewModel {
-    public serverNameEnum: ServerNamesEnumViewModel = new ServerNamesEnumViewModel();
+    public serverName: string = "";
     public serverCount: number = 0;
+    public serverDescription: string = "";
 
-    constructor(serverNameEnum?: ServerNamesEnumViewModel, serverCount?: number) {
-        this.serverNameEnum = serverNameEnum;
+    constructor(serverName?: string, serverCount?: number, serverDescription?: string) {
+        this.serverName = serverName;
         this.serverCount = serverCount;
+        this.serverDescription = serverDescription;
     }
 }
 
 export class CombatTypeCountViewModel {
-    public combatTypeEnum: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
+    public combatTypeName: string = "";
     public combatTypeCount: number = 0;
+    public combatTypeDescription: string = "";
 
-    constructor(combatTypeEnum?: CombatTypesEnumViewModel, combatTypeCount?: number) {
-        this.combatTypeEnum = combatTypeEnum;
+    constructor(combatTypeName?: string, combatTypeCount?: number, combatTypeDescription?: string) {
+        this.combatTypeName = combatTypeName;
         this.combatTypeCount = combatTypeCount;
+        this.combatTypeDescription = combatTypeDescription;
     }
 }
 
 export class LocationsCountViewModel {
-    public locationNameEnum: LocationNamesEnumViewModel = new LocationNamesEnumViewModel();
+    public locationName: string = "";
     public locationCount: number = 0;
+    public locationDescription: string = "";
 
-    constructor(locationNameEnum?: LocationNamesEnumViewModel, locationCount?: number) {
-        this.locationNameEnum = locationNameEnum;
+    constructor(locationName?: string, locationCount?: number, locationDescription?: string) {
+        this.locationName = locationName;
         this.locationCount = locationCount;
+        this.locationDescription = locationDescription;
+    }
+}
+
+export class TerritoryCountViewModel {
+    public territoryName: string = "";
+    public territoryCount: number = 0;
+    public territoryDescription: string = "";
+
+    constructor(territoryName?: string, territoryCount?: number, territoryDescription?: string) {
+        this.territoryName = territoryName;
+        this.territoryCount = territoryCount;
+        this.territoryDescription = territoryDescription;
     }
 }
 
 export class UserClassCountViewModel {
-    public userClass: UserClassViewModel = new UserClassViewModel();
+    public userClassName: string = "";
     public userClassCount: number = 0;
+    public userClassDescription: string = "";
 
-    constructor(userClass?: UserClassViewModel, userClassCount?: number) {
-        this.userClass = userClass;
+    constructor(userClassName?: string, userClassCount?: number, userClassDescription?: string) {
+        this.userClassName = userClassName;
         this.userClassCount = userClassCount;
+        this.userClassDescription = userClassDescription;
     }
 }

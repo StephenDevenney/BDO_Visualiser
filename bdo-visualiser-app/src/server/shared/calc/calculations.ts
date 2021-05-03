@@ -13,8 +13,18 @@ export class Calculations {
         return moment().format("YYYY-MM-DD");
     }
 
-        // Current Date - Week Begin
+        // Current Date - Week Begin (isoWeek starts on monday, should check preference)
     public calcWeekStartDate(): string {
-        return moment().subtract(7,'d').format("YYYY-MM-DD");
+        return moment().startOf('isoWeek').format("YYYY-MM-DD");
+    }
+
+        // Current Date - Month Begin
+    public calcMonthStartDate(): string {
+        return moment().startOf('month').format("YYYY-MM-DD");
+    }
+
+        // Current Date - Year Begin
+    public calcYearStartDate(): string {
+        return moment().startOf('year').format("YYYY-MM-DD");
     }
 }
