@@ -1,4 +1,4 @@
-import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatStatsViewModel, GrindingDataViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
+import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatStatsByLocationViewModel, CombatStatsViewModel, GrindingDataViewModel, LocationNamesEnumViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 import { ColumnHeadersHandler, CombatPageDataHandler, CombatPageNewEntryHandler, CombatStatsTabHandler } from '../middleware/combathandler';
 
 export class CombatController {
@@ -19,6 +19,10 @@ export class CombatController {
 
     public async getStatsData(): Promise<CombatStatsViewModel> {
         return await new CombatStatsTabHandler().getCombatStats();
+    }
+
+    public async getStatsDataByLocation(locationEnum: LocationNamesEnumViewModel): Promise<CombatStatsByLocationViewModel> {
+        return await new CombatStatsTabHandler().getCombatStatsByLocation(locationEnum);
     }
 
         // PUT

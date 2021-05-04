@@ -1,6 +1,6 @@
 import { CombatHeadersEntity, CombatStatsEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
 import { ColumnHeadersContext, CombatSettingsContext, CombatStatsContext, CombatStatsHoursContext, CombatTableHeadersContext, GrindingDataContext, LocationsEnumContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
-import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatStatsViewModel, CombatTypeCountViewModel, GrindingDataViewModel, HoursStatsViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, LocationsCountViewModel, PreviousCombatValuesViewModel, ServerCountViewModel, ServerNamesEnumViewModel, StatViewModel, TerritoryCountViewModel, TimeAmountEnumViewModel, UserClassCountViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
+import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatStatsByLocationViewModel, CombatStatsViewModel, CombatTypeCountViewModel, GrindingDataViewModel, HoursStatsViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, LocationsCountViewModel, PreviousCombatValuesViewModel, ServerCountViewModel, ServerNamesEnumViewModel, StatViewModel, TerritoryCountViewModel, TimeAmountEnumViewModel, UserClassCountViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 import { ClassNamesEnumViewModel, ClassRolesEnumViewModel, CombatTypesEnumViewModel, GearViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
 import { ClassNamesEnumEntity, CombatTypesEnumEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
 import { GearContext, ClassNamesEnumContext, CombatTypesEnumContext, UserClassContext } from '../sqlContext/userClassContext';
@@ -275,61 +275,85 @@ export class CombatStatsTabHandler {
         }
     }
 
-    public async getTrashLootByLocation(locationEnum: LocationNamesEnumViewModel): Promise<CombatStatsViewModel> {
-        let stats: CombatStatsViewModel = new CombatStatsViewModel();
+    public async getCombatStatsByLocation(locationEnum: LocationNamesEnumViewModel): Promise<CombatStatsByLocationViewModel> {
+        let combatStatsByLocationViewModel: CombatStatsByLocationViewModel = new CombatStatsByLocationViewModel();
         let calc: Calculations = new Calculations();
-        await new CombatStatsContext().getAllByLocation(calc.calcCurrentDate(), calc.calcWeekStartDate(), calc.calcMonthStartDate(), calc.calcYearStartDate(), locationEnum.locationId).then((row: Array<CombatStatsEntity>) => {
-            stats.trashLootAmount.average = row[0].trashLootAmount;
-            stats.trashLootAmount.daily = row[1].trashLootAmount;
-            stats.trashLootAmount.weekly = row[2].trashLootAmount;
-            stats.trashLootAmount.monthly = row[3].trashLootAmount;
-            stats.trashLootAmount.yearly = row[4].trashLootAmount;
-            stats.trashLootAmount.total = row[5].trashLootAmount;
-
-            stats.afuaruSpawns.average = row[0].afuaruSpawns;
-            stats.afuaruSpawns.daily = row[1].afuaruSpawns;
-            stats.afuaruSpawns.weekly = row[2].afuaruSpawns;
-            stats.afuaruSpawns.monthly = row[3].afuaruSpawns;
-            stats.afuaruSpawns.yearly = row[4].afuaruSpawns;
-            stats.afuaruSpawns.total = row[5].afuaruSpawns;
-
-            stats.timeAmount.average = row[0].timeAmount;
-            stats.timeAmount.daily = row[1].timeAmount;
-            stats.timeAmount.weekly = row[2].timeAmount;
-            stats.timeAmount.monthly = row[3].timeAmount;
-            stats.timeAmount.yearly = row[4].timeAmount;
-            stats.timeAmount.total = row[5].timeAmount;
+        await getLocations().then((res: CombatStatsViewModel) => {
+            combatStatsByLocationViewModel.combatStats.trashLootAmount = res.trashLootAmount;
+            combatStatsByLocationViewModel.combatStats.afuaruSpawns = res.afuaruSpawns;
+            combatStatsByLocationViewModel.combatStats.timeAmount = res.timeAmount;
         });
 
-       
-        let scVM = new Array<ServerCountViewModel>();
-        await new ServerEnumContext().getServerCountViaLocation(locationEnum.locationId).then((row: Array<ServerNamesEnumEntity>) => {
-            row.forEach((_: ServerNamesEnumEntity) => {
-                scVM.push(new ServerCountViewModel(_.serverName, _.serverCount, _.serverName + " - " + _.serverCount));
+        await getServerCount().then((res: ServerCountViewModel) => {
+            combatStatsByLocationViewModel.serverCount = res;
+        });
+
+        await getUserClassCount().then((res: UserClassCountViewModel) => {
+            combatStatsByLocationViewModel.userClassCount = res;
+        });
+
+        await getHoursCount().then((res: HoursStatsViewModel) => {
+            combatStatsByLocationViewModel.hoursStats = res;
+        });
+
+        return combatStatsByLocationViewModel;
+
+        async function getLocations(): Promise<CombatStatsViewModel> {
+            let stats: CombatStatsViewModel = new CombatStatsViewModel();
+            await new CombatStatsContext().getAllByLocation(calc.calcCurrentDate(), calc.calcWeekStartDate(), calc.calcMonthStartDate(), calc.calcYearStartDate(), locationEnum.locationId).then((row: Array<CombatStatsEntity>) => {
+                stats.trashLootAmount.average = row[0].trashLootAmount;
+                stats.trashLootAmount.daily = row[1].trashLootAmount;
+                stats.trashLootAmount.weekly = row[2].trashLootAmount;
+                stats.trashLootAmount.monthly = row[3].trashLootAmount;
+                stats.trashLootAmount.yearly = row[4].trashLootAmount;
+                stats.trashLootAmount.total = row[5].trashLootAmount;
+    
+                stats.afuaruSpawns.average = row[0].afuaruSpawns;
+                stats.afuaruSpawns.daily = row[1].afuaruSpawns;
+                stats.afuaruSpawns.weekly = row[2].afuaruSpawns;
+                stats.afuaruSpawns.monthly = row[3].afuaruSpawns;
+                stats.afuaruSpawns.yearly = row[4].afuaruSpawns;
+                stats.afuaruSpawns.total = row[5].afuaruSpawns;
+    
+                stats.timeAmount.average = row[0].timeAmount;
+                stats.timeAmount.daily = row[1].timeAmount;
+                stats.timeAmount.weekly = row[2].timeAmount;
+                stats.timeAmount.monthly = row[3].timeAmount;
+                stats.timeAmount.yearly = row[4].timeAmount;
+                stats.timeAmount.total = row[5].timeAmount;
             });
-        });
-        stats.serverCount = scVM;
 
-        let uccVM = new Array<UserClassCountViewModel>();
-        await new UserClassContext().getUserClassCountViaLocation(locationEnum.locationId).then((row: Array<UserClassEntity>) => {
-            row.forEach((_: UserClassEntity) => {
-                uccVM.push(new UserClassCountViewModel(_.className, _.userClassCount, _.className + " - " + _.userClassCount));
+            return stats;
+        }
+
+        async function getServerCount(): Promise<ServerCountViewModel> {
+            let scVM = new ServerCountViewModel();
+            await new ServerEnumContext().getServerCountViaLocation(locationEnum.locationId).then((row: Array<ServerNamesEnumEntity>) => {
+                scVM = new ServerCountViewModel(row[0].serverName, row[0].serverCount, row[0].serverName + " - " + row[0].serverCount);
             });
-        });
-        stats.userClassCount = uccVM;
 
-        let hcVM = new HoursStatsViewModel();
-        await new CombatStatsHoursContext().getAllViaLocation(calc.calcCurrentDate(), calc.calcWeekStartDate(), calc.calcMonthStartDate(), calc.calcYearStartDate(), locationEnum.locationId).then((row: Array<number>) => {
-            hcVM.hoursDay = row[0];
-            hcVM.hoursWeek = row[1];
-            hcVM.hoursMonth = row[2];
-            hcVM.hoursYear = row[3];
-            hcVM.hoursTotal = row[4];
-        });
-        stats.serverCount = scVM;
+            return scVM[0];
+        }
 
-        //return CombatStatsByLocationViewModel
+        async function getUserClassCount(): Promise<UserClassCountViewModel> {
+            let uccVM = new UserClassCountViewModel();
+            await new UserClassContext().getUserClassCountViaLocation(locationEnum.locationId).then((row: Array<UserClassEntity>) => {
+                uccVM = new UserClassCountViewModel(row[0].className, row[0].userClassCount, row[0].className + " - " + row[0].userClassCount);
+            });
 
-        return stats;
+            return uccVM;
+        }
+
+        async function getHoursCount(): Promise<HoursStatsViewModel> {
+            let hcVM = new HoursStatsViewModel();
+            await new CombatStatsHoursContext().getAllViaLocation(calc.calcCurrentDate(), calc.calcWeekStartDate(), calc.calcMonthStartDate(), calc.calcYearStartDate(), locationEnum.locationId).then((row: Array<number>) => {
+                hcVM.hoursDay = row[0];
+                hcVM.hoursWeek = row[1];
+                hcVM.hoursMonth = row[2];
+                hcVM.hoursYear = row[3];
+                hcVM.hoursTotal = row[4];
+            });
+            return hcVM;
+        }
     }
 }
