@@ -59,6 +59,20 @@ export class UserClassContext {
     });
   }
 
+  public getUserClassCountViaLocation(locationId: number) {
+    const sql = `SELECT enum_class.classId, enum_class.className, COUNT(enum_class.classId) AS userClassCount FROM combat_grinding INNER JOIN userClass_classes ON userClass_classes.classId = combat_grinding.FK_classId INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId WHERE enum_class.classId != 1 AND combat_grinding.FK_locationId = $locationId GROUP BY enum_class.classId ORDER BY userClassCount DESC, enum_class.classId LIMIT 3`;
+    const values = { $locationId: locationId };
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<UserClassEntity> = new Array<UserClassEntity>();
+      for (const row of rows) {
+          const item = new UserClassContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
   public async insert(userClass: UserClassEntity): Promise<void> {
     const sql = `INSERT OR REPLACE INTO userClass_classes (FK_combatSettingsId, FK_classNameId, FK_classRoleId, FK_gearScoreId, FK_primaryCombatTypeId, dateCreated) VALUES (1, $FK_classNameId, $FK_classRoleId, $FK_gearScoreId, $FK_primaryCombatTypeId, $dateCreated);`;
     const values = { $FK_classNameId: userClass.classNameId, $FK_classRoleId: userClass.classRoleId, $FK_gearScoreId: userClass.FK_gearScoreId, $FK_primaryCombatTypeId: userClass.combatTypeId, $dateCreated: userClass.dateCreated };
@@ -261,6 +275,20 @@ export class CombatTypesEnumContext {
   public getCombatTypeCount() {
     const sql = `SELECT enum_combatType.combatTypeId, enum_combatType.combatTypeName, COUNT(enum_combatType.combatTypeId) AS combatTypeCount FROM combat_grinding INNER JOIN enum_combatType ON enum_combatType.combatTypeId = combat_grinding.FK_combatTypeId WHERE enum_combatType.combatTypeId != 1 GROUP BY enum_combatType.combatTypeId ORDER BY combatTypeCount DESC, enum_combatType.combatTypeId LIMIT 3`;
     const values = {};
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<CombatTypesEnumEntity> = new Array<CombatTypesEnumEntity>();
+      for (const row of rows) {
+          const item = new CombatTypesEnumContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
+  public getCombatTypeCountViaLocation(locationId: number) {
+    const sql = `SELECT enum_combatType.combatTypeId, enum_combatType.combatTypeName, COUNT(enum_combatType.combatTypeId) AS combatTypeCount FROM combat_grinding INNER JOIN enum_combatType ON enum_combatType.combatTypeId = combat_grinding.FK_combatTypeId WHERE enum_combatType.combatTypeId != 1 AND GROUP BY enum_combatType.combatTypeId ORDER BY combatTypeCount DESC, enum_combatType.combatTypeId LIMIT 3`;
+    const values = { $locationId: locationId };
 
     return TheDb.selectAll(sql, values).then((rows: any) => {
       const nm: Array<CombatTypesEnumEntity> = new Array<CombatTypesEnumEntity>();

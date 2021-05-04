@@ -89,26 +89,20 @@
              
 
         <div class="col-6 pl-0">
-            <p-tabView>
-                <p-tabPanel header="Graphs">
-                    <div class="tab-container">
+            <p-tabView (onChange)="handleChange($event)">
+                <p-tabPanel *ngFor="let item of tabPanels; let i = index" [header]="item.header" [selected]="i == activeTabIndex">
+                    <ng-template *ngIf="i == 0" pTemplate="content" class="tab-container">
                         <graphs></graphs>
-                    </div> 
-                </p-tabPanel>
-                <p-tabPanel header="Loot">
-                    <div class="tab-container">
+                    </ng-template> 
+                    <ng-template *ngIf="i == 1" pTemplate="content" class="tab-container">
                         <loot></loot>
-                    </div>
-                </p-tabPanel>
-                <p-tabPanel header="Buffs">
-                    <div class="tab-container">
+                    </ng-template> 
+                    <ng-template *ngIf="i == 2" pTemplate="content" class="tab-container">
                         <buffs></buffs>
-                    </div>
-                </p-tabPanel>
-                <p-tabPanel header="Stats">
-                    <div class="tab-container">
+                    </ng-template> 
+                    <ng-template *ngIf="i == 3" pTemplate="content" class="tab-container">
                         <stats></stats>
-                    </div>
+                    </ng-template> 
                 </p-tabPanel>
             </p-tabView>
         </div>      

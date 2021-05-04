@@ -241,3 +241,10 @@ export class CombatStatsEntity {
         }
     }
 }
+
+export class HoursStatsEntity {
+    public hoursDay: number = 0;
+    public hoursMonth: number = 0;
+    public hoursYear: number = 0;
+    public hoursTotal: number = 0;
+}

@@ -5,6 +5,7 @@ import { Table } from 'primeng/table';
 import { CombatPageDataViewModel, CombatHeadersViewModel, VisibleDataViewModel } from '../../../../server/shared/viewModels/combatViewModels';
 import { UserClassViewModel } from '../../../../server/shared/viewModels/userClassViewModel';
 import { CombatNewEntryViewModel } from '../../../shared/classes/newEntryEmitted';
+import { TabPanel } from 'primeng/tabview';
 
 @Component({
   selector: 'combat-page',
@@ -21,6 +22,8 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public displayableHeaders: Array<CombatHeadersViewModel> = new Array<CombatHeadersViewModel>();
   public filteredColumns: Array<CombatHeadersViewModel> = new Array<CombatHeadersViewModel>();
   public activeClasses: Array<UserClassViewModel> = new Array<UserClassViewModel>();
+  private tabPanels: any[] = [{id: 1, header: "Graphs"},{ id: 2, header: "Loot" },{id: 3, header: "Buffs"},{ id: 4, header: "Stats" }];
+  public activeTabIndex: number = 0;
 
   constructor(private injector: Injector,
               private combatService: CombatService) {
@@ -133,5 +136,10 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public emittedInsertCancel(fcVM: Array<CombatHeadersViewModel>) {
     this.isAddingEntry = false; 
     this.filteredColumns = fcVM.filter(header => header.isActive == true);
+  }
+
+  public handleChange(e: {originalEvent: MouseEvent, index: number}) {
+    console.log(e);
+    this.activeTabIndex = e.index;
   }
 }

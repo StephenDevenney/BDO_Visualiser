@@ -25,7 +25,8 @@ export class StatsComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {
     this.combatService.getCombatStatsTabData().then((res: CombatStatsViewModel) => {
       this.combatStats = res;
-      console.log(res)
+      console.log(res);
+      this.isLoaded = true;
     }).catch(() => {
 
     });

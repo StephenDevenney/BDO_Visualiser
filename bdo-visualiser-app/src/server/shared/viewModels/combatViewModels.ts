@@ -284,3 +284,37 @@ export class UserClassCountViewModel {
         this.userClassDescription = userClassDescription;
     }
 }
+
+export class HoursStatsViewModel {
+    public hoursDay: number = 0;
+    public hoursWeek: number = 0;
+    public hoursMonth: number = 0;
+    public hoursYear: number = 0;
+    public hoursTotal: number = 0;
+
+    constructor(hoursDay?: number, hoursWeek?: number, hoursMonth?: number, hoursYear?: number, hoursTotal?: number) {
+        if(hoursDay) {
+            this.hoursDay = hoursDay;
+            this.hoursWeek = hoursWeek;
+            this.hoursMonth = hoursMonth;
+            this.hoursYear = hoursYear;
+            this.hoursTotal = hoursTotal;
+        }
+    }
+}
+
+export class CombatStatsByLocationViewModel {
+    public combatStats: CombatStatsViewModel = new CombatStatsViewModel();
+    public serverCount: ServerCountViewModel = new ServerCountViewModel();
+    public userClassCount: UserClassCountViewModel = new UserClassCountViewModel();
+    public hoursStats: HoursStatsViewModel = new HoursStatsViewModel();
+
+    constructor(combatStats?: CombatStatsViewModel, serverCount?: ServerCountViewModel, userClassCount?: UserClassCountViewModel, hoursStats?: HoursStatsViewModel) {
+        if(combatStats) {
+            this.combatStats = combatStats;
+            this.serverCount = serverCount;
+            this.userClassCount = userClassCount;
+            this.hoursStats = hoursStats;
+        }
+    }
+}

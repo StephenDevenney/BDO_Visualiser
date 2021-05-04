@@ -1,5 +1,5 @@
 import { TheDb } from '../thedb';
-import { CombatHeadersEntity, CombatSettingsEntity, CombatStatsEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
+import { CombatHeadersEntity, CombatSettingsEntity, CombatStatsEntity, GrindingDataEntity, GrindingTableHeadersEntity, HoursStatsEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
 import { Calculations } from '../../shared/calc/calculations';
 
 export class CombatSettingsContext {
@@ -365,6 +365,20 @@ export class ServerEnumContext {
     });
   }
 
+  public getServerCountViaLocation(locationId: number) {
+    const sql = `SELECT enum_server.serverId, enum_server.serverName, enum_server.isElviaRealm, COUNT(enum_server.serverId) AS serverCount FROM combat_grinding INNER JOIN enum_server ON enum_server.serverId = combat_grinding.FK_serverId WHERE enum_server.serverId != 1 AND combat_grinding.FK_locationId = $locationId GROUP BY serverId ORDER BY serverCount DESC, serverId LIMIT 3`;
+    const values = { $locationId: locationId };
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<ServerNamesEnumEntity> = new Array<ServerNamesEnumEntity>();
+      for (const row of rows) {
+          const item = new ServerEnumContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
   private fromRow(row: ServerNamesEnumEntity): ServerNamesEnumEntity {
     this.serverId = row['serverId'];
     this.serverName = row['serverName'];
@@ -408,8 +422,22 @@ export class CombatStatsContext {
   public timeAmount: number = 0;
 
   public getAll(todaysDate: string, weekStartDate: string, monthStartDate: string, yearStartDate: string): Promise<Array<CombatStatsEntity>> {
-    const sql = `SELECT ROUND(AVG(t1.trashLootAmount), 2) AS trashLootAmount, ROUND(AVG(t1.afuaruSpawns), 2) AS afuaruSpawns, ROUND(AVG(enum_time.timeAmount), 2) AS timeAmount FROM combat_grinding AS t1 INNER JOIN enum_time ON enum_time.timeId = t1.FK_timeId UNION ALL SELECT SUM(t2.trashLootAmount), SUM(t2.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t2 INNER JOIN enum_time ON enum_time.timeId = t2.FK_timeId WHERE t2.dateCreated == $todaysDate UNION ALL SELECT SUM(t3.trashLootAmount), SUM(t3.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t3 INNER JOIN enum_time ON enum_time.timeId = t3.FK_timeId WHERE t3.dateCreated BETWEEN $weekStartDate AND $todaysDate UNION ALL SELECT SUM(t4.trashLootAmount), SUM(t4.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t4 INNER JOIN enum_time ON enum_time.timeId = t4.FK_timeId WHERE t4.dateCreated BETWEEN $monthStartDate AND $todaysDate UNION ALL SELECT SUM(t5.trashLootAmount), SUM(t5.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t5 INNER JOIN enum_time ON enum_time.timeId = t5.FK_timeId WHERE t5.dateCreated BETWEEN $yearStartDate AND $todaysDate UNION ALL SELECT SUM(t6.trashLootAmount), SUM(t6.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t6 INNER JOIN enum_time ON enum_time.timeId = t6.FK_timeId WHERE t6.dateCreated`;
+    const sql = `SELECT ROUND(AVG(t1.trashLootAmount), 2) AS trashLootAmount, ROUND(AVG(t1.afuaruSpawns), 2) AS afuaruSpawns, ROUND(AVG(enum_time.timeAmount), 2) AS timeAmount FROM combat_grinding AS t1 INNER JOIN enum_time ON enum_time.timeId = t1.FK_timeId UNION ALL SELECT SUM(t2.trashLootAmount), SUM(t2.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t2 INNER JOIN enum_time ON enum_time.timeId = t2.FK_timeId WHERE t2.dateCreated == $todaysDate UNION ALL SELECT SUM(t3.trashLootAmount), SUM(t3.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t3 INNER JOIN enum_time ON enum_time.timeId = t3.FK_timeId WHERE t3.dateCreated BETWEEN $weekStartDate AND $todaysDate UNION ALL SELECT SUM(t4.trashLootAmount), SUM(t4.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t4 INNER JOIN enum_time ON enum_time.timeId = t4.FK_timeId WHERE t4.dateCreated BETWEEN $monthStartDate AND $todaysDate UNION ALL SELECT SUM(t5.trashLootAmount), SUM(t5.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t5 INNER JOIN enum_time ON enum_time.timeId = t5.FK_timeId WHERE t5.dateCreated BETWEEN $yearStartDate AND $todaysDate UNION ALL SELECT SUM(t6.trashLootAmount), SUM(t6.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t6 INNER JOIN enum_time ON enum_time.timeId = t6.FK_timeId`;
     const values = { $todaysDate: todaysDate, $weekStartDate: weekStartDate, $monthStartDate: monthStartDate, $yearStartDate: yearStartDate };
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<CombatStatsEntity> = new Array<CombatStatsEntity>();
+      for (const row of rows) {
+          const item = new CombatStatsContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
+  public getAllByLocation(todaysDate: string, weekStartDate: string, monthStartDate: string, yearStartDate: string, locationId: number): Promise<Array<CombatStatsEntity>> {
+    const sql = `SELECT ROUND(AVG(t1.trashLootAmount), 2) AS trashLootAmount, ROUND(AVG(t1.afuaruSpawns), 2) AS afuaruSpawns, ROUND(AVG(enum_time.timeAmount), 2) AS timeAmount FROM combat_grinding AS t1 INNER JOIN enum_time ON enum_time.timeId = t1.FK_timeId INNER JOIN enum_locations ON enum_locations.locationId = t1.FK_locationId WHERE enum_locations.locationId = $locationId UNION ALL SELECT SUM(t2.trashLootAmount), SUM(t2.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t2 INNER JOIN enum_time ON enum_time.timeId = t2.FK_timeId INNER JOIN enum_locations ON enum_locations.locationId = t2.FK_locationId WHERE t2.dateCreated == $todaysDate AND enum_locations.locationId = $locationId UNION ALL SELECT SUM(t3.trashLootAmount), SUM(t3.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t3 INNER JOIN enum_time ON enum_time.timeId = t3.FK_timeId INNER JOIN enum_locations ON enum_locations.locationId = t3.FK_locationId WHERE enum_locations.locationId = $locationId AND t3.dateCreated BETWEEN $weekStartDate AND $todaysDate UNION ALL SELECT SUM(t4.trashLootAmount), SUM(t4.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t4 INNER JOIN enum_time ON enum_time.timeId = t4.FK_timeId INNER JOIN enum_locations ON enum_locations.locationId = t4.FK_locationId WHERE enum_locations.locationId = $locationId AND t4.dateCreated BETWEEN $monthStartDate AND $todaysDate UNION ALL SELECT SUM(t5.trashLootAmount), SUM(t5.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t5 INNER JOIN enum_time ON enum_time.timeId = t5.FK_timeId INNER JOIN enum_locations ON enum_locations.locationId = t5.FK_locationId WHERE enum_locations.locationId = $locationId AND t5.dateCreated BETWEEN $yearStartDate AND $todaysDate UNION ALL SELECT SUM(t6.trashLootAmount), SUM(t6.afuaruSpawns), SUM(enum_time.timeAmount) FROM combat_grinding AS t6 INNER JOIN enum_time ON enum_time.timeId = t6.FK_timeId INNER JOIN enum_locations ON enum_locations.locationId = t6.FK_locationId WHERE enum_locations.locationId = $locationId`;
+    const values = { $todaysDate: todaysDate, $weekStartDate: weekStartDate, $monthStartDate: monthStartDate, $yearStartDate: yearStartDate, $locationId: locationId };
 
     return TheDb.selectAll(sql, values).then((rows: any) => {
       const nm: Array<CombatStatsEntity> = new Array<CombatStatsEntity>();
@@ -427,5 +455,43 @@ export class CombatStatsContext {
     this.timeAmount = row['timeAmount'];
   
     return this;
+  }
+}
+
+export class CombatStatsHoursContext {
+  public timeSum: number = 0;
+
+  public getAll(): Promise<Array<number>> {
+    const sql = `SELECT SUM(enum_time.timeAmount) as timeSum FROM combat_grinding INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId WHERE combat_grinding.dateCreated = $todaysDate UNION ALL SELECT SUM(enum_time.timeAmount) as timeSum FROM combat_grinding INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId WHERE combat_grinding.dateCreated BETWEEN $weekStartDate AND $todaysDate UNION ALL SELECT SUM(enum_time.timeAmount) as timeSum FROM combat_grinding INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId WHERE combat_grinding.dateCreated BETWEEN $monthStartDate AND $todaysDate UNION ALL SELECT SUM(enum_time.timeAmount) as timeSum FROM combat_grinding INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId WHERE combat_grinding.dateCreated BETWEEN $yearStartDate AND $todaysDate UNION ALL SELECT SUM(enum_time.timeAmount) as timeSum FROM combat_grinding INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId`;
+    const values = { };
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<number> = new Array<number>();
+      for (const row of rows) {
+          const item = new CombatStatsHoursContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
+  public getAllViaLocation(todaysDate: string, weekStartDate: string, monthStartDate: string, yearStartDate: string, locationId: number): Promise<Array<number>> {
+    const sql = `SELECT SUM(enum_time.timeAmount) as timeSum FROM combat_grinding INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId WHERE combat_grinding.dateCreated = $todaysDate AND combat_grinding.FK_location = $locationId UNION ALL SELECT SUM(enum_time.timeAmount) as timeSum FROM combat_grinding INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId WHERE combat_grinding.FK_location = $locationId AND combat_grinding.dateCreated BETWEEN $weekStartDate AND $todaysDate UNION ALL SELECT SUM(enum_time.timeAmount) as timeSum FROM combat_grinding INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId WHERE combat_grinding.FK_location = $locationId AND combat_grinding.dateCreated BETWEEN $monthStartDate AND $todaysDate UNION ALL SELECT SUM(enum_time.timeAmount) as timeSum FROM combat_grinding INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId WHERE combat_grinding.FK_location = $locationId AND combat_grinding.dateCreated BETWEEN $yearStartDate AND $todaysDate UNION ALL SELECT SUM(enum_time.timeAmount) as timeSum FROM combat_grinding INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId WHERE combat_grinding.FK_location = $locationId`;
+    const values = { $todaysDate: todaysDate, $weekStartDate: weekStartDate, $monthStartDate: monthStartDate, $yearStartDate: yearStartDate, $locationId: locationId };
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<number> = new Array<number>();
+      for (const row of rows) {
+          const item = new CombatStatsHoursContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
+  private fromRow(row: number): number {
+    this.timeSum = row['timeSum'];
+
+    return this.timeSum;
   }
 }

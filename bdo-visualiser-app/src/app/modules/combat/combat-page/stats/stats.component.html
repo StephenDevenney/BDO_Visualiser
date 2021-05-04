@@ -1,4 +1,4 @@
-<div class="page-tab">
+<div *ngIf="isLoaded" class="page-tab">
     <div class="page-tab-content">
         <div class="row">
             <p-carousel class="w-100" [value]="carouselTabs" [numVisible]="1" [numScroll]="1">
@@ -42,82 +42,116 @@
                             </div>
                         </div>
                     </div>
-                    <div #afuaruTab *ngIf="tab.id == 2">
+                    <div #locationTab *ngIf="tab.id == 2">
                         <label class="mb-0">{{tab.label}}</label>
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between" style="height: 30vh;">
+                                <div class="d-flex flex-column"></div>
+                                <div class="d-flex flex-column stat-container-a">
+                                    <label>Avg.</label>
+                                    <div class="d-flex align-items-center justify-content-center mt-4">
+                                        <label>{{combatStats.trashLootAmount.average | noRecordPipe}}</label>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column stat-container-a">
+                                    <label>Day.</label>
+                                    <div class="d-flex align-items-center justify-content-center mt-4">
+                                        <label>{{combatStats.trashLootAmount.daily | noRecordPipe}}</label>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column stat-container-a">
+                                    <label>Week.</label>
+                                    <div class="d-flex align-items-center justify-content-center mt-4">
+                                        <label>{{combatStats.trashLootAmount.weekly | noRecordPipe}}</label>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column stat-container-a">
+                                    <label>Month.</label>
+                                    <div class="d-flex align-items-center justify-content-center mt-4">
+                                        <label>{{combatStats.trashLootAmount.monthly | noRecordPipe}}</label>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column stat-container-a">
+                                    <label>Year.</label>
+                                    <div class="d-flex align-items-center justify-content-center mt-4">
+                                        <label>{{combatStats.trashLootAmount.yearly | noRecordPipe}}</label>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column"></div>
+                            </div>
+                        </div>
                     </div>
                     <div #agrisTab *ngIf="tab.id == 3">
                         <label class="mb-0">{{tab.label}}</label>
                     </div>
-                    <div #locationTab *ngIf="tab.id == 4">
+                    <div #afuaruTab *ngIf="tab.id == 4">
                         <label class="mb-0">{{tab.label}}</label>
                     </div>
                 </ng-template>
             </p-carousel>
         </div>
-        <div class="row">
-            <div class="row combat-stats-container mr-0 ml-0">
-                <div class="col-md-3">
-                    <div>
-                        <label>Locactions</label>
-                    </div>
-                    <div class="h-100 mb-2">
-                        <p-listbox disabled="true" [options]="combatStats.locationCount" optionLabel="locationDescription"></p-listbox>
+        <div class="row combat-stats-container">
+            <div class="col-md-3">
+                <div>
+                    <label>Locactions</label>
+                </div>
+                <div class="mb-2">
+                    <p-listbox disabled="true" [options]="combatStats.locationCount" optionLabel="locationDescription"></p-listbox>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div>
+                    <label>Territories</label>
+                </div>
+                <div class="mb-2">
+                    <p-listbox disabled="true" [options]="combatStats.territoryCount" optionLabel="territoryDescription"></p-listbox>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div>
+                    <label>Combat Types</label>
+                </div>
+                <div class="mb-2">
+                    <p-listbox disabled="true" [options]="combatStats.combatTypeCount" optionLabel="combatTypeDescription"></p-listbox>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div>
+                    <label>Classes</label>
+                </div>
+                <div class="mb-2">
+                    <p-listbox disabled="true" [options]="combatStats.userClassCount" optionLabel="userClassDescription"></p-listbox>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div>
+                    <label>Servers</label>
+                </div>
+                <div class="mb-2">
+                    <p-listbox disabled="true" [options]="combatStats.serverCount" optionLabel="serverDescription"></p-listbox>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div>
+                    <label>Hours Today</label>
+                </div>
+                <div class="mb-2">
+                    <div class="stat-container-b">
+                        <label class="mb-0">{{combatStats.timeAmount.daily | timeHours}}</label>  
+                    </div> 
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div>
+                    <label>Hours This Week</label>
+                </div>
+                <div class="mb-2">
+                    <div class="stat-container-b">
+                        <label class="mb-0">{{combatStats.timeAmount.weekly | timeHours}}</label>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div>
-                        <label>Territories</label>
-                    </div>
-                    <div class="h-100 mb-2">
-                        <p-listbox disabled="true" [options]="combatStats.territoryCount" optionLabel="territoryDescription"></p-listbox>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div>
-                        <label>Combat Types</label>
-                    </div>
-                    <div class="h-100 mb-2">
-                        <p-listbox disabled="true" [options]="combatStats.combatTypeCount" optionLabel="combatTypeDescription"></p-listbox>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div>
-                        <label>Classes</label>
-                    </div>
-                    <div class="h-100 mb-2">
-                        <p-listbox disabled="true" [options]="combatStats.userClassCount" optionLabel="userClassDescription"></p-listbox>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div>
-                        <label>Servers</label>
-                    </div>
-                    <div class="h-100 mb-2">
-                        <p-listbox disabled="true" [options]="combatStats.serverCount" optionLabel="serverDescription"></p-listbox>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div>
-                        <label>Hours Today</label>
-                    </div>
-                    <div class="h-100 mb-2">
-                        <div class="stat-container-b">
-                            <label class="mb-0">{{combatStats.timeAmount.daily | timeHours}}</label>  
-                        </div> 
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div>
-                        <label>Hours This Week</label>
-                    </div>
-                    <div class="h-100 mb-2">
-                        <div class="stat-container-b">
-                            <label class="mb-0">{{combatStats.timeAmount.weekly | timeHours}}</label>
-                        </div>
-                    </div>
-                </div>
-                <div calss="col"></div>
-            </div>  
+            </div>
+            <div calss="col"></div> 
         </div>
     </div>
 </div>
