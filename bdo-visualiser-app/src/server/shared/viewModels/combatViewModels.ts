@@ -197,12 +197,19 @@ export class CombatStatsViewModel {
     public locationCount: Array<LocationsCountViewModel> = new Array<LocationsCountViewModel>();
     public territoryCount: Array<TerritoryCountViewModel> = new Array<TerritoryCountViewModel>();
     public userClassCount: Array<UserClassCountViewModel> = new Array<UserClassCountViewModel>();
+    public locationsGrouped: Array<LocationNamesGroupedEnumViewModel> = new Array<LocationNamesGroupedEnumViewModel>();
 
-    constructor (trashLootAmount?: StatViewModel, afuaruSpawns?: StatViewModel, timeAmount?: StatViewModel) {
+    constructor (trashLootAmount?: StatViewModel, afuaruSpawns?: StatViewModel, timeAmount?: StatViewModel, serverCount?: Array<ServerCountViewModel>, combatTypeCount?: Array<CombatTypeCountViewModel>, locationCount?: Array<LocationsCountViewModel>, territoryCount?: Array<TerritoryCountViewModel>, userClassCount?: Array<UserClassCountViewModel>, locationsGrouped?: Array<LocationNamesGroupedEnumViewModel>) {
         if(trashLootAmount) {
-            this.timeAmount = trashLootAmount;
+            this.trashLootAmount = trashLootAmount;
             this.afuaruSpawns = afuaruSpawns;
             this.timeAmount = timeAmount;
+            this.serverCount = serverCount;
+            this.combatTypeCount = combatTypeCount;
+            this.locationCount = locationCount;
+            this.territoryCount = territoryCount;
+            this.userClassCount = userClassCount;
+            this.locationsGrouped = locationsGrouped;
         }
     }
 }

@@ -85,28 +85,32 @@ export class CombatPageNewEntryHandler {
             });
         });
 
-        let locationViewModel = new Array<LocationNamesEnumViewModel>();
-        await new LocationsEnumContext().getMostRecent().then((_: Array<LocationNamesEnumEntity>) => {
-            if(_.length > 0) {
-                _.forEach(row => {
-                    locationViewModel.push(new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, parseInt(row.recommendedAP), row.afuaruSpawnable));
-                });
-            } 
-        });
+        // let locationViewModel = new Array<LocationNamesEnumViewModel>();
+        // await new LocationsEnumContext().getMostRecent().then((_: Array<LocationNamesEnumEntity>) => {
+        //     if(_.length > 0) {
+        //         _.forEach(row => {
+        //             locationViewModel.push(new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, parseInt(row.recommendedAP), row.afuaruSpawnable));
+        //         });
+        //     } 
+        // });
 
+        // let locationNamesEnum = new Array<LocationNamesGroupedEnumViewModel>();
+        // if(locationViewModel.length > 0)
+        //     locationNamesEnum.push(new LocationNamesGroupedEnumViewModel("Recent", locationViewModel));
+
+        // let locationArray = await new LocationsEnumContext().getAll();
+        // await new TerritoryEnumContext().getAll().then((_: Array<TerritoryEnumEntity>) => {
+        //     _.forEach(row => {
+        //         let locations = new Array<LocationNamesEnumViewModel>();
+        //         locationArray.filter((_: LocationNamesEnumEntity) => _.territoryId == row.territoryId).forEach(_ => {
+        //             locations.push(new LocationNamesEnumViewModel(_.locationId, _.territoryId, _.locationName, _.territoryName, _.recommendedLevel, parseInt(_.recommendedAP), _.afuaruSpawnable));
+        //         });
+        //         locationNamesEnum.push(new LocationNamesGroupedEnumViewModel(row.territoryName, locations));
+        //     });
+        // });
         let locationNamesEnum = new Array<LocationNamesGroupedEnumViewModel>();
-        if(locationViewModel.length > 0)
-            locationNamesEnum.push(new LocationNamesGroupedEnumViewModel("Recent", locationViewModel));
-
-        let locationArray = await new LocationsEnumContext().getAll();
-        await new TerritoryEnumContext().getAll().then((_: Array<TerritoryEnumEntity>) => {
-            _.forEach(row => {
-                let locations = new Array<LocationNamesEnumViewModel>();
-                locationArray.filter((_: LocationNamesEnumEntity) => _.territoryId == row.territoryId).forEach(_ => {
-                    locations.push(new LocationNamesEnumViewModel(_.locationId, _.territoryId, _.locationName, _.territoryName, _.recommendedLevel, parseInt(_.recommendedAP), _.afuaruSpawnable));
-                });
-                locationNamesEnum.push(new LocationNamesGroupedEnumViewModel(row.territoryName, locations));
-            });
+        await new SharedCombatFunctions().getGroupedLocations().then((res: Array<LocationNamesGroupedEnumViewModel>) => {
+            locationNamesEnum = res;
         });
 
         let serverNamesEnum = new Array<ServerNamesEnumViewModel>();
@@ -254,6 +258,10 @@ export class CombatStatsTabHandler {
                 });
             });
             statsReturn.locationCount = lcVM;
+
+            await new SharedCombatFunctions().getGroupedLocations().then((res: Array<LocationNamesGroupedEnumViewModel>) => {
+                statsReturn.locationsGrouped = res;
+            });
     
             let tcVM = new Array<TerritoryCountViewModel>();
             await new LocationsEnumContext().getTerritoryCount().then((row: Array<LocationNamesEnumEntity>) => {
@@ -355,5 +363,35 @@ export class CombatStatsTabHandler {
             });
             return hcVM;
         }
+    }
+}
+
+export class SharedCombatFunctions {
+    public async getGroupedLocations(): Promise<Array<LocationNamesGroupedEnumViewModel>> {
+        let locationViewModel = new Array<LocationNamesEnumViewModel>();
+        await new LocationsEnumContext().getMostRecent().then((_: Array<LocationNamesEnumEntity>) => {
+            if(_.length > 0) {
+                _.forEach(row => {
+                    locationViewModel.push(new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, parseInt(row.recommendedAP), row.afuaruSpawnable));
+                });
+            } 
+        });
+
+        let locationNamesEnum = new Array<LocationNamesGroupedEnumViewModel>();
+        if(locationViewModel.length > 0)
+            locationNamesEnum.push(new LocationNamesGroupedEnumViewModel("Recent", locationViewModel));
+
+        let locationArray = await new LocationsEnumContext().getAll();
+        await new TerritoryEnumContext().getAll().then((_: Array<TerritoryEnumEntity>) => {
+            _.forEach(row => {
+                let locations = new Array<LocationNamesEnumViewModel>();
+                locationArray.filter((_: LocationNamesEnumEntity) => _.territoryId == row.territoryId).forEach(_ => {
+                    locations.push(new LocationNamesEnumViewModel(_.locationId, _.territoryId, _.locationName, _.territoryName, _.recommendedLevel, parseInt(_.recommendedAP), _.afuaruSpawnable));
+                });
+                locationNamesEnum.push(new LocationNamesGroupedEnumViewModel(row.territoryName, locations));
+            });
+        });
+
+        return locationNamesEnum;
     }
 }

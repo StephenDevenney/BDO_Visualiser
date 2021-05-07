@@ -43,38 +43,44 @@
                         </div>
                     </div>
                     <div #locationTab *ngIf="tab.id == 2">
-                        <label class="mb-0">{{tab.label}}</label>
+                        <div class="d-flex align-items-center">
+                            <label class="mb-0 w-100">{{tab.label}}</label> 
+                            <div class="d-flex align-items-centet justify-content-end">
+                                Test
+                            </div>
+                        </div>
+                          
                         <div>
                             <div class="d-flex align-items-center justify-content-between" style="height: 30vh;">
                                 <div class="d-flex flex-column"></div>
                                 <div class="d-flex flex-column stat-container-a">
                                     <label>Avg.</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
-                                        <label>{{combatStats.trashLootAmount.average | noRecordPipe}}</label>
+                                        <label>-</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column stat-container-a">
                                     <label>Day.</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
-                                        <label>{{combatStats.trashLootAmount.daily | noRecordPipe}}</label>
+                                        <label>-</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column stat-container-a">
                                     <label>Week.</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
-                                        <label>{{combatStats.trashLootAmount.weekly | noRecordPipe}}</label>
+                                        <label>-</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column stat-container-a">
                                     <label>Month.</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
-                                        <label>{{combatStats.trashLootAmount.monthly | noRecordPipe}}</label>
+                                        <label>-</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column stat-container-a">
                                     <label>Year.</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
-                                        <label>{{combatStats.trashLootAmount.yearly | noRecordPipe}}</label>
+                                        <label>-</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column"></div>

@@ -10,7 +10,7 @@
                     <label>Location</label>
                     <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[0]);" [(ngModel)]="combatHeaders[0].isActive" ngDefaultControl></p-inputSwitch>
                 </div>
-                <p-dropdown class="w-100" [disabled]="!combatHeaders[0].isActive" class="w-100" appendTo="body" [options]="combatEnums.locationNamesEnum" [(ngModel)]="newEntry.grindLocation" optionLabel="locationName" [group]="true">
+                <p-dropdown class="w-100" [filter]="true" filterBy="locationName" [disabled]="!combatHeaders[0].isActive" class="w-100" appendTo="body" [options]="combatEnums.locationNamesEnum" [(ngModel)]="newEntry.grindLocation" optionLabel="locationName" [group]="true">
                     <ng-template let-group pTemplate="group">
                         <div class="p-d-flex p-ai-center">
                             <span>{{group.label}}</span>
