@@ -186,6 +186,7 @@ export class CombatStatsTabHandler {
             stats.locationCount = res.locationCount;
             stats.territoryCount = res.territoryCount;
             stats.userClassCount = res.userClassCount;
+            stats.locationsGrouped = res.locationsGrouped;
         });
 
         return stats;
@@ -219,19 +220,6 @@ export class CombatStatsTabHandler {
             return statsReturn;
         }
 
-        async function getTrashLootStatsByLocation(locationEnum: LocationNamesEnumViewModel): Promise<void> {
-            
-            return;
-        }
-
-        async function getAgrisStats(): Promise<void> {
-            return;
-        }
-
-        async function getAfuaruStats(): Promise<void> {
-            return;
-        }
-
         async function getFavourites(): Promise<CombatStatsViewModel> {
             let statsReturn: CombatStatsViewModel = new CombatStatsViewModel();
             let scVM = new Array<ServerCountViewModel>();
@@ -241,7 +229,6 @@ export class CombatStatsTabHandler {
                 });
             });
             statsReturn.serverCount = scVM;
-            
     
             let ctcVM = new Array<CombatTypeCountViewModel>();
             await new CombatTypesEnumContext().getCombatTypeCount().then((row: Array<CombatTypesEnumEntity>) => {
@@ -287,9 +274,9 @@ export class CombatStatsTabHandler {
         let combatStatsByLocationViewModel: CombatStatsByLocationViewModel = new CombatStatsByLocationViewModel();
         let calc: Calculations = new Calculations();
         await getLocations().then((res: CombatStatsViewModel) => {
-            combatStatsByLocationViewModel.combatStats.trashLootAmount = res.trashLootAmount;
-            combatStatsByLocationViewModel.combatStats.afuaruSpawns = res.afuaruSpawns;
-            combatStatsByLocationViewModel.combatStats.timeAmount = res.timeAmount;
+            combatStatsByLocationViewModel.trashLootAmount = res.trashLootAmount;
+            combatStatsByLocationViewModel.afuaruSpawns = res.afuaruSpawns;
+            combatStatsByLocationViewModel.timeAmount = res.timeAmount;
         });
 
         await getServerCount().then((res: ServerCountViewModel) => {
@@ -303,6 +290,9 @@ export class CombatStatsTabHandler {
         await getHoursCount().then((res: HoursStatsViewModel) => {
             combatStatsByLocationViewModel.hoursStats = res;
         });
+
+        if(combatStatsByLocationViewModel.timeAmount.total > 0)
+            combatStatsByLocationViewModel.hasRecordAvailable = true;
 
         return combatStatsByLocationViewModel;
 
@@ -337,16 +327,18 @@ export class CombatStatsTabHandler {
         async function getServerCount(): Promise<ServerCountViewModel> {
             let scVM = new ServerCountViewModel();
             await new ServerEnumContext().getServerCountViaLocation(locationEnum.locationId).then((row: Array<ServerNamesEnumEntity>) => {
-                scVM = new ServerCountViewModel(row[0].serverName, row[0].serverCount, row[0].serverName + " - " + row[0].serverCount);
+                if(row.length > 0)
+                    scVM = new ServerCountViewModel(row[0].serverName, row[0].serverCount, row[0].serverName + " - " + row[0].serverCount);
             });
 
-            return scVM[0];
+            return scVM;
         }
 
         async function getUserClassCount(): Promise<UserClassCountViewModel> {
             let uccVM = new UserClassCountViewModel();
             await new UserClassContext().getUserClassCountViaLocation(locationEnum.locationId).then((row: Array<UserClassEntity>) => {
-                uccVM = new UserClassCountViewModel(row[0].className, row[0].userClassCount, row[0].className + " - " + row[0].userClassCount);
+                if(row.length > 0)
+                    uccVM = new UserClassCountViewModel(row[0].className, row[0].userClassCount, row[0].className + " - " + row[0].userClassCount);
             });
 
             return uccVM;

@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { CombatStatsViewModel } from 'src/server/shared/viewModels/combatViewModels';
+import { CombatStatsByLocationViewModel, CombatStatsViewModel, LocationNamesEnumViewModel } from 'src/server/shared/viewModels/combatViewModels';
 import { BaseComponent } from '../../../../shared/components/base.component';
 import { CombatService } from '../../combat.service';
 
@@ -10,10 +10,12 @@ import { CombatService } from '../../combat.service';
 export class StatsComponent extends BaseComponent implements OnInit {
   public isLoaded: boolean = false;
   public locations: Array<Location> = new Array<Location>();
-  public selectedLocation: number = 0;
   public locationSelected: boolean = false;
-  private carouselTabs: any[] = [{id: 1, label: "Trash Loot"},{ id: 2, label: "Trash Loot By Location" },{id: 3, label: "Agris"},{ id: 4, label: "Afuaru" }];
+  private carouselTabs: any[] = [{id: 1, label: "Trash Loot - Overview"},{ id: 2, label: "Trash Loot - Location" },{id: 3, label: "Agris"},{ id: 4, label: "Afuaru" }];
   public combatStats: CombatStatsViewModel = new CombatStatsViewModel();
+  public selectedLocation: LocationNamesEnumViewModel = new LocationNamesEnumViewModel();
+  public locationIsSelected: boolean = false;
+  public locationStats: CombatStatsByLocationViewModel = new CombatStatsByLocationViewModel();
 
   constructor(private injector: Injector,
               private combatService: CombatService) {
@@ -43,6 +45,20 @@ export class StatsComponent extends BaseComponent implements OnInit {
     else {
 
     }
+  }
+
+  public getSelectedLocationData(e: { orginalEvent: MouseEvent, value: LocationNamesEnumViewModel }) {
+    this.loader.startBackground();
+    this.combatService.getStatsDataByLocation(e.value).then((res: CombatStatsByLocationViewModel) => {
+      console.log(res);
+      this.locationStats = res;
+      this.loader.stopBackground();
+    }).catch(() => {
+      this.messageService.add({severity:'error', summary:'Error.', detail:'Error Loading Location.', life: 2600 });
+    }).then(() => {
+      if(!this.locationIsSelected)
+        this.locationIsSelected = true;
+    });
   }
   
 }

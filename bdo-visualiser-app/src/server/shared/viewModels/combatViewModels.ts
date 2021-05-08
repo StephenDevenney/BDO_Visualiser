@@ -311,17 +311,23 @@ export class HoursStatsViewModel {
 }
 
 export class CombatStatsByLocationViewModel {
-    public combatStats: CombatStatsViewModel = new CombatStatsViewModel();
+    public trashLootAmount: StatViewModel = new StatViewModel();
+    public afuaruSpawns: StatViewModel = new StatViewModel();
+    public timeAmount: StatViewModel = new StatViewModel();
     public serverCount: ServerCountViewModel = new ServerCountViewModel();
     public userClassCount: UserClassCountViewModel = new UserClassCountViewModel();
     public hoursStats: HoursStatsViewModel = new HoursStatsViewModel();
+    public hasRecordAvailable: boolean = false;
 
-    constructor(combatStats?: CombatStatsViewModel, serverCount?: ServerCountViewModel, userClassCount?: UserClassCountViewModel, hoursStats?: HoursStatsViewModel) {
-        if(combatStats) {
-            this.combatStats = combatStats;
+    constructor(trashLootAmount?: StatViewModel, afuaruSpawns?: StatViewModel, timeAmount?: StatViewModel, serverCount?: ServerCountViewModel, userClassCount?: UserClassCountViewModel, hoursStats?: HoursStatsViewModel, hasRecordAvailable?: boolean) {
+        if(trashLootAmount) {
+            this.trashLootAmount = trashLootAmount;
+            this.afuaruSpawns = afuaruSpawns;
+            this.timeAmount = timeAmount;
             this.serverCount = serverCount;
             this.userClassCount = userClassCount;
             this.hoursStats = hoursStats;
+            this.hasRecordAvailable = hasRecordAvailable;
         }
     }
 }
