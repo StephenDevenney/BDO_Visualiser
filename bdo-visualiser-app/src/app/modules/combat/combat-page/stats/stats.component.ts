@@ -60,6 +60,21 @@ export class StatsComponent extends BaseComponent implements OnInit {
         this.locationIsSelected = true;
     });
   }
+
+  public reloadTabData() {
+    this.loader.startBackground();
+    if(this.locationIsSelected = true) {
+      this.combatService.getStatsDataByLocation(this.selectedLocation).then((res: CombatStatsByLocationViewModel) => {
+        this.locationStats = res;
+        this.loader.stopBackground();
+      }).catch(() => {
+        this.messageService.add({severity:'error', summary:'Error.', detail:'Error Loading Location.', life: 2600 });
+      }).then(() => {
+        if(!this.locationIsSelected)
+          this.locationIsSelected = true;
+      });
+    } 
+  }
   
 }
 

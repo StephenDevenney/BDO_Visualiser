@@ -6,6 +6,7 @@ import { CombatPageDataViewModel, CombatHeadersViewModel, VisibleDataViewModel }
 import { UserClassViewModel } from '../../../../server/shared/viewModels/userClassViewModel';
 import { CombatNewEntryViewModel } from '../../../shared/classes/newEntryEmitted';
 import { TabPanel } from 'primeng/tabview';
+import { StatsComponent } from './stats/stats.component';
 
 @Component({
   selector: 'combat-page',
@@ -13,6 +14,7 @@ import { TabPanel } from 'primeng/tabview';
 })
 export class CombatPageComponent extends BaseComponent implements OnInit {
   @ViewChild('table') public dt!: Table;
+  @ViewChild('StatsComponent') public statsComponent: StatsComponent
   public rowGroupMetadata: any;
   public isLoaded: boolean = false;
   public maxSelectedLabelsNum: number = 0;
@@ -131,6 +133,7 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     this.filteredColumns = cneVM.chVM.filter(header => header.isActive == true);
     this.customSort();
     this.updateRowGroupMetaData(this.grindingRes);
+    this.statsComponent.reloadTabData();
   }
 
   public emittedInsertCancel(fcVM: Array<CombatHeadersViewModel>) {
@@ -139,7 +142,6 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   }
 
   public handleChange(e: {originalEvent: MouseEvent, index: number}) {
-    console.log(e);
     this.activeTabIndex = e.index;
   }
 }

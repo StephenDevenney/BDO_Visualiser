@@ -9,31 +9,31 @@
                             <div class="d-flex align-items-center justify-content-between" style="height: 30vh;">
                                 <div class="d-flex flex-column"></div>
                                 <div class="d-flex flex-column stat-container-a">
-                                    <label>Avg.</label>
+                                    <label class="font-weight-bold">Avg.</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
                                         <label>{{combatStats.trashLootAmount.average | noRecordPipe}}</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column stat-container-a">
-                                    <label>Day.</label>
+                                    <label class="font-weight-bold">Day</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
                                         <label>{{combatStats.trashLootAmount.daily | noRecordPipe}}</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column stat-container-a">
-                                    <label>Week.</label>
+                                    <label class="font-weight-bold">Week</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
                                         <label>{{combatStats.trashLootAmount.weekly | noRecordPipe}}</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column stat-container-a">
-                                    <label>Month.</label>
+                                    <label class="font-weight-bold">Month</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
                                         <label>{{combatStats.trashLootAmount.monthly | noRecordPipe}}</label>
                                     </div>
                                 </div>
                                 <div class="d-flex flex-column stat-container-a">
-                                    <label>Year.</label>
+                                    <label class="font-weight-bold">Year</label>
                                     <div class="d-flex align-items-center justify-content-center mt-4">
                                         <label>{{combatStats.trashLootAmount.yearly | noRecordPipe}}</label>
                                     </div>
@@ -66,71 +66,131 @@
                             </div>
                             <ng-template #locationSelected>
                                 <div style="height: 30vh;">
-                                    <h3>Trash Loot</h3>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="d-flex flex-column"></div>
-                                        <div class="d-flex flex-column stat-container-c p-2">
-                                            <label>Avg.</label>
+                                    <label class="font-weight-bold mb-0">Trash Loot</label>
+                                    <div class="row m-0">
+                                        <div class="col p-0 m-2 stat-container-c">
+                                            <label class="font-weight-bold pl-2">Avg.</label>
                                             <div class="d-flex align-items-center justify-content-center mt-1">
                                                 <label>{{locationStats.trashLootAmount.average | noRecordPipe}}</label>
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column stat-container-c p-2">
-                                            <label>Day.</label>
+                                        <div class="col p-0 m-2 stat-container-c">
+                                            <label class="font-weight-bold pl-2">Day</label>
                                             <div class="d-flex align-items-center justify-content-center mt-1">
                                                 <label>{{locationStats.trashLootAmount.daily | noRecordPipe}}</label>
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column stat-container-c p-2">
-                                            <label>Week.</label>
+                                        <div class="col p-0 m-2 stat-container-c">
+                                            <label class="font-weight-bold pl-2">Week</label>
                                             <div class="d-flex align-items-center justify-content-center mt-1">
                                                 <label>{{locationStats.trashLootAmount.weekly | noRecordPipe}}</label>
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column stat-container-c p-2">
-                                            <label>Month.</label>
+                                        <div class="col p-0 m-2 stat-container-c">
+                                            <label class="font-weight-bold pl-2">Month</label>
                                             <div class="d-flex align-items-center justify-content-center mt-1">
                                                 <label>{{locationStats.trashLootAmount.monthly | noRecordPipe}}</label>
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column stat-container-c p-2">
-                                            <label>Year.</label>
+                                        <div class="col p-0 m-2 stat-container-c">
+                                            <label class="font-weight-bold pl-2">Year</label>
                                             <div class="d-flex align-items-center justify-content-center mt-1">
                                                 <label>{{locationStats.trashLootAmount.yearly | noRecordPipe}}</label>
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column"></div>
                                     </div>
-                                    <h3>Other</h3>
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div class="d-flex flex-column"></div>
-                                        <div class="d-flex flex-column stat-container-c p-2">
-                                            <label>Top Server</label>
+                                    <label class="font-weight-bold mb-0">Other</label>
+                                    <div class="row m-0">
+                                        <div class="col p-0 m-2 stat-container-c">
+                                            <label class="font-weight-bold pl-2">Top Server</label>
                                             <div class="d-flex align-items-center justify-content-center mt-1">
                                                 <label>{{locationStats.serverCount.serverDescription | noRecordPipe}}</label>
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column stat-container-c p-2">
-                                            <label>Top Class</label>
+                                        <div class="col p-0 m-2 stat-container-c">
+                                            <label class="font-weight-bold pl-2">Top Class</label>
                                             <div class="d-flex align-items-center justify-content-center mt-1">
                                                 <label>{{locationStats.userClassCount.userClassDescription | noRecordPipe}}</label>
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column stat-container-c p-2">
-                                            <label>Hours</label>
+                                        <div class="col p-0 m-2 stat-container-c">
+                                            <label class="font-weight-bold pl-2">Hours</label>
                                             <div class="d-flex align-items-center justify-content-center mt-1">
                                                 <label>{{locationStats.hoursStats.hoursTotal | noRecordPipe}}</label>
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column stat-container-c p-2">
-                                            <label>Afuaru</label>
+                                        <div class="col p-0 m-2 stat-container-c">
+                                            <label class="font-weight-bold pl-2">Afuaru</label>
                                             <div class="d-flex align-items-center justify-content-center mt-1">
                                                 <label>{{locationStats.afuaruSpawns.total | noRecordPipe}}</label>
                                             </div>
                                         </div>
+                                    </div>
+                                    <!-- <label class="font-weight-bold">Trash Loot</label>
+                                    <div class="d-flex align-items-center justify-content-between">
                                         <div class="d-flex flex-column"></div>
+                                        <div class="d-flex flex-column stat-container-c p-2">
+                                            <label class="font-weight-bold">Avg</label>
+                                            <div class="d-flex align-items-center justify-content-center mt-1">
+                                                <label class="mb-0">{{locationStats.trashLootAmount.average | noRecordPipe}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column stat-container-c p-2">
+                                            <label class="font-weight-bold">Day</label>
+                                            <div class="d-flex align-items-center justify-content-center mt-1">
+                                                <label class="mb-0">{{locationStats.trashLootAmount.daily | noRecordPipe}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column stat-container-c p-2">
+                                            <label class="font-weight-bold">Week</label>
+                                            <div class="d-flex align-items-center justify-content-center mt-1">
+                                                <label class="mb-0">{{locationStats.trashLootAmount.weekly | noRecordPipe}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column stat-container-c p-2">
+                                            <label class="font-weight-bold">Month</label>
+                                            <div class="d-flex align-items-center justify-content-center mt-1">
+                                                <label class="mb-0">{{locationStats.trashLootAmount.monthly | noRecordPipe}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column stat-container-c p-2">
+                                            <label class="font-weight-bold">Year</label>
+                                            <div class="d-flex align-items-center justify-content-center mt-1">
+                                                <label class="mb-0">{{locationStats.trashLootAmount.yearly | noRecordPipe}}</label>
+                                            </div>
+                                        </div>
                                         <div class="d-flex flex-column"></div>
                                     </div>
+                                    <label class="font-weight-bold">Other</label>
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex flex-column"></div>
+                                        <div class="d-flex flex-column stat-container-c p-2">
+                                            <label class="font-weight-bold">Top Server</label>
+                                            <div class="d-flex align-items-center justify-content-center mt-1">
+                                                <label class="mb-0">{{locationStats.serverCount.serverDescription | noRecordPipe}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column stat-container-c p-2">
+                                            <label class="font-weight-bold">Top Class</label>
+                                            <div class="d-flex align-items-center justify-content-center mt-1">
+                                                <label class="mb-0">{{locationStats.userClassCount.userClassDescription | noRecordPipe}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column stat-container-c p-2">
+                                            <label class="font-weight-bold">Hours</label>
+                                            <div class="d-flex align-items-center justify-content-center mt-1">
+                                                <label class="mb-0">{{locationStats.hoursStats.hoursTotal | noRecordPipe}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column stat-container-c p-2">
+                                            <label class="font-weight-bold">Afuaru</label>
+                                            <div class="d-flex align-items-center justify-content-center mt-1">
+                                                <label class="mb-0">{{locationStats.afuaruSpawns.total | noRecordPipe}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-column"></div>
+                                        <div class="d-flex flex-column"></div> -->
+                                    <!-- </div> -->
                                     
                                 </div>
                             </ng-template>
