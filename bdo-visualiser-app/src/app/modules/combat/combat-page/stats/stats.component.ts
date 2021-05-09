@@ -11,7 +11,7 @@ export class StatsComponent extends BaseComponent implements OnInit {
   public isLoaded: boolean = false;
   public locations: Array<Location> = new Array<Location>();
   public locationSelected: boolean = false;
-  private carouselTabs: any[] = [{id: 1, label: "Trash Loot - Overview"},{ id: 2, label: "Trash Loot - Location" },{id: 3, label: "Agris"},{ id: 4, label: "Afuaru" }];
+  private carouselTabs: any[] = [{id: 1, label: "Trash Loot"},{ id: 2, label: "Location Filter" },{id: 3, label: "Agris"},{ id: 4, label: "Afuaru" }];
   public combatStats: CombatStatsViewModel = new CombatStatsViewModel();
   public selectedLocation: LocationNamesEnumViewModel = new LocationNamesEnumViewModel();
   public locationIsSelected: boolean = false;

@@ -437,7 +437,7 @@
     }
 
     // ## Combat Stat Containers
-    .stat-container-a, .stat-container-b {
+    .stat-container-a, .stat-container-b, .stat-container-c {
         background-color: darken($dark-primary, 6%);
         color: $dark-primary-text;
         border: 1px solid lighten($dark-tertiary, 10%);
