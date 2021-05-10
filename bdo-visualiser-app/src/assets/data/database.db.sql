@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS combat_grinding (
 	FK_serverId	INTEGER DEFAULT 0,
 	FK_combatTypeId INTEGER DEFAULT 0,
 	FK_gearScoreId INTEGER DEFAULT 0,
+	FK_agrisId INTEGER DEFAULT 1,
 	dateCreated TEXT NOT NULL,
 	trashLootAmount INTEGER DEFAULT 0,
 	afuaruSpawns INTEGER DEFAULT 0
@@ -278,6 +279,14 @@ CREATE TABLE IF NOT EXISTS enum_combatTableHeadings (
 	header TEXT
 );
 COMMIT;
+BEGIN TRANSACTION;
+DROP TABLE IF EXISTS `enum_agris`;
+CREATE TABLE IF NOT EXISTS enum_agris (
+	agrisId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	agrisAmount INTEGER,
+	agrisDayDescription TEXT DEFAULT ''
+);
+COMMIT;
 
 BEGIN TRANSACTION;
 DROP TABLE IF EXISTS `image_classPortraits`;
@@ -350,14 +359,15 @@ INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (7, 1); -- UserCla
 INSERT INTO security_navRole (FK_navMenuId, FK_roleId) VALUES (7, 2); -- UserClasses - admin
 
 -- Combat - ColumnDefaults
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 1, 1, 0);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (2, 1, 2, 1);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (3, 1, 3, 1);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (4, 1, 4, 1);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (5, 1, 5, 1);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (6, 1, 6, 0);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (7, 1, 7, 0);
-INSERT INTO combat_columnDefaults (columnDefaultsId, FK_combatSettingsId, FK_headingId, isActive) VALUES (8, 1, 8, 0);
+INSERT INTO combat_columnDefaults (FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 1, 0);
+INSERT INTO combat_columnDefaults (FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 2, 1);
+INSERT INTO combat_columnDefaults (FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 3, 1);
+INSERT INTO combat_columnDefaults (FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 4, 1);
+INSERT INTO combat_columnDefaults (FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 5, 1);
+INSERT INTO combat_columnDefaults (FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 6, 0);
+INSERT INTO combat_columnDefaults (FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 7, 0);
+INSERT INTO combat_columnDefaults (FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 8, 0);
+INSERT INTO combat_columnDefaults (FK_combatSettingsId, FK_headingId, isActive) VALUES (1, 9, 0);
 
 -- enum_time
 INSERT INTO enum_time (timeAmount) VALUES (60);
@@ -627,7 +637,24 @@ INSERT INTO enum_combatTableHeadings (field, header) VALUES ('trashLootAmount', 
 INSERT INTO enum_combatTableHeadings (field, header) VALUES ('className', 'Class');
 INSERT INTO enum_combatTableHeadings (field, header) VALUES ('serverName', 'Server');
 INSERT INTO enum_combatTableHeadings (field, header) VALUES ('combatTypeName', 'Combat Type');
+INSERT INTO enum_combatTableHeadings (field, header) VALUES ('agrisAmount', 'Agris');
 INSERT INTO enum_combatTableHeadings (field, header) VALUES ('afuaruSpawns', 'Afuaru Spawns');
+
+-- enum_agris
+INSERT INTO enum_agris (agrisAmount, agrisDayDescription) VALUES (0, '-');
+INSERT INTO enum_agris (agrisAmount) VALUES (5000);
+INSERT INTO enum_agris (agrisAmount) VALUES (10000);
+INSERT INTO enum_agris (agrisAmount) VALUES (15000);
+INSERT INTO enum_agris (agrisAmount, agrisDayDescription) VALUES (20000, '1 Day');
+INSERT INTO enum_agris (agrisAmount) VALUES (25000);
+INSERT INTO enum_agris (agrisAmount) VALUES (30000);
+INSERT INTO enum_agris (agrisAmount, agrisDayDescription) VALUES (40000, '2 Days');
+INSERT INTO enum_agris (agrisAmount) VALUES (50000);
+INSERT INTO enum_agris (agrisAmount, agrisDayDescription) VALUES (60000, '3 Days');
+INSERT INTO enum_agris (agrisAmount) VALUES (70000);
+INSERT INTO enum_agris (agrisAmount, agrisDayDescription) VALUES (80000, '4 Days');
+INSERT INTO enum_agris (agrisAmount) VALUES (90000);
+INSERT INTO enum_agris (agrisAmount, agrisDayDescription) VALUES (100000, '5 Days');
 
 /*
 SELECT userClass_classes.classId, userClass_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, userClass_classes.dateCreated, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore 

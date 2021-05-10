@@ -1,7 +1,7 @@
 {
   "name": "bdo-visualiser",
   "version": "0.1.0",
-  "main": "main.js",
+  "main": "index.js",
   "description": "App To Visual Data From Black Desert Online",
   "author": {
     "name": "Commander386"
@@ -64,16 +64,15 @@
     "rxjs": "~6.6.0",
     "sqlite3": "^5.0.2",
     "tslib": "^2.0.0",
-    "zingchart-angular": "^1.0.1",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "^10.0.1",
-    "@angular-devkit/build-angular": "~0.1100.5",
+    "@angular-devkit/build-angular": "^0.1102.12",
     "@angular-eslint/builder": "0.8.0-beta.6",
     "@angular-eslint/eslint-plugin": "0.8.0-beta.6",
     "@angular-eslint/eslint-plugin-template": "0.8.0-beta.6",
-    "@angular-eslint/schematics": "^0.8.0-beta.6",
+    "@angular-eslint/schematics": "^4.2.0",
     "@angular-eslint/template-parser": "0.8.0-beta.6",
     "@angular/cli": "~11.0.5",
     "@angular/compiler-cli": "~11.0.5",
@@ -93,7 +92,7 @@
     "eslint-plugin-prefer-arrow": "1.2.2",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
-    "karma": "~5.1.0",
+    "karma": "^6.3.2",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",

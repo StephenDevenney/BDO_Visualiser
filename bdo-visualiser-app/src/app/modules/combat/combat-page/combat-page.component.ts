@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, Injector, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { CombatService } from '../combat.service';
 import { Table } from 'primeng/table';
@@ -14,7 +14,7 @@ import { StatsComponent } from './stats/stats.component';
 })
 export class CombatPageComponent extends BaseComponent implements OnInit {
   @ViewChild('table') public dt!: Table;
-  @ViewChild('StatsComponent') public statsComponent: StatsComponent
+  @ViewChild('stats') public statsComponent!: StatsComponent;
   public rowGroupMetadata: any;
   public isLoaded: boolean = false;
   public maxSelectedLabelsNum: number = 0;
@@ -133,7 +133,8 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
     this.filteredColumns = cneVM.chVM.filter(header => header.isActive == true);
     this.customSort();
     this.updateRowGroupMetaData(this.grindingRes);
-    this.statsComponent.reloadTabData();
+    if(typeof(this.statsComponent) != "undefined")
+      this.statsComponent.reloadTabData();
   }
 
   public emittedInsertCancel(fcVM: Array<CombatHeadersViewModel>) {

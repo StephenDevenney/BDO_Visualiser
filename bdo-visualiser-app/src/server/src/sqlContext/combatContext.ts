@@ -1,5 +1,5 @@
 import { TheDb } from '../thedb';
-import { CombatHeadersEntity, CombatSettingsEntity, CombatStatsEntity, GrindingDataEntity, GrindingTableHeadersEntity, HoursStatsEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
+import { AgrisEnumEntity, CombatHeadersEntity, CombatSettingsEntity, CombatStatsEntity, GrindingDataEntity, GrindingTableHeadersEntity, HoursStatsEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
 import { Calculations } from '../../shared/calc/calculations';
 
 export class CombatSettingsContext {
@@ -96,13 +96,16 @@ export class GrindingDataContext {
   public isElviaRealm: boolean = false;
   public combatTypeId: number = 0;
   public combatTypeName: string = "";
+  public agrisId: number = 1;
+  public agrisAmount: number = 0;
+  public agrisDayDescription: string = "";
   public dateCreated: string = "";
   public trashLootAmount: number = 0;
   public afuaruSpawns: number = 0;
   public afuaruSpawnable: boolean = false;
 
   public getAll(): Promise<Array<GrindingDataEntity>> {
-    const sql = `SELECT grindingId, enum_locations.locationId, enum_locations.locationName, enum_territory.territoryId, enum_territory.territoryName, enum_locations.recommendedAP, enum_locations.recommendedLevel, enum_time.timeId, enum_time.timeAmount, userClass_classes.classId AS userClassId, enum_class.classId AS classNameId, enum_class.className, enum_class.fileName, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId AS classRoleId, enum_classRole.roleDescription AS classRoleName, userClass_gearScore.gearScoreId, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore, enum_server.serverId, enum_server.serverName as serverDescription, enum_server.isElviaRealm, combatType.combatTypeId, combatType.combatTypeName AS combatTypeName, combat_grinding.dateCreated, combat_grinding.trashLootAmount, combat_grinding.afuaruSpawns, enum_locations.afuaruSpawnable FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = combat_grinding.FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId INNER JOIN userClass_classes ON userClass_classes.classId = combat_grinding.FK_classId INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = combat_grinding.FK_gearScoreId INNER JOIN enum_server ON enum_server.serverId = combat_grinding.FK_serverId INNER JOIN enum_combatType AS combatType ON combatType.combatTypeId = combat_grinding.FK_combatTypeId INNER JOIN enum_combatType AS primaryCombatType ON primaryCombatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE combat_grinding.FK_combatSettingsId = 1 ORDER BY grindingId DESC`;
+    const sql = `SELECT grindingId, enum_locations.locationId, enum_locations.locationName, enum_territory.territoryId, enum_territory.territoryName, enum_locations.recommendedAP, enum_locations.recommendedLevel, enum_time.timeId, enum_time.timeAmount, userClass_classes.classId AS userClassId, enum_class.classId AS classNameId, enum_class.className, enum_class.fileName, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId AS classRoleId, enum_classRole.roleDescription AS classRoleName, userClass_gearScore.gearScoreId, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore, enum_server.serverId, enum_server.serverName as serverDescription, enum_server.isElviaRealm, combatType.combatTypeId, combatType.combatTypeName AS combatTypeName, enum_agris.agrisId, enum_agris.agrisAmount, enum_agris.agrisDayDescription, combat_grinding.dateCreated, combat_grinding.trashLootAmount, combat_grinding.afuaruSpawns, enum_locations.afuaruSpawnable FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = combat_grinding.FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId INNER JOIN userClass_classes ON userClass_classes.classId = combat_grinding.FK_classId INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = combat_grinding.FK_gearScoreId INNER JOIN enum_server ON enum_server.serverId = combat_grinding.FK_serverId INNER JOIN enum_combatType AS combatType ON combatType.combatTypeId = combat_grinding.FK_combatTypeId INNER JOIN enum_combatType AS primaryCombatType ON primaryCombatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId INNER JOIN enum_agris ON enum_agris.agrisId = combat_grinding.FK_agrisId WHERE combat_grinding.FK_combatSettingsId = 1 ORDER BY grindingId DESC`;
     const values = {};
 
     return TheDb.selectAll(sql, values).then((rows: any) => {
@@ -116,7 +119,7 @@ export class GrindingDataContext {
   }
 
   public async getMostRecent(): Promise<GrindingDataEntity> {
-    const sql = `SELECT grindingId, enum_locations.locationId, enum_locations.locationName, enum_territory.territoryId, enum_territory.territoryName, enum_locations.recommendedAP, enum_locations.recommendedLevel, enum_time.timeId, enum_time.timeAmount, userClass_classes.classId AS userClassId, enum_class.classId AS classNameId, enum_class.className, enum_class.fileName, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId AS classRoleId, enum_classRole.roleDescription AS classRoleName, userClass_gearScore.gearScoreId, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore, enum_server.serverId, enum_server.serverName as serverDescription, enum_server.isElviaRealm, combatType.combatTypeId, combatType.combatTypeName AS combatTypeName, combat_grinding.dateCreated, combat_grinding.trashLootAmount, combat_grinding.afuaruSpawns, enum_locations.afuaruSpawnable FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = combat_grinding.FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId INNER JOIN userClass_classes ON userClass_classes.classId = combat_grinding.FK_classId INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = combat_grinding.FK_gearScoreId INNER JOIN enum_server ON enum_server.serverId = combat_grinding.FK_serverId INNER JOIN enum_combatType AS combatType ON combatType.combatTypeId = combat_grinding.FK_combatTypeId INNER JOIN enum_combatType AS primaryCombatType ON primaryCombatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId WHERE combat_grinding.FK_combatSettingsId = 1 ORDER BY grindingId DESC LIMIT 1`;
+    const sql = `SELECT grindingId, enum_locations.locationId, enum_locations.locationName, enum_territory.territoryId, enum_territory.territoryName, enum_locations.recommendedAP, enum_locations.recommendedLevel, enum_time.timeId, enum_time.timeAmount, userClass_classes.classId AS userClassId, enum_class.classId AS classNameId, enum_class.className, enum_class.fileName, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId AS classRoleId, enum_classRole.roleDescription AS classRoleName, userClass_gearScore.gearScoreId, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore, enum_server.serverId, enum_server.serverName as serverDescription, enum_server.isElviaRealm, combatType.combatTypeId, combatType.combatTypeName AS combatTypeName, enum_agris.agrisId, enum_agris.agrisAmount, enum_agris.agrisDayDescription, combat_grinding.dateCreated, combat_grinding.trashLootAmount, combat_grinding.afuaruSpawns, enum_locations.afuaruSpawnable FROM combat_grinding INNER JOIN enum_locations ON enum_locations.locationId = combat_grinding.FK_locationId INNER JOIN enum_territory ON enum_territory.territoryId = enum_locations.FK_territoryId INNER JOIN enum_time ON enum_time.timeId = combat_grinding.FK_timeId INNER JOIN userClass_classes ON userClass_classes.classId = combat_grinding.FK_classId INNER JOIN enum_class ON enum_class.classId = userClass_classes.FK_classNameId INNER JOIN enum_classRole ON enum_classRole.roleId = userClass_classes.FK_classRoleId INNER JOIN userClass_gearScore ON userClass_gearScore.gearScoreId = combat_grinding.FK_gearScoreId INNER JOIN enum_server ON enum_server.serverId = combat_grinding.FK_serverId INNER JOIN enum_combatType AS combatType ON combatType.combatTypeId = combat_grinding.FK_combatTypeId INNER JOIN enum_combatType AS primaryCombatType ON primaryCombatType.combatTypeId = userClass_classes.FK_primaryCombatTypeId INNER JOIN enum_agris ON enum_agris.agrisId = combat_grinding.FK_agrisId WHERE combat_grinding.FK_combatSettingsId = 1 ORDER BY grindingId DESC LIMIT 1`;
     const values = { };
 
     return TheDb.selectOne(sql, values).then((row: any) => {
@@ -126,8 +129,8 @@ export class GrindingDataContext {
   }
 
   public async insert(entry: GrindingDataEntity): Promise<void> {
-    const sql = `INSERT OR REPLACE INTO combat_grinding (FK_combatSettingsId, FK_classId, FK_locationId, FK_timeId, FK_serverId, FK_combatTypeId, FK_gearScoreId, dateCreated, trashLootAmount, afuaruSpawns) VALUES (1, $classId, $locationId, $timeId, $serverId, $combatTypeId, $gearScoreId, $dateCreated, $trashloot, $afuaru);`;
-    const values = { $classId: entry.userClassId, $locationId: entry.locationId, $timeId: entry.timeId, $serverId: entry.serverId, $combatTypeId: entry.combatTypeId, $gearScoreId: entry.gearScoreId, $dateCreated: new Calculations().calcCurrentDate(), $trashloot: entry.trashLootAmount, $afuaru: entry.afuaruSpawns };
+    const sql = `INSERT OR REPLACE INTO combat_grinding (FK_combatSettingsId, FK_classId, FK_locationId, FK_timeId, FK_serverId, FK_combatTypeId, FK_gearScoreId, FK_agrisId, dateCreated, trashLootAmount, afuaruSpawns) VALUES (1, $classId, $locationId, $timeId, $serverId, $combatTypeId, $gearScoreId, $agrisId, $dateCreated, $trashloot, $afuaru);`;
+    const values = { $classId: entry.userClassId, $locationId: entry.locationId, $timeId: entry.timeId, $serverId: entry.serverId, $combatTypeId: entry.combatTypeId, $gearScoreId: entry.gearScoreId, $agrisId: entry.agrisId, $dateCreated: new Calculations().calcCurrentDate(), $trashloot: entry.trashLootAmount, $afuaru: entry.afuaruSpawns };
 
     return TheDb.insert(sql, values).then((result) => {});
   }
@@ -159,6 +162,9 @@ export class GrindingDataContext {
     this.isElviaRealm = row['isElviaRealm'];
     this.combatTypeId = row['combatTypeId'];
     this.combatTypeName = row['combatTypeName'];
+    this.agrisId = row['agrisId'];
+    this.agrisAmount = row['agrisAmount'];
+    this.agrisDayDescription = row['agrisDayDescription'];
     this.dateCreated = row['dateCreated'];
     this.trashLootAmount = row['trashLootAmount'];
     this.afuaruSpawns = row['afuaruSpawns'];
@@ -412,6 +418,34 @@ export class TimeEnumContext {
     this.timeId = row['timeId'];
     this.timeAmount = row['timeAmount'];
   
+    return this;
+  }
+}
+
+export class AgrisEnumContext {
+  public agrisId: number = 0;
+  public agrisAmount: number = 0;
+  public agrisDayDescription: string = "";
+
+  public getAll(): Promise<Array<AgrisEnumEntity>> {
+    const sql = `SELECT * FROM enum_agris`;
+    const values = {};
+
+    return TheDb.selectAll(sql, values).then((rows: any) => {
+      const nm: Array<AgrisEnumEntity> = new Array<AgrisEnumEntity>();
+      for (const row of rows) {
+          const item = new AgrisEnumContext().fromRow(row);
+          nm.push(item);
+      }
+      return nm;
+    });
+  }
+
+  private fromRow(row: AgrisEnumEntity): AgrisEnumEntity {
+    this.agrisId = row['agrisId'];
+    this.agrisAmount = row['agrisAmount'];
+    this.agrisDayDescription = row['agrisDayDescription'];
+    
     return this;
   }
 }

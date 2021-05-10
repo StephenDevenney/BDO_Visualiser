@@ -18,7 +18,7 @@ export class DateLongPipe implements PipeTransform {
 export class TimeAmountPipe implements PipeTransform {
     transform(timeAmount: number): string {
         if(timeAmount == 0 || typeof(timeAmount) == "undefined" || timeAmount == null) 
-            return "No Record";
+            return "N/A";
 
         let timeHours = Math.floor(timeAmount/60);
         if(timeHours == 1)
@@ -33,7 +33,7 @@ export class TimeAmountPipe implements PipeTransform {
 export class NoRecordPipe implements PipeTransform {
     transform(incomingItem: any): string {
         if(typeof(incomingItem) == "undefined" || incomingItem == null) 
-            return "No Record";
+            return "N/A";
             
         return incomingItem;
     }

@@ -33,7 +33,8 @@ export class TableInsertComponent extends BaseComponent implements AfterViewInit
           this.newEntry.timeAmount = this.combatEnums.timeAmountEnum[0];
           this.newEntry.server = this.combatEnums.serverNamesEnum[0];
           this.newEntry.combatType = this.combatEnums.combatTypesEnum[0];
-          this.newEntry.userClass = this.combatEnums.activeClasses.filter(_ => _.classRoleEnum.classRole == "Main")[0];
+          this.newEntry.agris = this.combatEnums.agrisEnum[0];
+          this.newEntry.userClass = this.combatEnums.activeClasses.filter(_ => _.classRoleEnum.classRole == "Main")[0]; 
         }
         else {
           this.newEntry.timeAmount = this.combatEnums.timeAmountEnum.filter((_) => _.timeId == this.combatEnums.previousCombatValuesViewModel.timeAmount.timeId)[0];
@@ -44,6 +45,8 @@ export class TableInsertComponent extends BaseComponent implements AfterViewInit
             
           if(this.combatEnums.previousCombatValuesViewModel.combatType.combatTypeId > 1)
             this.newEntry.combatType = this.combatEnums.previousCombatValuesViewModel.combatType;
+          if(this.combatEnums.previousCombatValuesViewModel.agris.agrisId > 1)
+            this.newEntry.agris = this.combatEnums.previousCombatValuesViewModel.agris;
         }
         
         this.isLoaded = true;

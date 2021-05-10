@@ -30,9 +30,10 @@ export class GrindingDataViewModel {
     public userClass: UserClassViewModel = new UserClassViewModel();
     public server: ServerNamesEnumViewModel = new ServerNamesEnumViewModel();
     public combatType: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
+    public agris: AgrisEnumViewModel = new AgrisEnumViewModel();
     public afuaruSpawns: number = 0;
 
-    constructor(grindingId?: number, classId?: number, dateCreated?: string, grindLocation?: LocationNamesEnumViewModel, timeAmount?: TimeAmountEnumViewModel, trashLootAmount?: number, userClass?: UserClassViewModel, server?: ServerNamesEnumViewModel, combatType?: CombatTypesEnumViewModel, afuaruSpawns?: number) {
+    constructor(grindingId?: number, classId?: number, dateCreated?: string, grindLocation?: LocationNamesEnumViewModel, timeAmount?: TimeAmountEnumViewModel, trashLootAmount?: number, userClass?: UserClassViewModel, server?: ServerNamesEnumViewModel, combatType?: CombatTypesEnumViewModel, agris?: AgrisEnumViewModel, afuaruSpawns?: number) {
         if(grindingId) {
             this.grindingId = grindingId;
             this.classId = classId;
@@ -43,6 +44,7 @@ export class GrindingDataViewModel {
             this.userClass = userClass;
             this.server = server;
             this.combatType = combatType;
+            this.agris = agris;
             this.afuaruSpawns = afuaruSpawns;
         }
     }
@@ -57,9 +59,10 @@ export class VisibleDataViewModel {
     public className: string = "";
     public serverName: string = "";
     public combatTypeName: string = "";
+    public agrisAmount: number = 0;
     public afuaruSpawns: string = "-";
 
-    constructor(grindingId?: number, dateCreated?: string, locationName?: string, timeAmount?: string, trashLootAmount?: number, className?: string, serverName?: string, combatTypeName?: string, afuaruSpawns?: string) {
+    constructor(grindingId?: number, dateCreated?: string, locationName?: string, timeAmount?: string, trashLootAmount?: number, className?: string, serverName?: string, combatTypeName?: string, agrisAmount?: number, afuaruSpawns?: string) {
         this.grindingId = grindingId;
         this.dateCreated = dateCreated;
         this.locationName = locationName;
@@ -68,6 +71,7 @@ export class VisibleDataViewModel {
         this.className = className;
         this.serverName = serverName;
         this.combatTypeName = combatTypeName;
+        this.agrisAmount = agrisAmount;
         this.afuaruSpawns = afuaruSpawns;
     }
 }
@@ -154,16 +158,18 @@ export class CombatPageEnumsViewModel {
     public serverNamesEnum: Array<ServerNamesEnumViewModel> = new Array<ServerNamesEnumViewModel>();
     public combatTypesEnum: Array<CombatTypesEnumViewModel> = new Array<CombatTypesEnumViewModel>();
     public timeAmountEnum: Array<TimeAmountEnumViewModel> = new Array<TimeAmountEnumViewModel>();
+    public agrisEnum: Array<AgrisEnumViewModel> = new Array<AgrisEnumViewModel>();
     public previousCombatValuesViewModel: PreviousCombatValuesViewModel = new PreviousCombatValuesViewModel();
     public activeClasses: Array<UserClassViewModel> = new Array<UserClassViewModel>();
 
-    constructor(classNamesEnum?: Array<ClassNamesEnumViewModel>, locationNamesEnum?: Array<LocationNamesGroupedEnumViewModel>, serverNamesEnum?: Array<ServerNamesEnumViewModel>, combatTypesEnum?: Array<CombatTypesEnumViewModel>, timeAmountEnum?: Array<TimeAmountEnumViewModel>, previousCombatValuesViewModel?: PreviousCombatValuesViewModel, activeClasses?: Array<UserClassViewModel>) {
+    constructor(classNamesEnum?: Array<ClassNamesEnumViewModel>, locationNamesEnum?: Array<LocationNamesGroupedEnumViewModel>, serverNamesEnum?: Array<ServerNamesEnumViewModel>, combatTypesEnum?: Array<CombatTypesEnumViewModel>, timeAmountEnum?: Array<TimeAmountEnumViewModel>, agrisEnum?: Array<AgrisEnumViewModel>, previousCombatValuesViewModel?: PreviousCombatValuesViewModel, activeClasses?: Array<UserClassViewModel>) {
         if(classNamesEnum) {
             this.classNamesEnum = classNamesEnum;
             this.locationNamesEnum = locationNamesEnum;
             this.serverNamesEnum = serverNamesEnum;
             this.combatTypesEnum = combatTypesEnum;
             this.timeAmountEnum = timeAmountEnum;
+            this.agrisEnum = agrisEnum;
             this.previousCombatValuesViewModel = previousCombatValuesViewModel;
             this.activeClasses = activeClasses;
         }    
@@ -176,14 +182,16 @@ export class PreviousCombatValuesViewModel {
     public timeAmount: TimeAmountEnumViewModel = new TimeAmountEnumViewModel();
     public server: ServerNamesEnumViewModel = new ServerNamesEnumViewModel();
     public combatType: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
+    public agris: AgrisEnumViewModel = new AgrisEnumViewModel();
 
-    constructor(userClass?: UserClassViewModel, grindLocation?: LocationNamesEnumViewModel, timeAmount?: TimeAmountEnumViewModel, server?: ServerNamesEnumViewModel, combatType?: CombatTypesEnumViewModel) {
+    constructor(userClass?: UserClassViewModel, grindLocation?: LocationNamesEnumViewModel, timeAmount?: TimeAmountEnumViewModel, server?: ServerNamesEnumViewModel, combatType?: CombatTypesEnumViewModel, agris?: AgrisEnumViewModel) {
         if(userClass) {
             this.userClass = userClass;
             this.grindLocation = grindLocation;
             this.timeAmount = timeAmount;
             this.server = server;
             this.combatType = combatType;
+            this.agris = agris;
         }
     }
 }
@@ -306,6 +314,30 @@ export class HoursStatsViewModel {
             this.hoursMonth = hoursMonth;
             this.hoursYear = hoursYear;
             this.hoursTotal = hoursTotal;
+        }
+    }
+}
+
+export class TimeViewModel {
+    public minutes: number = 0;
+    public hours: number = 0;
+
+    constructor(minutes?: number, hours?: number) {
+        if(minutes) {
+            this.minutes = minutes;
+            this.hours = hours;
+        }
+    }
+}
+
+export class AgrisEnumViewModel {
+    public agrisId: number = 1;
+    public agrisDescription: string = "";
+
+    constructor(agrisId?: number, agrisDescription?: string) {
+        if(agrisId) {
+            this.agrisId = agrisId;
+            this.agrisDescription = agrisDescription;
         }
     }
 }

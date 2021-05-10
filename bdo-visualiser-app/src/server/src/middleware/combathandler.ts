@@ -1,6 +1,6 @@
-import { CombatHeadersEntity, CombatStatsEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
-import { ColumnHeadersContext, CombatSettingsContext, CombatStatsContext, CombatStatsHoursContext, CombatTableHeadersContext, GrindingDataContext, LocationsEnumContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
-import { CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatStatsByLocationViewModel, CombatStatsViewModel, CombatTypeCountViewModel, GrindingDataViewModel, HoursStatsViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, LocationsCountViewModel, PreviousCombatValuesViewModel, ServerCountViewModel, ServerNamesEnumViewModel, StatViewModel, TerritoryCountViewModel, TimeAmountEnumViewModel, UserClassCountViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
+import { AgrisEnumEntity, CombatHeadersEntity, CombatStatsEntity, GrindingDataEntity, GrindingTableHeadersEntity, LocationNamesEnumEntity, ServerNamesEnumEntity, TerritoryEnumEntity, TimeAmountEnumEntity } from '../../shared/entities/combatEntities';
+import { AgrisEnumContext, ColumnHeadersContext, CombatSettingsContext, CombatStatsContext, CombatStatsHoursContext, CombatTableHeadersContext, GrindingDataContext, LocationsEnumContext, ServerEnumContext, TerritoryEnumContext, TimeEnumContext } from '../sqlContext/combatContext';
+import { AgrisEnumViewModel, CombatHeadersViewModel, CombatPageDataViewModel, CombatPageEnumsViewModel, CombatStatsByLocationViewModel, CombatStatsViewModel, CombatTypeCountViewModel, GrindingDataViewModel, HoursStatsViewModel, LocationNamesEnumViewModel, LocationNamesGroupedEnumViewModel, LocationsCountViewModel, PreviousCombatValuesViewModel, ServerCountViewModel, ServerNamesEnumViewModel, StatViewModel, TerritoryCountViewModel, TimeAmountEnumViewModel, UserClassCountViewModel, VisibleDataViewModel } from '../../shared/viewModels/combatViewModels';
 import { ClassNamesEnumViewModel, ClassRolesEnumViewModel, CombatTypesEnumViewModel, GearViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
 import { ClassNamesEnumEntity, CombatTypesEnumEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
 import { GearContext, ClassNamesEnumContext, CombatTypesEnumContext, UserClassContext } from '../sqlContext/userClassContext';
@@ -33,13 +33,19 @@ export class CombatPageDataHandler {
             _.forEach(row => {
                 let timeDescription = row.timeAmount + " Minutes";
                 let afuaruSpawns = "-";
+                let agrisBurnt = "";
                 if(row.afuaruSpawnable)
                     afuaruSpawns = row.afuaruSpawns.toString();
-                vdVM.push(new VisibleDataViewModel(row.grindingId, row.dateCreated, row.locationName, timeDescription, row.trashLootAmount, row.className, row.serverDescription, row.combatTypeName, afuaruSpawns));
-                gdVM.push(new GrindingDataViewModel(row.grindingId, row.userClassId, row.dateCreated, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, row.recommendedAP), new TimeAmountEnumViewModel(row.timeId, row.timeAmount), row.trashLootAmount, new UserClassViewModel(row.userClassId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRoleName), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription), new ServerNamesEnumViewModel(row.serverId, row.serverDescription, row.isElviaRealm), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), row.afuaruSpawns));
+                if(row.agrisAmount > 0 && row.agrisDayDescription.length > 0)
+                    agrisBurnt = row.agrisAmount + " (" + row.agrisDayDescription + ")";
+                else 
+                    agrisBurnt = row.agrisAmount.toString();
+
+                vdVM.push(new VisibleDataViewModel(row.grindingId, row.dateCreated, row.locationName, timeDescription, row.trashLootAmount, row.className, row.serverDescription, row.combatTypeName, row.agrisAmount, afuaruSpawns));
+                gdVM.push(new GrindingDataViewModel(row.grindingId, row.userClassId, row.dateCreated, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, row.recommendedAP), new TimeAmountEnumViewModel(row.timeId, row.timeAmount), row.trashLootAmount, new UserClassViewModel(row.userClassId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRoleName), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription), new ServerNamesEnumViewModel(row.serverId, row.serverDescription, row.isElviaRealm), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new AgrisEnumViewModel(row.agrisId, agrisBurnt), row.afuaruSpawns));
             });
         });
-
+        
         return new CombatPageDataViewModel(gthVM, gdVM, vdVM, hasDefaultCombatHeaders, acVM, hasMainClass);
     }
 
@@ -50,7 +56,7 @@ export class CombatPageDataHandler {
         let afuaruSpawns = "-";
         if(gdE.afuaruSpawnable)
             afuaruSpawns = gdE.afuaruSpawns.toString();
-        return new VisibleDataViewModel(gdE.grindingId, gdE.dateCreated, gdE.locationName, gdE.timeAmount.toString() + " Minutes", gdE.trashLootAmount, gdE.className, gdE.serverDescription, gdE.combatTypeName, afuaruSpawns);
+        return new VisibleDataViewModel(gdE.grindingId, gdE.dateCreated, gdE.locationName, gdE.timeAmount.toString() + " Minutes", gdE.trashLootAmount, gdE.className, gdE.serverDescription, gdE.combatTypeName, gdE.agrisAmount, afuaruSpawns);
 
         async function convertToEntity(eVM: GrindingDataViewModel, headers: Array<CombatHeadersViewModel>): Promise<GrindingDataEntity> {
             let res: GrindingDataEntity = new GrindingDataEntity();
@@ -65,6 +71,8 @@ export class CombatPageDataHandler {
                 res.combatTypeId = eVM.combatType.combatTypeId;
             else 
                 res.combatTypeId = eVM.userClass.combatTypeEnum.combatTypeId;
+            if(headers.filter(_ => _.header == "Agris")[0].isActive)
+                res.agrisId = eVM.agris.agrisId;
             if(headers.filter(_ => _.header == "Afuaru Spawns")[0].isActive && eVM.grindLocation.afuaruSpawnable)
                 res.afuaruSpawns = eVM.afuaruSpawns;
             
@@ -85,29 +93,6 @@ export class CombatPageNewEntryHandler {
             });
         });
 
-        // let locationViewModel = new Array<LocationNamesEnumViewModel>();
-        // await new LocationsEnumContext().getMostRecent().then((_: Array<LocationNamesEnumEntity>) => {
-        //     if(_.length > 0) {
-        //         _.forEach(row => {
-        //             locationViewModel.push(new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, parseInt(row.recommendedAP), row.afuaruSpawnable));
-        //         });
-        //     } 
-        // });
-
-        // let locationNamesEnum = new Array<LocationNamesGroupedEnumViewModel>();
-        // if(locationViewModel.length > 0)
-        //     locationNamesEnum.push(new LocationNamesGroupedEnumViewModel("Recent", locationViewModel));
-
-        // let locationArray = await new LocationsEnumContext().getAll();
-        // await new TerritoryEnumContext().getAll().then((_: Array<TerritoryEnumEntity>) => {
-        //     _.forEach(row => {
-        //         let locations = new Array<LocationNamesEnumViewModel>();
-        //         locationArray.filter((_: LocationNamesEnumEntity) => _.territoryId == row.territoryId).forEach(_ => {
-        //             locations.push(new LocationNamesEnumViewModel(_.locationId, _.territoryId, _.locationName, _.territoryName, _.recommendedLevel, parseInt(_.recommendedAP), _.afuaruSpawnable));
-        //         });
-        //         locationNamesEnum.push(new LocationNamesGroupedEnumViewModel(row.territoryName, locations));
-        //     });
-        // });
         let locationNamesEnum = new Array<LocationNamesGroupedEnumViewModel>();
         await new SharedCombatFunctions().getGroupedLocations().then((res: Array<LocationNamesGroupedEnumViewModel>) => {
             locationNamesEnum = res;
@@ -134,6 +119,18 @@ export class CombatPageNewEntryHandler {
             });
         });
 
+        let agrisEnum = new Array<AgrisEnumViewModel>();
+        await new AgrisEnumContext().getAll().then((_: Array<AgrisEnumEntity>) => {
+            _.forEach(row => {
+                let agrisBurnt = "";
+                if(row.agrisAmount > 0 && row.agrisDayDescription.length > 0)
+                    agrisBurnt = row.agrisAmount + " (" + row.agrisDayDescription + ")";
+                else 
+                    agrisBurnt = row.agrisAmount.toString();
+                agrisEnum.push(new AgrisEnumViewModel(row.agrisId, agrisBurnt));
+            });
+        });
+
         let acVM = await new UserClassHandler().getUserClasses();
         let previousEntry = new PreviousCombatValuesViewModel();
         await new GrindingDataContext().getMostRecent().then((_: GrindingDataEntity) => {
@@ -143,10 +140,16 @@ export class CombatPageNewEntryHandler {
                 previousEntry.server = new ServerNamesEnumViewModel(_.serverId, _.serverDescription, _.isElviaRealm);
                 previousEntry.timeAmount = new TimeAmountEnumViewModel(_.timeId, _.timeAmount);
                 previousEntry.userClass = new UserClassViewModel(_.userClassId, new ClassNamesEnumViewModel(_.classNameId, _.className, _.fileName), new ClassRolesEnumViewModel(_.classRoleId, _.classRoleName), new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName), new GearViewModel(_.ap, _.aap, _.dp, _.gearScore), _.classDescription);    
+                let agrisBurnt = "";
+                if(_.agrisAmount > 0 && _.agrisDayDescription.length > 0)
+                    agrisBurnt = _.agrisAmount + " (" + _.agrisDayDescription + ")";
+                else 
+                    agrisBurnt = _.agrisAmount.toString();
+                previousEntry.agris = new AgrisEnumViewModel(_.agrisId, agrisBurnt);
             }
         });
 
-        return new CombatPageEnumsViewModel(classNamesEnum, locationNamesEnum, serverNamesEnum, combatTypesEnum, timeAmountEnum, previousEntry, acVM);
+        return new CombatPageEnumsViewModel(classNamesEnum, locationNamesEnum, serverNamesEnum, combatTypesEnum, timeAmountEnum, agrisEnum, previousEntry, acVM);
     }
 }
 

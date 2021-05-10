@@ -27,4 +27,8 @@ export class Calculations {
     public calcYearStartDate(): string {
         return moment().startOf('year').format("YYYY-MM-DD");
     }
+
+    public calcMinutesToHours(minutes: number) {
+        return Math.floor(minutes/60);
+    }
 }

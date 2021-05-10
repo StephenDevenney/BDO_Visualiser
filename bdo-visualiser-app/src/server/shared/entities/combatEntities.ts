@@ -54,6 +54,9 @@ export class GrindingDataEntity {
     public isElviaRealm: boolean = false;
     public combatTypeId: number = 1;
     public combatTypeName: string = "-";
+    public agrisId: number = 1;
+    public agrisAmount: number = 0;
+    public agrisDayDescription: string = "";
     public dateCreated: string = "";
     public trashLootAmount: number = 0;
     public afuaruSpawns: number = 0;
@@ -207,6 +210,20 @@ export class TimeAmountEnumEntity {
             this.timeId = timeId;
             this.timeAmount = timeAmount;
         } 
+    }
+}
+
+export class AgrisEnumEntity {
+    public agrisId: number = 1;
+    public agrisAmount: number = 0;
+    public agrisDayDescription: string = "";
+
+    constructor(agrisId?: number, agrisAmount?: number, agrisDayDescription?: string) {
+        if(agrisId) {
+            this.agrisId = agrisId;
+            this.agrisAmount = agrisAmount;
+            this.agrisDayDescription = agrisDayDescription;
+        }
     }
 }
 

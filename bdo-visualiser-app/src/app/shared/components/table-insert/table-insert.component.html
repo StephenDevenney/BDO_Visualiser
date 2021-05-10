@@ -60,16 +60,16 @@
             <div class="col-4">
                 <div class="d-flex align-items-center justify-content-between">
                     <label>Agris Burnt</label>
-                    <p-inputSwitch></p-inputSwitch>
+                    <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[6]);" [(ngModel)]="combatHeaders[6].isActive" ngDefaultControl></p-inputSwitch>
                 </div>
-                <p-dropdown [disabled]="globals.isSignedIn" placeholder="120000 (1 Day)"></p-dropdown>
+                <p-dropdown [disabled]="!combatHeaders[6].isActive" [options]="combatEnums.agrisEnum" [(ngModel)]="newEntry.agris" optionLabel="agrisDescription"></p-dropdown>
             </div>
             <div class="col-4">
                 <div class="d-flex align-items-center justify-content-between">
                     <label>Afuaru Spawns</label>
-                    <p-inputSwitch [disabled]="!newEntry.grindLocation.afuaruSpawnable" (onChange)="toggleSwitch(combatHeaders[6]);" [(ngModel)]="combatHeaders[6].isActive" ngDefaultControl></p-inputSwitch>
+                    <p-inputSwitch [disabled]="!newEntry.grindLocation.afuaruSpawnable" (onChange)="toggleSwitch(combatHeaders[7]);" [(ngModel)]="combatHeaders[7].isActive" ngDefaultControl></p-inputSwitch>
                 </div>
-                <p-inputNumber [disabled]="!combatHeaders[6].isActive || !newEntry.grindLocation.afuaruSpawnable" [(ngModel)]="newEntry.afuaruSpawns" [min]="0"></p-inputNumber>
+                <p-inputNumber [disabled]="!combatHeaders[7].isActive || !newEntry.grindLocation.afuaruSpawnable" [(ngModel)]="newEntry.afuaruSpawns" [min]="0"></p-inputNumber>
             </div>
             <div class="col-4">
                 <div class="d-flex justify-content-center align-items-center">

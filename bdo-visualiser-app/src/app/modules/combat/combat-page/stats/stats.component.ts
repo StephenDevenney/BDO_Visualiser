@@ -25,17 +25,11 @@ export class StatsComponent extends BaseComponent implements OnInit {
     Max Weekly Metrics
   */
   ngOnInit(): void {
-    this.combatService.getCombatStatsTabData().then((res: CombatStatsViewModel) => {
-      this.combatStats = res;
-      console.log(res);
-      this.isLoaded = true;
-    }).catch(() => {
-
-    });
+    this.loadCombatStatData();
   }
 
-  ngAfterViewInit(): void {
-
+  async ngAfterViewInit(): Promise<void> {
+    await this.loadLocationData();
   }
 
   public loadTrashLoot(e: any) {
@@ -47,33 +41,38 @@ export class StatsComponent extends BaseComponent implements OnInit {
     }
   }
 
-  public getSelectedLocationData(e: { orginalEvent: MouseEvent, value: LocationNamesEnumViewModel }) {
+  public async getSelectedLocationData(e: { orginalEvent: MouseEvent, value: LocationNamesEnumViewModel }) {
+    this.selectedLocation = e.value;
+    await this.loadLocationData();
+  }
+
+  public async reloadTabData() {
+    if(this.locationIsSelected = true)
+      await this.loadLocationData();
+    await this.loadCombatStatData();
+  }
+
+  public async loadLocationData(): Promise<void> {
     this.loader.startBackground();
-    this.combatService.getStatsDataByLocation(e.value).then((res: CombatStatsByLocationViewModel) => {
-      console.log(res);
+    await this.combatService.getStatsDataByLocation(this.selectedLocation).then((res: CombatStatsByLocationViewModel) => {
       this.locationStats = res;
       this.loader.stopBackground();
     }).catch(() => {
       this.messageService.add({severity:'error', summary:'Error.', detail:'Error Loading Location.', life: 2600 });
+      this.loader.stopBackground();
     }).then(() => {
       if(!this.locationIsSelected)
         this.locationIsSelected = true;
     });
   }
 
-  public reloadTabData() {
-    this.loader.startBackground();
-    if(this.locationIsSelected = true) {
-      this.combatService.getStatsDataByLocation(this.selectedLocation).then((res: CombatStatsByLocationViewModel) => {
-        this.locationStats = res;
-        this.loader.stopBackground();
-      }).catch(() => {
-        this.messageService.add({severity:'error', summary:'Error.', detail:'Error Loading Location.', life: 2600 });
-      }).then(() => {
-        if(!this.locationIsSelected)
-          this.locationIsSelected = true;
-      });
-    } 
+  public async loadCombatStatData(): Promise<void> {
+    this.combatService.getCombatStatsTabData().then((res: CombatStatsViewModel) => {
+      this.combatStats = res;
+      this.isLoaded = true;
+    }).catch(() => {
+
+    });
   }
   
 }
