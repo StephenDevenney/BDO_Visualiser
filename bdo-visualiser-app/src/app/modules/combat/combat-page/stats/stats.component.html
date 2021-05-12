@@ -43,10 +43,10 @@
                         </div>
                     </div>
                     <div #locationTab *ngIf="tab.id == 2">
-                        <div class="d-flex align-items-center">
-                            <label class="mb-0 w-100">{{tab.label}}</label> 
-                            <div class="d-flex align-items-centet justify-content-end">
-                                <p-dropdown class="w-100" [filter]="true" filterBy="locationName" class="w-100" appendTo="body" [options]="combatStats.locationsGrouped" [(ngModel)]="selectedLocation" optionLabel="locationName" [group]="true" placeholder="select location" (onChange)="getSelectedLocationData($event)">
+                        <div class="row">
+                            <div class="col-7 d-flex align-items-center">
+                                <label class="mb-0 mr-2 w-100">{{tab.label}}</label> 
+                                <p-dropdown [filter]="true" filterBy="locationName" class="w-100" [options]="combatStats.locationsGrouped" [(ngModel)]="selectedLocation" optionLabel="locationName" [group]="true" placeholder="select location" (onChange)="getSelectedLocationData($event)">
                                     <ng-template let-group pTemplate="group">
                                         <div class="p-d-flex p-ai-center">
                                             <span>{{group.label}}</span>
@@ -54,6 +54,7 @@
                                     </ng-template>
                                 </p-dropdown>
                             </div>
+                            <div class="col-5"></div>
                         </div>
                           
                         <div>

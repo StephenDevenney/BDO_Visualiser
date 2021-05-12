@@ -320,7 +320,9 @@ CREATE TABLE IF NOT EXISTS userClass_gearScore (
 	aap INTEGER DEFAULT 0,
 	dp INTEGER DEFAULT 0,
 	gearScore INTEGER DEFAULT 0,
-	dateCreated TEXT NOT NULL
+	dateCreated TEXT NOT NULL,
+	gearLabel TEXT DEFAULT '',
+	isCurrent INTEGER DEFAULT 0,
 );
 COMMIT;
 
@@ -338,7 +340,7 @@ INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Life', 'Life
 INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Fail Stacks', 'Fail Stacks Tracker', 'fail-stacks');
 INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Scrolls', 'Track Your Scrolls', 'scrolls');
 INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Barter', 'Manage Your Bartering', 'barter');
-INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Classes', 'Character Creation', 'user-classes');
+INSERT INTO security_navMenu (navName, navTitle, navRoute) VALUES ('Family', 'Manage Family Classes and Shared Stats', 'user-classes');
 
 -- security_navIcon
 
@@ -380,9 +382,9 @@ INSERT INTO enum_roles (roleName) VALUES ('user');
 INSERT INTO enum_roles (roleName) VALUES ('admin');
 
 -- enum_classRole
-INSERT INTO enum_classRole (roleDescription) VALUES ('Main');
+INSERT INTO enum_classRole (roleDescription) VALUES ('Main Combatant');
 INSERT INTO enum_classRole (roleDescription) VALUES ('Tagged');
-INSERT INTO enum_classRole (roleDescription) VALUES ('Secondary');
+INSERT INTO enum_classRole (roleDescription) VALUES ('Secondary Combatant');
 INSERT INTO enum_classRole (roleDescription) VALUES ('Life Skiller');
 INSERT INTO enum_classRole (roleDescription) VALUES ('Alt');
 

@@ -13,7 +13,6 @@
         # Input
             ## Buttons
             ## Dropdown
-                ### Text
                 ### Icon
                 ### Panel Body
                 ### Panel Items
@@ -39,6 +38,7 @@
             ## Checkboxes  
             ## Switch
             ## FloatLabel
+            ## Placeholder
             ## Popup Dialog
     */
 
@@ -131,8 +131,8 @@
 
         &:hover, &:focus, &:active{
             &:not(.disabled):not(:disabled){
-                background: lighten($dark-secondary, 10%);
-                border-color: lighten($dark-secondary, 10%);
+                background: lighten($dark-secondary, 5%);
+                border-color: lighten($dark-secondary, 5%);
                 color: $dark-secondary-text;
             } 
         }
@@ -171,11 +171,6 @@
         background-color: lighten($dark-primary, 10%);
         border-color: darken($dark-tertiary, 15%);
 
-        // ### Text
-        &.p-inputtext {
-            color: $dark-primary-text;
-        }  
-
         // ### Icon
         &.p-dropdown .p-dropdown-trigger {
             color: $dark-primary-text;
@@ -193,20 +188,19 @@
             // ### Filter
             .p-dropdown-header {
                 background: lighten($dark-primary, 5%);
-                .p-inputtext {
-                    background: lighten($dark-primary, 5%);
-                    border-color: darken($dark-tertiary, 15%);
-                }
-                .p-inputtext:enabled:hover {
-                    border-color: lighten($dark-tertiary, 10%);
-                }
                 .p-dropdown-filter-icon {
                     color: $dark-primary-text;
                 }
             }
 
-            .p-dropdown-items .p-dropdown-empty-message {
-                color: $dark-primary-text;
+            .p-dropdown-items {
+                .p-dropdown-empty-message {
+                    color: $dark-primary-text;
+                }
+                .p-dropdown-item-group {
+                    background: lighten($dark-primary, 3%);
+                    color: $dark-primary-text;
+                }
             }
         }
 
@@ -252,11 +246,7 @@
     .p-dropdown:not(.p-disabled).p-focus {
         border-color: lighten($dark-tertiary, 10%);
     }
-
-    .p-inputtext {
-        color: $dark-primary-text;
-    }
-
+    
     // ## MultiSelect
 
     // ### Element
@@ -423,9 +413,6 @@
     // ## Class Selection
     .character-card-class-image {
         border: 4px solid darken($standard-primary, 2%);
-        // &:hover {
-        //     border-color: goldenrod;
-        // }
     }
 
     .character-card-class-image-alt {
@@ -449,12 +436,19 @@
     .p-inputtext {
         color: $dark-primary-text;
     }
-
+    
     .p-inputtext {
-        background-color: $dark-primary;
+        color: $dark-primary-text;
+        background: lighten($dark-primary, 5%);
+        border-color: darken($dark-tertiary, 15%);
     }
 
-    .p-inputtext:enabled:focus {
+    .p-inputtext:enabled:hover {
+        border-color: lighten($dark-tertiary, 10%);
+    }
+
+    .p-inputtext:enabled:focus, .p-inputtext.p-focus {
+        border-color: lighten($dark-tertiary, 20%);
         box-shadow: 0 0 0 0.03rem $dark-secondary;
     }
 
@@ -522,20 +516,7 @@
         color: $dark-primary-text;  
     }
 
-    // ## Input Number
-    .p-inputnumber .p-component {
-        border-color: $dark-tertiary;
-    }
-
-    .p-inputtext:enabled:hover {
-        border-color: lighten($dark-tertiary, 10%);
-    }
-
-    .p-inputtext:enabled:focus {
-        border-color: lighten($dark-tertiary, 10%);
-        box-shadow: none;
-    }
-
+    // ## Placeholder
     .p-placeholder {
         color: lighten($dark-primary-text, 10%);
     }

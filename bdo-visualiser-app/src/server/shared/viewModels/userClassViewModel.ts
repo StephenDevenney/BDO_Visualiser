@@ -73,14 +73,16 @@ export class UserClassViewModel {
 }
 
 export class GearViewModel {
+    public gearLabel: string = "";
     public ap: number = 0;
     public aap: number = 0;
     public dp: number = 0
     public gearScore: number = 0;
     public gearBrackets: GearBracketsViewModel = new GearBracketsViewModel();
 
-    constructor(ap?: number, aap?: number, dp?: number, gearScore?: number, gearBrackets?: GearBracketsViewModel) {
-        if(ap) {
+    constructor(gearLabel?: string, ap?: number, aap?: number, dp?: number, gearScore?: number, gearBrackets?: GearBracketsViewModel) {
+        if(gearLabel) {
+            this.gearLabel = gearLabel;
             this.ap = ap;
             this.aap = aap;
             this.dp = dp;

@@ -273,6 +273,9 @@
     background-position: center;
     background-size: cover;
     height: 25vh;
+    &.large {
+        height: 45vh;
+    }
 }
 
 .userClass-selected .portrait-hoverable {

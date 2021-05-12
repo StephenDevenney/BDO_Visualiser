@@ -31,6 +31,7 @@
     # Specifics
         ## Dropdown-Options
         ## Class Selection
+            ### Tabpanel Override
     # Logo
     # Bootstrap Override
     # PrimeNG Override
@@ -252,19 +253,11 @@
 .page-tab {
     width: 100%;
     height: 100%;
-
-    .page-tab-content {
-
-    }
 }
 
 // ## Containers 
 .table-container {
     height: calc(90vh - 4rem + 6px);
-}
-
-.tab-container {
-    background-color: transparent;
 }
 
 //# Fonts
@@ -483,10 +476,10 @@ input {
 // ## Dropdowns
 .p-dropdown {
     border-radius: 0.25rem;
-    width: calc(10em + 1rem + 2px);
+    // width: calc(10em + 1rem + 2px);
 }
 
-.table-insert .p-dropdown,.p-inputnumber {
+.p-dropdown,.p-inputnumber, .p-inputtext {
     width: 100% !important;
 }
 
@@ -528,13 +521,6 @@ input {
     // ### Panels
     .p-tabview-panels {
         height: calc(100vh - 4.5rem);
-        background: transparent;
-    }
-}
-
-.character-card .p-tabview {
-    .p-tabview-panels {
-        height: 0rem;
         background: transparent;
     }
 }
@@ -646,7 +632,15 @@ input {
     border: none
 }
 
-// Stat Container
+// ### Tabpanel Override
+.character-card-background {
+    .p-tabview-panels {
+        overflow-y: auto;
+        height: calc(30vh - 4.5rem);
+    }
+}
+
+// ## Stat Container
 .combat-stats-container {
     height: calc(60vh - 3.5rem - 6em);
     overflow-y: auto;

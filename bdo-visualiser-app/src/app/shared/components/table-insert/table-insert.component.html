@@ -10,7 +10,7 @@
                     <label>Location</label>
                     <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[0]);" [(ngModel)]="combatHeaders[0].isActive" ngDefaultControl></p-inputSwitch>
                 </div>
-                <p-dropdown class="w-100" [filter]="true" filterBy="locationName" [disabled]="!combatHeaders[0].isActive" class="w-100" appendTo="body" [options]="combatEnums.locationNamesEnum" [(ngModel)]="newEntry.grindLocation" optionLabel="locationName" [group]="true">
+                <p-dropdown class="w-100" [filter]="true" filterBy="locationName" [disabled]="!combatHeaders[0].isActive" class="w-100" [options]="combatEnums.locationNamesEnum" [(ngModel)]="newEntry.grindLocation" optionLabel="locationName" [group]="true">
                     <ng-template let-group pTemplate="group">
                         <div class="p-d-flex p-ai-center">
                             <span>{{group.label}}</span>
@@ -23,7 +23,7 @@
                     <label>Time Grinded (Minutes)</label>
                     <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[1])" [(ngModel)]="combatHeaders[1].isActive" ngDefaultControl></p-inputSwitch>
                 </div>
-                <p-dropdown class="w-100" [disabled]="!combatHeaders[1].isActive" appendTo="body" [options]="combatEnums.timeAmountEnum" [(ngModel)]="newEntry.timeAmount" optionLabel="timeAmount"></p-dropdown>
+                <p-dropdown class="w-100" [disabled]="!combatHeaders[1].isActive" [options]="combatEnums.timeAmountEnum" [(ngModel)]="newEntry.timeAmount" optionLabel="timeAmount"></p-dropdown>
             </div>
             <div class="col-4">
                 <div class="d-flex align-items-center justify-content-between">
@@ -39,21 +39,21 @@
                     <label>Character</label>
                     <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[3]);" [(ngModel)]="combatHeaders[3].isActive" ngDefaultControl></p-inputSwitch>
                 </div>
-                <p-dropdown #userClassDropdown (onChange)="currentClassChanged($event);" [disabled]="!combatHeaders[3].isActive" appendTo="body" [options]="combatEnums.activeClasses" [(ngModel)]="newEntry.userClass" optionLabel="classDescription"></p-dropdown>
+                <p-dropdown #userClassDropdown (onChange)="currentClassChanged($event);" [disabled]="!combatHeaders[3].isActive" [options]="combatEnums.activeClasses" [(ngModel)]="newEntry.userClass" optionLabel="classDescription"></p-dropdown>
             </div>
             <div class="col-4">
                 <div class="d-flex align-items-center justify-content-between">
                     <label>Server</label>
                     <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[4]);" [(ngModel)]="combatHeaders[4].isActive" ngDefaultControl></p-inputSwitch>
                 </div>
-                <p-dropdown [disabled]="!combatHeaders[4].isActive" appendTo="body" [options]="combatEnums.serverNamesEnum" [(ngModel)]="newEntry.server" optionLabel="serverDescription"></p-dropdown>
+                <p-dropdown [disabled]="!combatHeaders[4].isActive" [options]="combatEnums.serverNamesEnum" [(ngModel)]="newEntry.server" optionLabel="serverDescription"></p-dropdown>
             </div>
             <div class="col-4">
                 <div class="d-flex align-items-center justify-content-between">
                     <label>Combat Type</label>
                     <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[5]);" [(ngModel)]="combatHeaders[5].isActive" ngDefaultControl></p-inputSwitch>
                 </div>
-                <p-dropdown (onChange)="combatTypeChanged($event);" [disabled]="!combatHeaders[5].isActive" appendTo="body" [options]="combatEnums.combatTypesEnum" [(ngModel)]="newEntry.combatType" optionLabel="combatTypeName"></p-dropdown>
+                <p-dropdown (onChange)="combatTypeChanged($event);" [disabled]="!combatHeaders[5].isActive" [options]="combatEnums.combatTypesEnum" [(ngModel)]="newEntry.combatType" optionLabel="combatTypeName"></p-dropdown>
             </div>
         </div>
         <div class="row align-items-center mt-3">
@@ -74,7 +74,7 @@
             <div class="col-4">
                 <div class="d-flex justify-content-center align-items-center">
                     <button class="btn btn-primary mr-2" (click)="createEntry()">Create Entry</button>
-                    <button class="btn btn-primary" (click)="cancelInsert.emit(combatHeaders);">Cancel</button>
+                    <button class="btn btn-secondary" (click)="cancelInsert.emit(combatHeaders);">Cancel</button>
                 </div>
             </div>
         </div>

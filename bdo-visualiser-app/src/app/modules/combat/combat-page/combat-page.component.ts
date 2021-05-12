@@ -97,9 +97,8 @@ export class CombatPageComponent extends BaseComponent implements OnInit {
   public addEntryChecks() {
     if(this.activeClasses.length > 0)
       this.isAddingEntry = true;
-    else {
-      this.messageService.add({severity:'info', summary:'Main Class Required.', detail:'Create a class before adding an entry.', life: 2600 });
-    }
+    else
+      this.messageService.add({severity:'warn', summary:'Class Required.', detail:'Create a class before adding an entry.', life: 2600 });
   }
 
   public async onVisibleColumnChange(event: { itemValue: CombatHeadersViewModel, value: Array<CombatHeadersViewModel> }) {

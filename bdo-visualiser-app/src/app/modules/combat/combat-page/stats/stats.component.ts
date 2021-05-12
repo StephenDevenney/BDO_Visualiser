@@ -32,17 +32,10 @@ export class StatsComponent extends BaseComponent implements OnInit {
     await this.loadLocationData();
   }
 
-  public loadTrashLoot(e: any) {
-    let locationToLoad = e.value;
-    if(locationToLoad === null)
-      this.locationSelected = false;
-    else {
-
-    }
-  }
-
   public async getSelectedLocationData(e: { orginalEvent: MouseEvent, value: LocationNamesEnumViewModel }) {
     this.selectedLocation = e.value;
+    if(!this.locationIsSelected)
+        this.locationIsSelected = true;
     await this.loadLocationData();
   }
 
@@ -60,9 +53,6 @@ export class StatsComponent extends BaseComponent implements OnInit {
     }).catch(() => {
       this.messageService.add({severity:'error', summary:'Error.', detail:'Error Loading Location.', life: 2600 });
       this.loader.stopBackground();
-    }).then(() => {
-      if(!this.locationIsSelected)
-        this.locationIsSelected = true;
     });
   }
 

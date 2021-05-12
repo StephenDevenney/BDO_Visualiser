@@ -53,13 +53,15 @@ export class UserClassEntity {
     public combatTypeName: string = "";
     public dateCreated: string = "";
     public classDescription: string = "";
+    public gearLabel: string = "";
     public ap: number = 0;
     public aap: number = 0;
     public dp: number = 0;
     public gearScore: number = 0;
+    public isCurrent: boolean = false;
     public userClassCount: number = 0;
 
-    constructor(classId?: number, FK_gearScoreId?: number, classNameId?: number, className?: string, fileName?: string, classRoleId?: number, classRole?: string, combatTypeId?: number, combatTypeName?: string, dateCreated?: string, classDescription?: string, ap?: number, aap?: number, dp?: number, gearScore?: number, userClassCount?: number) {
+    constructor(classId?: number, FK_gearScoreId?: number, classNameId?: number, className?: string, fileName?: string, classRoleId?: number, classRole?: string, combatTypeId?: number, combatTypeName?: string, dateCreated?: string, classDescription?: string, gearLabel?: string, ap?: number, aap?: number, dp?: number, gearScore?: number, isCurrent?: boolean, userClassCount?: number) {
         if(classId) {
             this.classId = classId;
             this.FK_gearScoreId = FK_gearScoreId;
@@ -72,10 +74,12 @@ export class UserClassEntity {
             this.combatTypeName = combatTypeName;
             this.dateCreated = dateCreated;
             this.classDescription= classDescription;
+            this.gearLabel = gearLabel;
             this.ap = ap;
             this.aap = aap;
             this.dp = dp;
             this.gearScore = gearScore;
+            this.isCurrent = isCurrent;
             this.userClassCount = userClassCount;
         }     
     }
@@ -88,8 +92,10 @@ export class GearEntity {
     public dp: number = 0
     public gearScore: number = 0;
     public dateCreated: string = "";
+    public gearLabel: string = "";
+    public isCurrent: boolean = false;
 
-    constructor(gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number, dateCreated?: string) {
+    constructor(gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number, dateCreated?: string, gearLabel?: string, isCurrent?: boolean) {
         if(gearScoreId) {
             this.gearScoreId = gearScoreId;
             this.ap = ap;
@@ -97,6 +103,8 @@ export class GearEntity {
             this.dp = dp;
             this.gearScore = gearScore;
             this.dateCreated = dateCreated;
+            this.gearLabel = gearLabel;
+            this.isCurrent = isCurrent;
         }   
     }
 }

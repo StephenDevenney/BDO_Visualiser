@@ -23,6 +23,7 @@ import { ButtonModule } from 'primeng/button';
 import { Calculations } from '../../../server/shared/calc/calculations';
 import { TabViewModule } from 'primeng/tabview';
 import { ListboxModule } from 'primeng/listbox';
+import { InputTextModule } from 'primeng/inputtext';
 
 @NgModule({
   imports: [
@@ -58,7 +59,8 @@ import { ListboxModule } from 'primeng/listbox';
     NoRecordPipe,
     ButtonModule,
     TabViewModule,
-    ListboxModule
+    ListboxModule,
+    InputTextModule
   ],
   providers: [
     Globals,

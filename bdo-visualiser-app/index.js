@@ -35,7 +35,7 @@ let createWindow = () => {
 	});
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show();
-		mainWindow.removeMenu();
+		// mainWindow.removeMenu();
 	});
 
 	// and load the index.html of the app.

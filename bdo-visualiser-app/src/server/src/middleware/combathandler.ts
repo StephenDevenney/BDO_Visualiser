@@ -42,7 +42,7 @@ export class CombatPageDataHandler {
                     agrisBurnt = row.agrisAmount.toString();
 
                 vdVM.push(new VisibleDataViewModel(row.grindingId, row.dateCreated, row.locationName, timeDescription, row.trashLootAmount, row.className, row.serverDescription, row.combatTypeName, row.agrisAmount, afuaruSpawns));
-                gdVM.push(new GrindingDataViewModel(row.grindingId, row.userClassId, row.dateCreated, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, row.recommendedAP), new TimeAmountEnumViewModel(row.timeId, row.timeAmount), row.trashLootAmount, new UserClassViewModel(row.userClassId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRoleName), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription), new ServerNamesEnumViewModel(row.serverId, row.serverDescription, row.isElviaRealm), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new AgrisEnumViewModel(row.agrisId, agrisBurnt), row.afuaruSpawns));
+                gdVM.push(new GrindingDataViewModel(row.grindingId, row.userClassId, row.dateCreated, new LocationNamesEnumViewModel(row.locationId, row.territoryId, row.locationName, row.territoryName, row.recommendedLevel, row.recommendedAP), new TimeAmountEnumViewModel(row.timeId, row.timeAmount), row.trashLootAmount, new UserClassViewModel(row.userClassId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRoleName), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.gearLabel, row.ap, row.aap, row.dp, row.gearScore), row.classDescription), new ServerNamesEnumViewModel(row.serverId, row.serverDescription, row.isElviaRealm), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new AgrisEnumViewModel(row.agrisId, agrisBurnt), row.afuaruSpawns));
             });
         });
         
@@ -139,7 +139,7 @@ export class CombatPageNewEntryHandler {
                 previousEntry.grindLocation = new LocationNamesEnumViewModel(_.locationId, _.territoryId, _.locationName, _.territoryName, _.recommendedLevel, _.recommendedAP);
                 previousEntry.server = new ServerNamesEnumViewModel(_.serverId, _.serverDescription, _.isElviaRealm);
                 previousEntry.timeAmount = new TimeAmountEnumViewModel(_.timeId, _.timeAmount);
-                previousEntry.userClass = new UserClassViewModel(_.userClassId, new ClassNamesEnumViewModel(_.classNameId, _.className, _.fileName), new ClassRolesEnumViewModel(_.classRoleId, _.classRoleName), new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName), new GearViewModel(_.ap, _.aap, _.dp, _.gearScore), _.classDescription);    
+                previousEntry.userClass = new UserClassViewModel(_.userClassId, new ClassNamesEnumViewModel(_.classNameId, _.className, _.fileName), new ClassRolesEnumViewModel(_.classRoleId, _.classRoleName), new CombatTypesEnumViewModel(_.combatTypeId, _.combatTypeName), new GearViewModel(_.gearLabel, _.ap, _.aap, _.dp, _.gearScore), _.classDescription);    
                 let agrisBurnt = "";
                 if(_.agrisAmount > 0 && _.agrisDayDescription.length > 0)
                     agrisBurnt = _.agrisAmount + " (" + _.agrisDayDescription + ")";

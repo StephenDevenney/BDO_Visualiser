@@ -9,7 +9,7 @@ export class UserClassHandler {
         let acVM = new Array<UserClassViewModel>();
         await new UserClassContext().getAll().then((_ : Array<UserClassEntity>) => {
             _.forEach(async row => {
-                acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.ap, row.aap, row.dp, row.gearScore), row.classDescription));
+                acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(row.gearLabel, row.ap, row.aap, row.dp, row.gearScore), row.classDescription));
             });
         });
         return acVM;
@@ -21,7 +21,7 @@ export class UserClassHandler {
         let ncE = await new UserClassContext().getMostRecent();
         await new GearContext().updateClassId(ncE.FK_gearScoreId, ncE.classId );
 
-        return new UserClassViewModel(ncE.classId, new ClassNamesEnumViewModel(ncE.classNameId, ncE.className, ncE.fileName), new ClassRolesEnumViewModel(ncE.classRoleId, ncE.classRole), new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(ncE.ap, ncE.aap, ncE.dp, ncE.gearScore), ncE.classDescription);
+        return new UserClassViewModel(ncE.classId, new ClassNamesEnumViewModel(ncE.classNameId, ncE.className, ncE.fileName), new ClassRolesEnumViewModel(ncE.classRoleId, ncE.classRole), new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(ncE.gearLabel, ncE.ap, ncE.aap, ncE.dp, ncE.gearScore), ncE.classDescription);
 
         async function convertToEntity(userClass: UserClassViewModel): Promise<UserClassEntity> {
             let userClassEntity: UserClassEntity = new UserClassEntity(); 
@@ -36,10 +36,12 @@ export class UserClassHandler {
             userClassEntity.classDescription = userClass.classDescription;
             userClassEntity.combatTypeId = userClass.combatTypeEnum.combatTypeId;
             userClassEntity.combatTypeName = userClass.combatTypeEnum.combatTypeName;
+            userClassEntity.gearLabel = userClass.gear.gearLabel;
             userClassEntity.ap = userClass.gear.ap;
             userClassEntity.aap = userClass.gear.aap;
             userClassEntity.dp = userClass.gear.dp;
             userClassEntity.dateCreated = new Calculations().calcCurrentDate();
+            userClassEntity.isCurrent = true;
 
             return userClassEntity;
         }

@@ -24,9 +24,8 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
     this.userClassService.getClassCreationData().then((res: ClassCreationViewModel) => {
       this.classCreationData = res;
       console.log(res);
-      this.classRolesEnumFiltered = res.classRolesEnum.filter(_ => _.classRole != "Main");
-      if(!res.hasMainUserClass)
-        this.classCreationData.newUserClass.classRoleEnum = this.classCreationData.classRolesEnum[0];
+      if(res.hasMainUserClass)
+        this.classRolesEnumFiltered = res.classRolesEnum.filter(_ => _.classRoleId != 1);
 
       this.isLoaded = true;
     }).catch((err: any) => {
@@ -46,14 +45,19 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
   }
 
   public async createClass() {
-    this.loader.startBackground();
-    await this.userClassService.addUserClass(this.classCreationData.newUserClass).then((res: UserClassViewModel) => {
-      console.log(res);
-      this.router.navigate(["user-classes"]);
-    }).catch(() => {
-      this.messageService.add({ severity:'error', summary:'Error', detail:'Error adding class.', life: 2600 });
-    }).then(() => {
-      this.loader.stopBackground();
-    });
+    if(this.classCreationData.newUserClass.gear.gearLabel.length > 0) {
+      this.loader.startBackground();
+      await this.userClassService.addUserClass(this.classCreationData.newUserClass).then((res: UserClassViewModel) => {
+        console.log(res);
+        this.messageService.add({ severity:'info', summary:'How To Update', detail:'You can add more gear builds or alter existing for a specific character by clicking edit character.', life: 2600 });
+        this.router.navigate(["user-classes"]);
+      }).catch(() => {
+        this.messageService.add({ severity:'error', summary:'Error', detail:'Error adding class.', life: 2600 });
+      }).then(() => {
+        this.loader.stopBackground();
+      });
+    } 
+    else
+      this.messageService.add({ severity:'warn', summary:'Gear builds require a name', detail:'Examples: Nouver, Kutum, Tank, Full AP, Accuarcy, Evasion...', life: 2600 });
   }
 }

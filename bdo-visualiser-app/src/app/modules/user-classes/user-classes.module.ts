@@ -5,9 +5,6 @@ import { SharedModule } from '../../shared/modules/sharedModule';
 import { RouterModule } from '@angular/router';
 import { ClassCreationPageComponent } from './class-creation/class-creation-page.component';
 import { UserClassesService } from './user-classes.service';
-import { Calculations } from 'src/server/shared/calc/calculations';
-
-
 
 @NgModule({
   declarations: [
