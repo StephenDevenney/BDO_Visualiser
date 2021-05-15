@@ -29,4 +29,9 @@ export class UserClassesPageComponent extends BaseComponent implements OnInit  {
     });
   }
 
+  public navToEdit(item: UserClassViewModel) {
+    if(item.classId > 0)
+      this.router.navigate(['user-classes/edit/' + item.classId]);
+  }
+
 }

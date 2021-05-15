@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CharacterCardsViewModel, ClassCreationViewModel, ClassNamesEnumViewModel, UserClassViewModel } from '../../../server/shared/viewModels/userClassViewModel';
+import { CharacterCardsViewModel, ClassCreationViewModel, ClassEditViewModel, ClassNamesEnumViewModel, UserClassViewModel } from '../../../server/shared/viewModels/userClassViewModel';
 import { UserClassController } from '../../../server/src/routes/userClassController';
 
 @Injectable()
@@ -18,6 +18,10 @@ export class UserClassesService {
     public async getClassCreationData(): Promise<ClassCreationViewModel> {
         return await this.userClassRoute.getClassCreationData();
     } 
+
+    public async getClassEditData(userClassId: number): Promise<ClassEditViewModel> {
+        return await this.userClassRoute.getClassEditData(userClassId);
+    }
 
         // POST
     public async addUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {

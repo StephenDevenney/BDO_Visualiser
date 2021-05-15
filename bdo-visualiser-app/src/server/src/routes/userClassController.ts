@@ -1,12 +1,12 @@
-import { CharacterCardsViewModel, ClassCreationViewModel, ClassEditViewModel, ClassNamesEnumViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
-import { UserClassCreationHandler, UserClassHandler, UserClassNameHandler } from '../middleware/userClassHandler';
+import { ClassCreationViewModel, ClassEditViewModel, ClassNamesEnumViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
+import { UserClassDataHandler, UserClassHandler } from '../middleware/userClassHandler';
 
 export class UserClassController {
     constructor(){}
 
         // GET
     public async getClassNameEnums(): Promise<Array<ClassNamesEnumViewModel>> {
-        return await new UserClassNameHandler().getClassNames();
+        return await new UserClassHandler().getClassNameEnums();
     } 
 
     public async getClassCardsData(): Promise<Array<UserClassViewModel>> {
@@ -14,14 +14,14 @@ export class UserClassController {
     } 
 
     public async getClassCreationData(): Promise<ClassCreationViewModel> {
-        return await new UserClassCreationHandler().getClassCreationData();
+        return await new UserClassDataHandler().getClassCreationData();
     } 
 
-    public async getClassEditData(): Promise<ClassEditViewModel>{
-        return new ClassEditViewModel();
+    public async getClassEditData(userClassId: number): Promise<ClassEditViewModel>{
+        return await new UserClassDataHandler().getClassEditData(userClassId);
     }
         // POST
     public async addUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
-        return await new UserClassHandler().addUserClass(userClass);
+        return await new UserClassDataHandler().addUserClass(userClass);
     }
 } 

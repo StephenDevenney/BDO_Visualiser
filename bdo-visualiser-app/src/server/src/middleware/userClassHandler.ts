@@ -1,25 +1,23 @@
-import { UserClassViewModel, CombatTypesEnumViewModel, GearViewModel, ClassNamesEnumViewModel, ClassCreationViewModel, ClassRolesEnumViewModel, GearBracketsViewModel, CharacterCardsViewModel, ClassEditViewModel, BuildsViewModel } from '../../shared/viewModels/userClassViewModel';
-import { UserClassContext, ClassNamesEnumContext, ClassRolesEnumContext, GearContext, CombatTypesEnumContext, GearBracketContext } from '../sqlContext/userClassContext';
+import { UserClassViewModel, CombatTypesEnumViewModel, GearViewModel, ClassNamesEnumViewModel, ClassCreationViewModel, ClassRolesEnumViewModel, GearBracketsViewModel, ClassEditViewModel, BuildsViewModel } from '../../shared/viewModels/userClassViewModel';
+import { UserClassContext, ClassNamesEnumContext, ClassRolesEnumContext, GearContext, CombatTypesEnumContext } from '../sqlContext/userClassContext';
 import { Calculations } from '../../shared/calc/calculations';
-import { ClassNamesEnumEntity, ClassRoleEnumEntity, CombatTypesEnumEntity, GearBracketsEntity, GearEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
+import { ClassNamesEnumEntity, ClassRoleEnumEntity, CombatTypesEnumEntity, GearEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
 
+export class UserClassDataHandler {
+    public async getClassCreationData(): Promise<ClassCreationViewModel> {
+        let hasMainUserClass = true;
+        let cneVM = new Array<ClassNamesEnumViewModel>();
+        let cteVM = new Array<CombatTypesEnumViewModel>();
+        let creVM = new Array<ClassRolesEnumViewModel>();
+        await new UserClassHandler().getClassNameEnums().then((res: Array<ClassNamesEnumViewModel>) => { cneVM = res; });
+        await new UserClassHandler().getCombatTypeEnums().then((res) => { cteVM = res; });
+        await new UserClassHandler().getClassRoleEnums().then((res) => { creVM = res; });
+        await new UserClassHandler().getMostRecentUserClass().then((_: UserClassViewModel) => {
+            if(_.classId == 0)
+                hasMainUserClass = false;
+        }); 
 
-export class UserClassHandler {
-    public async getUserClasses(): Promise<Array<UserClassViewModel>> {
-        let acVM = new Array<UserClassViewModel>();
-        await new UserClassContext().getAll().then((_ : Array<UserClassEntity>) => {
-            _.forEach(async row => {
-                if(row.FK_gearTypeId == 1) {
-                    await new GearContext().getViaClassId(row.classId).then((res: GearEntity) => {
-                        acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%")), row.classDescription));
-                    });
-                }  
-                /*
-                    TODO: else if(row.FK_gearTypeId == 2) get life gear
-                */
-            });
-        });
-        return acVM;
+        return new ClassCreationViewModel(cneVM, cteVM, creVM, new UserClassViewModel(), hasMainUserClass);
     }
 
     public async addUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
@@ -48,88 +46,129 @@ export class UserClassHandler {
             return userClassEntity;
         }
     }
+
+    public async getClassEditData(userClassId: number): Promise<ClassEditViewModel> {
+        let ceVM: ClassEditViewModel = new ClassEditViewModel();
+        await new UserClassHandler().getGearBuilds(userClassId).then((res: BuildsViewModel) => { ceVM.builds = res; });
+        await new UserClassHandler().getCombatTypeByUserClassId(userClassId).then((res: CombatTypesEnumViewModel) => { ceVM.userClassCombatType = res; });
+        await new UserClassHandler().getRoleByUserClassId(userClassId).then((res: ClassRolesEnumViewModel) => { ceVM.userClassRole = res; });
+        await new UserClassHandler().getCombatTypeEnums().then((res: Array<CombatTypesEnumViewModel>) => { ceVM.userClassCombatTypesEnum = res; });
+        await new UserClassHandler().getClassRoleEnums().then((res: Array<ClassRolesEnumViewModel>) => { ceVM.userClassRolesEnum = res; });
+
+        return ceVM;
+    }
 }
 
-export class UserClassNameHandler {
-    public async getClassNames(): Promise<Array<ClassNamesEnumViewModel>> {
+export class UserClassHandler {
+    public async getUserClasses(): Promise<Array<UserClassViewModel>> {
+        let acVM = new Array<UserClassViewModel>();
+        await new UserClassContext().getAll().then((_ : Array<UserClassEntity>) => {
+            _.forEach(async row => {
+                if(row.FK_gearTypeId == 1) {
+                    await new GearContext().getViaClassId(row.classId).then((res: GearEntity) => {
+                        acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%")), row.classDescription));
+                    });
+                }  
+                /*
+                    TODO: else if(row.FK_gearTypeId == 2) get life gear
+                */
+            });
+        });
+        return acVM;
+    }
+
+    public async getCombatTypeEnums(): Promise<Array<CombatTypesEnumViewModel>> {
+        let combatTypesEnum = new Array<CombatTypesEnumViewModel>();
+        await new CombatTypesEnumContext().getAll().then((_: Array<CombatTypesEnumEntity>) => {
+            _.forEach(row => {
+                combatTypesEnum.push(new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName));
+            });
+        });
+
+        return combatTypesEnum;
+    }
+
+    public async getClassRoleEnums(): Promise<Array<ClassRolesEnumViewModel>> {
+        let classRoleEnums = new Array<ClassRolesEnumViewModel>();
+        await new ClassRolesEnumContext().getAll().then((_: Array<ClassRoleEnumEntity>) => {
+            _.forEach(row => {
+                classRoleEnums.push(new ClassRolesEnumViewModel(row.roleId, row.roleDescription));
+            });
+        });
+
+        return classRoleEnums;
+    }
+
+    public async getClassNameEnums(): Promise<Array<ClassNamesEnumViewModel>> {
         let classNamesEnum = new Array<ClassNamesEnumViewModel>();
         await new ClassNamesEnumContext().getAll().then((_: Array<ClassNamesEnumEntity>) => {
             _.forEach(row => {
-                classNamesEnum.push(new ClassNamesEnumViewModel(row.classId, row.className));
+                classNamesEnum.push(new ClassNamesEnumViewModel(row.classId, row.className, row.fileName, false));
             });
         });
         return classNamesEnum;
     }
-}
 
-export class UserClassCreationHandler {
-    public async getClassCreationData(): Promise<ClassCreationViewModel> {
-        
-        let cneVM = new Array<ClassNamesEnumViewModel>();
-        await new ClassNamesEnumContext().getAll().then((_: Array<ClassNamesEnumEntity>) => {
-            _.forEach(row => {
-                cneVM.push(new ClassNamesEnumViewModel(row.classId, row.className, row.fileName, false));
-            });
-        });
-
-        let cteVM = new Array<CombatTypesEnumViewModel>();
-        await new CombatTypesEnumContext().getAll().then((_: Array<CombatTypesEnumEntity>) => {
-            _.forEach(row => {
-                cteVM.push(new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName));
-            });
-        });
-
-        let creVM = new Array<ClassRolesEnumViewModel>();
-        await new ClassRolesEnumContext().getAll().then((_: Array<ClassRoleEnumEntity>) => {
-            _.forEach(row => {
-                creVM.push(new ClassRolesEnumViewModel(row.roleId, row.roleDescription));
-            });
-        });
-        let hasMainUserClass = true;
-        await new UserClassContext().getMostRecent().then((_: UserClassEntity) => {
-            if(typeof(_) == "undefined")
-                hasMainUserClass = false;
+    public async getMostRecentUserClass(): Promise<UserClassViewModel> {
+        let userClass: UserClassViewModel = new UserClassViewModel();
+        await new UserClassContext().getMostRecent().then(async (row: UserClassEntity) => {
+            if(row.FK_gearTypeId == 1) {
+                await new GearContext().getViaClassId(row.classId).then((res: GearEntity) => {
+                    userClass = new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%")), row.classDescription);
+                });
+            } 
+            else {
+                /*
+                    TODO: get life gear
+                */
+            }
         }); 
 
-        return new ClassCreationViewModel(cneVM, cteVM, creVM, new UserClassViewModel(), hasMainUserClass);
+        return userClass;
     }
-}
 
-export class UserClassEditHandler {
-    public async getClassEditData(): Promise<ClassEditViewModel> {
-        let ceVM: ClassEditViewModel = new ClassEditViewModel();
-        await getGearBuilds().then((res: BuildsViewModel) => {
-            ceVM.builds = res;
+    public async getCombatBuilds(userClassId: number): Promise<Array<GearViewModel>> {
+        let gVM: Array<GearViewModel> = new Array<GearViewModel>();
+        await new GearContext().getAllUserClassBuilds(userClassId).then((res: Array<GearEntity>) => {
+            res.forEach((_: GearEntity) => {
+                gVM.push(new GearViewModel(_.gearLabel, _.ap, _.aap, _.dp, _.gearScore, new GearBracketsViewModel(_.aapBracketLow + " - " + _.apBracketHigh, _.apBracketBonus, _.aapBracketLow + " - " + _.aapBracketHigh, _.aapBracketBonus, _.dpBracketLow + " - " + _.dpBracketHigh, _.dpBracketBonus + "%")));
+            });
+        });
+        return gVM;
+    }
+
+    public async getLifeBuilds(): Promise<void> {
+        /*
+            Get Life Gear Here
+        */
+        return;
+    }
+
+    public async getGearBuilds(userClassId: number): Promise<BuildsViewModel> {
+        let builds: BuildsViewModel = new BuildsViewModel();
+        await this.getCombatBuilds(userClassId).then((res: Array<GearViewModel>) => { builds.combat = res; });
+        await this.getLifeBuilds().then((res: void) => { });
+
+        return builds;
+    }
+
+    public async getRoleByUserClassId(classId: number): Promise<ClassRolesEnumViewModel> {
+        let userClassRole: ClassRolesEnumViewModel = new ClassRolesEnumViewModel();
+        await new ClassRolesEnumContext().getViaUserClassId(classId).then((res: ClassRoleEnumEntity) => {
+            userClassRole.classRoleId = res.roleId;
+            userClassRole.classRole = res.roleDescription;
         });
 
-        return new ClassEditViewModel();
+        return userClassRole;
+    }
 
-        async function getGearBuilds(): Promise<BuildsViewModel> {
-            let builds: BuildsViewModel = new BuildsViewModel();
-            await getCombatBuilds().then((res: Array<GearViewModel>) => {
-                builds.combat = res;
-            });
-            await getLifeBuilds().then((res: void) => {
-
-            });
-            return builds;
-        }
-
-        async function getCombatBuilds(): Promise<Array<GearViewModel>> {
-            let gVM: Array<GearViewModel> = new Array<GearViewModel>();
-            await new GearContext().getAll().then((res: Array<GearEntity>) => {
-                res.forEach((_: GearEntity) => {
-                    gVM.push(new GearViewModel(_.gearLabel, _.ap, _.aap, _.dp, _.gearScore));
-                });
-            });
-            return new Array<GearViewModel>();
-        }
-
-        async function getLifeBuilds(): Promise<void> {
-            /*
-                Get Life Gear Here
-            */
-            return;
-        }
+    public async getCombatTypeByUserClassId(classId: number): Promise<CombatTypesEnumViewModel> {
+        let combatType: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
+        await new CombatTypesEnumContext().getViaUserClassId(classId).then((res: CombatTypesEnumViewModel) => {
+            combatType.combatTypeId = res.combatTypeId;
+            combatType.combatTypeName = res.combatTypeName;
+        });
+        
+        return combatType;
     }
 }

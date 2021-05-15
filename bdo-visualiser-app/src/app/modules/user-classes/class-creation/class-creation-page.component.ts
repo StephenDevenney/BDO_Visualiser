@@ -36,6 +36,7 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
       this.messageService.add({ severity:'error', summary:'Error', detail:'Error Loading Data.', life: 2600 });
       // Log Error
     }).then(() => {
+      this.classCreationData.newUserClass.combatTypeEnum = this.classCreationData.combatTypesEnum[0];
       this.loader.stop();
     });
   }

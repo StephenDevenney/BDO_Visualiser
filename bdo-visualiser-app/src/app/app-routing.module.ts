@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: 'scrolls', component: ScrollsPageComponent, data: {page: 'scrolls'} },
   { path: 'user-classes', component: UserClassesPageComponent, data: {page: 'user-classes'} },
   { path: 'user-classes/creation', component: ClassCreationPageComponent, data: {page: 'user-classes/creation'} },
-  { path: 'user-classes/edit', component: ClassEditPageComponent, data: {page: 'user-classes/creation'} },
+  { path: 'user-classes/edit/:classId', component: ClassEditPageComponent, data: {page: 'user-classes/edit/:classId'} },
   { path: 'extras', component: ExtrasPageComponent, data: {page: 'extras'} },
   { path: '**', redirectTo:'home', data: {page: 'home'} }
 ];
