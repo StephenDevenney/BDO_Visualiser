@@ -50,9 +50,9 @@ export class CombatPageDataHandler {
     }
 
     public async addEntry(entry: GrindingDataViewModel, combatHeaders: Array<CombatHeadersViewModel>): Promise<VisibleDataViewModel> {
+        debugger;
         let eE = await convertToEntity(entry, combatHeaders);
-        await new GrindingDataContext().insert(eE);
-        let gdE = await new GrindingDataContext().getMostRecent();
+        let gdE = await new GrindingDataContext().insert(eE);
         let afuaruSpawns = "-";
         if(gdE.afuaruSpawnable)
             afuaruSpawns = gdE.afuaruSpawns.toString();
@@ -75,7 +75,6 @@ export class CombatPageDataHandler {
                 res.agrisId = eVM.agris.agrisId;
             if(headers.filter(_ => _.header == "Afuaru Spawns")[0].isActive && eVM.grindLocation.afuaruSpawnable)
                 res.afuaruSpawns = eVM.afuaruSpawns;
-            
             res.gearScoreId = (await new GearContext().getViaClassId(eVM.userClass.classId)).gearScoreId;
             res.trashLootAmount = eVM.trashLootAmount;
 

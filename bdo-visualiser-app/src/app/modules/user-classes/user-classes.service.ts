@@ -11,7 +11,7 @@ export class UserClassesService {
         return await this.userClassRoute.getClassNameEnums();
     } 
 
-    public async getClassCardsData(): Promise<CharacterCardsViewModel> {
+    public async getClassCardsData(): Promise<Array<UserClassViewModel>> {
         return await this.userClassRoute.getClassCardsData();
     } 
 

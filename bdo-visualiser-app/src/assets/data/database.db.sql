@@ -279,12 +279,21 @@ CREATE TABLE IF NOT EXISTS enum_combatTableHeadings (
 	header TEXT
 );
 COMMIT;
+
 BEGIN TRANSACTION;
 DROP TABLE IF EXISTS `enum_agris`;
 CREATE TABLE IF NOT EXISTS enum_agris (
 	agrisId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	agrisAmount INTEGER,
 	agrisDayDescription TEXT DEFAULT ''
+);
+COMMIT;
+
+BEGIN TRANSACTION;
+DROP TABLE IF EXISTS `enum_gearTypes`;
+CREATE TABLE IF NOT EXISTS enum_gearTypes (
+	gearTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	gearTypeDescription TEXT NOT NULL
 );
 COMMIT;
 
@@ -304,6 +313,7 @@ CREATE TABLE IF NOT EXISTS userClass_classes (
 	FK_combatSettingsId	INTEGER DEFAULT 0,
 	FK_classNameId INTEGER DEFAULT 0,
 	FK_classRoleId INTEGER DEFAULT 0,
+	FK_gearTypeId DEFAULT 0,
 	FK_gearScoreId INTEGER DEFAULT 0,
 	FK_primaryCombatTypeId INTEGER DEFAULT 2,
 	dateCreated TEXT NOT NULL
@@ -322,7 +332,7 @@ CREATE TABLE IF NOT EXISTS userClass_gearScore (
 	gearScore INTEGER DEFAULT 0,
 	dateCreated TEXT NOT NULL,
 	gearLabel TEXT DEFAULT '',
-	isCurrent INTEGER DEFAULT 0,
+	isCurrent INTEGER DEFAULT 0
 );
 COMMIT;
 
@@ -387,6 +397,7 @@ INSERT INTO enum_classRole (roleDescription) VALUES ('Tagged');
 INSERT INTO enum_classRole (roleDescription) VALUES ('Secondary Combatant');
 INSERT INTO enum_classRole (roleDescription) VALUES ('Life Skiller');
 INSERT INTO enum_classRole (roleDescription) VALUES ('Alt');
+INSERT INTO enum_classRole (roleDescription) VALUES ('Quester');
 
 -- enum_class
 INSERT INTO enum_class (className, fileName) VALUES ('-', '-');
@@ -657,6 +668,10 @@ INSERT INTO enum_agris (agrisAmount) VALUES (70000);
 INSERT INTO enum_agris (agrisAmount, agrisDayDescription) VALUES (80000, '4 Days');
 INSERT INTO enum_agris (agrisAmount) VALUES (90000);
 INSERT INTO enum_agris (agrisAmount, agrisDayDescription) VALUES (100000, '5 Days');
+
+-- enum_gearTypes
+INSERT INTO enum_gearTypes (gearTypeDescription) VALUES ('Combat');
+INSERT INTO enum_gearTypes (gearTypeDescription) VALUES ('Life');
 
 /*
 SELECT userClass_classes.classId, userClass_classes.FK_gearScoreId, enum_class.className as className, enum_class.classId as classNameId, (className || ' (' || cast(userClass_gearScore.gearScore as text) || ' GS)') AS classDescription, enum_classRole.roleId as classRoleId, enum_classRole.roleDescription as classRole, enum_combatType.combatTypeId, enum_combatType.combatTypeName, userClass_classes.dateCreated, userClass_gearScore.ap, userClass_gearScore.aap, userClass_gearScore.dp, userClass_gearScore.gearScore 

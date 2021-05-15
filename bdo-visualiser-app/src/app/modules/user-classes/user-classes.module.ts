@@ -5,11 +5,13 @@ import { SharedModule } from '../../shared/modules/sharedModule';
 import { RouterModule } from '@angular/router';
 import { ClassCreationPageComponent } from './class-creation/class-creation-page.component';
 import { UserClassesService } from './user-classes.service';
+import { ClassEditPageComponent } from './class-edit/class-edit.component';
 
 @NgModule({
   declarations: [
     UserClassesPageComponent,
-    ClassCreationPageComponent
+    ClassCreationPageComponent,
+    ClassEditPageComponent
   ],
   imports: [
     CommonModule,

@@ -16,6 +16,24 @@ export class ClassCreationViewModel {
     }
 }
 
+export class ClassEditViewModel {
+    public builds: BuildsViewModel = new BuildsViewModel();
+    public userClassRole: ClassRolesEnumViewModel = new ClassRolesEnumViewModel();
+    public userClassCombatType: CombatTypesEnumViewModel = new CombatTypesEnumViewModel();
+    public userClassRolesEnum: Array<ClassRolesEnumViewModel> = new Array<ClassRolesEnumViewModel>();
+    public userClassCombatTypesEnum: Array<CombatTypesEnumViewModel> = new Array<CombatTypesEnumViewModel>();
+
+    constructor(builds?: BuildsViewModel, userClassRole?: ClassRolesEnumViewModel, userClassCombatType?: CombatTypesEnumViewModel, userClassRolesEnum?: Array<ClassRolesEnumViewModel>, userClassCombatTypesEnum?: Array<CombatTypesEnumViewModel>) {
+        if(builds) {
+            this.builds = builds;
+            this.userClassRole = userClassRole;
+            this.userClassCombatType = userClassCombatType;
+            this.userClassRolesEnum = userClassRolesEnum;
+            this.userClassCombatTypesEnum = userClassCombatTypesEnum;
+        }
+    }
+}
+
 export class CharacterCardsViewModel {
     public userClasses: Array<UserClassViewModel> = new Array<UserClassViewModel>();
     
@@ -122,4 +140,9 @@ export class GearBracketsViewModel {
             this.dpBracketBonus = dpBracketBonus;
         }
     }
+}
+
+export class BuildsViewModel {
+    public combat: Array<GearViewModel> = new Array<GearViewModel>();
+    public life: Array<GearViewModel> = new Array<GearViewModel>();
 }

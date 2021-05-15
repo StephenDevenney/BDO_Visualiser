@@ -8,7 +8,7 @@ import { UserClassesService } from '../user-classes.service';
   templateUrl: './user-classes-page.component.html'
 })
 export class UserClassesPageComponent extends BaseComponent implements OnInit  {
-  public pageData: CharacterCardsViewModel = new CharacterCardsViewModel();
+  public userClasses: Array<UserClassViewModel> = new Array<UserClassViewModel>();
   public isLoaded: boolean = false;
 
   constructor(private injector: Injector,
@@ -18,10 +18,10 @@ export class UserClassesPageComponent extends BaseComponent implements OnInit  {
 
   ngOnInit(): void {
    this.loader.start();
-    this.userClassService.getClassCardsData().then((res: CharacterCardsViewModel) => {
-      this.pageData = res;
+    this.userClassService.getClassCardsData().then((res: Array<UserClassViewModel>) => {
+      this.userClasses = res;
       this.isLoaded = true;
-      console.log(res);
+      console.log(this.userClasses);
     }).catch(() => {
 
     }).then(() => {

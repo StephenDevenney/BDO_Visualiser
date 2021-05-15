@@ -129,11 +129,13 @@ export class GrindingDataContext {
     });
   }
 
-  public async insert(entry: GrindingDataEntity): Promise<void> {
+  public async insert(entry: GrindingDataEntity): Promise<GrindingDataEntity> {
     const sql = `INSERT OR REPLACE INTO combat_grinding (FK_combatSettingsId, FK_classId, FK_locationId, FK_timeId, FK_serverId, FK_combatTypeId, FK_gearScoreId, FK_agrisId, dateCreated, trashLootAmount, afuaruSpawns) VALUES (1, $classId, $locationId, $timeId, $serverId, $combatTypeId, $gearScoreId, $agrisId, $dateCreated, $trashloot, $afuaru);`;
     const values = { $classId: entry.userClassId, $locationId: entry.locationId, $timeId: entry.timeId, $serverId: entry.serverId, $combatTypeId: entry.combatTypeId, $gearScoreId: entry.gearScoreId, $agrisId: entry.agrisId, $dateCreated: new Calculations().calcCurrentDate(), $trashloot: entry.trashLootAmount, $afuaru: entry.afuaruSpawns };
 
-    return TheDb.insert(sql, values).then((result) => {});
+    TheDb.insert(sql, values).then((result) => {});
+
+    return this.getMostRecent();
   }
 
   private fromRow(row: GrindingDataEntity): GrindingDataEntity {

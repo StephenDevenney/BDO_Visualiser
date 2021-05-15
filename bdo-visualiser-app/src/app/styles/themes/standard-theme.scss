@@ -64,6 +64,14 @@
         }
     }
 
+    .primary-background {
+        background-color: darken($standard-primary, 2%);
+    }
+
+    .secondary-background {
+        background-color: darken($standard-primary, 10%);
+    }
+
     // ## Page
     .page-header {
         border-bottom: 0.1rem solid darken($standard-primary, 20%);

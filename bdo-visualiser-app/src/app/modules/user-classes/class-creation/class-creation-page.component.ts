@@ -23,9 +23,13 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
     this.loader.start();
     this.userClassService.getClassCreationData().then((res: ClassCreationViewModel) => {
       this.classCreationData = res;
-      console.log(res);
+      /*
+        TODO: Filter out secondary grinder
+      */
       if(res.hasMainUserClass)
         this.classRolesEnumFiltered = res.classRolesEnum.filter(_ => _.classRoleId != 1);
+      else
+        this.classRolesEnumFiltered = res.classRolesEnum;
 
       this.isLoaded = true;
     }).catch((err: any) => {
@@ -48,13 +52,12 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
     if(this.classCreationData.newUserClass.gear.gearLabel.length > 0) {
       this.loader.startBackground();
       await this.userClassService.addUserClass(this.classCreationData.newUserClass).then((res: UserClassViewModel) => {
-        console.log(res);
-        this.messageService.add({ severity:'info', summary:'How To Update', detail:'You can add more gear builds or alter existing for a specific character by clicking edit character.', life: 2600 });
         this.router.navigate(["user-classes"]);
       }).catch(() => {
         this.messageService.add({ severity:'error', summary:'Error', detail:'Error adding class.', life: 2600 });
       }).then(() => {
         this.loader.stopBackground();
+        this.messageService.add({ severity:'info', summary:'How To Update', detail:'You can add more gear builds or alter existing for a specific character by clicking edit character.', life: 2600 });
       });
     } 
     else

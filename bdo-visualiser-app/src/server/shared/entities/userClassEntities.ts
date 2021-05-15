@@ -43,6 +43,7 @@ export class CombatTypesEnumEntity {
 
 export class UserClassEntity {
     public classId: number = 0;
+    public FK_gearTypeId: number = 1;
     public FK_gearScoreId: number = 0;
     public classNameId: number = 1;
     public className: string = "";
@@ -53,17 +54,12 @@ export class UserClassEntity {
     public combatTypeName: string = "";
     public dateCreated: string = "";
     public classDescription: string = "";
-    public gearLabel: string = "";
-    public ap: number = 0;
-    public aap: number = 0;
-    public dp: number = 0;
-    public gearScore: number = 0;
-    public isCurrent: boolean = false;
     public userClassCount: number = 0;
 
-    constructor(classId?: number, FK_gearScoreId?: number, classNameId?: number, className?: string, fileName?: string, classRoleId?: number, classRole?: string, combatTypeId?: number, combatTypeName?: string, dateCreated?: string, classDescription?: string, gearLabel?: string, ap?: number, aap?: number, dp?: number, gearScore?: number, isCurrent?: boolean, userClassCount?: number) {
+    constructor(classId?: number, FK_gearTypeId?: number, FK_gearScoreId?: number, classNameId?: number, className?: string, fileName?: string, classRoleId?: number, classRole?: string, combatTypeId?: number, combatTypeName?: string, dateCreated?: string, classDescription?: string, userClassCount?: number) {
         if(classId) {
             this.classId = classId;
+            this.FK_gearTypeId = FK_gearTypeId;
             this.FK_gearScoreId = FK_gearScoreId;
             this.classNameId = classNameId;
             this.className = className;
@@ -74,12 +70,6 @@ export class UserClassEntity {
             this.combatTypeName = combatTypeName;
             this.dateCreated = dateCreated;
             this.classDescription= classDescription;
-            this.gearLabel = gearLabel;
-            this.ap = ap;
-            this.aap = aap;
-            this.dp = dp;
-            this.gearScore = gearScore;
-            this.isCurrent = isCurrent;
             this.userClassCount = userClassCount;
         }     
     }
@@ -88,19 +78,37 @@ export class UserClassEntity {
 export class GearEntity {
     public gearScoreId: number = 0;
     public ap: number = 0;
+    public apBracketLow: number = 0;
+    public apBracketHigh: number = 0;
+    public apBracketBonus: number = 0;
     public aap: number = 0;
-    public dp: number = 0
+    public aapBracketLow: number = 0;
+    public aapBracketHigh: number = 0;
+    public aapBracketBonus: number = 0;
+    public dp: number = 0;
+    public dpBracketLow: number = 0;
+    public dpBracketHigh: number = 0;
+    public dpBracketBonus: number = 0;
     public gearScore: number = 0;
     public dateCreated: string = "";
     public gearLabel: string = "";
     public isCurrent: boolean = false;
 
-    constructor(gearScoreId?: number, ap?: number, aap?: number, dp?: number, gearScore?: number, dateCreated?: string, gearLabel?: string, isCurrent?: boolean) {
+    constructor(gearScoreId?: number, ap?: number, apBracketLow?: number, apBracketHigh?: number, apBracketBonus?: number, aap?: number, aapBracketLow?: number, aapBracketHigh?: number, aapBracketBonus?: number, dp?: number, dpBracketLow?: number, dpBracketHigh?: number, dpBracketBonus?: number, gearScore?: number, dateCreated?: string, gearLabel?: string, isCurrent?: boolean) {
         if(gearScoreId) {
             this.gearScoreId = gearScoreId;
             this.ap = ap;
+            this.apBracketLow = apBracketLow;
+            this.apBracketHigh = apBracketHigh;
+            this.apBracketBonus = apBracketBonus;
             this.aap = aap;
+            this.aapBracketLow = aapBracketLow;
+            this.aapBracketHigh = aapBracketHigh;
+            this.aapBracketBonus = aapBracketBonus;
             this.dp = dp;
+            this.dpBracketLow = dpBracketLow;
+            this.dpBracketHigh = dpBracketHigh;
+            this.dpBracketBonus = dpBracketBonus;
             this.gearScore = gearScore;
             this.dateCreated = dateCreated;
             this.gearLabel = gearLabel;

@@ -27,6 +27,7 @@ export class TableInsertComponent extends BaseComponent implements AfterViewInit
     if(this.globals.config.previousPage.navMenuId == 2) {
       this.apiService.getCombatNewEntryData().then((res: CombatPageEnumsViewModel) => {
         this.combatEnums = res;
+        console.log(res);
       }).finally(async () => {
         if(this.tableLength == 0) {
           this.newEntry.grindLocation = this.combatEnums.locationNamesEnum[0].items[0];
@@ -34,7 +35,7 @@ export class TableInsertComponent extends BaseComponent implements AfterViewInit
           this.newEntry.server = this.combatEnums.serverNamesEnum[0];
           this.newEntry.combatType = this.combatEnums.combatTypesEnum[0];
           this.newEntry.agris = this.combatEnums.agrisEnum[0];
-          this.newEntry.userClass = this.combatEnums.activeClasses.filter(_ => _.classRoleEnum.classRole == "Main")[0]; 
+          this.newEntry.userClass = this.combatEnums.activeClasses[0]; 
         }
         else {
           this.newEntry.timeAmount = this.combatEnums.timeAmountEnum.filter((_) => _.timeId == this.combatEnums.previousCombatValuesViewModel.timeAmount.timeId)[0];
@@ -73,6 +74,7 @@ export class TableInsertComponent extends BaseComponent implements AfterViewInit
       this.updateCombatRes.emit(new CombatNewEntryViewModel(res, this.combatHeaders));
       this.loader.stopBackground();
     }).catch((err: any) => {
+      console.log(err);
       this.messageService.add({severity:'error', summary:'Error', detail:'Failed to add entry.', life: 2600 });
       this.loader.stopBackground();
     });
