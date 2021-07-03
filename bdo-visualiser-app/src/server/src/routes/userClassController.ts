@@ -28,4 +28,9 @@ export class UserClassController {
     public async addCombatGearBuild(newCombatGear: GearViewModel, userClassId: number): Promise<Array<GearViewModel>> {
         return await new UserClassDataHandler().addCombatGearBuild(newCombatGear, userClassId);
     }
+
+        // PUT
+    public async updateCombatGear(combatGear: GearViewModel): Promise<void> {
+
+    }
 } 

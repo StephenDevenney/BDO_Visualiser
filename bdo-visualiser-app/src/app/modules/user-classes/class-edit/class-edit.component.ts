@@ -54,4 +54,8 @@ export class ClassEditPageComponent extends BaseComponent implements OnInit  {
     else
       this.messageService.add({ severity:'warn', summary:'Gear builds require a name', detail:'Examples: Nouver, Kutum, Tank, Full AP, Accuarcy, Evasion...', life: 2600 });
   }
+
+  public async onGearEdit(build: GearViewModel): Promise<void> {
+    console.log(build);
+  }
 }

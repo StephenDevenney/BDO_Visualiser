@@ -17,19 +17,19 @@
                                 <div class="ml-2">
                                     <label>Gear Build Name</label>
                                 </div>
-                                <input type="text" pInputText placeholder="Gear Build Name" [(ngModel)]="build.gearLabel"/>
+                                <input type="text" pInputText placeholder="Gear Build Name" [(ngModel)]="build.gearLabel" (onChange)="onGearEdit(build)"/>
                                 <div class="mt-1 ml-2">
                                     <label>Mainhand Ap</label>
                                 </div>
-                                <p-inputNumber [min]="0" [(ngModel)]="build.ap">0</p-inputNumber>
+                                <p-inputNumber [min]="0" [(ngModel)]="build.ap" (ngModelChange)="onGearEdit(build)">0</p-inputNumber>
                                 <div class="mt-1 ml-2">
                                     <label>Awakening Ap</label>
                                 </div>
-                                <p-inputNumber [min]="0" [(ngModel)]="build.aap">0</p-inputNumber>
+                                <p-inputNumber [min]="0" [(ngModel)]="build.aap" (ngModelChange)="onGearEdit(build)">0</p-inputNumber>
                                 <div class="mt-1 ml-2">
                                     <label>Dp</label>
                                 </div>
-                                <p-inputNumber [min]="0" [(ngModel)]="build.dp">0</p-inputNumber>
+                                <p-inputNumber [min]="0" [(ngModel)]="build.dp" (ngModelChange)="onGearEdit(build)">0</p-inputNumber>
                             </div>
                         </div>              
                     </div>

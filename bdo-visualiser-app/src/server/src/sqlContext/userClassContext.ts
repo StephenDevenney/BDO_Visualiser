@@ -306,6 +306,14 @@ export class GearContext {
     return;
   }
 
+  public async updateGear(combatGear: GearViewModel): Promise<void> {
+    // const sql = `UPDATE userClass_gearScore SET ap = $ap, aap = $aap, dp = $dp WHERE FK_classId == $userClassId`;
+    // const values = { $userClassId: userClassId };
+
+    // TheDb.update(sql, values).then((result) => {});
+    // return;
+  }
+
   private fromRow(row: GearEntity): GearEntity {
     this.gearScoreId = row['gearScoreId'];
     this.ap = row['ap'];

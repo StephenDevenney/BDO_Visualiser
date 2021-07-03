@@ -28,8 +28,12 @@ export class UserClassesService {
         return await this.userClassRoute.addUserClass(userClass);
     }
 
-        // POST
     public async addCombatGearBuild(newCombatGear: GearViewModel, userClassId: number): Promise<Array<GearViewModel>> {
         return await this.userClassRoute.addCombatGearBuild(newCombatGear, userClassId);
+    }
+
+        // PUT
+    public async updateCombatGear(combatGear: GearViewModel): Promise<void> {
+        
     }
 }
