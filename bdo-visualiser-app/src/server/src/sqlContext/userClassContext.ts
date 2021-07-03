@@ -251,7 +251,7 @@ export class GearContext {
   }
 
   public async getAllUserClassBuilds(classId: number): Promise<Array<GearEntity>> {
-    const sql = `SELECT gearScoreId, ap, cb1.apBracketLow AS apBracketLow, cb1.apBracketHigh AS apBracketHigh, cb1.apBracketBonus AS apBracketBonus, aap, cb2.apBracketLow AS aapBracketLow, cb2.apBracketHigh AS aapBracketHigh, cb2.apBracketBonus AS aapBracketBonus, dp, cb3.dpBracketLow AS dpBracketLow, cb3.dpBracketHigh AS dpBracketHigh, cb3.dpBracketBonus AS dpBracketBonus, gearScore, dateCreated, gearLabel, isCurrent FROM userClass_gearScore INNER JOIN enum_combatBrackets AS cb1 ON userClass_gearScore.ap >= cb1.apBracketLow AND userClass_gearScore.ap <= cb1.apBracketHigh INNER JOIN enum_combatBrackets AS cb2 ON userClass_gearScore.aap >= cb2.apBracketLow AND userClass_gearScore.aap <= cb2.apBracketHigh INNER JOIN enum_combatBrackets AS cb3 ON userClass_gearScore.dp >= cb3.dpBracketLow AND userClass_gearScore.dp <= cb3.dpBracketHigh WHERE userClass_gearScore.FK_classId == $classId AND userClass_gearScore.isCurrent == 1 LIMIT 1`;
+    const sql = `SELECT DISTINCT gearScoreId, ap, cb1.apBracketLow AS apBracketLow, cb1.apBracketHigh AS apBracketHigh, cb1.apBracketBonus AS apBracketBonus, aap, cb2.apBracketLow AS aapBracketLow, cb2.apBracketHigh AS aapBracketHigh, cb2.apBracketBonus AS aapBracketBonus, dp, cb3.dpBracketLow AS dpBracketLow, cb3.dpBracketHigh AS dpBracketHigh, cb3.dpBracketBonus AS dpBracketBonus, gearScore, dateCreated, gearLabel, isCurrent FROM userClass_gearScore INNER JOIN enum_combatBrackets AS cb1 ON userClass_gearScore.ap >= cb1.apBracketLow AND userClass_gearScore.ap <= cb1.apBracketHigh INNER JOIN enum_combatBrackets AS cb2 ON userClass_gearScore.aap >= cb2.apBracketLow AND userClass_gearScore.aap <= cb2.apBracketHigh INNER JOIN enum_combatBrackets AS cb3 ON userClass_gearScore.dp >= cb3.dpBracketLow AND userClass_gearScore.dp <= cb3.dpBracketHigh WHERE userClass_gearScore.FK_classId == $classId AND userClass_gearScore.isCurrent == 1 GROUP BY gearScoreId ORDER BY gearScoreId ASC`;
     const values = { $classId: classId };
 
     return TheDb.selectAll(sql, values).then((rows: any) => {
@@ -282,12 +282,28 @@ export class GearContext {
     return this.getMostRecent();
   }
 
+  public async insertWithUserClassId(gear: GearViewModel, userClassId: number): Promise<GearEntity> {
+    const sql = `INSERT OR REPLACE INTO userClass_gearScore (FK_combatSettingsId, FK_classId, ap, aap, dp, gearScore, dateCreated, gearLabel, isCurrent) VALUES (1, $userClassId, $ap, $aap, $dp, $gearScore, $dateCreated, $gearLabel, $isCurrent);`;
+    const values = { $userClassId: userClassId, $ap: gear.ap, $aap: gear.aap, $dp: gear.dp, $gearScore: new Calculations().calcGearScore(gear), $dateCreated: new Calculations().calcCurrentDate(), $gearLabel: gear.gearLabel, $isCurrent: true };
+
+    TheDb.insert(sql, values).then((result) => {});
+    return this.getMostRecent();
+  }
+
   public async updateClassId(gearScoreId: number, classId: number): Promise<GearEntity> {
-    const sql = `UPDATE userClass_gearScore SET FK_classId = $classId WHERE gearScoreId = $gearScoreId`;
+    const sql = `UPDATE userClass_gearScore SET FK_classId = $classId WHERE gearScoreId == $gearScoreId`;
     const values = { $gearScoreId: gearScoreId, $classId: classId};
 
     TheDb.update(sql, values).then((result) => {});
     return this.getMostRecent();
+  }
+
+  public async updateCombatGearActiveState(userClassId: number): Promise<void> {
+    const sql = `UPDATE userClass_gearScore SET isCurrent = 0 WHERE FK_classId == $userClassId`;
+    const values = { $userClassId: userClassId };
+
+    TheDb.update(sql, values).then((result) => {});
+    return;
   }
 
   private fromRow(row: GearEntity): GearEntity {

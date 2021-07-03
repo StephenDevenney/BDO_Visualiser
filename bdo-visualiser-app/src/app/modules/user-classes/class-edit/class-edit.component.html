@@ -38,21 +38,21 @@
                     <div class="mt-2 ml-2">
                         <label>Gear Build Name</label>
                     </div>
-                    <input type="text" pInputText placeholder="Gear Build Name"/>
+                    <input type="text" pInputText placeholder="Gear Build Name" [(ngModel)]="newCombatGear.gearLabel"/>
                     <div class="mt-2 ml-2">
                         <label>Mainhand Ap</label>
                     </div>
-                    <p-inputNumber [min]="0">0</p-inputNumber>
+                    <p-inputNumber [min]="0" [(ngModel)]="newCombatGear.ap">0</p-inputNumber>
                     <div class="mt-2 ml-2">
                         <label>Awakening Ap</label>
                     </div>
-                    <p-inputNumber [min]="0">0</p-inputNumber>
+                    <p-inputNumber [min]="0" [(ngModel)]="newCombatGear.aap">0</p-inputNumber>
                     <div class="mt-2 ml-2">
                         <label>Dp</label>
                     </div>
-                    <p-inputNumber [min]="0">0</p-inputNumber>
+                    <p-inputNumber [min]="0" [(ngModel)]="newCombatGear.dp">0</p-inputNumber>
                     <div class="mt-4">
-                        <button class="btn btn-primary">New Build</button>
+                        <button class="btn btn-primary" (click)="createCombatBuild()">New Build</button>
                     </div>
                 </div>
             </div>

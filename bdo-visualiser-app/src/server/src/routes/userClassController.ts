@@ -1,4 +1,4 @@
-import { ClassCreationViewModel, ClassEditViewModel, ClassNamesEnumViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
+import { ClassCreationViewModel, ClassEditViewModel, ClassNamesEnumViewModel, GearViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
 import { UserClassDataHandler, UserClassHandler } from '../middleware/userClassHandler';
 
 export class UserClassController {
@@ -23,5 +23,9 @@ export class UserClassController {
         // POST
     public async addUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
         return await new UserClassDataHandler().addUserClass(userClass);
+    }
+
+    public async addCombatGearBuild(newCombatGear: GearViewModel, userClassId: number): Promise<Array<GearViewModel>> {
+        return await new UserClassDataHandler().addCombatGearBuild(newCombatGear, userClassId);
     }
 } 

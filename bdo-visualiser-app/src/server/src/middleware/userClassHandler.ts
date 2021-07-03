@@ -21,30 +21,12 @@ export class UserClassDataHandler {
     }
 
     public async addUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
-        let ucE = await convertToEntity(userClass);
+        let ucE = await new UserClassHandler().convertUserClassViewModelToEntity(userClass);
         await new UserClassContext().insert(ucE);
         let ncE = await new UserClassContext().getMostRecent();
         let gE = await new GearContext().updateClassId(ncE.FK_gearScoreId, ncE.classId);
 
         return new UserClassViewModel(ncE.classId, new ClassNamesEnumViewModel(ncE.classNameId, ncE.className, ncE.fileName), new ClassRolesEnumViewModel(ncE.classRoleId, ncE.classRole), new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(gE.gearLabel, gE.ap, gE.aap, gE.dp, gE.gearScore, new GearBracketsViewModel(gE.apBracketLow + " - " + gE.apBracketHigh, gE.apBracketBonus, gE.aapBracketLow + " - " + gE.aapBracketHigh, gE.aapBracketBonus, gE.dpBracketLow + " - " + gE.dpBracketHigh, gE.dpBracketBonus + "%")), ncE.classDescription);
-
-        async function convertToEntity(userClass: UserClassViewModel): Promise<UserClassEntity> {
-            let userClassEntity: UserClassEntity = new UserClassEntity(); 
-            userClassEntity.classNameId = (await new ClassNamesEnumContext().get(userClass.classNameEnum.className)).classId;
-            if(userClass.classRoleEnum.classRoleId != 4) {
-                let ngE = await new GearContext().insert(userClass.gear);
-                userClassEntity.FK_gearScoreId = ngE.gearScoreId;
-                userClassEntity.combatTypeId = userClass.combatTypeEnum.combatTypeId;
-                userClassEntity.combatTypeName = userClass.combatTypeEnum.combatTypeName;
-            }
-            userClassEntity.className = userClass.classNameEnum.className;
-            userClassEntity.classRole = userClass.classRoleEnum.classRole;
-            userClassEntity.classRoleId = userClass.classRoleEnum.classRoleId
-            userClassEntity.classDescription = userClass.classDescription;
-            userClassEntity.dateCreated = new Calculations().calcCurrentDate();
-
-            return userClassEntity;
-        }
     }
 
     public async getClassEditData(userClassId: number): Promise<ClassEditViewModel> {
@@ -56,6 +38,17 @@ export class UserClassDataHandler {
         await new UserClassHandler().getClassRoleEnums().then((res: Array<ClassRolesEnumViewModel>) => { ceVM.userClassRolesEnum = res; });
 
         return ceVM;
+    }
+
+    public async addCombatGearBuild(newCombatGear: GearViewModel, userClassId: number): Promise<Array<GearViewModel>> {
+        /*
+            - mark most recent gear entity (relevant userclass) as not current;
+            - create new gear entity (mark current);
+            - return latest combat gear viewmodels;
+        */
+    //    await new UserClassHandler().updateCombatGearActiveState(userClassId);
+       await new UserClassHandler().createCombatGearEntry(newCombatGear, userClassId);
+       return await new UserClassHandler().getCombatBuilds(userClassId);
     }
 }
 
@@ -170,5 +163,35 @@ export class UserClassHandler {
         });
         
         return combatType;
+    }
+
+    public async updateCombatGearActiveState(userClassId: number): Promise<void> {
+        return await new GearContext().updateCombatGearActiveState(userClassId);
+    }
+
+    public async createCombatGearEntry(combatGear: GearViewModel, userClassId: number): Promise<GearEntity> {
+        return await new GearContext().insertWithUserClassId(combatGear, userClassId);
+    }
+
+    public async convertGearEntityToViewModel(combatGearEntity: GearEntity): Promise<GearViewModel> {
+        return new GearViewModel(combatGearEntity.gearLabel, combatGearEntity.ap, combatGearEntity.aap, combatGearEntity.dp, combatGearEntity.gearScore, new GearBracketsViewModel(combatGearEntity.aapBracketLow + " - " + combatGearEntity.apBracketHigh, combatGearEntity.apBracketBonus, combatGearEntity.aapBracketLow + " - " + combatGearEntity.aapBracketHigh, combatGearEntity.aapBracketBonus, combatGearEntity.dpBracketLow + " - " + combatGearEntity.dpBracketHigh, combatGearEntity.dpBracketBonus + "%"));
+    }
+
+    public async convertUserClassViewModelToEntity(userClass: UserClassViewModel): Promise<UserClassEntity> {
+        let userClassEntity: UserClassEntity = new UserClassEntity(); 
+        userClassEntity.classNameId = (await new ClassNamesEnumContext().get(userClass.classNameEnum.className)).classId;
+        if(userClass.classRoleEnum.classRoleId != 4) {
+            let ngE = await new GearContext().insert(userClass.gear);
+            userClassEntity.FK_gearScoreId = ngE.gearScoreId;
+            userClassEntity.combatTypeId = userClass.combatTypeEnum.combatTypeId;
+            userClassEntity.combatTypeName = userClass.combatTypeEnum.combatTypeName;
+        }
+        userClassEntity.className = userClass.classNameEnum.className;
+        userClassEntity.classRole = userClass.classRoleEnum.classRole;
+        userClassEntity.classRoleId = userClass.classRoleEnum.classRoleId
+        userClassEntity.classDescription = userClass.classDescription;
+        userClassEntity.dateCreated = new Calculations().calcCurrentDate();
+
+        return userClassEntity;
     }
 }
