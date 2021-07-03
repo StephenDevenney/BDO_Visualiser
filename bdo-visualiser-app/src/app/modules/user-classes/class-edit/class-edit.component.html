@@ -12,66 +12,26 @@
             <div class="row m-1 ml-2 border border-secondary">
                 <div class="col-8 scroll-container-v overflow-auto" style="height: 80vh;">
                     <div class="row p-2">
-                        <div class="col-6 mb-2 p-1"><!-- *ngFor="let item of gearBuilds.combat" -->
+                        <div class="col-6 mb-2 p-1" *ngFor="let build of gearBuilds.combat"><!-- *ngFor="let item of gearBuilds.combat" -->
                             <div class="p-2 secondary-background border border-secondary">
                                 <div class="ml-2">
                                     <label>Gear Build Name</label>
                                 </div>
-                                <input type="text" pInputText placeholder="Gear Build Name"/>
+                                <input type="text" pInputText placeholder="Gear Build Name" [(ngModel)]="build.gearLabel"/>
                                 <div class="mt-1 ml-2">
                                     <label>Mainhand Ap</label>
                                 </div>
-                                <p-inputNumber [min]="0">0</p-inputNumber>
+                                <p-inputNumber [min]="0" [(ngModel)]="build.ap">0</p-inputNumber>
                                 <div class="mt-1 ml-2">
                                     <label>Awakening Ap</label>
                                 </div>
-                                <p-inputNumber [min]="0">0</p-inputNumber>
+                                <p-inputNumber [min]="0" [(ngModel)]="build.aap">0</p-inputNumber>
                                 <div class="mt-1 ml-2">
                                     <label>Dp</label>
                                 </div>
-                                <p-inputNumber [min]="0">0</p-inputNumber>
+                                <p-inputNumber [min]="0" [(ngModel)]="build.dp">0</p-inputNumber>
                             </div>
                         </div>              
-                        <div class="col-6 mb-2 p-1">
-                            <div class="p-2 secondary-background border border-secondary">
-                                <div>
-                                    <label>Gear Build Name</label>
-                                </div>
-                                <input type="text" pInputText placeholder="Gear Build Name"/>
-                            <div>
-                                <label>Mainhand Ap</label>
-                            </div>
-                            <p-inputNumber [min]="0">0</p-inputNumber>
-                            <div>
-                                <label>Awakening Ap</label>
-                                </div>
-                                <p-inputNumber [min]="0">0</p-inputNumber>
-                                <div>
-                                    <label>Dp</label>
-                                </div>
-                                <p-inputNumber [min]="0">0</p-inputNumber>
-                            </div>
-                        </div>
-                        <div class="col-6 mb-2 p-1">
-                            <div class="p-2 secondary-background border border-secondary">
-                                <div class="ml-2">
-                                    <label>Gear Build Name</label>
-                                </div>
-                                <input type="text" pInputText placeholder="Gear Build Name"/>
-                                <div class="ml-2">
-                                    <label>Mainhand Ap</label>
-                                </div>
-                                <p-inputNumber [min]="0">0</p-inputNumber>
-                                <div class="ml-2">
-                                    <label>Awakening Ap</label>
-                                </div>
-                                <p-inputNumber [min]="0">0</p-inputNumber>
-                                <div class="ml-2">
-                                    <label>Dp</label>
-                                </div>
-                                <p-inputNumber [min]="0">0</p-inputNumber>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="col-4">
