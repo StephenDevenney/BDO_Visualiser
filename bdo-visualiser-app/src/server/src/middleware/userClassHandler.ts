@@ -26,7 +26,7 @@ export class UserClassDataHandler {
         let ncE = await new UserClassContext().getMostRecent();
         let gE = await new GearContext().updateClassId(ncE.FK_gearScoreId, ncE.classId);
 
-        return new UserClassViewModel(ncE.classId, new ClassNamesEnumViewModel(ncE.classNameId, ncE.className, ncE.fileName), new ClassRolesEnumViewModel(ncE.classRoleId, ncE.classRole), new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(gE.gearScoreId, gE.gearLabel, gE.ap, gE.aap, gE.dp, gE.gearScore, new GearBracketsViewModel(gE.apBracketLow + " - " + gE.apBracketHigh, gE.apBracketBonus, gE.aapBracketLow + " - " + gE.aapBracketHigh, gE.aapBracketBonus, gE.dpBracketLow + " - " + gE.dpBracketHigh, gE.dpBracketBonus + "%")), ncE.classDescription);
+        return new UserClassViewModel(ncE.classId, new ClassNamesEnumViewModel(ncE.classNameId, ncE.className, ncE.fileName), new ClassRolesEnumViewModel(ncE.classRoleId, ncE.classRole), new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(gE.gearScoreId, gE.gearScoreBuildId, gE.gearLabel, gE.ap, gE.aap, gE.dp, gE.gearScore, new GearBracketsViewModel(gE.apBracketLow + " - " + gE.apBracketHigh, gE.apBracketBonus, gE.aapBracketLow + " - " + gE.aapBracketHigh, gE.aapBracketBonus, gE.dpBracketLow + " - " + gE.dpBracketHigh, gE.dpBracketBonus + "%")), ncE.classDescription);
     }
 
     public async getClassEditData(userClassId: number): Promise<ClassEditViewModel> {
@@ -41,12 +41,14 @@ export class UserClassDataHandler {
     }
 
     public async addCombatGearBuild(newCombatGear: GearViewModel, userClassId: number): Promise<Array<GearViewModel>> {
-       await new UserClassHandler().createCombatGearEntry(newCombatGear, userClassId);
-       return await new UserClassHandler().getCombatBuilds(userClassId);
+        await new UserClassHandler().getGearScoreBuildId(newCombatGear, userClassId).then((res: number) => { newCombatGear.gearScoreBuildId = res; });
+        await new UserClassHandler().createCombatGearEntry(newCombatGear, userClassId);
+        return await new UserClassHandler().getCombatBuilds(userClassId);
     }
 
-    public async updateCombatGear(combatGear: GearViewModel): Promise<void> {
-
+    public async updateCombatGear(combatGear: GearViewModel, userClassId: number): Promise<Array<GearViewModel>> {
+       await new UserClassHandler().updateCombatGearActiveState(userClassId, combatGear.gearScoreBuildId);
+       return await this.addCombatGearBuild(combatGear, userClassId);
     }
 }
 
@@ -57,7 +59,7 @@ export class UserClassHandler {
             _.forEach(async row => {
                 if(row.FK_gearTypeId == 1) {
                     await new GearContext().getViaClassId(row.classId).then((res: GearEntity) => {
-                        acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%")), row.classDescription));
+                        acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearScoreBuildId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%")), row.classDescription));
                     });
                 }  
                 /*
@@ -103,16 +105,21 @@ export class UserClassHandler {
     public async getMostRecentUserClass(): Promise<UserClassViewModel> {
         let userClass: UserClassViewModel = new UserClassViewModel();
         await new UserClassContext().getMostRecent().then(async (row: UserClassEntity) => {
-            if(row.FK_gearTypeId == 1) {
-                await new GearContext().getViaClassId(row.classId).then((res: GearEntity) => {
-                    userClass = new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%")), row.classDescription);
-                });
-            } 
-            else {
-                /*
-                    TODO: get life gear
-                */
+            if(typeof(row) != "undefined") {
+                if(row.FK_gearTypeId == 1) {
+                    await new GearContext().getViaClassId(row.classId).then((res: GearEntity) => {
+                        userClass = new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearScoreBuildId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%")), row.classDescription);
+                    });
+                } 
+                else {
+                    /*
+                        TODO: get life gear
+                    */
+                }
             }
+            else {
+                return userClass;
+            }  
         }); 
 
         return userClass;
@@ -122,7 +129,7 @@ export class UserClassHandler {
         let gVM: Array<GearViewModel> = new Array<GearViewModel>();
         await new GearContext().getAllUserClassBuilds(userClassId).then((res: Array<GearEntity>) => {
             res.forEach((_: GearEntity) => {
-                gVM.push(new GearViewModel(_.gearScoreId, _.gearLabel, _.ap, _.aap, _.dp, _.gearScore, new GearBracketsViewModel(_.aapBracketLow + " - " + _.apBracketHigh, _.apBracketBonus, _.aapBracketLow + " - " + _.aapBracketHigh, _.aapBracketBonus, _.dpBracketLow + " - " + _.dpBracketHigh, _.dpBracketBonus + "%")));
+                gVM.push(new GearViewModel(_.gearScoreId, _.gearScoreBuildId, _.gearLabel, _.ap, _.aap, _.dp, _.gearScore, new GearBracketsViewModel(_.aapBracketLow + " - " + _.apBracketHigh, _.apBracketBonus, _.aapBracketLow + " - " + _.aapBracketHigh, _.aapBracketBonus, _.dpBracketLow + " - " + _.dpBracketHigh, _.dpBracketBonus + "%")));
             });
         });
         return gVM;
@@ -163,8 +170,8 @@ export class UserClassHandler {
         return combatType;
     }
 
-    public async updateCombatGearActiveState(userClassId: number): Promise<void> {
-        return await new GearContext().updateCombatGearActiveState(userClassId);
+    public async updateCombatGearActiveState(userClassId: number, gearScoreBuildId: number): Promise<void> {
+        return await new GearContext().updateCombatGearActiveState(userClassId, gearScoreBuildId);
     }
 
     public async createCombatGearEntry(combatGear: GearViewModel, userClassId: number): Promise<GearEntity> {
@@ -172,13 +179,17 @@ export class UserClassHandler {
     }
 
     public async convertGearEntityToViewModel(combatGearEntity: GearEntity): Promise<GearViewModel> {
-        return new GearViewModel(combatGearEntity.gearScoreId, combatGearEntity.gearLabel, combatGearEntity.ap, combatGearEntity.aap, combatGearEntity.dp, combatGearEntity.gearScore, new GearBracketsViewModel(combatGearEntity.aapBracketLow + " - " + combatGearEntity.apBracketHigh, combatGearEntity.apBracketBonus, combatGearEntity.aapBracketLow + " - " + combatGearEntity.aapBracketHigh, combatGearEntity.aapBracketBonus, combatGearEntity.dpBracketLow + " - " + combatGearEntity.dpBracketHigh, combatGearEntity.dpBracketBonus + "%"));
+        return new GearViewModel(combatGearEntity.gearScoreId, combatGearEntity.gearScoreBuildId, combatGearEntity.gearLabel, combatGearEntity.ap, combatGearEntity.aap, combatGearEntity.dp, combatGearEntity.gearScore, new GearBracketsViewModel(combatGearEntity.aapBracketLow + " - " + combatGearEntity.apBracketHigh, combatGearEntity.apBracketBonus, combatGearEntity.aapBracketLow + " - " + combatGearEntity.aapBracketHigh, combatGearEntity.aapBracketBonus, combatGearEntity.dpBracketLow + " - " + combatGearEntity.dpBracketHigh, combatGearEntity.dpBracketBonus + "%"));
     }
 
+    /* 
+        - Only used when creating userclass;
+    */
     public async convertUserClassViewModelToEntity(userClass: UserClassViewModel): Promise<UserClassEntity> {
         let userClassEntity: UserClassEntity = new UserClassEntity(); 
         userClassEntity.classNameId = (await new ClassNamesEnumContext().get(userClass.classNameEnum.className)).classId;
         if(userClass.classRoleEnum.classRoleId != 4) {
+            userClass.gear.gearScoreBuildId = 1;
             let ngE = await new GearContext().insert(userClass.gear);
             userClassEntity.FK_gearScoreId = ngE.gearScoreId;
             userClassEntity.combatTypeId = userClass.combatTypeEnum.combatTypeId;
@@ -193,11 +204,16 @@ export class UserClassHandler {
         return userClassEntity;
     }
 
-    // public async convertGearViewModelToEntity(gearScoreId: GearViewModel) {
-    //     return await new GearContext().get(gearScoreId);
-    // }
+    public async getGearScoreBuildId(combatGear: GearViewModel, userClassId: number) : Promise<number> {
+        let gearBuildId: number = 0;
+        await new GearContext().getExistingBuildId(combatGear, userClassId).then((res: number) => { 
+            if(typeof(res) != "undefined")
+                gearBuildId = res; 
+        });
 
-    public async updateCombatGear(combatGear: GearViewModel): Promise<void> {
-        
+        if(gearBuildId === 0)
+            await new GearContext().getNextAvailableBuildId(userClassId).then((res: number) => { gearBuildId = res; });
+
+        return gearBuildId;
     }
 }

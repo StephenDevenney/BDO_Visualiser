@@ -45,6 +45,7 @@ export class GrindingDataEntity {
     public classRoleId: number = 0;
     public classRoleName: string = "";
     public gearScoreId: number = 0;
+    public gearScoreBuildId: number = 0;
     public gearLabel: string = "";
     public ap: number = 0;
     public aap: number = 0;
@@ -63,7 +64,7 @@ export class GrindingDataEntity {
     public afuaruSpawns: number = 0;
     public afuaruSpawnable: boolean = false;
 
-    constructor(grindingId?: number, locationId?: number, locationName?: string, territoryId?: number, territoryName?: string, timeId?: number, timeAmount?: number, userClassId?: number, classNameId?: number, className?: string, fileName?: string, classRoleId?: number, classRoleName?: string, gearScoreId?: number, gearLabel?: string, ap?: number, aap?: number, dp?: number, gearScore?: number, serverId?: number, serverDescription?: string, isElviaRealm?: boolean, combatTypeId?: number, combatTypeName?: string, trashLootAmount?: number, afuaruSpawns?: number, afuaruSpawnable?: boolean) {
+    constructor(grindingId?: number, locationId?: number, locationName?: string, territoryId?: number, territoryName?: string, timeId?: number, timeAmount?: number, userClassId?: number, classNameId?: number, className?: string, fileName?: string, classRoleId?: number, classRoleName?: string, gearScoreId?: number, gearScoreBuildId?: number, gearLabel?: string, ap?: number, aap?: number, dp?: number, gearScore?: number, serverId?: number, serverDescription?: string, isElviaRealm?: boolean, combatTypeId?: number, combatTypeName?: string, trashLootAmount?: number, afuaruSpawns?: number, afuaruSpawnable?: boolean) {
         if(grindingId) {
             this.grindingId = grindingId;
             this.locationId = locationId;
@@ -79,6 +80,7 @@ export class GrindingDataEntity {
             this.classRoleId = classRoleId;
             this.classRoleName = classRoleName;
             this.gearScoreId = gearScoreId;
+            this.gearScoreBuildId = gearScoreBuildId;
             this.gearLabel = gearLabel;
             this.ap = ap;
             this.aap = aap;

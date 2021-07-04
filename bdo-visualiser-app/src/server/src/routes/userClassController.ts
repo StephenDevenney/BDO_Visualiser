@@ -30,7 +30,7 @@ export class UserClassController {
     }
 
         // PUT
-    public async updateCombatGear(combatGear: GearViewModel): Promise<void> {
-
+    public async updateCombatGear(combatGear: GearViewModel, userClassId: number): Promise<Array<GearViewModel>> {
+        return await new UserClassDataHandler().updateCombatGear(combatGear, userClassId);
     }
 } 

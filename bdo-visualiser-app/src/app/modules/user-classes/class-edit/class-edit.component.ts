@@ -56,6 +56,15 @@ export class ClassEditPageComponent extends BaseComponent implements OnInit  {
   }
 
   public async onGearEdit(build: GearViewModel): Promise<void> {
-    console.log(build);
+    if(build.gearLabel.length > 0) {
+      this.loader.startBackground();
+      await this.userClassService.updateCombatGear(build, this.classId).then((res: Array<GearViewModel>) => {
+        this.gearBuilds.combat = res;
+        this.loader.stopBackground();
+      }).catch(() => {
+        this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error updating gear build.', life: 2600 });
+        this.loader.stopBackground();
+      });
+    }
   }
 }

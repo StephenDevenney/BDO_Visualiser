@@ -77,6 +77,7 @@ export class UserClassEntity {
 
 export class GearEntity {
     public gearScoreId: number = 0;
+    public gearScoreBuildId: number = 0;
     public ap: number = 0;
     public apBracketLow: number = 0;
     public apBracketHigh: number = 0;
@@ -94,9 +95,10 @@ export class GearEntity {
     public gearLabel: string = "";
     public isCurrent: boolean = false;
 
-    constructor(gearScoreId?: number, ap?: number, apBracketLow?: number, apBracketHigh?: number, apBracketBonus?: number, aap?: number, aapBracketLow?: number, aapBracketHigh?: number, aapBracketBonus?: number, dp?: number, dpBracketLow?: number, dpBracketHigh?: number, dpBracketBonus?: number, gearScore?: number, dateCreated?: string, gearLabel?: string, isCurrent?: boolean) {
+    constructor(gearScoreId?: number, gearScoreBuildId?: number, ap?: number, apBracketLow?: number, apBracketHigh?: number, apBracketBonus?: number, aap?: number, aapBracketLow?: number, aapBracketHigh?: number, aapBracketBonus?: number, dp?: number, dpBracketLow?: number, dpBracketHigh?: number, dpBracketBonus?: number, gearScore?: number, dateCreated?: string, gearLabel?: string, isCurrent?: boolean) {
         if(gearScoreId) {
             this.gearScoreId = gearScoreId;
+            this.gearScoreBuildId = gearScoreBuildId;
             this.ap = ap;
             this.apBracketLow = apBracketLow;
             this.apBracketHigh = apBracketHigh;
