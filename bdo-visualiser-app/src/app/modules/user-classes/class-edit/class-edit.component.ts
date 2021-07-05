@@ -1,7 +1,8 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BuildsViewModel, ClassEditViewModel, GearViewModel, UserClassViewModel } from 'src/server/shared/viewModels/userClassViewModel';
+import { BuildsViewModel, ClassEditViewModel, ClassRolesEnumViewModel, GearViewModel, UserClassViewModel } from 'src/server/shared/viewModels/userClassViewModel';
 import { BaseComponent } from '../../../shared/components/base.component';
+import { CombatTypesEnum } from '../../combat/classes/combatEnums';
 import { UserClassesService } from '../user-classes.service';
 
 @Component({
@@ -11,7 +12,7 @@ import { UserClassesService } from '../user-classes.service';
 export class ClassEditPageComponent extends BaseComponent implements OnInit  {
   public isLoaded: boolean = false;
   public classId: number = 0;
-  public gearBuilds: BuildsViewModel = new BuildsViewModel();
+  public userClassEditPageData: ClassEditViewModel = new ClassEditViewModel();
   public newCombatGear: GearViewModel = new GearViewModel();
 
   constructor(private injector: Injector,
@@ -22,19 +23,20 @@ export class ClassEditPageComponent extends BaseComponent implements OnInit  {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      console.log(params);
       if(typeof(params['classId']) != "undefined")
         this.classId = params['classId'];
       if(this.classId > 0) {
-        this.userClassService.getClassEditData(this.classId).then((res: ClassEditViewModel) => {
+        this.userClassService.getClassEditData(this.classId).catch(() => {
+          this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error loading edit data.', life: 2600 });
+          this.router.navigate(["user-classes"]);
+        }).then((res: ClassEditViewModel) => {
           console.log(res);
-          this.gearBuilds = res.builds;
+          this.userClassEditPageData = res;
           this.isLoaded = true;
-        }).catch(() => {
-    
         });
       }
       else {
+        this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error loading edit data.', life: 2600 });
         this.router.navigate(["user-classes"]);
       }
     });
@@ -44,10 +46,10 @@ export class ClassEditPageComponent extends BaseComponent implements OnInit  {
     if(this.newCombatGear.gearLabel.length > 0) {
       this.loader.startBackground();
       await this.userClassService.addCombatGearBuild(this.newCombatGear, this.classId).then((res: Array<GearViewModel>) => {
-        this.gearBuilds.combat = res;
+        this.userClassEditPageData.builds.combat = res;
         this.loader.stopBackground();
       }).catch(() => {
-        this.messageService.add({ severity:'error', summary:'Error', detail:'Error adding gear build.', life: 2600 });
+        this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error adding gear build.', life: 2600 });
         this.loader.stopBackground();
       });
     }
@@ -59,12 +61,28 @@ export class ClassEditPageComponent extends BaseComponent implements OnInit  {
     if(build.gearLabel.length > 0) {
       this.loader.startBackground();
       await this.userClassService.updateCombatGear(build, this.classId).then((res: Array<GearViewModel>) => {
-        this.gearBuilds.combat = res;
+        this.userClassEditPageData.builds.combat = res;
         this.loader.stopBackground();
       }).catch(() => {
         this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error updating gear build.', life: 2600 });
         this.loader.stopBackground();
       });
     }
+  }
+
+  public async onCombatTypeChanged(e: { originalEvent: MouseEvent, value: CombatTypesEnum }): Promise<void> {
+    this.loader.startBackground();
+    await this.userClassService.updateCombatType(e.value, this.classId).catch(() => {
+      this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error updating combat type.', life: 2600 });
+      this.loader.stopBackground();
+    }).then(() => { this.loader.stopBackground(); });
+  }
+
+  public async onUserClassRoleChanged(e: { originalEvent: MouseEvent, value: ClassRolesEnumViewModel }): Promise<void> {
+    this.loader.startBackground();
+    await this.userClassService.updateUserClassRole(e.value, this.classId).catch(() => {
+      this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error updating primary role.', life: 2600 });
+      this.loader.stopBackground();
+    }).then(() => { this.loader.stopBackground(); });
   }
 }

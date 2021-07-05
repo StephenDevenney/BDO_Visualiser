@@ -1,6 +1,6 @@
 import { TheDb } from '../thedb';
 import { Calculations } from '../../shared/calc/calculations';
-import { GearViewModel } from '../../shared/viewModels/userClassViewModel';
+import { ClassRolesEnumViewModel, CombatTypesEnumViewModel, GearViewModel } from '../../shared/viewModels/userClassViewModel';
 import { UserClassEntity, ClassNamesEnumEntity, ClassRoleEnumEntity, GearEntity, CombatTypesEnumEntity, GearBracketsEntity } from '../../shared/entities/userClassEntities';
 
 export class UserClassContext {
@@ -187,6 +187,14 @@ export class ClassRolesEnumContext {
       if(row) 
         return new ClassRolesEnumContext().fromRow(row);
     });
+  }
+
+  public async updateUserClassRole(userClassRole: ClassRolesEnumViewModel, userClassId: number): Promise<void> {
+    const sql = `UPDATE userClass_classes SET FK_classRoleId = $userClassRoleId WHERE classId == $userClassId`;
+    const values = { $userClassRoleId: userClassRole.classRoleId, $userClassId: userClassId};
+
+    TheDb.update(sql, values).then((result) => {});
+    return;
   }
 
   private fromRow(row: ClassRoleEnumEntity): ClassRoleEnumEntity {
@@ -438,6 +446,14 @@ export class CombatTypesEnumContext {
       if(row) 
         return new CombatTypesEnumContext().fromRow(row);
     });
+  }
+
+  public async updateCombatType(combatType: CombatTypesEnumViewModel, userClassId: number): Promise<void> {
+    const sql = `UPDATE userClass_classes SET FK_primaryCombatTypeId = $combatTypeId WHERE classId == $userClassId`;
+    const values = { $combatTypeId: combatType.combatTypeId, $userClassId: userClassId};
+
+    TheDb.update(sql, values).then((result) => {});
+    return;
   }
 
   private fromRow(row: CombatTypesEnumEntity): CombatTypesEnumEntity {

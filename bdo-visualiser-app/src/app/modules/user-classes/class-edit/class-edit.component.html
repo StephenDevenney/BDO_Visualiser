@@ -12,7 +12,7 @@
             <div class="row m-1 ml-2 border border-secondary">
                 <div class="col-8 scroll-container-v overflow-auto" style="height: 80vh;">
                     <div class="row p-2">
-                        <div class="col-6 mb-2 p-1" *ngFor="let build of gearBuilds.combat"><!-- *ngFor="let item of gearBuilds.combat" -->
+                        <div class="col-6 mb-2 p-1" *ngFor="let build of userClassEditPageData.builds.combat"><!-- *ngFor="let item of gearBuilds.combat" -->
                             <div class="p-2 secondary-background border border-secondary">
                                 <div class="ml-2">
                                     <label>Gear Build Name</label>
@@ -62,10 +62,9 @@
                 <div>
                     <h3>Life Gear Builds</h3>
                 </div>
-                <div>
-                    combat type and role dropdowns
-                    <!-- <p-dropdown disabled placeholder="Main"></p-dropdown>
-                    <p-dropdown disabled placeholder="Awakening"></p-dropdown> -->
+                <div class="d-flex align-items-center justify-content-between">
+                    <p-dropdown class="mr-2" (onChange)="onCombatTypeChanged($event);" [options]="userClassEditPageData.userClassCombatTypesEnum" [(ngModel)]="userClassEditPageData.userClassCombatType" optionLabel="combatTypeName"></p-dropdown>
+                    <p-dropdown (onChange)="onUserClassRoleChanged($event);" [options]="userClassEditPageData.userClassRolesEnum" [(ngModel)]="userClassEditPageData.userClassRole" optionLabel="classRole"></p-dropdown>
                 </div>
             </div>
             <div>

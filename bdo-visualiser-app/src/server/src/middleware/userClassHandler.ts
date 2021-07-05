@@ -2,6 +2,7 @@ import { UserClassViewModel, CombatTypesEnumViewModel, GearViewModel, ClassNames
 import { UserClassContext, ClassNamesEnumContext, ClassRolesEnumContext, GearContext, CombatTypesEnumContext } from '../sqlContext/userClassContext';
 import { Calculations } from '../../shared/calc/calculations';
 import { ClassNamesEnumEntity, ClassRoleEnumEntity, CombatTypesEnumEntity, GearEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
+import { CombatTypesEnum } from 'src/app/modules/combat/classes/combatEnums';
 
 export class UserClassDataHandler {
     public async getClassCreationData(): Promise<ClassCreationViewModel> {
@@ -49,6 +50,14 @@ export class UserClassDataHandler {
     public async updateCombatGear(combatGear: GearViewModel, userClassId: number): Promise<Array<GearViewModel>> {
        await new UserClassHandler().updateCombatGearActiveState(userClassId, combatGear.gearScoreBuildId);
        return await this.addCombatGearBuild(combatGear, userClassId);
+    }
+
+    public async updateCombatType(combatType: CombatTypesEnumViewModel, userClassId: number): Promise<void> {
+        return await new CombatTypesEnumContext().updateCombatType(combatType, userClassId);
+    }
+
+    public async updateUserClassRole(userClassRole: ClassRolesEnumViewModel, userClassId: number): Promise<void> {
+        return await new ClassRolesEnumContext().updateUserClassRole(userClassRole, userClassId);
     }
 }
 

@@ -1,4 +1,4 @@
-import { ClassCreationViewModel, ClassEditViewModel, ClassNamesEnumViewModel, GearViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
+import { ClassCreationViewModel, ClassEditViewModel, ClassNamesEnumViewModel, ClassRolesEnumViewModel, CombatTypesEnumViewModel, GearViewModel, UserClassViewModel } from '../../shared/viewModels/userClassViewModel';
 import { UserClassDataHandler, UserClassHandler } from '../middleware/userClassHandler';
 
 export class UserClassController {
@@ -32,5 +32,13 @@ export class UserClassController {
         // PUT
     public async updateCombatGear(combatGear: GearViewModel, userClassId: number): Promise<Array<GearViewModel>> {
         return await new UserClassDataHandler().updateCombatGear(combatGear, userClassId);
+    }
+
+    public async updateCombatType(combatType: CombatTypesEnumViewModel, userClassId: number): Promise<void> {
+        return await new UserClassDataHandler().updateCombatType(combatType, userClassId);
+    }
+
+    public async updateUserClassRole(userClassRole: ClassRolesEnumViewModel, userClassId: number): Promise<void> {
+        return await new UserClassDataHandler().updateUserClassRole(userClassRole, userClassId);
     }
 } 
