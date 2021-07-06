@@ -27,7 +27,7 @@ export class UserClassDataHandler {
         let ncE = await new UserClassContext().getMostRecent();
         let gE = await new GearContext().updateClassId(ncE.FK_gearScoreId, ncE.classId);
 
-        return new UserClassViewModel(ncE.classId, new ClassNamesEnumViewModel(ncE.classNameId, ncE.className, ncE.fileName), new ClassRolesEnumViewModel(ncE.classRoleId, ncE.classRole), new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(gE.gearScoreId, gE.gearScoreBuildId, gE.gearLabel, gE.ap, gE.aap, gE.dp, gE.gearScore, new GearBracketsViewModel(gE.apBracketLow + " - " + gE.apBracketHigh, gE.apBracketBonus, gE.aapBracketLow + " - " + gE.aapBracketHigh, gE.aapBracketBonus, gE.dpBracketLow + " - " + gE.dpBracketHigh, gE.dpBracketBonus + "%")), ncE.classDescription);
+        return new UserClassViewModel(ncE.classId, new ClassNamesEnumViewModel(ncE.classNameId, ncE.className, ncE.fileName), new ClassRolesEnumViewModel(ncE.classRoleId, ncE.classRole), new CombatTypesEnumViewModel(ncE.combatTypeId, ncE.combatTypeName), new GearViewModel(gE.gearScoreId, gE.gearScoreBuildId, gE.gearLabel, gE.ap, gE.aap, gE.dp, gE.gearScore, new GearBracketsViewModel(gE.apBracketLow + " - " + gE.apBracketHigh, gE.apBracketBonus, gE.aapBracketLow + " - " + gE.aapBracketHigh, gE.aapBracketBonus, gE.dpBracketLow + " - " + gE.dpBracketHigh, gE.dpBracketBonus + "%"), new GearBracketsViewModel(gE.nextAapBracketLow + " - " + gE.nextApBracketHigh, gE.nextApBracketBonus, gE.nextAapBracketLow + " - " + gE.nextAapBracketHigh, gE.nextAapBracketBonus, gE.nextDpBracketLow + " - " + gE.nextDpBracketHigh, gE.nextDpBracketBonus + "%")), ncE.classDescription);
     }
 
     public async getClassEditData(userClassId: number): Promise<ClassEditViewModel> {
@@ -68,7 +68,7 @@ export class UserClassHandler {
             _.forEach(async row => {
                 if(row.FK_gearTypeId == 1) {
                     await new GearContext().getViaClassId(row.classId).then((res: GearEntity) => {
-                        acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearScoreBuildId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%")), row.classDescription));
+                        acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearScoreBuildId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%"), new GearBracketsViewModel(res.nextAapBracketLow + " - " + res.nextApBracketHigh, res.nextApBracketBonus, res.nextAapBracketLow + " - " + res.nextAapBracketHigh, res.nextAapBracketBonus, res.nextDpBracketLow + " - " + res.nextDpBracketHigh, res.nextDpBracketBonus + "%")), row.classDescription));
                     });
                 }  
                 /*
@@ -117,7 +117,7 @@ export class UserClassHandler {
             if(typeof(row) != "undefined") {
                 if(row.FK_gearTypeId == 1) {
                     await new GearContext().getViaClassId(row.classId).then((res: GearEntity) => {
-                        userClass = new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearScoreBuildId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%")), row.classDescription);
+                        userClass = new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearScoreBuildId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%"), new GearBracketsViewModel(res.nextAapBracketLow + " - " + res.nextApBracketHigh, res.nextApBracketBonus, res.nextAapBracketLow + " - " + res.nextAapBracketHigh, res.nextAapBracketBonus, res.nextDpBracketLow + " - " + res.nextDpBracketHigh, res.nextDpBracketBonus + "%")), row.classDescription);
                     });
                 } 
                 else {
@@ -138,7 +138,7 @@ export class UserClassHandler {
         let gVM: Array<GearViewModel> = new Array<GearViewModel>();
         await new GearContext().getAllUserClassBuilds(userClassId).then((res: Array<GearEntity>) => {
             res.forEach((_: GearEntity) => {
-                gVM.push(new GearViewModel(_.gearScoreId, _.gearScoreBuildId, _.gearLabel, _.ap, _.aap, _.dp, _.gearScore, new GearBracketsViewModel(_.aapBracketLow + " - " + _.apBracketHigh, _.apBracketBonus, _.aapBracketLow + " - " + _.aapBracketHigh, _.aapBracketBonus, _.dpBracketLow + " - " + _.dpBracketHigh, _.dpBracketBonus + "%")));
+                gVM.push(new GearViewModel(_.gearScoreId, _.gearScoreBuildId, _.gearLabel, _.ap, _.aap, _.dp, _.gearScore, new GearBracketsViewModel(_.aapBracketLow + " - " + _.apBracketHigh, _.apBracketBonus, _.aapBracketLow + " - " + _.aapBracketHigh, _.aapBracketBonus, _.dpBracketLow + " - " + _.dpBracketHigh, _.dpBracketBonus + "%"), new GearBracketsViewModel(_.nextAapBracketLow + " - " + _.nextApBracketHigh, _.nextApBracketBonus, _.nextAapBracketLow + " - " + _.nextAapBracketHigh, _.nextAapBracketBonus, _.nextDpBracketLow + " - " + _.nextDpBracketHigh, _.nextDpBracketBonus + "%")));
             });
         });
         return gVM;
@@ -188,7 +188,7 @@ export class UserClassHandler {
     }
 
     public async convertGearEntityToViewModel(combatGearEntity: GearEntity): Promise<GearViewModel> {
-        return new GearViewModel(combatGearEntity.gearScoreId, combatGearEntity.gearScoreBuildId, combatGearEntity.gearLabel, combatGearEntity.ap, combatGearEntity.aap, combatGearEntity.dp, combatGearEntity.gearScore, new GearBracketsViewModel(combatGearEntity.aapBracketLow + " - " + combatGearEntity.apBracketHigh, combatGearEntity.apBracketBonus, combatGearEntity.aapBracketLow + " - " + combatGearEntity.aapBracketHigh, combatGearEntity.aapBracketBonus, combatGearEntity.dpBracketLow + " - " + combatGearEntity.dpBracketHigh, combatGearEntity.dpBracketBonus + "%"));
+        return new GearViewModel(combatGearEntity.gearScoreId, combatGearEntity.gearScoreBuildId, combatGearEntity.gearLabel, combatGearEntity.ap, combatGearEntity.aap, combatGearEntity.dp, combatGearEntity.gearScore, new GearBracketsViewModel(combatGearEntity.aapBracketLow + " - " + combatGearEntity.apBracketHigh, combatGearEntity.apBracketBonus, combatGearEntity.aapBracketLow + " - " + combatGearEntity.aapBracketHigh, combatGearEntity.aapBracketBonus, combatGearEntity.dpBracketLow + " - " + combatGearEntity.dpBracketHigh, combatGearEntity.dpBracketBonus + "%"), new GearBracketsViewModel(combatGearEntity.nextAapBracketLow + " - " + combatGearEntity.nextApBracketHigh, combatGearEntity.nextApBracketBonus, combatGearEntity.nextAapBracketLow + " - " + combatGearEntity.nextAapBracketHigh, combatGearEntity.nextAapBracketBonus, combatGearEntity.nextDpBracketLow + " - " + combatGearEntity.nextDpBracketHigh, combatGearEntity.nextDpBracketBonus + "%"));
     }
 
     /* 

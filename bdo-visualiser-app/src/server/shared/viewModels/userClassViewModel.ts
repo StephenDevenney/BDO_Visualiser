@@ -99,8 +99,9 @@ export class GearViewModel {
     public dp: number = 0
     public gearScore: number = 0;
     public gearBrackets: GearBracketsViewModel = new GearBracketsViewModel();
+    public nextGearBrackets: GearBracketsViewModel = new GearBracketsViewModel();
 
-    constructor(gearScoreId?: number, gearScoreBuildId?: number, gearLabel?: string, ap?: number, aap?: number, dp?: number, gearScore?: number, gearBrackets?: GearBracketsViewModel) {
+    constructor(gearScoreId?: number, gearScoreBuildId?: number, gearLabel?: string, ap?: number, aap?: number, dp?: number, gearScore?: number, gearBrackets?: GearBracketsViewModel, nextGearBrackets?: GearBracketsViewModel) {
         if(gearScoreId) {
             this.gearScoreId = gearScoreId;
             this.gearScoreBuildId = gearScoreBuildId;
@@ -110,6 +111,7 @@ export class GearViewModel {
             this.dp = dp;
             this.gearScore = gearScore;
             this.gearBrackets = gearBrackets;
+            this.nextGearBrackets = nextGearBrackets;
         }   
     }
 }

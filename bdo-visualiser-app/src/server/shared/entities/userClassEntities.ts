@@ -94,8 +94,17 @@ export class GearEntity {
     public dateCreated: string = "";
     public gearLabel: string = "";
     public isCurrent: boolean = false;
+    public nextApBracketLow: number = 0;
+    public nextApBracketHigh: number = 0;
+    public nextApBracketBonus: number = 0;
+    public nextAapBracketLow: number = 0;
+    public nextAapBracketHigh: number = 0;
+    public nextAapBracketBonus: number = 0;
+    public nextDpBracketLow: number = 0;
+    public nextDpBracketHigh: number = 0;
+    public nextDpBracketBonus: number = 0;
 
-    constructor(gearScoreId?: number, gearScoreBuildId?: number, ap?: number, apBracketLow?: number, apBracketHigh?: number, apBracketBonus?: number, aap?: number, aapBracketLow?: number, aapBracketHigh?: number, aapBracketBonus?: number, dp?: number, dpBracketLow?: number, dpBracketHigh?: number, dpBracketBonus?: number, gearScore?: number, dateCreated?: string, gearLabel?: string, isCurrent?: boolean) {
+    constructor(gearScoreId?: number, gearScoreBuildId?: number, ap?: number, apBracketLow?: number, apBracketHigh?: number, apBracketBonus?: number, aap?: number, aapBracketLow?: number, aapBracketHigh?: number, aapBracketBonus?: number, dp?: number, dpBracketLow?: number, dpBracketHigh?: number, dpBracketBonus?: number, gearScore?: number, dateCreated?: string, gearLabel?: string, isCurrent?: boolean, nextApBracketLow?: number, nextApBracketHigh?: number, nextApBracketBonus?: number, nextAapBracketLow?: number, nextAapBracketHigh?: number, nextAapBracketBonus?: number, nextDpBracketLow?: number, nextDpBracketHigh?: number, nextDpBracketBonus?: number) {
         if(gearScoreId) {
             this.gearScoreId = gearScoreId;
             this.gearScoreBuildId = gearScoreBuildId;
@@ -115,7 +124,16 @@ export class GearEntity {
             this.dateCreated = dateCreated;
             this.gearLabel = gearLabel;
             this.isCurrent = isCurrent;
-        }   
+            this.nextApBracketLow = nextApBracketLow;
+            this.nextApBracketHigh = nextApBracketHigh;
+            this.nextApBracketBonus = nextApBracketBonus;
+            this.nextAapBracketLow = nextAapBracketLow;
+            this.nextAapBracketHigh = nextAapBracketHigh;
+            this.nextAapBracketBonus = nextAapBracketBonus;
+            this.nextDpBracketLow = nextDpBracketLow;
+            this.nextDpBracketHigh = nextDpBracketHigh;
+            this.nextDpBracketBonus = nextDpBracketBonus;
+        }
     }
 }
 
