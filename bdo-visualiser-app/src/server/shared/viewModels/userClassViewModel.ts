@@ -1,3 +1,5 @@
+import { timeStamp } from "console";
+
 export class ClassCreationViewModel {
     public classNamesEnum: Array<ClassNamesEnumViewModel> = new Array<ClassNamesEnumViewModel>();
     public combatTypesEnum: Array<CombatTypesEnumViewModel> = new Array<CombatTypesEnumViewModel>();
@@ -100,8 +102,9 @@ export class GearViewModel {
     public gearScore: number = 0;
     public gearBrackets: GearBracketsViewModel = new GearBracketsViewModel();
     public nextGearBrackets: GearBracketsViewModel = new GearBracketsViewModel();
+    public isActive: boolean = false;
 
-    constructor(gearScoreId?: number, gearScoreBuildId?: number, gearLabel?: string, ap?: number, aap?: number, dp?: number, gearScore?: number, gearBrackets?: GearBracketsViewModel, nextGearBrackets?: GearBracketsViewModel) {
+    constructor(gearScoreId?: number, gearScoreBuildId?: number, gearLabel?: string, ap?: number, aap?: number, dp?: number, gearScore?: number, gearBrackets?: GearBracketsViewModel, nextGearBrackets?: GearBracketsViewModel, isActive?: boolean) {
         if(gearScoreId) {
             this.gearScoreId = gearScoreId;
             this.gearScoreBuildId = gearScoreBuildId;
@@ -112,6 +115,7 @@ export class GearViewModel {
             this.gearScore = gearScore;
             this.gearBrackets = gearBrackets;
             this.nextGearBrackets = nextGearBrackets;
+            this.isActive = isActive;
         }   
     }
 }

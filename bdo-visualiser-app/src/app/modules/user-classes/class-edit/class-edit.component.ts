@@ -14,6 +14,7 @@ export class ClassEditPageComponent extends BaseComponent implements OnInit  {
   public classId: number = 0;
   public userClassEditPageData: ClassEditViewModel = new ClassEditViewModel();
   public newCombatGear: GearViewModel = new GearViewModel();
+  public selectedBuild: GearViewModel = new GearViewModel();
 
   constructor(private injector: Injector,
               private userClassService: UserClassesService,
@@ -30,9 +31,10 @@ export class ClassEditPageComponent extends BaseComponent implements OnInit  {
           this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error loading edit data.', life: 2600 });
           this.router.navigate(["user-classes"]);
         }).then((res: ClassEditViewModel) => {
-          console.log(res);
           this.userClassEditPageData = res;
+          this.selectedBuild = this.userClassEditPageData.builds.combat.filter((_: GearViewModel) => _.isActive == true)[0];
           this.isLoaded = true;
+          console.log(this.userClassEditPageData);
         });
       }
       else {
@@ -62,6 +64,7 @@ export class ClassEditPageComponent extends BaseComponent implements OnInit  {
       this.loader.startBackground();
       await this.userClassService.updateCombatGear(build, this.classId).then((res: Array<GearViewModel>) => {
         this.userClassEditPageData.builds.combat = res;
+        this.selectedBuild = this.userClassEditPageData.builds.combat.filter((_: GearViewModel) => _.isActive == true)[0];
         this.loader.stopBackground();
       }).catch(() => {
         this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error updating gear build.', life: 2600 });
@@ -82,6 +85,16 @@ export class ClassEditPageComponent extends BaseComponent implements OnInit  {
     this.loader.startBackground();
     await this.userClassService.updateUserClassRole(e.value, this.classId).catch(() => {
       this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error updating primary role.', life: 2600 });
+      this.loader.stopBackground();
+    }).then(() => { this.loader.stopBackground(); });
+  }
+
+  public async onSelectedBuildChange(newSelectedBuild: GearViewModel): Promise<void> {
+    this.loader.startBackground();
+    this.userClassEditPageData.builds.combat.filter((_: GearViewModel) => _.isActive == true)[0].isActive = false;
+    this.userClassEditPageData.builds.combat.filter((_: GearViewModel) => _.gearScoreId == newSelectedBuild.gearScoreId)[0].isActive = true;
+    await this.userClassService.updateUserClassActiveGearScoreId(newSelectedBuild, this.classId).catch(() => {
+      this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error updating active build.', life: 2600 });
       this.loader.stopBackground();
     }).then(() => { this.loader.stopBackground(); });
   }

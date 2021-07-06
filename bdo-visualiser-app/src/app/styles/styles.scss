@@ -28,6 +28,8 @@
         ## MultiSelect
         ## Tabpanel
             ### FixedTiles
+            ### Totals
+        ## Radio
     # Specifics
         ## Dropdown-Options
         ## Class Selection
@@ -595,6 +597,16 @@ input {
     }
 }
 
+// ## Radio
+p-radiobutton {
+    label {
+        margin-bottom: 0.1rem;
+    }
+}
+
+.p-radiobutton .p-radiobutton-box:not(.p-disabled).p-focus {
+    box-shadow: 0 0 0 0;
+}
 
 // # Specifics
 

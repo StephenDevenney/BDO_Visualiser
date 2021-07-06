@@ -44,4 +44,8 @@ export class UserClassesService {
     public async updateUserClassRole(userClassRole: ClassRolesEnumViewModel, userClassId: number): Promise<void> {
         return await this.userClassRoute.updateUserClassRole(userClassRole, userClassId);
     }
+
+    public async updateUserClassActiveGearScoreId(newSelectedBuild: GearViewModel, userClassId: number): Promise<void> {
+        return await this.userClassRoute.updateUserClassActiveGearScoreId(newSelectedBuild, userClassId);
+    }
 }

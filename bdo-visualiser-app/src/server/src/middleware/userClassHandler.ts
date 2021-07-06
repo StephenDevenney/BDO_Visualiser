@@ -49,7 +49,13 @@ export class UserClassDataHandler {
 
     public async updateCombatGear(combatGear: GearViewModel, userClassId: number): Promise<Array<GearViewModel>> {
        await new UserClassHandler().updateCombatGearActiveState(userClassId, combatGear.gearScoreBuildId);
-       return await this.addCombatGearBuild(combatGear, userClassId);
+       let gVM = await this.addCombatGearBuild(combatGear, userClassId);
+       if(combatGear.isActive) {
+        await this.updateUserClassActiveGearScoreId(gVM.filter((e: GearViewModel) => e.gearLabel == combatGear.gearLabel)[0], userClassId);
+        gVM.filter((e: GearViewModel) => e.gearLabel == combatGear.gearLabel)[0].isActive = true;
+       }
+
+       return gVM;
     }
 
     public async updateCombatType(combatType: CombatTypesEnumViewModel, userClassId: number): Promise<void> {
@@ -58,6 +64,10 @@ export class UserClassDataHandler {
 
     public async updateUserClassRole(userClassRole: ClassRolesEnumViewModel, userClassId: number): Promise<void> {
         return await new ClassRolesEnumContext().updateUserClassRole(userClassRole, userClassId);
+    }
+
+    public async updateUserClassActiveGearScoreId(newSelectedBuild: GearViewModel, userClassId: number): Promise<void> {
+        return await new UserClassContext().updateCombatGearActiveState(newSelectedBuild, userClassId);
     }
 }
 
@@ -68,7 +78,7 @@ export class UserClassHandler {
             _.forEach(async row => {
                 if(row.FK_gearTypeId == 1) {
                     await new GearContext().getViaClassId(row.classId).then((res: GearEntity) => {
-                        acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearScoreBuildId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%"), new GearBracketsViewModel(res.nextAapBracketLow + " - " + res.nextApBracketHigh, res.nextApBracketBonus, res.nextAapBracketLow + " - " + res.nextAapBracketHigh, res.nextAapBracketBonus, res.nextDpBracketLow + " - " + res.nextDpBracketHigh, res.nextDpBracketBonus + "%")), row.classDescription));
+                        acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearScoreBuildId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%"), new GearBracketsViewModel(res.nextAapBracketLow + " - " + res.nextApBracketHigh, res.nextApBracketBonus, res.nextAapBracketLow + " - " + res.nextAapBracketHigh, res.nextAapBracketBonus, res.nextDpBracketLow + " - " + res.nextDpBracketHigh, res.nextDpBracketBonus + "%"), res.isActive), row.classDescription));
                     });
                 }  
                 /*
@@ -117,7 +127,7 @@ export class UserClassHandler {
             if(typeof(row) != "undefined") {
                 if(row.FK_gearTypeId == 1) {
                     await new GearContext().getViaClassId(row.classId).then((res: GearEntity) => {
-                        userClass = new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearScoreBuildId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%"), new GearBracketsViewModel(res.nextAapBracketLow + " - " + res.nextApBracketHigh, res.nextApBracketBonus, res.nextAapBracketLow + " - " + res.nextAapBracketHigh, res.nextAapBracketBonus, res.nextDpBracketLow + " - " + res.nextDpBracketHigh, res.nextDpBracketBonus + "%")), row.classDescription);
+                        userClass = new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearScoreBuildId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%"), new GearBracketsViewModel(res.nextAapBracketLow + " - " + res.nextApBracketHigh, res.nextApBracketBonus, res.nextAapBracketLow + " - " + res.nextAapBracketHigh, res.nextAapBracketBonus, res.nextDpBracketLow + " - " + res.nextDpBracketHigh, res.nextDpBracketBonus + "%"), res.isActive), row.classDescription);
                     });
                 } 
                 else {
@@ -138,7 +148,7 @@ export class UserClassHandler {
         let gVM: Array<GearViewModel> = new Array<GearViewModel>();
         await new GearContext().getAllUserClassBuilds(userClassId).then((res: Array<GearEntity>) => {
             res.forEach((_: GearEntity) => {
-                gVM.push(new GearViewModel(_.gearScoreId, _.gearScoreBuildId, _.gearLabel, _.ap, _.aap, _.dp, _.gearScore, new GearBracketsViewModel(_.aapBracketLow + " - " + _.apBracketHigh, _.apBracketBonus, _.aapBracketLow + " - " + _.aapBracketHigh, _.aapBracketBonus, _.dpBracketLow + " - " + _.dpBracketHigh, _.dpBracketBonus + "%"), new GearBracketsViewModel(_.nextAapBracketLow + " - " + _.nextApBracketHigh, _.nextApBracketBonus, _.nextAapBracketLow + " - " + _.nextAapBracketHigh, _.nextAapBracketBonus, _.nextDpBracketLow + " - " + _.nextDpBracketHigh, _.nextDpBracketBonus + "%")));
+                gVM.push(new GearViewModel(_.gearScoreId, _.gearScoreBuildId, _.gearLabel, _.ap, _.aap, _.dp, _.gearScore, new GearBracketsViewModel(_.aapBracketLow + " - " + _.apBracketHigh, _.apBracketBonus, _.aapBracketLow + " - " + _.aapBracketHigh, _.aapBracketBonus, _.dpBracketLow + " - " + _.dpBracketHigh, _.dpBracketBonus + "%"), new GearBracketsViewModel(_.nextAapBracketLow + " - " + _.nextApBracketHigh, _.nextApBracketBonus, _.nextAapBracketLow + " - " + _.nextAapBracketHigh, _.nextAapBracketBonus, _.nextDpBracketLow + " - " + _.nextDpBracketHigh, _.nextDpBracketBonus + "%"), _.isActive));
             });
         });
         return gVM;
@@ -188,7 +198,7 @@ export class UserClassHandler {
     }
 
     public async convertGearEntityToViewModel(combatGearEntity: GearEntity): Promise<GearViewModel> {
-        return new GearViewModel(combatGearEntity.gearScoreId, combatGearEntity.gearScoreBuildId, combatGearEntity.gearLabel, combatGearEntity.ap, combatGearEntity.aap, combatGearEntity.dp, combatGearEntity.gearScore, new GearBracketsViewModel(combatGearEntity.aapBracketLow + " - " + combatGearEntity.apBracketHigh, combatGearEntity.apBracketBonus, combatGearEntity.aapBracketLow + " - " + combatGearEntity.aapBracketHigh, combatGearEntity.aapBracketBonus, combatGearEntity.dpBracketLow + " - " + combatGearEntity.dpBracketHigh, combatGearEntity.dpBracketBonus + "%"), new GearBracketsViewModel(combatGearEntity.nextAapBracketLow + " - " + combatGearEntity.nextApBracketHigh, combatGearEntity.nextApBracketBonus, combatGearEntity.nextAapBracketLow + " - " + combatGearEntity.nextAapBracketHigh, combatGearEntity.nextAapBracketBonus, combatGearEntity.nextDpBracketLow + " - " + combatGearEntity.nextDpBracketHigh, combatGearEntity.nextDpBracketBonus + "%"));
+        return new GearViewModel(combatGearEntity.gearScoreId, combatGearEntity.gearScoreBuildId, combatGearEntity.gearLabel, combatGearEntity.ap, combatGearEntity.aap, combatGearEntity.dp, combatGearEntity.gearScore, new GearBracketsViewModel(combatGearEntity.aapBracketLow + " - " + combatGearEntity.apBracketHigh, combatGearEntity.apBracketBonus, combatGearEntity.aapBracketLow + " - " + combatGearEntity.aapBracketHigh, combatGearEntity.aapBracketBonus, combatGearEntity.dpBracketLow + " - " + combatGearEntity.dpBracketHigh, combatGearEntity.dpBracketBonus + "%"), new GearBracketsViewModel(combatGearEntity.nextAapBracketLow + " - " + combatGearEntity.nextApBracketHigh, combatGearEntity.nextApBracketBonus, combatGearEntity.nextAapBracketLow + " - " + combatGearEntity.nextAapBracketHigh, combatGearEntity.nextAapBracketBonus, combatGearEntity.nextDpBracketLow + " - " + combatGearEntity.nextDpBracketHigh, combatGearEntity.nextDpBracketBonus + "%"), combatGearEntity.isActive);
     }
 
     /* 

@@ -103,8 +103,9 @@ export class GearEntity {
     public nextDpBracketLow: number = 0;
     public nextDpBracketHigh: number = 0;
     public nextDpBracketBonus: number = 0;
+    public isActive: boolean = false;
 
-    constructor(gearScoreId?: number, gearScoreBuildId?: number, ap?: number, apBracketLow?: number, apBracketHigh?: number, apBracketBonus?: number, aap?: number, aapBracketLow?: number, aapBracketHigh?: number, aapBracketBonus?: number, dp?: number, dpBracketLow?: number, dpBracketHigh?: number, dpBracketBonus?: number, gearScore?: number, dateCreated?: string, gearLabel?: string, isCurrent?: boolean, nextApBracketLow?: number, nextApBracketHigh?: number, nextApBracketBonus?: number, nextAapBracketLow?: number, nextAapBracketHigh?: number, nextAapBracketBonus?: number, nextDpBracketLow?: number, nextDpBracketHigh?: number, nextDpBracketBonus?: number) {
+    constructor(gearScoreId?: number, gearScoreBuildId?: number, ap?: number, apBracketLow?: number, apBracketHigh?: number, apBracketBonus?: number, aap?: number, aapBracketLow?: number, aapBracketHigh?: number, aapBracketBonus?: number, dp?: number, dpBracketLow?: number, dpBracketHigh?: number, dpBracketBonus?: number, gearScore?: number, dateCreated?: string, gearLabel?: string, isCurrent?: boolean, nextApBracketLow?: number, nextApBracketHigh?: number, nextApBracketBonus?: number, nextAapBracketLow?: number, nextAapBracketHigh?: number, nextAapBracketBonus?: number, nextDpBracketLow?: number, nextDpBracketHigh?: number, nextDpBracketBonus?: number, isActive?: boolean) {
         if(gearScoreId) {
             this.gearScoreId = gearScoreId;
             this.gearScoreBuildId = gearScoreBuildId;
@@ -133,6 +134,7 @@ export class GearEntity {
             this.nextDpBracketLow = nextDpBracketLow;
             this.nextDpBracketHigh = nextDpBracketHigh;
             this.nextDpBracketBonus = nextDpBracketBonus;
+            this.isActive = isActive;
         }
     }
 }

@@ -429,6 +429,25 @@
         }
     }
 
+    // ## Radio
+    .p-radiobutton .p-radiobutton-box.p-highlight {
+        border-color: $standard-secondary;
+        background: $standard-secondary;
+    }
+
+    .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
+        border-color: lighten($standard-secondary, 10%);
+        background: lighten($standard-secondary, 10%);
+    }
+
+    .p-radiobutton .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
+        border-color: $standard-secondary;
+    }
+
+    .p-radiobutton .p-radiobutton-box .p-radiobutton-icon {
+        background-color: transparent;
+    }
+
     // # Specifics
 
     // ## Class Selection

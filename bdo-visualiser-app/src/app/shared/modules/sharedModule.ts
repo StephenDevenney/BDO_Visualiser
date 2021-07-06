@@ -24,6 +24,8 @@ import { Calculations } from '../../../server/shared/calc/calculations';
 import { TabViewModule } from 'primeng/tabview';
 import { ListboxModule } from 'primeng/listbox';
 import { InputTextModule } from 'primeng/inputtext';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   imports: [
@@ -60,7 +62,9 @@ import { InputTextModule } from 'primeng/inputtext';
     ButtonModule,
     TabViewModule,
     ListboxModule,
-    InputTextModule
+    InputTextModule,
+    RadioButtonModule,
+    CheckboxModule
   ],
   providers: [
     Globals,
