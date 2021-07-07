@@ -93,7 +93,7 @@ export class ClassEditPageComponent extends BaseComponent implements OnInit  {
     this.loader.startBackground();
     this.userClassEditPageData.builds.combat.filter((_: GearViewModel) => _.isActive == true)[0].isActive = false;
     this.userClassEditPageData.builds.combat.filter((_: GearViewModel) => _.gearScoreId == newSelectedBuild.gearScoreId)[0].isActive = true;
-    await this.userClassService.updateUserClassActiveGearScoreId(newSelectedBuild, this.classId).catch(() => {
+    await this.userClassService.updateUserClassActiveGearScoreId(newSelectedBuild.gearScoreId, this.classId).catch(() => {
       this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error updating active build.', life: 2600 });
       this.loader.stopBackground();
     }).then(() => { this.loader.stopBackground(); });

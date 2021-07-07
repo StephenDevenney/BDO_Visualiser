@@ -42,7 +42,7 @@ export class UserClassController {
         return await new UserClassDataHandler().updateUserClassRole(userClassRole, userClassId);
     }
 
-    public async updateUserClassActiveGearScoreId(newSelectedBuild: GearViewModel, userClassId: number): Promise<void> {
-        return await new UserClassDataHandler().updateUserClassActiveGearScoreId(newSelectedBuild, userClassId);
+    public async updateUserClassActiveGearScoreId(gearScoreId: number, userClassId: number): Promise<void> {
+        return await new UserClassDataHandler().updateUserClassActiveGearScoreId(gearScoreId, userClassId);
     }
 } 
