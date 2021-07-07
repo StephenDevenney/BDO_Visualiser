@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { CharacterCardsViewModel, UserClassViewModel } from '../../../../server/shared/viewModels/userClassViewModel';
+import { UserClassViewModel } from '../../../../server/shared/viewModels/userClassViewModel';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { UserClassesService } from '../user-classes.service';
 
