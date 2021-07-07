@@ -6,11 +6,11 @@ export class UserClassController {
 
         // GET
     public async getClassNameEnums(): Promise<Array<ClassNamesEnumViewModel>> {
-        return await new UserClassHandler().getClassNameEnums();
+        return await new UserClassDataHandler().getClassNameEnums();
     } 
 
     public async getClassCardsData(): Promise<Array<UserClassViewModel>> {
-        return await new UserClassHandler().getUserClasses();
+        return await new UserClassDataHandler().getClassCardsData();
     } 
 
     public async getClassCreationData(): Promise<ClassCreationViewModel> {

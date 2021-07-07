@@ -2,15 +2,22 @@ import { UserClassViewModel, CombatTypesEnumViewModel, GearViewModel, ClassNames
 import { UserClassContext, ClassNamesEnumContext, ClassRolesEnumContext, GearContext, CombatTypesEnumContext } from '../sqlContext/userClassContext';
 import { Calculations } from '../../shared/calc/calculations';
 import { ClassNamesEnumEntity, ClassRoleEnumEntity, CombatTypesEnumEntity, GearEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
-import { CombatTypesEnum } from 'src/app/modules/combat/classes/combatEnums';
 
 export class UserClassDataHandler {
+    public async getClassCardsData(): Promise<Array<UserClassViewModel>> {
+        return await new UserClassHandler().getUserClasses();
+    }
+
+    public async getClassNameEnums(): Promise<Array<ClassNamesEnumViewModel>> {
+        return await new UserClassHandler().getClassNameEnums();
+    }
+
     public async getClassCreationData(): Promise<ClassCreationViewModel> {
         let hasMainUserClass = true;
         let cneVM = new Array<ClassNamesEnumViewModel>();
         let cteVM = new Array<CombatTypesEnumViewModel>();
         let creVM = new Array<ClassRolesEnumViewModel>();
-        await new UserClassHandler().getClassNameEnums().then((res: Array<ClassNamesEnumViewModel>) => { cneVM = res; });
+        await this.getClassNameEnums().then((res: Array<ClassNamesEnumViewModel>) => { cneVM = res; });
         await new UserClassHandler().getCombatTypeEnums().then((res) => { cteVM = res; });
         await new UserClassHandler().getClassRoleEnums().then((res) => { creVM = res; });
         await new UserClassHandler().getMostRecentUserClass().then((_: UserClassViewModel) => {
@@ -79,7 +86,6 @@ export class UserClassHandler {
             _.forEach(async row => {
                 if(row.FK_gearTypeId == 1) {
                     await new GearContext().getViaClassId(row.classId).then((res: GearEntity) => {
-                        // debugger;
                         acVM.push(new UserClassViewModel(row.classId, new ClassNamesEnumViewModel(row.classNameId, row.className, row.fileName), new ClassRolesEnumViewModel(row.classRoleId, row.classRole), new CombatTypesEnumViewModel(row.combatTypeId, row.combatTypeName), new GearViewModel(res.gearScoreId, res.gearScoreBuildId, res.gearLabel, res.ap, res.aap, res.dp, res.gearScore, new GearBracketsViewModel(res.apBracketLow + " - " + res.apBracketHigh, res.apBracketBonus, res.aapBracketLow + " - " + res.aapBracketHigh, res.aapBracketBonus, res.dpBracketLow + " - " + res.dpBracketHigh, res.dpBracketBonus + "%"), new GearBracketsViewModel(res.nextAapBracketLow + " - " + res.nextApBracketHigh, res.nextApBracketBonus, res.nextAapBracketLow + " - " + res.nextAapBracketHigh, res.nextAapBracketBonus, res.nextDpBracketLow + " - " + res.nextDpBracketHigh, res.nextDpBracketBonus + "%"), res.isActive), row.classDescription));
                     });
                 }  
