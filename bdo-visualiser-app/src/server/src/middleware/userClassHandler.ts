@@ -66,7 +66,7 @@ export class UserClassDataHandler {
     }
 
     public async updateCombatGear(combatGear: GearViewModel, userClassId: number): Promise<Array<GearViewModel>> {
-       await new UserClassHandler().updateCombatGearActiveState(userClassId, combatGear.gearScoreBuildId);
+       await new UserClassHandler().updateCombatGearCurrentState(userClassId, combatGear.gearScoreBuildId);
        let gVM = await this.addCombatGearBuild(combatGear, userClassId);
        if(combatGear.isActive) {
         await this.updateUserClassActiveGearScoreId(gVM.filter((e: GearViewModel) => e.gearLabel == combatGear.gearLabel)[0].gearScoreId, userClassId);
@@ -226,8 +226,8 @@ export class UserClassHandler {
         return combatType;
     }
 
-    public async updateCombatGearActiveState(userClassId: number, gearScoreBuildId: number): Promise<void> {
-        return await new GearContext().updateCombatGearActiveState(userClassId, gearScoreBuildId);
+    public async updateCombatGearCurrentState(userClassId: number, gearScoreBuildId: number): Promise<void> {
+        return await new GearContext().updateCombatGearCurrentState(userClassId, gearScoreBuildId);
     }
 
     public async createCombatGearEntry(combatGear: GearViewModel, userClassId: number): Promise<GearEntity> {

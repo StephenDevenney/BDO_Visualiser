@@ -44,19 +44,33 @@ export class ClassEditPageComponent extends BaseComponent implements OnInit  {
     });
   }
 
-  public async createCombatBuild(): Promise<void> {
+  public async checkCombatBuilds(): Promise<void> {
     if(this.newCombatGear.gearLabel.length > 0) {
-      this.loader.startBackground();
-      await this.userClassService.addCombatGearBuild(this.newCombatGear, this.classId).then((res: Array<GearViewModel>) => {
-        this.userClassEditPageData.builds.combat = res;
-        this.loader.stopBackground();
-      }).catch(() => {
-        this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error adding gear build.', life: 2600 });
-        this.loader.stopBackground();
+      let duplicateCheck: boolean = false;
+      await Promise.all(this.userClassEditPageData.builds.combat.map(async (res: GearViewModel) => { 
+        if(res.gearLabel === this.newCombatGear.gearLabel)
+          duplicateCheck = true;
+      })).then(async () => {
+        if(duplicateCheck)
+          this.messageService.add({ severity:'warn', summary:'Gear build duplicate', detail:'Label is required to be unique.', life: 2600 });
+        else
+          await this.createCombatBuild();
       });
     }
     else
       this.messageService.add({ severity:'warn', summary:'Gear builds require a name', detail:'Examples: Nouver, Kutum, Tank, Full AP, Accuarcy, Evasion...', life: 2600 });
+  }
+
+  public async createCombatBuild(): Promise<void> {
+    this.loader.startBackground();
+    await this.userClassService.addCombatGearBuild(this.newCombatGear, this.classId).then((res: Array<GearViewModel>) => {
+      this.userClassEditPageData.builds.combat = res;
+      this.selectedBuild = this.userClassEditPageData.builds.combat.filter((_: GearViewModel) => _.isActive == true)[0];
+      this.loader.stopBackground();
+    }).catch(() => {
+      this.messageService.add({ severity:'error', summary:'Error', detail:'Internal error adding gear build.', life: 2600 });
+      this.loader.stopBackground();
+    });
   }
 
   public async onGearEdit(build: GearViewModel): Promise<void> {

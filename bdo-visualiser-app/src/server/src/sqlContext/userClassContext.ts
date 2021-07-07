@@ -325,7 +325,7 @@ export class GearContext {
     return this.getMostRecent();
   }
 
-  public async updateCombatGearActiveState(userClassId: number, gearScoreBuildId: number): Promise<void> {
+  public async updateCombatGearCurrentState(userClassId: number, gearScoreBuildId: number): Promise<void> {
     const sql = `UPDATE userClass_gearScore SET isCurrent = 0 WHERE FK_classId == $userClassId AND gearScoreBuildId == $gearScoreBuildId`;
     const values = { $userClassId: userClassId, $gearScoreBuildId: gearScoreBuildId };
 
