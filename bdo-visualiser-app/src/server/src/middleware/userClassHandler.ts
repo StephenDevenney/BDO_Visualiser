@@ -1,7 +1,7 @@
 import { UserClassViewModel, CombatTypesEnumViewModel, GearViewModel, ClassNamesEnumViewModel, ClassCreationViewModel, ClassRolesEnumViewModel, GearBracketsViewModel, ClassEditViewModel, BuildsViewModel } from '../../shared/viewModels/userClassViewModel';
 import { UserClassContext, ClassNamesEnumContext, ClassRolesEnumContext, GearContext, CombatTypesEnumContext } from '../sqlContext/userClassContext';
 import { Calculations } from '../../shared/calc/calculations';
-import { ClassNamesEnumEntity, ClassRoleEnumEntity, CombatTypesEnumEntity, GearEntity, UserClassEntity } from '../../shared/entities/userClassEntities';
+import { ClassNamesEnumEntity, ClassRoleEnumEntity, CombatTypesEnumEntity, GearEntity, UserClassEntity, userClassRoleChecksEntity } from '../../shared/entities/userClassEntities';
 
 export class UserClassDataHandler {
     public async getClassCardsData(): Promise<Array<UserClassViewModel>> {
@@ -14,19 +14,16 @@ export class UserClassDataHandler {
     }
 
     public async getClassCreationData(): Promise<ClassCreationViewModel> {
-        let hasMainUserClass = true;
+        let userClassRoleChecks: userClassRoleChecksEntity = new userClassRoleChecksEntity();
         let cneVM = new Array<ClassNamesEnumViewModel>();
         let cteVM = new Array<CombatTypesEnumViewModel>();
         let creVM = new Array<ClassRolesEnumViewModel>();
         await this.getClassNameEnums().then((res: Array<ClassNamesEnumViewModel>) => { cneVM = res; });
         await new UserClassHandler().getCombatTypeEnums().then((res: Array<CombatTypesEnumViewModel>) => { cteVM = res; });
         await new UserClassHandler().getClassRoleEnums().then((res: Array<ClassRolesEnumViewModel>) => { creVM = res; });
-        await new UserClassHandler().getMostRecentUserClass().then((_: UserClassViewModel) => {
-            if(_.classId == 0)
-                hasMainUserClass = false;
-        });
-
-        return new ClassCreationViewModel(cneVM, cteVM, creVM, new UserClassViewModel(), hasMainUserClass);
+        await new UserClassHandler().checkAvailableUserClassRoles().then((res: userClassRoleChecksEntity) => { userClassRoleChecks = res; });
+        await new UserClassHandler().filterAvailableUserClassRoles(creVM, userClassRoleChecks).then((res: Array<ClassRolesEnumViewModel>) => { creVM = res });
+        return new ClassCreationViewModel(cneVM, cteVM, creVM, new UserClassViewModel(), userClassRoleChecks.hasMainClass);
     }
 
     public async addUserClass(userClass: UserClassViewModel): Promise<UserClassViewModel> {
@@ -271,5 +268,19 @@ export class UserClassHandler {
             await new GearContext().getNextAvailableBuildId(userClassId).then((res: number) => { gearBuildId = res; });
 
         return gearBuildId;
+    }
+
+    public async checkAvailableUserClassRoles(): Promise<userClassRoleChecksEntity> {
+        return await new ClassRolesEnumContext().checkAvailableUserClassRoles();
+    }
+
+    public async filterAvailableUserClassRoles(creVM: Array<ClassRolesEnumViewModel>, userClassRoleChecks: userClassRoleChecksEntity): Promise<Array<ClassRolesEnumViewModel>> {
+        if(userClassRoleChecks.hasMainClass)
+            creVM = creVM.filter((_: ClassRolesEnumViewModel) => _.classRoleId != 1 );
+        if(userClassRoleChecks.hasSecondaryClass)
+            creVM = creVM.filter((_: ClassRolesEnumViewModel) => _.classRoleId != 3 );
+        creVM = creVM.filter((_: ClassRolesEnumViewModel) => _.classRoleId != 4 );
+
+        return creVM;
     }
 }

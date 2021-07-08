@@ -1,7 +1,7 @@
 import { TheDb } from '../thedb';
 import { Calculations } from '../../shared/calc/calculations';
 import { ClassRolesEnumViewModel, CombatTypesEnumViewModel, GearViewModel } from '../../shared/viewModels/userClassViewModel';
-import { UserClassEntity, ClassNamesEnumEntity, ClassRoleEnumEntity, GearEntity, CombatTypesEnumEntity, GearBracketsEntity } from '../../shared/entities/userClassEntities';
+import { UserClassEntity, ClassNamesEnumEntity, ClassRoleEnumEntity, GearEntity, CombatTypesEnumEntity, GearBracketsEntity, userClassRoleChecksEntity } from '../../shared/entities/userClassEntities';
 
 export class UserClassContext {
   public classId: number = 0;
@@ -205,11 +205,31 @@ export class ClassRolesEnumContext {
     return;
   }
 
+  public async checkAvailableUserClassRoles(): Promise<userClassRoleChecksEntity> {
+    const sql = `SELECT userClass_classes.classId AS mainClass, uc.classId AS secondaryClass FROM userClass_classes LEFT JOIN userClass_classes AS uc on uc.FK_classRoleId == 3 WHERE userClass_classes.FK_classRoleId == 1`;
+    const values = { };
+
+    return TheDb.selectOne(sql, values).then((row: any) => {
+      if(row)
+        return new ClassRolesEnumContext().fromRowRoleCheck(row);
+    });
+  }
+
   private fromRow(row: ClassRoleEnumEntity): ClassRoleEnumEntity {
     this.roleId = row['roleId'];
     this.roleDescription = row['roleDescription'];
   
     return this;
+  }
+
+  private fromRowRoleCheck(row: userClassRoleChecksEntity): userClassRoleChecksEntity {
+    let res: userClassRoleChecksEntity = new userClassRoleChecksEntity(false, false);
+    if(!!row['mainClass'])
+      res.hasMainClass = true;
+    if(!!row['secondaryClass'])
+      res.hasSecondaryClass = true;
+
+    return res;
   }
 }
 

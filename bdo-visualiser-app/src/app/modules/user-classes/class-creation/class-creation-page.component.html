@@ -37,10 +37,10 @@
             </div>
             <div class="row m-0">
                 <div class="col-6 p-0">
-                    <p-dropdown [disabled]="!userClassHasBeenSelected" [options]="classCreationData.combatTypesEnum" [(ngModel)]="classCreationData.newUserClass.combatTypeEnum" optionLabel="combatTypeName"></p-dropdown>
+                    <p-dropdown (onChange)="onCombatTypeChanged($event);" [disabled]="!userClassHasBeenSelected" [options]="classCreationData.combatTypesEnum" [(ngModel)]="classCreationData.newUserClass.combatTypeEnum" optionLabel="combatTypeName"></p-dropdown>
                 </div>
                 <div class="col-6 p-0 pl-2">
-                    <p-dropdown [disabled]="!userClassHasBeenSelected" [options]="classRolesEnumFiltered" [(ngModel)]="classCreationData.newUserClass.classRoleEnum" optionLabel="classRole"></p-dropdown>
+                    <p-dropdown (onChange)="onUserClassRoleChanged($event);" [disabled]="!userClassHasBeenSelected" [options]="classRolesEnumFiltered" [(ngModel)]="classCreationData.newUserClass.classRoleEnum" optionLabel="classRole"></p-dropdown>
                 </div>
             </div>
             <div *ngIf="userClassHasBeenSelected">

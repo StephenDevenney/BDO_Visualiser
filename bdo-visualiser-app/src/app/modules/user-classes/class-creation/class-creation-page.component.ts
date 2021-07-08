@@ -1,4 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
+import { CombatTypeCountViewModel } from 'src/server/shared/viewModels/combatViewModels';
 import { ClassCreationViewModel, ClassNamesEnumViewModel, ClassRolesEnumViewModel, UserClassViewModel } from '../../../../server/shared/viewModels/userClassViewModel';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { UserClassesService } from '../user-classes.service';
@@ -23,18 +24,10 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
     this.loader.start();
     this.userClassService.getClassCreationData().then((res: ClassCreationViewModel) => {
       this.classCreationData = res;
-      /*
-        TODO: Filter out secondary grinder
-      */
-      if(res.hasMainUserClass)
-        this.classRolesEnumFiltered = res.classRolesEnum.filter(_ => _.classRoleId != 1);
-      else
-        this.classRolesEnumFiltered = res.classRolesEnum;
-
+      this.classRolesEnumFiltered = res.classRolesEnum;
       this.isLoaded = true;
     }).catch((err: any) => {
       this.messageService.add({ severity:'error', summary:'Error', detail:'Error Loading Data.', life: 2600 });
-      // Log Error
     }).then(() => {
       this.classCreationData.newUserClass.combatTypeEnum = this.classCreationData.combatTypesEnum[0];
       this.loader.stop();
@@ -63,5 +56,13 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
     } 
     else
       this.messageService.add({ severity:'warn', summary:'Gear builds require a name', detail:'Examples: Nouver, Kutum, Tank, Full AP, Accuarcy, Evasion...', life: 2600 });
+  }
+
+  public async onCombatTypeChanged(e: { originalEvent: MouseEvent, value: CombatTypeCountViewModel }): Promise <void> {
+    console.log(e);
+  }
+
+  public async onUserClassRoleChanged(e: { originalEvent: MouseEvent, value: ClassRolesEnumViewModel }): Promise <void> {
+    console.log(e);
   }
 }
