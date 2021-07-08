@@ -5,7 +5,7 @@
                 <h2 class="mb-0">Add Class</h2>
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-secondary" (click)="router.navigate(['user-classes']);">Cancel</button>
-                    <button [disabled]="classCreationData.newUserClass.gear.ap == 0 || classCreationData.newUserClass.gear.aap == 0 || classCreationData.newUserClass.gear.dp == 0" class="btn btn-primary ml-3" (click)="createClass()">Add</button>
+                    <button class="btn btn-primary ml-3" (click)="createClass()">Add</button>
                 </div>
             </div>
             
@@ -27,7 +27,7 @@
             <div>
                 <label class="mt-2">Awakening AP</label>
             </div>
-            <p-inputNumber [disabled]="!userClassHasBeenSelected" [(ngModel)]="classCreationData.newUserClass.gear.aap" [min]="0">{{classCreationData.newUserClass.gear.aap}}</p-inputNumber>
+            <p-inputNumber [disabled]="!userClassHasBeenSelected || classCreationData.newUserClass.combatTypeEnum.combatTypeId == 4" [(ngModel)]="classCreationData.newUserClass.gear.aap" [min]="0">{{classCreationData.newUserClass.gear.aap}}</p-inputNumber>
             <div>
                 <label class="mt-2">DP</label>
             </div>
