@@ -27,7 +27,7 @@
             <div>
                 <label class="mt-2">Awakening AP</label>
             </div>
-            <p-inputNumber [disabled]="!userClassHasBeenSelected || classCreationData.newUserClass.combatTypeEnum.combatTypeId == 4" [(ngModel)]="classCreationData.newUserClass.gear.aap" [min]="0">{{classCreationData.newUserClass.gear.aap}}</p-inputNumber>
+            <p-inputNumber [disabled]="!userClassHasBeenSelected || classCreationData.newUserClass.combatTypeEnum.combatTypeId == 4 || classCreationData.newUserClass.classNameEnum.classId == 16" [(ngModel)]="classCreationData.newUserClass.gear.aap" [min]="0">{{classCreationData.newUserClass.gear.aap}}</p-inputNumber>
             <div>
                 <label class="mt-2">DP</label>
             </div>
@@ -40,7 +40,7 @@
                     <p-dropdown (onChange)="onCombatTypeChanged($event);" [disabled]="!userClassHasBeenSelected" [options]="classCreationData.combatTypesEnum" [(ngModel)]="classCreationData.newUserClass.combatTypeEnum" optionLabel="combatTypeName"></p-dropdown>
                 </div>
                 <div class="col-6 p-0 pl-2">
-                    <p-dropdown (onChange)="onUserClassRoleChanged($event);" [disabled]="!userClassHasBeenSelected" [options]="classRolesEnumFiltered" [(ngModel)]="classCreationData.newUserClass.classRoleEnum" optionLabel="classRole"></p-dropdown>
+                    <p-dropdown [disabled]="!userClassHasBeenSelected" [options]="classRolesEnumFiltered" [(ngModel)]="classCreationData.newUserClass.classRoleEnum" optionLabel="classRole"></p-dropdown>
                 </div>
             </div>
             <div *ngIf="userClassHasBeenSelected">

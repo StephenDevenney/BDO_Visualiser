@@ -1,6 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { CombatTypeCountViewModel } from 'src/server/shared/viewModels/combatViewModels';
-import { ClassCreationViewModel, ClassNamesEnumViewModel, ClassRolesEnumViewModel, UserClassViewModel } from '../../../../server/shared/viewModels/userClassViewModel';
+import { ClassCreationViewModel, ClassNamesEnumViewModel, ClassRolesEnumViewModel, CombatTypesEnumViewModel, UserClassViewModel } from '../../../../server/shared/viewModels/userClassViewModel';
 import { BaseComponent } from '../../../shared/components/base.component';
 import { UserClassesService } from '../user-classes.service';
 
@@ -11,9 +10,9 @@ import { UserClassesService } from '../user-classes.service';
 export class ClassCreationPageComponent extends BaseComponent implements OnInit  {
   public classCreationData: ClassCreationViewModel = new ClassCreationViewModel();
   public classRolesEnumFiltered: Array<ClassRolesEnumViewModel> = new Array<ClassRolesEnumViewModel>();
+  public combatTypesEnumUnfiltered: Array<CombatTypesEnumViewModel> = new Array<CombatTypesEnumViewModel>();
   public isLoaded: boolean = false;
   public userClassHasBeenSelected: boolean = false;
-  public selectedUserClassId: number = 0;
 
   constructor(private injector: Injector,
               private userClassService: UserClassesService) {
@@ -25,6 +24,7 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
     this.userClassService.getClassCreationData().then((res: ClassCreationViewModel) => {
       this.classCreationData = res;
       this.classRolesEnumFiltered = res.classRolesEnum;
+      this.combatTypesEnumUnfiltered = res.combatTypesEnum;
       this.isLoaded = true;
     }).catch((err: any) => {
       this.messageService.add({ severity:'error', summary:'Error', detail:'Error Loading Data.', life: 2600 });
@@ -37,9 +37,12 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
   public async selectClass(e: ClassNamesEnumViewModel) {
     await Promise.all(this.classCreationData.classNamesEnum.map( _ => { _.isSelected = false; }));
     e.isSelected = true;
+    this.classCreationData.newUserClass.classNameEnum.classId = e.classId;
     this.classCreationData.newUserClass.classNameEnum.className = e.className;
     this.classCreationData.newUserClass.classNameEnum.fileName = e.fileName;
+    this.classCreationData.newUserClass.classNameEnum.isSelected = true;
     this.userClassHasBeenSelected = true;
+    this.filterCombatTypes();
   }
 
   public async createClass() {
@@ -58,11 +61,15 @@ export class ClassCreationPageComponent extends BaseComponent implements OnInit 
       this.messageService.add({ severity:'warn', summary:'Gear builds require a name', detail:'Examples: Nouver, Kutum, Tank, Full AP, Accuarcy, Evasion...', life: 2600 });
   }
 
-  public async onCombatTypeChanged(e: { originalEvent: MouseEvent, value: CombatTypeCountViewModel }): Promise <void> {
-    console.log(e);
+  public async onCombatTypeChanged(e: { originalEvent: MouseEvent, value: CombatTypesEnumViewModel }): Promise <void> {
+    this.filterCombatTypes();
   }
 
-  public async onUserClassRoleChanged(e: { originalEvent: MouseEvent, value: ClassRolesEnumViewModel }): Promise <void> {
-    console.log(e);
+  private async filterCombatTypes(): Promise<void> {
+    this.classCreationData.combatTypesEnum = this.combatTypesEnumUnfiltered;
+    if(this.classCreationData.newUserClass.classNameEnum.classId == 2)
+      this.classCreationData.combatTypesEnum = this.classCreationData.combatTypesEnum.filter((res: CombatTypesEnumViewModel) => res.combatTypeId != 3);
+    else if(this.classCreationData.newUserClass.classNameEnum.classId == 16)
+      this.classCreationData.combatTypesEnum = this.classCreationData.combatTypesEnum.filter((res: CombatTypesEnumViewModel) => res.combatTypeId != 2);
   }
 }
