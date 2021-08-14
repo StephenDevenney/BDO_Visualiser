@@ -11,4 +11,10 @@ Fan-made project to keep track of various activities in the MMORPG Black Desert 
 ## Aim
 Provide visual feedback to data given by user.
  
- 
+ ## Topics
+ - Combat Stats (PvE)
+ - Life Stats
+ - Fail Stack Tracker
+ - Scroll Tracker
+ - Barter Stats
+ - User Classes
