@@ -18,3 +18,6 @@ Provide visual feedback to data given by user.
  - Scroll Tracker
  - Barter Stats
  - User Classes
+
+## Current Stage
+App is WIP and not V.1 ready yet.
