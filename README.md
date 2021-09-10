@@ -21,3 +21,4 @@ Provide visual feedback to data given by user.
 
 ## Current Stage
 App is WIP and not V.1 ready yet.
+On Pause until its converted electron to electron.net
