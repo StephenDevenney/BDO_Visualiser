@@ -17,6 +17,7 @@ export class TableInsertComponent extends BaseComponent implements AfterViewInit
   public combatEnums: CombatPageEnumsViewModel = new CombatPageEnumsViewModel();
   public newEntry: GrindingDataViewModel = new GrindingDataViewModel();
   public isLoaded: boolean = false;
+  public agrisIsReady: boolean = false;
 
   constructor(private injector: Injector, 
               private apiService: APIService,) {

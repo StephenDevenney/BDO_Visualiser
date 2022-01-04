@@ -1,16 +1,12 @@
 <div class="table-insert" *ngIf="isLoaded">
     <div *ngIf="combatHeaders.length > 0" class="p-4">
         <div class="text-center">
-            <h2>Select What You Want To Track</h2>
-            <label *ngIf="tableLength == 0">Headers may be toggled on/off at any time.</label>
+            <h2>New Data Entry</h2>
         </div>
         <div class="row align-items-center mt-4">
             <div class="col-4">
-                <div class="d-flex align-items-center justify-content-between">
-                    <label>Location</label>
-                    <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[0]);" [(ngModel)]="combatHeaders[0].isActive" ngDefaultControl></p-inputSwitch>
-                </div>
-                <p-dropdown class="w-100" [filter]="true" filterBy="locationName" [disabled]="!combatHeaders[0].isActive" class="w-100" [options]="combatEnums.locationNamesEnum" [(ngModel)]="newEntry.grindLocation" optionLabel="locationName" [group]="true">
+                <label>Location</label>
+                <p-dropdown class="w-100" [filter]="true" filterBy="locationName" class="w-100" [options]="combatEnums.locationNamesEnum" [(ngModel)]="newEntry.grindLocation" optionLabel="locationName" [group]="true">
                     <ng-template let-group pTemplate="group">
                         <div class="p-d-flex p-ai-center">
                             <span>{{group.label}}</span>
@@ -19,57 +15,36 @@
                 </p-dropdown>
             </div>
             <div class="col-4">
-                <div class="d-flex align-items-center justify-content-between">
-                    <label>Time Grinded (Minutes)</label>
-                    <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[1])" [(ngModel)]="combatHeaders[1].isActive" ngDefaultControl></p-inputSwitch>
-                </div>
-                <p-dropdown class="w-100" [disabled]="!combatHeaders[1].isActive" [options]="combatEnums.timeAmountEnum" [(ngModel)]="newEntry.timeAmount" optionLabel="timeAmount"></p-dropdown>
+                <label>Time Grinded (Minutes)</label>
+                <p-dropdown class="w-100" [options]="combatEnums.timeAmountEnum" [(ngModel)]="newEntry.timeAmount" optionLabel="timeAmount"></p-dropdown>
             </div>
             <div class="col-4">
-                <div class="d-flex align-items-center justify-content-between">
-                    <label>Primary Trash Loot Dropped</label>
-                    <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[2])" [(ngModel)]="combatHeaders[2].isActive" ngDefaultControl></p-inputSwitch>
-                </div>
-                <p-inputNumber class="w-100" [disabled]="!combatHeaders[2].isActive" [(ngModel)]="newEntry.trashLootAmount" [min]="0"></p-inputNumber>
+                <label>Primary Trash Loot Dropped</label>
+                <p-inputNumber class="w-100" [(ngModel)]="newEntry.trashLootAmount" [min]="0"></p-inputNumber>
             </div>
         </div>
         <div class="row align-items-center mt-3">
             <div class="col-4">
-                <div class="d-flex align-items-center justify-content-between">
-                    <label>Character</label>
-                    <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[3]);" [(ngModel)]="combatHeaders[3].isActive" ngDefaultControl></p-inputSwitch>
-                </div>
-                <p-dropdown #userClassDropdown (onChange)="currentClassChanged($event);" [disabled]="!combatHeaders[3].isActive" [options]="combatEnums.activeClasses" [(ngModel)]="newEntry.userClass" optionLabel="classDescription"></p-dropdown>
+                <label>Character</label>
+                <p-dropdown #userClassDropdown (onChange)="currentClassChanged($event);" [options]="combatEnums.activeClasses" [(ngModel)]="newEntry.userClass" optionLabel="classDescription"></p-dropdown>
             </div>
             <div class="col-4">
-                <div class="d-flex align-items-center justify-content-between">
-                    <label>Server</label>
-                    <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[4]);" [(ngModel)]="combatHeaders[4].isActive" ngDefaultControl></p-inputSwitch>
-                </div>
-                <p-dropdown [disabled]="!combatHeaders[4].isActive" [options]="combatEnums.serverNamesEnum" [(ngModel)]="newEntry.server" optionLabel="serverDescription"></p-dropdown>
+                <label>Server</label>
+                <p-dropdown [options]="combatEnums.serverNamesEnum" [(ngModel)]="newEntry.server" optionLabel="serverDescription"></p-dropdown>
             </div>
             <div class="col-4">
-                <div class="d-flex align-items-center justify-content-between">
-                    <label>Combat Type</label>
-                    <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[5]);" [(ngModel)]="combatHeaders[5].isActive" ngDefaultControl></p-inputSwitch>
-                </div>
-                <p-dropdown (onChange)="combatTypeChanged($event);" [disabled]="!combatHeaders[5].isActive" [options]="combatEnums.combatTypesEnum" [(ngModel)]="newEntry.combatType" optionLabel="combatTypeName"></p-dropdown>
+                <label>Combat Type</label>
+                <p-dropdown (onChange)="combatTypeChanged($event);" [options]="combatEnums.combatTypesEnum" [(ngModel)]="newEntry.combatType" optionLabel="combatTypeName"></p-dropdown>
             </div>
         </div>
         <div class="row align-items-center mt-3">
             <div class="col-4">
-                <div class="d-flex align-items-center justify-content-between">
-                    <label>Agris Burnt</label>
-                    <p-inputSwitch (onChange)="toggleSwitch(combatHeaders[6]);" [(ngModel)]="combatHeaders[6].isActive" ngDefaultControl></p-inputSwitch>
-                </div>
-                <p-dropdown [disabled]="!combatHeaders[6].isActive" [options]="combatEnums.agrisEnum" [(ngModel)]="newEntry.agris" optionLabel="agrisDescription"></p-dropdown>
+                <label>Agris Burnt</label>
+                <p-dropdown [disabled]="!agrisIsReady" [options]="combatEnums.agrisEnum" [(ngModel)]="newEntry.agris" optionLabel="agrisDescription"></p-dropdown>
             </div>
             <div class="col-4">
-                <div class="d-flex align-items-center justify-content-between">
-                    <label>Afuaru Spawns</label>
-                    <p-inputSwitch [disabled]="!newEntry.grindLocation.afuaruSpawnable" (onChange)="toggleSwitch(combatHeaders[7]);" [(ngModel)]="combatHeaders[7].isActive" ngDefaultControl></p-inputSwitch>
-                </div>
-                <p-inputNumber [disabled]="!combatHeaders[7].isActive || !newEntry.grindLocation.afuaruSpawnable" [(ngModel)]="newEntry.afuaruSpawns" [min]="0"></p-inputNumber>
+                <label>Afuaru Spawns</label>
+                <p-inputNumber [disabled]="!newEntry.grindLocation.afuaruSpawnable" [(ngModel)]="newEntry.afuaruSpawns" [min]="0"></p-inputNumber>
             </div>
             <div class="col-4">
                 <div class="d-flex justify-content-center align-items-center">

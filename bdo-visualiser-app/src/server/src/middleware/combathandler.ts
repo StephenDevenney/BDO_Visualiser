@@ -49,7 +49,6 @@ export class CombatPageDataHandler {
     }
 
     public async addEntry(entry: GrindingDataViewModel, combatHeaders: Array<CombatHeadersViewModel>): Promise<VisibleDataViewModel> {
-        debugger;
         let eE = await convertToEntity(entry, combatHeaders);
         let gdE = await new GrindingDataContext().insert(eE);
         let afuaruSpawns = "-";
