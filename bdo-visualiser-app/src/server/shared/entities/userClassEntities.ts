@@ -159,12 +159,14 @@ export class GearBracketsEntity {
     }
 }
 
-export class userClassRoleChecksEntity {
+export class UserClassRoleChecksEntity {
     public hasMainClass: boolean = false;
     public hasSecondaryClass: boolean = false;
 
     constructor(hasMainClass?: boolean, hasSecondaryClass?: boolean) {
-        this.hasMainClass = hasMainClass;
-        this.hasSecondaryClass = hasSecondaryClass;
+        if(hasMainClass) {
+            this.hasMainClass = hasMainClass;
+            this.hasSecondaryClass = hasSecondaryClass;
+        }
     }
 }
